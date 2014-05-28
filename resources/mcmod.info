@@ -1,0 +1,20 @@
+[
+{
+  "modid": "pressure",
+  "name": "Pressure Piping",
+  "description": "",
+  "version": "@PRESSURE_VER@",
+  "url": "htts://bdew.net/",
+  "updateUrl": "",
+  "authorList": [
+    "bdew"
+  ],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]

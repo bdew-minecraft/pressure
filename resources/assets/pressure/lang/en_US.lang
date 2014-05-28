@@ -1,0 +1,11 @@
+tile.pressure.input.name=High Pressure Input
+tile.pressure.output.name=High Pressure Output
+tile.pressure.pipe.name=High Pressure Piping
+tile.pressure.pump.name=High Pressure Pump
+tile.pressure.water.name=Infinite Water Source
+
+item.pressure.Debugger.name=Pressure System Debugger
+item.pressure.Interface.name=Pressure System Interface
+
+pressure.label.filter.set=Setting fluid filter to: %s
+pressure.label.filter.unset=Removing fluid filter
