@@ -48,7 +48,6 @@ with HasTE[TilePump] with BlockNotifyUpdates with BlockFilterable[TilePump] {
       world.setBlockMetadataWithNotify(x, y, z, (meta & 7) | 8, 2)
     else if (!powered && ((meta & 8) == 8))
       world.setBlockMetadataWithNotify(x, y, z, meta & 7, 2)
-    printf("Meta was %d, powered=%s, new meta=%d\n", meta, powered, world.getBlockMetadata(x, y, z))
   }
 
   @SideOnly(Side.CLIENT)

@@ -32,10 +32,8 @@ class TilePump extends TileDataSlots with FakeTank with TileFilterable {
       val res = from.drain(face.getOpposite, Int.MaxValue, false)
       if (res != null && res.getFluid != null && res.amount > 0 && isFluidAllowed(res)) {
         val filled = to.fill(face.getOpposite, res, true)
-        if (filled > 0) {
+        if (filled > 0)
           from.drain(face, filled, true)
-          println("Moved: ", filled)
-        }
       }
     }
   }
