@@ -18,21 +18,13 @@ object Config {
   var IDs: IdManager = null
   val guiHandler = new GuiHandler
 
-  var pocketDimProviderId = -1
-  var pocketBiopmeId = -1
-
   def load(cfg: File): Configuration = {
     val c = new Configuration(cfg)
     c.load()
     try {
-
-      pocketDimProviderId = c.get(Configuration.CATEGORY_GENERAL, "PocketDimProviderId", 58, "Dimension Provider ID").getInt
-      pocketBiopmeId = c.get(Configuration.CATEGORY_GENERAL, "PocketBiomeId", 58, "Biome ID").getInt
-
-      IDs = new IdManager(c, 11000, 3800)
+      IDs = new IdManager(c, 12000, 3900)
       Items.load()
       Blocks.load()
-
     } finally {
       c.save()
     }

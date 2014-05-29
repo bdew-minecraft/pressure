@@ -16,7 +16,7 @@ import net.bdew.pressure.blocks.input.BlockInput
 import net.bdew.pressure.blocks.output.BlockOutput
 import net.bdew.pressure.blocks.source.BlockWaterSource
 
-object Blocks extends BlockManager(Config.IDs) {
+object Blocks extends BlockManager(Config.IDs, addOldTileNames = false) {
   val pipe = regBlockCls(classOf[BlockPipe], "Pipe")
   val pump = regBlockCls(classOf[BlockPump], "Pump")
   val output = regBlockCls(classOf[BlockOutput], "Output")
