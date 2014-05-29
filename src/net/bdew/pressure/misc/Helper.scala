@@ -64,8 +64,8 @@ object Helper extends IPressureHelper {
     val conn = connection.asInstanceOf[ConnectionInfo]
     if (recursionGuard.get()) {
       Pressure.logInfo("Detected loop, blowing up %d,%d,%d (dim %d)",
-        conn.origin.getXCoord, conn.origin.getYCoord, conn.origin.getZCoord, conn.origin.getWorldObj.provider.dimensionId)
-      conn.origin.getWorldObj.createExplosion(null, conn.origin.getXCoord, conn.origin.getYCoord, conn.origin.getZCoord, 1, true)
+        conn.origin.getXCoord, conn.origin.getYCoord, conn.origin.getZCoord, conn.origin.getWorld.provider.dimensionId)
+      conn.origin.getWorld.createExplosion(null, conn.origin.getXCoord, conn.origin.getYCoord, conn.origin.getZCoord, 1, true)
       return 0
     }
     recursionGuard.set(true)
@@ -105,7 +105,7 @@ object Helper extends IPressureHelper {
   }
 
   override def recalculateConnectionInfo(te: IPressureInject, side: ForgeDirection) =
-    ConnectionInfo(te, side, scanConnectedBlocks(BlockRef(te.getWorldObj, te.getXCoord, te.getYCoord, te.getZCoord), false)._2)
+    ConnectionInfo(te, side, scanConnectedBlocks(BlockRef(te.getWorld, te.getXCoord, te.getYCoord, te.getZCoord), false)._2)
 
   def getPipeConnections(ref: BlockRef): List[ForgeDirection] =
     (for {

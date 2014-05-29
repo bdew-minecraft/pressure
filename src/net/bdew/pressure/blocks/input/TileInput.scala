@@ -39,4 +39,5 @@ class TileInput extends TileDataSlots with FakeTank with IPressureInject with Ti
   override def getZCoord = zCoord
   override def getYCoord = yCoord
   override def getXCoord = xCoord
+  override def getWorld = worldObj
 }

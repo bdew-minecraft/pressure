@@ -18,5 +18,5 @@ public interface IPressureTile {
 
     int getZCoord();
 
-    World getWorldObj();
+    World getWorld();
 }

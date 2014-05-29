@@ -33,5 +33,6 @@ class TileOutput extends TileDataSlots with IPressureEject with TileFilterable {
   override def getXCoord = xCoord
   override def getYCoord = yCoord
   override def getZCoord = zCoord
+  override def getWorld = worldObj
 }
 
