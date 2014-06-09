@@ -13,17 +13,18 @@ import net.bdew.lib.data.base.TileDataSlots
 import net.bdew.pressure.api.IPressureEject
 import net.minecraftforge.fluids.{IFluidHandler, FluidStack}
 import net.bdew.pressure.config.Blocks
-import net.bdew.pressure.misc.BlockRef
+import net.bdew.pressure.misc.{FakeTank, BlockRef}
 import net.bdew.pressure.blocks.TileFilterable
+import net.minecraftforge.common.ForgeDirection
 
-class TileOutput extends TileDataSlots with IPressureEject with TileFilterable {
-  def facing = Blocks.output.getFacing(worldObj, xCoord, yCoord, zCoord)
-
+class TileOutput extends TileDataSlots with FakeTank with IPressureEject with TileFilterable {
+  def getFacing = Blocks.output.getFacing(worldObj, xCoord, yCoord, zCoord)
+  
   lazy val me = BlockRef.fromTile(this)
 
   override def eject(resource: FluidStack, doEject: Boolean) = {
     if (isFluidAllowed(resource)) {
-      val f = facing
+      val f = getFacing
       me.neighbour(f).getTile[IFluidHandler] map { dest =>
         dest.fill(f.getOpposite, resource, doEject)
       } getOrElse 0
@@ -34,5 +35,7 @@ class TileOutput extends TileDataSlots with IPressureEject with TileFilterable {
   override def getYCoord = yCoord
   override def getZCoord = zCoord
   override def getWorld = worldObj
+
+  override def isValidDirectionForFakeTank(dir: ForgeDirection) = getFacing == dir
 }
 

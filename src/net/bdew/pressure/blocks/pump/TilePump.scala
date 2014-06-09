@@ -15,10 +15,13 @@ import net.bdew.pressure.misc.{FakeTank, BlockRef}
 import net.minecraftforge.fluids.IFluidHandler
 import net.bdew.pressure.blocks.TileFilterable
 import net.bdew.lib.data.base.TileDataSlots
+import net.minecraftforge.common.ForgeDirection
 
 class TilePump extends TileDataSlots with FakeTank with TileFilterable {
   override def shouldRefresh(oldID: Int, newID: Int, oldMeta: Int, newMeta: Int, world: World, x: Int, y: Int, z: Int) =
     oldID != newID
+
+  def getFacing = Blocks.pump.getFacing(worldObj, xCoord, yCoord, zCoord)
 
   lazy val me = BlockRef.fromTile(this)
 
@@ -26,7 +29,7 @@ class TilePump extends TileDataSlots with FakeTank with TileFilterable {
 
   def doPushFluid() {
     if ((me.meta.getOrElse(0) & 8) == 0) return
-    val face = Blocks.pump.getFacing(worldObj, xCoord, yCoord, zCoord)
+    val face = getFacing
     for (from <- me.neighbour(face.getOpposite).getTile[IFluidHandler];
          to <- me.neighbour(face).getTile[IFluidHandler]) {
       val res = from.drain(face.getOpposite, Int.MaxValue, false)
@@ -37,4 +40,6 @@ class TilePump extends TileDataSlots with FakeTank with TileFilterable {
       }
     }
   }
+
+  override def isValidDirectionForFakeTank(dir: ForgeDirection) = dir == getFacing || dir.getOpposite == getFacing
 }

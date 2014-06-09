@@ -18,16 +18,16 @@ import net.minecraftforge.fluids.{FluidStack, Fluid}
 import net.bdew.pressure.blocks.TileFilterable
 
 class TileInput extends TileDataSlots with FakeTank with IPressureInject with TileFilterable {
-  def facing = Blocks.output.getFacing(worldObj, xCoord, yCoord, zCoord)
+  def getFacing = Blocks.output.getFacing(worldObj, xCoord, yCoord, zCoord)
   lazy val me = BlockRef.fromTile(this)
   var connection: IConnectionInfo = null
 
-  override def canFill(from: ForgeDirection, fluid: Fluid) = from == facing.getOpposite && isFluidAllowed(fluid)
+  override def canFill(from: ForgeDirection, fluid: Fluid) = from == getFacing.getOpposite && isFluidAllowed(fluid)
 
   override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int = {
     if (resource != null && resource.getFluid != null && resource.amount > 0 && canFill(from, resource.getFluid)) {
-      if (connection == null && me.neighbour(facing).getBlock[IPressureConnectableBlock].isDefined)
-        connection = Helper.recalculateConnectionInfo(this, facing)
+      if (connection == null && me.neighbour(getFacing).getBlock[IPressureConnectableBlock].isDefined)
+        connection = Helper.recalculateConnectionInfo(this, getFacing)
       if (connection != null)
         return Helper.pushFluidIntoPressureSytem(connection, resource, doFill)
     }
@@ -40,4 +40,6 @@ class TileInput extends TileDataSlots with FakeTank with IPressureInject with Ti
   override def getYCoord = yCoord
   override def getXCoord = xCoord
   override def getWorld = worldObj
+  
+  override def isValidDirectionForFakeTank(dir: ForgeDirection) = dir == getFacing.getOpposite
 }
