@@ -19,7 +19,7 @@ import net.minecraftforge.common.ForgeDirection
 
 class TileOutput extends TileDataSlots with FakeTank with IPressureEject with TileFilterable {
   def getFacing = Blocks.output.getFacing(worldObj, xCoord, yCoord, zCoord)
-  
+
   lazy val me = BlockRef.fromTile(this)
 
   override def eject(resource: FluidStack, doEject: Boolean) = {

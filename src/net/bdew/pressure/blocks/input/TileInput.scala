@@ -40,6 +40,6 @@ class TileInput extends TileDataSlots with FakeTank with IPressureInject with Ti
   override def getYCoord = yCoord
   override def getXCoord = xCoord
   override def getWorld = worldObj
-  
+
   override def isValidDirectionForFakeTank(dir: ForgeDirection) = dir == getFacing.getOpposite
 }

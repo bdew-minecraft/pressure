@@ -59,7 +59,7 @@ class PipeRenderer(id: Int) extends ISimpleBlockRenderingHandler {
     else
       block.getIcon(0, 0)
 
-    Tessellator.instance.setBrightness(block.getMixedBrightnessForBlock(world,x,y,z))
+    Tessellator.instance.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z))
 
     import RenderHelper._
     val offs = P3d(x, y, z)
