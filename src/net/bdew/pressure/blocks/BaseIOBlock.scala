@@ -31,10 +31,10 @@ class BaseIOBlock[T <: TileFilterable](id: Int, name: String, teClass: Class[T])
     ForgeDirection.values()(world.getBlockMetadata(x, y, z))
 
   override def setFacing(world: World, x: Int, y: Int, z: Int, facing: ForgeDirection) =
-    world.setBlockMetadataWithNotify(x, y, z, facing.ordinal(), 2)
+    world.setBlockMetadataWithNotify(x, y, z, facing.ordinal(), 3)
 
   override def rotateBlock(world: World, x: Int, y: Int, z: Int, axis: ForgeDirection) = {
-    world.setBlockMetadataWithNotify(x, y, z, (world.getBlockMetadata(x, y, z) + 1) % 6, 2)
+    world.setBlockMetadataWithNotify(x, y, z, (world.getBlockMetadata(x, y, z) + 1) % 6, 3)
     true
   }
 

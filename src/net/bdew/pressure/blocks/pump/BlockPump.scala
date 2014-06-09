@@ -33,12 +33,13 @@ with HasTE[TilePump] with BlockNotifyUpdates with BlockFilterable[TilePump] {
 
   override def getFacing(world: IBlockAccess, x: Int, y: Int, z: Int) =
     ForgeDirection.values()(world.getBlockMetadata(x, y, z) & 7)
+
   override def setFacing(world: World, x: Int, y: Int, z: Int, facing: ForgeDirection) =
-    world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) & 8 | facing.ordinal(), 2)
+    world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) & 8 | facing.ordinal(), 3)
 
   override def rotateBlock(world: World, x: Int, y: Int, z: Int, axis: ForgeDirection) = {
     val meta = world.getBlockMetadata(x, y, z)
-    world.setBlockMetadataWithNotify(x, y, z, (meta & 8) | (((meta & 7) + 1) % 6), 2)
+    world.setBlockMetadataWithNotify(x, y, z, (meta & 8) | (((meta & 7) + 1) % 6), 3)
   }
 
   override def onNeighborBlockChange(world: World, x: Int, y: Int, z: Int, blockId: Int) {
