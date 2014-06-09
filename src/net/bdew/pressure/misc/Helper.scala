@@ -18,8 +18,8 @@ import net.bdew.pressure.blocks.BlockPipe
 import net.bdew.pressure.Pressure
 
 object Helper extends IPressureHelper {
-  val recursionGuard = new ThreadLocal[Boolean] {
-    override def initialValue() = false
+  val recursionGuard = new ThreadLocal[Set[ConnectionInfo]] {
+    override def initialValue() = Set.empty
   }
 
   def scanConnectedBlocks(start: BlockRef, forceNeighbours: Boolean) = {
@@ -62,13 +62,14 @@ object Helper extends IPressureHelper {
   override def pushFluidIntoPressureSytem(connection: IConnectionInfo, fluid: FluidStack, doPush: Boolean): Int = {
     if (connection == null || fluid == null || fluid.getFluid == null || fluid.amount == 0 || !connection.isInstanceOf[ConnectionInfo]) return 0
     val conn = connection.asInstanceOf[ConnectionInfo]
-    if (recursionGuard.get()) {
+    val recGuard = recursionGuard.get()
+    if (recGuard.contains(conn)) {
       Pressure.logInfo("Detected loop, blowing up %d,%d,%d (dim %d)",
         conn.origin.getXCoord, conn.origin.getYCoord, conn.origin.getZCoord, conn.origin.getWorld.provider.dimensionId)
       conn.origin.getWorld.createExplosion(null, conn.origin.getXCoord, conn.origin.getYCoord, conn.origin.getZCoord, 1, true)
       return 0
     }
-    recursionGuard.set(true)
+    recursionGuard.set(recGuard + conn)
     try {
       if (conn.tiles.size == 0) return 0
       if (fluid.amount < 10) {
@@ -96,7 +97,7 @@ object Helper extends IPressureHelper {
         }).sum
       }
     } finally {
-      recursionGuard.set(false)
+      recursionGuard.set(recGuard)
     }
   }
 
