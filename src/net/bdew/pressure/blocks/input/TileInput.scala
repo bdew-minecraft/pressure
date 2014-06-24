@@ -11,14 +11,13 @@ package net.bdew.pressure.blocks.input
 
 import net.bdew.lib.data.base.TileDataSlots
 import net.bdew.pressure.api._
-import net.minecraftforge.common.ForgeDirection
+import net.minecraftforge.common.util.ForgeDirection
 import net.bdew.pressure.misc.{FakeTank, Helper, BlockRef}
-import net.bdew.pressure.config.Blocks
 import net.minecraftforge.fluids.{FluidStack, Fluid}
 import net.bdew.pressure.blocks.TileFilterable
 
 class TileInput extends TileDataSlots with FakeTank with IPressureInject with TileFilterable {
-  def getFacing = Blocks.output.getFacing(worldObj, xCoord, yCoord, zCoord)
+  def getFacing = BlockInput.getFacing(worldObj, xCoord, yCoord, zCoord)
   lazy val me = BlockRef.fromTile(this)
   var connection: IConnectionInfo = null
 

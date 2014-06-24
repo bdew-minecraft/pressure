@@ -10,7 +10,7 @@
 package net.bdew.pressure.api;
 
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Implemented on all blocks that can connect to Pressure pipes or blocks

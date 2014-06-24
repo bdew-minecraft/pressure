@@ -12,9 +12,9 @@ package net.bdew.pressure.blocks.input
 import net.bdew.pressure.blocks.{BlockNotifyUpdates, BaseIOBlock}
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.minecraft.world.IBlockAccess
-import net.minecraftforge.common.ForgeDirection
+import net.minecraftforge.common.util.ForgeDirection
 
-class BlockInput(id: Int) extends BaseIOBlock(id, "input", classOf[TileInput]) with BlockNotifyUpdates with IPressureConnectableBlock {
+object BlockInput extends BaseIOBlock("input", classOf[TileInput]) with BlockNotifyUpdates with IPressureConnectableBlock {
   override def canConnectFrom(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
     getFacing(world, x, y, z) == side
 }

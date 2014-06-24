@@ -9,22 +9,22 @@
 
 package net.bdew.pressure.blocks
 
-import net.minecraft.client.renderer.texture.IconRegister
+import net.minecraft.client.renderer.texture.IIconRegister
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.bdew.lib.rotate.{BaseRotateableBlock, IconType}
-import net.minecraft.util.Icon
+import net.minecraft.util.IIcon
 import net.minecraft.world.{World, IBlockAccess}
-import net.minecraftforge.common.ForgeDirection
+import net.minecraftforge.common.util.ForgeDirection
 import net.bdew.lib.block.HasTE
 import net.bdew.pressure.render.RotatedBlockRenderer
 
-class BaseIOBlock[T <: TileFilterable](id: Int, name: String, teClass: Class[T])
-  extends Block(id, Material.iron) with BaseRotateableBlock with HasTE[T] with BlockFilterable[T] {
+class BaseIOBlock[T <: TileFilterable](name: String, teClass: Class[T])
+  extends Block(Material.iron) with BaseRotateableBlock with HasTE[T] with BlockFilterable[T] {
   override val TEClass = teClass
 
-  setUnlocalizedName("pressure." + name)
+  setBlockName("pressure." + name)
   setHardness(2)
 
   override def getFacing(world: IBlockAccess, x: Int, y: Int, z: Int) =
@@ -48,9 +48,9 @@ class BaseIOBlock[T <: TileFilterable](id: Int, name: String, teClass: Class[T])
     case _ => sideIcon
   }
 
-  var frontIcon, sideIcon, backIcon: Icon = null
+  var frontIcon, sideIcon, backIcon: IIcon = null
   @SideOnly(Side.CLIENT)
-  override def registerIcons(ir: IconRegister) = {
+  override def registerBlockIcons(ir: IIconRegister) = {
     frontIcon = ir.registerIcon("pressure:%s/front".format(name))
     backIcon = ir.registerIcon("pressure:%s/back".format(name))
     sideIcon = ir.registerIcon("pressure:%s/side".format(name))

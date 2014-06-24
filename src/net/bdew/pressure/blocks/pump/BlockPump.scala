@@ -12,20 +12,20 @@ package net.bdew.pressure.blocks.pump
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import cpw.mods.fml.relauncher.{SideOnly, Side}
-import net.minecraft.client.renderer.texture.IconRegister
+import net.minecraft.client.renderer.texture.IIconRegister
 import net.bdew.lib.rotate.{BaseRotateableBlock, IconType}
 import net.bdew.lib.block.HasTE
-import net.minecraft.util.Icon
+import net.minecraft.util.IIcon
 import net.minecraft.world.{IBlockAccess, World}
-import net.minecraftforge.common.ForgeDirection
+import net.minecraftforge.common.util.ForgeDirection
 import net.bdew.pressure.render.RotatedBlockRenderer
 import net.bdew.pressure.blocks.{BlockFilterable, BlockNotifyUpdates}
 
-class BlockPump(id: Int) extends Block(id, Material.iron) with BaseRotateableBlock
+object BlockPump extends Block(Material.iron) with BaseRotateableBlock
 with HasTE[TilePump] with BlockNotifyUpdates with BlockFilterable[TilePump] {
   override val TEClass = classOf[TilePump]
 
-  setUnlocalizedName("pressure.pump")
+  setBlockName("pressure.pump")
   setHardness(2)
 
   @SideOnly(Side.CLIENT)
@@ -42,7 +42,7 @@ with HasTE[TilePump] with BlockNotifyUpdates with BlockFilterable[TilePump] {
     world.setBlockMetadataWithNotify(x, y, z, (meta & 8) | (((meta & 7) + 1) % 6), 3)
   }
 
-  override def onNeighborBlockChange(world: World, x: Int, y: Int, z: Int, blockId: Int) {
+  override def onNeighborBlockChange(world: World, x: Int, y: Int, z: Int, block: Block) {
     val meta = world.getBlockMetadata(x, y, z)
     val powered = world.isBlockIndirectlyGettingPowered(x, y, z)
     if (powered && ((meta & 8) == 0))
@@ -59,10 +59,10 @@ with HasTE[TilePump] with BlockNotifyUpdates with BlockFilterable[TilePump] {
     case _ => sideIconOff
   }
 
-  var frontIcon, sideIconOff, sideIconOn, backIcon: Icon = null
+  var frontIcon, sideIconOff, sideIconOn, backIcon: IIcon = null
 
   @SideOnly(Side.CLIENT)
-  override def registerIcons(ir: IconRegister) = {
+  override def registerBlockIcons(ir: IIconRegister) = {
     frontIcon = ir.registerIcon("pressure:pump/front")
     backIcon = ir.registerIcon("pressure:pump/back")
     sideIconOn = ir.registerIcon("pressure:pump/side_on")

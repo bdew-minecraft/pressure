@@ -9,8 +9,8 @@
 
 package net.bdew.pressure.render
 
-import net.minecraft.util.Icon
-import net.minecraftforge.common.ForgeDirection
+import net.minecraft.util.IIcon
+import net.minecraftforge.common.util.ForgeDirection
 import net.minecraft.client.renderer.Tessellator
 
 object RenderHelper {
@@ -74,7 +74,7 @@ object RenderHelper {
     PRender(p1.x, o, p2.y, uv1.u, uv2.v)
   ), 1F)
 
-  def draw(rect: (List[PRender], Float), offs: P3d, icon: Icon) = {
+  def draw(rect: (List[PRender], Float), offs: P3d, icon: IIcon) = {
     val (points, bright) = rect
     Tessellator.instance.setColorOpaque_F(bright, bright, bright)
     points.foreach(p =>

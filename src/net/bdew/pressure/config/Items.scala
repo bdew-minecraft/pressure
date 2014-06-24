@@ -12,7 +12,7 @@ package net.bdew.pressure.config
 import net.bdew.lib.config.ItemManager
 import net.bdew.pressure.ItemDebugger
 
-object Items extends ItemManager(Config.IDs) {
-  regItem(new ItemDebugger(ids.getItemId("Debugger")))
+object Items extends ItemManager {
+  regItem(ItemDebugger)
   regSimpleItem("Interface")
 }

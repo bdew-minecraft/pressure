@@ -12,15 +12,15 @@ package net.bdew.pressure.blocks
 import net.minecraft.block.Block
 import net.minecraft.world.World
 import net.bdew.pressure.misc.Helper
-import net.minecraftforge.common.ForgeDirection
+import net.minecraftforge.common.util.ForgeDirection
 
 trait BlockNotifyUpdates extends Block {
   def notifyPressureSystemUpdate(w: World, x: Int, y: Int, z: Int) =
     Helper.notifyBlockChanged(w, x, y, z)
 
-  override def breakBlock(world: World, x: Int, y: Int, z: Int, id: Int, meta: Int) = {
+  override def breakBlock(world: World, x: Int, y: Int, z: Int, block: Block, meta: Int) = {
     notifyPressureSystemUpdate(world, x, y, z)
-    super.breakBlock(world, x, y, z, id, meta)
+    super.breakBlock(world, x, y, z, block, meta)
   }
 
   override def onBlockPlaced(world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float, meta: Int) = {

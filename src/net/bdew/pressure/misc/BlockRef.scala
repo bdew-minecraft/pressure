@@ -9,18 +9,21 @@
 
 package net.bdew.pressure.misc
 
-import net.minecraftforge.common.{ForgeDirection, DimensionManager}
+import net.minecraftforge.common.DimensionManager
 import net.minecraft.block.Block
 import scala.reflect.ClassTag
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.common.util.ForgeDirection
 
 case class BlockRef(dim: Int, x: Int, y: Int, z: Int) {
   def world = Option(DimensionManager.getWorld(dim))
-  def block = world map (_.getBlockId(x, y, z)) flatMap (id => Option(Block.blocksList(id)))
-  def tile = world flatMap (w => Option(w.getBlockTileEntity(x, y, z)))
+  def block = world map (_.getBlock(x, y, z))
+  def tile = world flatMap (w => Option(w.getTileEntity(x, y, z)))
   def meta = world map (_.getBlockMetadata(x, y, z))
+
+  def blockIs(other: Block) = (block filter (_ == other)).isDefined
 
   def neighbour(side: ForgeDirection) = BlockRef(dim, x + side.offsetX, y + side.offsetY, z + side.offsetZ)
   def neighbours = ForgeDirection.VALID_DIRECTIONS.map(x => x -> neighbour(x))
@@ -51,7 +54,7 @@ case class BlockRef(dim: Int, x: Int, y: Int, z: Int) {
 
 object BlockRef {
   def apply(w: World, x: Int, y: Int, z: Int): BlockRef = BlockRef(w.provider.dimensionId, x, y, z)
-  def fromTile(te: TileEntity) = BlockRef(te.worldObj.provider.dimensionId, te.xCoord, te.yCoord, te.zCoord)
+  def fromTile(te: TileEntity) = BlockRef(te.getWorldObj.provider.dimensionId, te.xCoord, te.yCoord, te.zCoord)
   def fromNBT(tag: NBTTagCompound) =
     BlockRef(tag.getInteger("dim"), tag.getInteger("x"), tag.getInteger("y"), tag.getInteger("z"))
 }

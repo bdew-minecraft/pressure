@@ -13,15 +13,15 @@ import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.bdew.lib.block.HasTE
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.client.renderer.texture.IconRegister
+import net.minecraft.client.renderer.texture.IIconRegister
 
-class BlockWaterSource(id: Int) extends Block(id, Material.iron) with HasTE[TileWaterSource] {
+object BlockWaterSource extends Block(Material.iron) with HasTE[TileWaterSource] {
   override val TEClass = classOf[TileWaterSource]
-  setUnlocalizedName("pressure.water")
+  setBlockName("pressure.water")
   setHardness(1)
 
   @SideOnly(Side.CLIENT)
-  override def registerIcons(ir: IconRegister) = {
+  override def registerBlockIcons(ir: IIconRegister) = {
     blockIcon = ir.registerIcon("pressure:water")
   }
 }

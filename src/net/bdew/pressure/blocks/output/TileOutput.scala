@@ -12,13 +12,12 @@ package net.bdew.pressure.blocks.output
 import net.bdew.lib.data.base.TileDataSlots
 import net.bdew.pressure.api.IPressureEject
 import net.minecraftforge.fluids.{IFluidHandler, FluidStack}
-import net.bdew.pressure.config.Blocks
 import net.bdew.pressure.misc.{FakeTank, BlockRef}
 import net.bdew.pressure.blocks.TileFilterable
-import net.minecraftforge.common.ForgeDirection
+import net.minecraftforge.common.util.ForgeDirection
 
 class TileOutput extends TileDataSlots with FakeTank with IPressureEject with TileFilterable {
-  def getFacing = Blocks.output.getFacing(worldObj, xCoord, yCoord, zCoord)
+  def getFacing = BlockOutput.getFacing(worldObj, xCoord, yCoord, zCoord)
 
   lazy val me = BlockRef.fromTile(this)
 

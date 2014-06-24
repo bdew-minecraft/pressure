@@ -11,16 +11,16 @@ package net.bdew.pressure.blocks
 
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.client.renderer.texture.IconRegister
+import net.minecraft.client.renderer.texture.IIconRegister
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.bdew.pressure.render.PipeRenderer
-import net.minecraftforge.common.ForgeDirection
+import net.minecraftforge.common.util.ForgeDirection
 import net.minecraft.world.{World, IBlockAccess}
 import net.bdew.pressure.misc.Helper
 
-class BlockPipe(id: Int) extends Block(id, Material.iron) with IPressureConnectableBlock with BlockNotifyUpdates {
-  setUnlocalizedName("pressure.pipe")
+object BlockPipe extends Block(Material.iron) with IPressureConnectableBlock with BlockNotifyUpdates {
+  setBlockName("pressure.pipe")
   setHardness(2)
 
   override def renderAsNormalBlock() = false
@@ -30,7 +30,7 @@ class BlockPipe(id: Int) extends Block(id, Material.iron) with IPressureConnecta
   override def getRenderType = PipeRenderer.id
 
   @SideOnly(Side.CLIENT)
-  override def registerIcons(ir: IconRegister) = {
+  override def registerBlockIcons(ir: IIconRegister) = {
     blockIcon = ir.registerIcon("pressure:pipe")
   }
 

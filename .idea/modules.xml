@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../bdlib/bdlib.iml" filepath="$PROJECT_DIR$/../bdlib/bdlib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/deepcore.iml" filepath="$PROJECT_DIR$/deepcore.iml" />
       <module fileurl="file://$PROJECT_DIR$/pressure.iml" filepath="$PROJECT_DIR$/pressure.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vpsmod.iml" filepath="$PROJECT_DIR$/vpsmod.iml" />
     </modules>
   </component>
 </project>

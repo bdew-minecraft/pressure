@@ -10,6 +10,6 @@
 package net.bdew.pressure.misc
 
 import net.bdew.pressure.api.{IPressureInject, IConnectionInfo, IPressureEject}
-import net.minecraftforge.common.ForgeDirection
+import net.minecraftforge.common.util.ForgeDirection
 
 case class ConnectionInfo(origin: IPressureInject, side: ForgeDirection, tiles: Set[IPressureEject]) extends IConnectionInfo

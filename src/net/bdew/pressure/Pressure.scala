@@ -9,17 +9,15 @@
 
 package net.bdew.pressure
 
-import java.util.logging.Logger
 import net.bdew.pressure.config._
 import cpw.mods.fml.common.Mod
 import cpw.mods.fml.common.Mod.EventHandler
 import cpw.mods.fml.common.event._
-import cpw.mods.fml.common.network.NetworkMod
 import cpw.mods.fml.common.network.NetworkRegistry
 import java.io.File
+import org.apache.logging.log4j.Logger
 
 @Mod(modid = Pressure.modId, version = "PRESSURE_VER", name = "Pressure Piping", dependencies = "after:BuildCraft|energy;after:BuildCraft|Silicon;after:IC2;after:CoFHCore;required-after:bdlib", modLanguage = "scala")
-@NetworkMod(clientSideRequired = true, serverSideRequired = false)
 object Pressure {
   var log: Logger = null
   var instance = this
@@ -30,7 +28,10 @@ object Pressure {
   var configDir: File = null
 
   def logInfo(msg: String, args: Any*) = log.info(msg.format(args: _*))
-  def logWarn(msg: String, args: Any*) = log.warning(msg.format(args: _*))
+  def logWarn(msg: String, args: Any*) = log.warn(msg.format(args: _*))
+  def logError(msg: String, args: Any*) = log.error(msg.format(args: _*))
+  def logWarnException(msg: String, t: Throwable, args: Any*) = log.warn(msg.format(args: _*), t)
+  def logErrorException(msg: String, t: Throwable, args: Any*) = log.error(msg.format(args: _*), t)
 
   @EventHandler
   def preInit(event: FMLPreInitializationEvent) {
@@ -43,7 +44,7 @@ object Pressure {
 
   @EventHandler
   def init(event: FMLInitializationEvent) {
-    NetworkRegistry.instance.registerGuiHandler(this, Config.guiHandler)
+    NetworkRegistry.INSTANCE.registerGuiHandler(this, Config.guiHandler)
     TuningLoader.loadDealayed()
   }
 

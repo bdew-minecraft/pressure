@@ -10,18 +10,19 @@
 package net.bdew.pressure.blocks.pump
 
 import net.minecraft.world.World
-import net.bdew.pressure.config.Blocks
 import net.bdew.pressure.misc.{FakeTank, BlockRef}
 import net.minecraftforge.fluids.IFluidHandler
 import net.bdew.pressure.blocks.TileFilterable
 import net.bdew.lib.data.base.TileDataSlots
-import net.minecraftforge.common.ForgeDirection
+import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.block.Block
 
 class TilePump extends TileDataSlots with FakeTank with TileFilterable {
-  override def shouldRefresh(oldID: Int, newID: Int, oldMeta: Int, newMeta: Int, world: World, x: Int, y: Int, z: Int) =
-    oldID != newID
 
-  def getFacing = Blocks.pump.getFacing(worldObj, xCoord, yCoord, zCoord)
+  override def shouldRefresh(oldBlock: Block, newBlock: Block, oldMeta: Int, newMeta: Int, world: World, x: Int, y: Int, z: Int) =
+    oldBlock != newBlock
+
+  def getFacing = BlockPump.getFacing(worldObj, xCoord, yCoord, zCoord)
 
   lazy val me = BlockRef.fromTile(this)
 

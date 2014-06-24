@@ -10,10 +10,9 @@
 package net.bdew.pressure.misc
 
 import net.bdew.pressure.api._
-import net.minecraftforge.common.ForgeDirection
+import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.FluidStack
 import net.minecraft.world.{IBlockAccess, World}
-import net.minecraft.block.Block
 import net.bdew.pressure.blocks.BlockPipe
 import net.bdew.pressure.Pressure
 
@@ -35,7 +34,7 @@ object Helper extends IPressureHelper {
     while (!queue.isEmpty) {
       val current = queue.dequeue()
       seen.add(current)
-      if (current.getBlock[BlockPipe].isDefined)
+      if (current blockIs BlockPipe)
         queue.enqueue(getPipeConnections(current) map current.neighbour filterNot seen.contains: _*)
       else current.tile collect {
         case t: IPressureInject =>
@@ -118,8 +117,7 @@ object Helper extends IPressureHelper {
 
   def getPipeConnections(w: IBlockAccess, x: Int, y: Int, z: Int): List[ForgeDirection] = {
     (ForgeDirection.VALID_DIRECTIONS filter { dir =>
-      val blockId = w.getBlockId(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ)
-      val block = Block.blocksList(blockId)
+      val block = w.getBlock(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ)
       block != null && block.isInstanceOf[IPressureConnectableBlock] &&
         block.asInstanceOf[IPressureConnectableBlock].canConnectFrom(w, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, dir.getOpposite)
     }).toList
