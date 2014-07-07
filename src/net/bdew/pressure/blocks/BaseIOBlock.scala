@@ -12,6 +12,8 @@ package net.bdew.pressure.blocks
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.block.HasTE
 import net.bdew.lib.rotate.{BaseRotateableBlock, IconType}
+import net.bdew.pressure.CreativeTabPressure
+import net.bdew.pressure.blocks.BlockPipe._
 import net.bdew.pressure.render.RotatedBlockRenderer
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -26,6 +28,7 @@ class BaseIOBlock[T <: TileFilterable](name: String, teClass: Class[T])
 
   setBlockName("pressure." + name)
   setHardness(2)
+  setCreativeTab(CreativeTabPressure)
 
   override def getFacing(world: IBlockAccess, x: Int, y: Int, z: Int) =
     ForgeDirection.values()(world.getBlockMetadata(x, y, z))

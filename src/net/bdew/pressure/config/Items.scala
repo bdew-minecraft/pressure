@@ -10,9 +10,11 @@
 package net.bdew.pressure.config
 
 import net.bdew.lib.config.ItemManager
-import net.bdew.pressure.ItemDebugger
+import net.bdew.pressure.{CreativeTabPressure, ItemDebugger}
 
 object Items extends ItemManager {
   regItem(ItemDebugger)
-  regSimpleItem("Interface")
+  val interface = regSimpleItem("Interface")
+
+  interface.setCreativeTab(CreativeTabPressure)
 }

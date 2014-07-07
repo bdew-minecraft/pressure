@@ -9,3 +9,5 @@ item.pressure.Interface.name=Pressure System Interface
 
 pressure.label.filter.set=Setting fluid filter to: %s
 pressure.label.filter.unset=Removing fluid filter
+
+itemGroup.bdew.pressure=Pressure Piping

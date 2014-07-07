@@ -21,6 +21,7 @@ import net.minecraft.world.World
 
 object ItemDebugger extends SimpleItem("Debugger") {
   setMaxStackSize(1)
+  setCreativeTab(CreativeTabPressure)
 
   implicit def string2chatcomp(s: String) = new ChatComponentText(s)
 
