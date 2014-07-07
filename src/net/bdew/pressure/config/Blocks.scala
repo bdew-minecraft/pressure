@@ -9,15 +9,16 @@
 
 package net.bdew.pressure.config
 
+import cpw.mods.fml.common.registry.GameRegistry
 import net.bdew.lib.config.BlockManager
 import net.bdew.pressure.blocks._
-import net.bdew.pressure.blocks.pump.BlockPump
 import net.bdew.pressure.blocks.input.BlockInput
 import net.bdew.pressure.blocks.output.BlockOutput
+import net.bdew.pressure.blocks.pump.BlockPump
 import net.bdew.pressure.blocks.source.BlockWaterSource
 
 object Blocks extends BlockManager {
-  regBlock(BlockPipe, "Pipe")
+  GameRegistry.registerBlock(BlockPipe, classOf[ItemBlockPipe], "Pipe")
   regBlock(BlockPump, "Pump")
   regBlock(BlockOutput, "Output")
   regBlock(BlockInput, "Input")

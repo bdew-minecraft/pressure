@@ -9,15 +9,18 @@
 
 package net.bdew.pressure
 
-import net.bdew.pressure.config._
+import java.io.File
+
 import cpw.mods.fml.common.Mod
 import cpw.mods.fml.common.Mod.EventHandler
 import cpw.mods.fml.common.event._
 import cpw.mods.fml.common.network.NetworkRegistry
-import java.io.File
+import net.bdew.lib.Misc
+import net.bdew.pressure.config._
+import net.bdew.pressure.fmp.FmpHandler
 import org.apache.logging.log4j.Logger
 
-@Mod(modid = Pressure.modId, version = "PRESSURE_VER", name = "Pressure Piping", dependencies = "after:BuildCraft|energy;after:BuildCraft|Silicon;after:IC2;after:CoFHCore;required-after:bdlib", modLanguage = "scala")
+@Mod(modid = Pressure.modId, version = "PRESSURE_VER", name = "Pressure Piping", dependencies = "after:ForgeMultipart;required-after:bdlib", modLanguage = "scala")
 object Pressure {
   var log: Logger = null
   var instance = this
@@ -40,6 +43,7 @@ object Pressure {
     TuningLoader.load("config")
     TuningLoader.load("override", false)
     Config.load(event.getSuggestedConfigurationFile)
+    if (Misc.haveModVersion("ForgeMultipart")) new FmpHandler()
   }
 
   @EventHandler

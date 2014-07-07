@@ -9,9 +9,9 @@
 
 package net.bdew.pressure.blocks
 
+import net.bdew.pressure.misc.Helper
 import net.minecraft.block.Block
 import net.minecraft.world.World
-import net.bdew.pressure.misc.Helper
 import net.minecraftforge.common.util.ForgeDirection
 
 trait BlockNotifyUpdates extends Block {

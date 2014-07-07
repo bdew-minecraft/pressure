@@ -9,15 +9,15 @@
 
 package net.bdew.pressure
 
-import net.bdew.lib.items.SimpleItem
-import net.minecraft.item.ItemStack
-import net.minecraft.world.World
-import net.minecraft.entity.player.EntityPlayer
-import net.bdew.pressure.misc.{Helper, BlockRef}
-import net.minecraft.client.renderer.texture.IIconRegister
-import cpw.mods.fml.relauncher.{SideOnly, Side}
-import net.minecraft.util.ChatComponentText
 import cpw.mods.fml.common.registry.GameRegistry
+import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.items.SimpleItem
+import net.bdew.pressure.misc.{BlockRef, Helper}
+import net.minecraft.client.renderer.texture.IIconRegister
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
+import net.minecraft.util.ChatComponentText
+import net.minecraft.world.World
 
 object ItemDebugger extends SimpleItem("Debugger") {
   setMaxStackSize(1)

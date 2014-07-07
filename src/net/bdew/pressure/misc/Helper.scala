@@ -9,14 +9,41 @@
 
 package net.bdew.pressure.misc
 
+import net.bdew.lib.Misc
+import net.bdew.pressure.Pressure
 import net.bdew.pressure.api._
+import net.bdew.pressure.blocks.BlockPipe
+import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.FluidStack
-import net.minecraft.world.{IBlockAccess, World}
-import net.bdew.pressure.blocks.BlockPipe
-import net.bdew.pressure.Pressure
+
+object InternalPressureExtension extends IPressureExtension {
+  override def canPipeConnectTo(w: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
+    Option(w.getBlock(x, y, z)) flatMap {
+      Misc.asInstanceOpt(_, classOf[IPressureConnectableBlock])
+    } exists {
+      _.canConnectTo(w, x, y, z, side)
+    }
+
+  override def canPipeConnectFrom(w: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) = isConnectableBlock(w, x, y, z)
+
+  override def isConnectableBlock(w: IBlockAccess, x: Int, y: Int, z: Int) =
+    Option(w.getBlock(x, y, z)) exists (_.isInstanceOf[IPressureConnectableBlock])
+
+  override def tryPlacePipe(w: World, x: Int, y: Int, z: Int, p: EntityPlayerMP) = {
+    if (w.isAirBlock(x, y, z) || (Option(w.getBlock(x, y, z)) exists (_.isReplaceable(w, x, y, z)))) {
+      w.setBlock(x, y, z, BlockPipe, 0, 3)
+      true
+    } else false
+  }
+}
 
 object Helper extends IPressureHelper {
+  var extensions = List.empty[IPressureExtension]
+
+  registerExtension(InternalPressureExtension)
+
   val recursionGuard = new ThreadLocal[Set[ConnectionInfo]] {
     override def initialValue() = Set.empty
   }
@@ -31,18 +58,18 @@ object Helper extends IPressureHelper {
     val inputs = collection.mutable.Set.empty[IPressureInject]
     val outputs = collection.mutable.Set.empty[IPressureEject]
 
-    while (!queue.isEmpty) {
+    while (queue.nonEmpty) {
       val current = queue.dequeue()
       seen.add(current)
-      if (current blockIs BlockPipe)
+      if (isConnectableBlock(current))
         queue.enqueue(getPipeConnections(current) map current.neighbour filterNot seen.contains: _*)
-      else current.tile collect {
+      current.tile collect {
         case t: IPressureInject =>
           inputs.add(t)
           queue.enqueue(ForgeDirection.VALID_DIRECTIONS
             filter (dir =>
             current.getBlock[IPressureConnectableBlock] exists (
-              _.canConnectFrom(current.world.get, current.x, current.y, current.z, dir)))
+              _.canConnectTo(current.world.get, current.x, current.y, current.z, dir)))
             map current.neighbour
             filterNot seen.contains: _*)
         case t: IPressureEject =>
@@ -50,7 +77,7 @@ object Helper extends IPressureHelper {
           queue.enqueue(ForgeDirection.VALID_DIRECTIONS
             filter (dir =>
             current.getBlock[IPressureConnectableBlock] exists (
-              _.canConnectFrom(current.world.get, current.x, current.y, current.z, dir)))
+              _.canConnectTo(current.world.get, current.x, current.y, current.z, dir)))
             map current.neighbour
             filterNot seen.contains: _*)
       }
@@ -110,17 +137,35 @@ object Helper extends IPressureHelper {
   def getPipeConnections(ref: BlockRef): List[ForgeDirection] =
     (for {
       (dir, target) <- ref.neighbours
-      world <- target.world
-      conn <- target.getBlock[IPressureConnectableBlock]
-      if conn.canConnectFrom(world, target.x, target.y, target.z, dir.getOpposite)
+      if canPipeConnectFrom(ref, dir) && canPipeConnectTo(target, dir.getOpposite)
     } yield dir).toList
 
   def getPipeConnections(w: IBlockAccess, x: Int, y: Int, z: Int): List[ForgeDirection] = {
-    (ForgeDirection.VALID_DIRECTIONS filter { dir =>
-      val block = w.getBlock(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ)
-      block != null && block.isInstanceOf[IPressureConnectableBlock] &&
-        block.asInstanceOf[IPressureConnectableBlock].canConnectFrom(w, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, dir.getOpposite)
-    }).toList
+    ForgeDirection.VALID_DIRECTIONS.toList filter { dir =>
+      canPipeConnectFrom(w, x, y, z, dir) && canPipeConnectTo(w, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, dir.getOpposite)
+    }
   }
 
+  def canPipeConnectTo(w: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
+    extensions.exists(_.canPipeConnectTo(w, x, y, z, side))
+
+  def canPipeConnectFrom(w: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
+    extensions.exists(_.canPipeConnectFrom(w, x, y, z, side))
+
+  def isConnectableBlock(w: IBlockAccess, x: Int, y: Int, z: Int) =
+    extensions.exists(_.isConnectableBlock(w, x, y, z))
+
+  def canPipeConnectTo(ref: BlockRef, side: ForgeDirection) =
+    ref.world exists (w => extensions.exists(_.canPipeConnectTo(w, ref.x, ref.y, ref.z, side)))
+
+  def canPipeConnectFrom(ref: BlockRef, side: ForgeDirection) =
+    ref.world exists (w => extensions.exists(_.canPipeConnectFrom(w, ref.x, ref.y, ref.z, side)))
+
+  def isConnectableBlock(ref: BlockRef) =
+    ref.world exists (w => extensions.exists(_.isConnectableBlock(w, ref.x, ref.y, ref.z)))
+
+  override def tryPlacePipe(w: World, x: Int, y: Int, z: Int, p: EntityPlayerMP) =
+    extensions.exists(_.tryPlacePipe(w, x, y, z, p))
+
+  override def registerExtension(ext: IPressureExtension) = extensions :+= ext
 }

@@ -9,8 +9,8 @@
 
 package net.bdew.pressure.misc
 
-import net.minecraftforge.fluids.{FluidStack, Fluid, FluidTankInfo, IFluidHandler}
 import net.minecraftforge.common.util.ForgeDirection
+import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTankInfo, IFluidHandler}
 
 /**
  * Mixin that makes a TE look like a tank but not do anything. Used to make pipes from other mods connect correctly.

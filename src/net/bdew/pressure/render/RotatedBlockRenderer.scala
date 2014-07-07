@@ -9,13 +9,13 @@
 
 package net.bdew.pressure.render
 
-import cpw.mods.fml.client.registry.{RenderingRegistry, ISimpleBlockRenderingHandler}
+import cpw.mods.fml.client.registry.{ISimpleBlockRenderingHandler, RenderingRegistry}
+import net.bdew.pressure.blocks.BlockFilterable
 import net.minecraft.block.Block
-import net.minecraft.client.renderer.{Tessellator, RenderBlocks}
+import net.minecraft.client.renderer.{RenderBlocks, Tessellator}
 import net.minecraft.world.IBlockAccess
 import net.minecraftforge.common.util.ForgeDirection
 import org.lwjgl.opengl.GL11
-import net.bdew.pressure.blocks.BlockFilterable
 
 class RotatedBlockRenderer(id: Int) extends ISimpleBlockRenderingHandler {
   override def getRenderId = id
@@ -86,7 +86,7 @@ class RotatedBlockRenderer(id: Int) extends ISimpleBlockRenderingHandler {
     renderer.uvRotateBottom = 0
 
     if (block.isInstanceOf[BlockFilterable[_]]) {
-      import RenderHelper._
+      import net.bdew.pressure.render.RenderHelper._
       val offs = P3d(x, y, z)
       val bf = block.asInstanceOf[BlockFilterable[_]]
 

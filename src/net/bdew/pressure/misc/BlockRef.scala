@@ -9,13 +9,14 @@
 
 package net.bdew.pressure.misc
 
-import net.minecraftforge.common.DimensionManager
 import net.minecraft.block.Block
-import scala.reflect.ClassTag
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
-import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.common.DimensionManager
 import net.minecraftforge.common.util.ForgeDirection
+
+import scala.reflect.ClassTag
 
 case class BlockRef(dim: Int, x: Int, y: Int, z: Int) {
   def world = Option(DimensionManager.getWorld(dim))

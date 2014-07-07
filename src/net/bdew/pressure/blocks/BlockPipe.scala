@@ -9,15 +9,15 @@
 
 package net.bdew.pressure.blocks
 
+import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.pressure.api.IPressureConnectableBlock
+import net.bdew.pressure.misc.Helper
+import net.bdew.pressure.render.PipeRenderer
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
-import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.bdew.pressure.api.IPressureConnectableBlock
-import net.bdew.pressure.render.PipeRenderer
+import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
-import net.minecraft.world.{World, IBlockAccess}
-import net.bdew.pressure.misc.Helper
 
 object BlockPipe extends Block(Material.iron) with IPressureConnectableBlock with BlockNotifyUpdates {
   setBlockName("pressure.pipe")
@@ -57,5 +57,6 @@ object BlockPipe extends Block(Material.iron) with IPressureConnectableBlock wit
     this.setBlockBounds(0, 0, 0, 1, 1, 1)
   }
 
-  override def canConnectFrom(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) = true
+  override def canConnectTo(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) = true
+
 }

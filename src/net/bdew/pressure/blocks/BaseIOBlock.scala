@@ -9,16 +9,16 @@
 
 package net.bdew.pressure.blocks
 
-import net.minecraft.client.renderer.texture.IIconRegister
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.block.HasTE
+import net.bdew.lib.rotate.{BaseRotateableBlock, IconType}
+import net.bdew.pressure.render.RotatedBlockRenderer
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.bdew.lib.rotate.{BaseRotateableBlock, IconType}
+import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.util.IIcon
-import net.minecraft.world.{World, IBlockAccess}
+import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
-import net.bdew.lib.block.HasTE
-import net.bdew.pressure.render.RotatedBlockRenderer
 
 class BaseIOBlock[T <: TileFilterable](name: String, teClass: Class[T])
   extends Block(Material.iron) with BaseRotateableBlock with HasTE[T] with BlockFilterable[T] {

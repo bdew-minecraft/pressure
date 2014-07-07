@@ -9,9 +9,9 @@
 
 package net.bdew.pressure.render
 
+import net.minecraft.client.renderer.Tessellator
 import net.minecraft.util.IIcon
 import net.minecraftforge.common.util.ForgeDirection
-import net.minecraft.client.renderer.Tessellator
 
 object RenderHelper {
 

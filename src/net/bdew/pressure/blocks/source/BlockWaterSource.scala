@@ -9,10 +9,10 @@
 
 package net.bdew.pressure.blocks.source
 
+import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.block.HasTE
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.bdew.lib.block.HasTE
-import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.texture.IIconRegister
 
 object BlockWaterSource extends Block(Material.iron) with HasTE[TileWaterSource] {

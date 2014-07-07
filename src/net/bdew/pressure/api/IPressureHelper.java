@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
-public interface IPressureHelper {
+public interface IPressureHelper extends IPressureExtension {
     /**
      * Forces a reinitialization of the connection. Call before pushing if your current connection object is null
      *
@@ -36,4 +36,9 @@ public interface IPressureHelper {
      * Notify system of block change (call on server for any pipes/inputs/outputs placed / broken / rotated, etc.
      */
     void notifyBlockChanged(World world, int x, int y, int z);
+
+    /**
+     * Register a new extension (allows other mods to provide ovverides to some logic)
+     */
+    void registerExtension(IPressureExtension extension);
 }

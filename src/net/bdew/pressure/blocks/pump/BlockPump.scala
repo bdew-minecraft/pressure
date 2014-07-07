@@ -9,17 +9,17 @@
 
 package net.bdew.pressure.blocks.pump
 
+import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.block.HasTE
+import net.bdew.lib.rotate.{BaseRotateableBlock, IconType}
+import net.bdew.pressure.blocks.{BlockFilterable, BlockNotifyUpdates}
+import net.bdew.pressure.render.RotatedBlockRenderer
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import cpw.mods.fml.relauncher.{SideOnly, Side}
 import net.minecraft.client.renderer.texture.IIconRegister
-import net.bdew.lib.rotate.{BaseRotateableBlock, IconType}
-import net.bdew.lib.block.HasTE
 import net.minecraft.util.IIcon
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
-import net.bdew.pressure.render.RotatedBlockRenderer
-import net.bdew.pressure.blocks.{BlockFilterable, BlockNotifyUpdates}
 
 object BlockPump extends Block(Material.iron) with BaseRotateableBlock
 with HasTE[TilePump] with BlockNotifyUpdates with BlockFilterable[TilePump] {

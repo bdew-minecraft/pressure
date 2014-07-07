@@ -10,8 +10,8 @@
 package net.bdew.pressure.blocks.source
 
 import net.minecraft.tileentity.TileEntity
-import net.minecraftforge.fluids._
 import net.minecraftforge.common.util.ForgeDirection
+import net.minecraftforge.fluids._
 
 class TileWaterSource extends TileEntity with IFluidHandler {
   val fullStack = new FluidStack(FluidRegistry.WATER, Int.MaxValue)

@@ -9,9 +9,10 @@
 
 package net.bdew.pressure.config
 
+import java.io.{File, FileReader, InputStreamReader}
+
 import net.bdew.lib.recipes.gencfg._
 import net.bdew.lib.recipes.{RecipeLoader, RecipeParser}
-import java.io.{InputStreamReader, FileReader, File}
 import net.bdew.pressure.Pressure
 
 object Tuning extends ConfigSection

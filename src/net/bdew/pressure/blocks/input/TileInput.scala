@@ -11,10 +11,10 @@ package net.bdew.pressure.blocks.input
 
 import net.bdew.lib.data.base.TileDataSlots
 import net.bdew.pressure.api._
-import net.minecraftforge.common.util.ForgeDirection
-import net.bdew.pressure.misc.{FakeTank, Helper, BlockRef}
-import net.minecraftforge.fluids.{FluidStack, Fluid}
 import net.bdew.pressure.blocks.TileFilterable
+import net.bdew.pressure.misc.{BlockRef, FakeTank, Helper}
+import net.minecraftforge.common.util.ForgeDirection
+import net.minecraftforge.fluids.{Fluid, FluidStack}
 
 class TileInput extends TileDataSlots with FakeTank with IPressureInject with TileFilterable {
   def getFacing = BlockInput.getFacing(worldObj, xCoord, yCoord, zCoord)
@@ -25,7 +25,7 @@ class TileInput extends TileDataSlots with FakeTank with IPressureInject with Ti
 
   override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int = {
     if (resource != null && resource.getFluid != null && resource.amount > 0 && canFill(from, resource.getFluid)) {
-      if (connection == null && me.neighbour(getFacing).getBlock[IPressureConnectableBlock].isDefined)
+      if (connection == null && Helper.canPipeConnectTo(me.neighbour(getFacing), getFacing.getOpposite))
         connection = Helper.recalculateConnectionInfo(this, getFacing)
       if (connection != null)
         return Helper.pushFluidIntoPressureSytem(connection, resource, doFill)

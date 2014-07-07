@@ -9,13 +9,14 @@
 
 package net.bdew.pressure.render
 
-import cpw.mods.fml.client.registry.{RenderingRegistry, ISimpleBlockRenderingHandler}
+import cpw.mods.fml.client.registry.{ISimpleBlockRenderingHandler, RenderingRegistry}
+import net.bdew.pressure.misc.Helper
 import net.minecraft.block.Block
-import net.minecraft.client.renderer.{Tessellator, RenderBlocks}
+import net.minecraft.client.renderer.{RenderBlocks, Tessellator}
 import net.minecraft.world.IBlockAccess
 import net.minecraftforge.common.util.ForgeDirection
 import org.lwjgl.opengl.GL11
-import net.bdew.pressure.misc.Helper
+
 import scala.collection.Set
 
 class PipeRenderer(id: Int) extends ISimpleBlockRenderingHandler {
@@ -61,7 +62,7 @@ class PipeRenderer(id: Int) extends ISimpleBlockRenderingHandler {
 
     Tessellator.instance.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z))
 
-    import RenderHelper._
+    import net.bdew.pressure.render.RenderHelper._
     val offs = P3d(x, y, z)
 
     if (sides == Set(ForgeDirection.UP, ForgeDirection.DOWN)) {

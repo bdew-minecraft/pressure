@@ -9,13 +9,13 @@
 
 package net.bdew.pressure.blocks.pump
 
-import net.minecraft.world.World
-import net.bdew.pressure.misc.{FakeTank, BlockRef}
-import net.minecraftforge.fluids.IFluidHandler
-import net.bdew.pressure.blocks.TileFilterable
 import net.bdew.lib.data.base.TileDataSlots
-import net.minecraftforge.common.util.ForgeDirection
+import net.bdew.pressure.blocks.TileFilterable
+import net.bdew.pressure.misc.{BlockRef, FakeTank}
 import net.minecraft.block.Block
+import net.minecraft.world.World
+import net.minecraftforge.common.util.ForgeDirection
+import net.minecraftforge.fluids.IFluidHandler
 
 class TilePump extends TileDataSlots with FakeTank with TileFilterable {
 

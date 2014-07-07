@@ -21,5 +21,5 @@ public interface IPressureConnectableBlock {
      *
      * @return true if connection is possible
      */
-    boolean canConnectFrom(IBlockAccess world, int x, int y, int z, ForgeDirection side);
+    boolean canConnectTo(IBlockAccess world, int x, int y, int z, ForgeDirection side);
 }

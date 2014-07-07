@@ -9,8 +9,8 @@
 
 package net.bdew.pressure.blocks
 
-import net.bdew.lib.data.base.{UpdateKind, TileDataSlots}
 import net.bdew.lib.data.DataSlotString
+import net.bdew.lib.data.base.{TileDataSlots, UpdateKind}
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 
 trait TileFilterable extends TileDataSlots {

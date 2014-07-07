@@ -9,15 +9,15 @@
 
 package net.bdew.pressure.blocks
 
-import net.bdew.lib.block.HasTE
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.world.{IBlockAccess, World}
-import net.minecraftforge.fluids.{FluidRegistry, FluidContainerRegistry}
-import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraftforge.common.util.ForgeDirection
-import net.bdew.lib.rotate.{IconType, BaseRotateableBlock}
 import cpw.mods.fml.common.registry.GameRegistry
+import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.block.HasTE
+import net.bdew.lib.rotate.{BaseRotateableBlock, IconType}
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ChatComponentTranslation
+import net.minecraft.world.{IBlockAccess, World}
+import net.minecraftforge.common.util.ForgeDirection
+import net.minecraftforge.fluids.{FluidContainerRegistry, FluidRegistry}
 
 trait BlockFilterable[T <: TileFilterable] extends BaseRotateableBlock with HasTE[T] {
   override def onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, meta: Int, xoffs: Float, yoffs: Float, zoffs: Float): Boolean = {
