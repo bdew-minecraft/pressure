@@ -23,6 +23,7 @@ object ItemDebugger extends SimpleItem("Debugger") {
   setMaxStackSize(1)
   setCreativeTab(CreativeTabPressure)
 
+  import language.implicitConversions
   implicit def string2chatcomp(s: String) = new ChatComponentText(s)
 
   override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, xOff: Float, yOff: Float, zOff: Float): Boolean = {

@@ -33,7 +33,7 @@ trait BlockFilterable[T <: TileFilterable] extends BaseRotateableBlock with HasT
       val fluid = item flatMap (x => Option(FluidContainerRegistry.getFluidForFilledItem(x))) getOrElse (return false)
       if (!world.isRemote) {
         getTE(world, x, y, z).fluidFilter := fluid.getFluid.getName
-        player.addChatMessage(new ChatComponentTranslation("pressure.label.filter.set", fluid.getFluid.getLocalizedName))
+        player.addChatMessage(new ChatComponentTranslation("pressure.label.filter.set", fluid.getFluid.getLocalizedName(fluid)))
       }
       return true
     }
