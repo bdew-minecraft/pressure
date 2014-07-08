@@ -25,7 +25,7 @@ apply plugin: 'forge'
 version = "0.9.2"
 ext.bdlibver = "1.4.0.1"
 ext.apiVer = version
-ext.versuffix = "mc172"
+ext.versuffix = "mc1710"
 
 if (project.hasProperty('buildnum')) {
     project.version = project.version + '.' + project.buildnum
@@ -55,8 +55,8 @@ repositories {
 }
 
 dependencies {
-    compile "codechicken:CodeChickenLib:1.7.2-1.1.1.80:dev"
-    compile "codechicken:ForgeMultipart:1.7.2-1.1.0.288:dev"
+    compile "codechicken:CodeChickenLib:1.7.10-1.1.1.88:dev"
+    compile "codechicken:ForgeMultipart:1.7.10-1.1.0.296:dev"
     compile "net.bdew:bdlib:" + bdlibver
 }
 
