@@ -15,9 +15,12 @@ import cpw.mods.fml.common.Mod
 import cpw.mods.fml.common.Mod.EventHandler
 import cpw.mods.fml.common.event._
 import cpw.mods.fml.common.network.NetworkRegistry
+import cpw.mods.fml.relauncher.Side
 import net.bdew.lib.Misc
 import net.bdew.pressure.config._
 import net.bdew.pressure.fmp.FmpHandler
+import net.bdew.pressure.items.{Canister, CanisterRenderer}
+import net.minecraftforge.client.MinecraftForgeClient
 import org.apache.logging.log4j.Logger
 
 @Mod(modid = Pressure.modId, version = "PRESSURE_VER", name = "Pressure Piping", dependencies = "after:ForgeMultipart;required-after:bdlib", modLanguage = "scala")
@@ -44,6 +47,9 @@ object Pressure {
     TuningLoader.load("override", false)
     Config.load(event.getSuggestedConfigurationFile)
     if (Misc.haveModVersion("ForgeMultipart")) new FmpHandler()
+    if (event.getSide == Side.CLIENT) {
+      MinecraftForgeClient.registerItemRenderer(Canister, CanisterRenderer)
+    }
   }
 
   @EventHandler

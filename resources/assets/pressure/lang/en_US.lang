@@ -6,8 +6,11 @@ tile.pressure.water.name=Infinite Water Source
 
 item.pressure.Debugger.name=Pressure System Debugger
 item.pressure.Interface.name=Pressure System Interface
+item.pressure.HandPump.name=Hand Pump
+item.pressure.Canister.name=Canister
 
 pressure.label.filter.set=Setting fluid filter to: %s
 pressure.label.filter.unset=Removing fluid filter
 
 itemGroup.bdew.pressure=Pressure Piping
+itemGroup.bdew.canisters=Fluid Canisters
