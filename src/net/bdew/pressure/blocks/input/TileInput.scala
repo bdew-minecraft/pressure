@@ -19,7 +19,7 @@ import net.minecraftforge.fluids.{Fluid, FluidStack}
 class TileInput extends TileDataSlots with FakeTank with IPressureInject with TileFilterable {
   def getFacing = BlockInput.getFacing(worldObj, xCoord, yCoord, zCoord)
   lazy val me = BlockRef.fromTile(this)
-  var connection: IConnectionInfo = null
+  var connection: IPressureConnection = null
 
   override def canFill(from: ForgeDirection, fluid: Fluid) = from == getFacing.getOpposite && isFluidAllowed(fluid)
 
@@ -33,7 +33,7 @@ class TileInput extends TileDataSlots with FakeTank with IPressureInject with Ti
       if (connection == null && Helper.canPipeConnectTo(me.neighbour(getFacing), getFacing.getOpposite))
         connection = Helper.recalculateConnectionInfo(this, getFacing)
       if (connection != null)
-        return Helper.pushFluidIntoPressureSytem(connection, resource, doFill)
+        return connection.pushFluid(resource, doFill)
     }
     return 0
   }

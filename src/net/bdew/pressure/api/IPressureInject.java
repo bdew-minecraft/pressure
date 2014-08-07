@@ -10,5 +10,8 @@
 package net.bdew.pressure.api;
 
 public interface IPressureInject extends IPressureTile {
+    /**
+     * Forces invalidation of connection info
+     */
     void invalidateConnection();
 }

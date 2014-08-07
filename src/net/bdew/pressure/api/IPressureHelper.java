@@ -11,26 +11,17 @@ package net.bdew.pressure.api;
 
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
 
 public interface IPressureHelper extends IPressureExtension {
     /**
-     * Forces a reinitialization of the connection. Call before pushing if your current connection object is null
+     * Forces a reinitialization of the connection. Call before pushing if your current connection object is null.
+     * Should only be called on server side
      *
      * @param te   Origin tile entity
      * @param side Side of the connection
      * @return new connection object
      */
-    IConnectionInfo recalculateConnectionInfo(IPressureInject te, ForgeDirection side);
-
-    /**
-     * Tries to push fluid into the system
-     *
-     * @param fluid      FluidStack to push
-     * @param connection Connection object
-     * @return how much fluid was actualy pushed
-     */
-    int pushFluidIntoPressureSytem(IConnectionInfo connection, FluidStack fluid, boolean doPush);
+    IPressureConnection recalculateConnectionInfo(IPressureInject te, ForgeDirection side);
 
     /**
      * Notify system of block change (call on server for any pipes/inputs/outputs placed / broken / rotated, etc.
@@ -38,7 +29,7 @@ public interface IPressureHelper extends IPressureExtension {
     void notifyBlockChanged(World world, int x, int y, int z);
 
     /**
-     * Register a new extension (allows other mods to provide ovverides to some logic)
+     * Register a new extension (allows other mods to provide overrides to some logic)
      */
     void registerExtension(IPressureExtension extension);
 }

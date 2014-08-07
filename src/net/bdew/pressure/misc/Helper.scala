@@ -16,7 +16,8 @@ import net.bdew.pressure.blocks.BlockPipe
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
-import net.minecraftforge.fluids.FluidStack
+
+import scala.util.DynamicVariable
 
 object InternalPressureExtension extends IPressureExtension {
   override def canPipeConnectTo(w: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
@@ -44,9 +45,7 @@ object Helper extends IPressureHelper {
 
   registerExtension(InternalPressureExtension)
 
-  val recursionGuard = new ThreadLocal[Set[ConnectionInfo]] {
-    override def initialValue() = Set.empty
-  }
+  val recursionGuard = new DynamicVariable(Set.empty[IPressureConnection])
 
   def scanConnectedBlocks(start: BlockRef, forceNeighbours: Boolean) = {
     val seen = collection.mutable.Set.empty[BlockRef]
@@ -85,48 +84,6 @@ object Helper extends IPressureHelper {
     (inputs.toSet, outputs.toSet, seen)
   }
 
-  override def pushFluidIntoPressureSytem(connection: IConnectionInfo, fluid: FluidStack, doPush: Boolean): Int = {
-    if (connection == null || fluid == null || fluid.getFluid == null || fluid.amount == 0 || !connection.isInstanceOf[ConnectionInfo]) return 0
-    val conn = connection.asInstanceOf[ConnectionInfo]
-    val recGuard = recursionGuard.get()
-    if (recGuard.contains(conn)) {
-      Pressure.logInfo("Detected loop, blowing up %d,%d,%d (dim %d)",
-        conn.origin.getXCoord, conn.origin.getYCoord, conn.origin.getZCoord, conn.origin.getWorld.provider.dimensionId)
-      conn.origin.getWorld.createExplosion(null, conn.origin.getXCoord, conn.origin.getYCoord, conn.origin.getZCoord, 1, true)
-      return 0
-    }
-    recursionGuard.set(recGuard + conn)
-    try {
-      if (conn.tiles.size == 0) return 0
-      if (fluid.amount < 10) {
-        // Don't try balancing small amounts
-        var toPush = fluid.amount
-        conn.tiles.foreach { target =>
-          toPush -= target.eject(new FluidStack(fluid.getFluid, toPush), doPush)
-          if (toPush <= 0) return fluid.amount
-        }
-        toPush - fluid.amount
-      } else {
-        val maxFill = conn.tiles.map(target => target -> target.eject(fluid.copy(), false)).toMap
-        val totalFill = maxFill.values.sum
-        if (!doPush) return totalFill
-        val mul = if (totalFill > fluid.amount)
-          fluid.amount.toFloat / totalFill
-        else
-          1
-        (maxFill map { case (te, amount) =>
-          val toFill = (amount * mul).round
-          if (toFill > 0)
-            te.eject(new FluidStack(fluid.getFluid, toFill), doPush)
-          else
-            0
-        }).sum
-      }
-    } finally {
-      recursionGuard.set(recGuard)
-    }
-  }
-
   override def notifyBlockChanged(world: World, x: Int, y: Int, z: Int) {
     if (!world.isRemote)
       scanConnectedBlocks(BlockRef(world, x, y, z), true)._1 foreach (_.invalidateConnection())
@@ -136,7 +93,7 @@ object Helper extends IPressureHelper {
     if (te.getWorld.isRemote) {
       Pressure.logWarn("Attempt to generate ConnectionInfo on client side from %s. This is a bug.", te)
       null
-    } else ConnectionInfo(te, side, scanConnectedBlocks(BlockRef(te.getWorld, te.getXCoord, te.getYCoord, te.getZCoord), false)._2)
+    } else PressureConnection(te, side, scanConnectedBlocks(BlockRef(te.getWorld, te.getXCoord, te.getYCoord, te.getZCoord), false)._2)
 
   def getPipeConnections(ref: BlockRef): List[ForgeDirection] =
     (for {
