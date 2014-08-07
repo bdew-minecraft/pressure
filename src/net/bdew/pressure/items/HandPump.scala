@@ -4,7 +4,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.bdew.lib.items.SimpleItem
 import net.bdew.pressure.CreativeTabPressure
 import net.bdew.pressure.config.Tuning
-import net.bdew.pressure.items.Canister._
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.entity.player.EntityPlayer

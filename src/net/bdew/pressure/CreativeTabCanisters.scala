@@ -10,7 +10,6 @@
 package net.bdew.pressure
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.bdew.pressure.config.Items
 import net.bdew.pressure.items.Canister
 import net.minecraft.creativetab.CreativeTabs
 

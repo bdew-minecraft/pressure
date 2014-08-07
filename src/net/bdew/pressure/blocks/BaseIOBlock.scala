@@ -13,7 +13,6 @@ import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.block.HasTE
 import net.bdew.lib.rotate.{BaseRotateableBlock, IconType}
 import net.bdew.pressure.CreativeTabPressure
-import net.bdew.pressure.blocks.BlockPipe._
 import net.bdew.pressure.render.RotatedBlockRenderer
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
