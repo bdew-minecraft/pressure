@@ -14,6 +14,10 @@ import net.bdew.pressure.config.Items
 import net.minecraft.creativetab.CreativeTabs
 
 object CreativeTabPressure extends CreativeTabs("bdew.pressure") {
+  def init() {
+    Pressure.logInfo("Creative tab initialized: %s", this)
+  }
+
   @SideOnly(Side.CLIENT)
   override def getTabIconItem = Items.interface
 }

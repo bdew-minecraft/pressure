@@ -56,6 +56,8 @@ object Pressure {
   def init(event: FMLInitializationEvent) {
     NetworkRegistry.INSTANCE.registerGuiHandler(this, Config.guiHandler)
     TuningLoader.loadDealayed()
+    CreativeTabCanisters.init()
+    CreativeTabPressure.init()
   }
 
   @EventHandler

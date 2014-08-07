@@ -15,6 +15,10 @@ import net.bdew.pressure.items.Canister
 import net.minecraft.creativetab.CreativeTabs
 
 object CreativeTabCanisters extends CreativeTabs("bdew.canisters") {
+  def init() {
+    Pressure.logInfo("Creative tab initialized: %s", this)
+  }
+
   @SideOnly(Side.CLIENT)
   override def getTabIconItem = Canister
 }
