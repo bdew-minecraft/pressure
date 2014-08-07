@@ -30,7 +30,7 @@ class TileInput extends TileDataSlots with FakeTank with IPressureInject with Ti
       else
         0
     } else if (resource != null && resource.getFluid != null && resource.amount > 0 && canFill(from, resource.getFluid)) {
-      if (connection == null && Helper.canPipeConnectTo(me.neighbour(getFacing), getFacing.getOpposite))
+      if (connection == null && Helper.canPipeConnectTo(worldObj, me.neighbour(getFacing), getFacing.getOpposite))
         connection = Helper.recalculateConnectionInfo(this, getFacing)
       if (connection != null)
         return connection.pushFluid(resource, doFill)

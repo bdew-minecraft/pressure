@@ -29,10 +29,10 @@ class TilePump extends TileDataSlots with FakeTank with TileFilterable {
   serverTick.listen(doPushFluid)
 
   def doPushFluid() {
-    if ((me.meta.getOrElse(0) & 8) == 0) return
+    if ((me.meta(worldObj) & 8) == 0) return
     val face = getFacing
-    for (from <- me.neighbour(face.getOpposite).getTile[IFluidHandler];
-         to <- me.neighbour(face).getTile[IFluidHandler]) {
+    for (from <- me.neighbour(face.getOpposite).getTile[IFluidHandler](worldObj);
+         to <- me.neighbour(face).getTile[IFluidHandler](worldObj)) {
       val res = from.drain(face.getOpposite, Int.MaxValue, false)
       if (res != null && res.getFluid != null && res.amount > 0 && isFluidAllowed(res)) {
         val filled = to.fill(face.getOpposite, res, true)

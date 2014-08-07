@@ -25,7 +25,7 @@ import net.minecraftforge.common.util.ForgeDirection
 object FmpConverter extends IPartConverter {
   override def blockTypes = util.Arrays.asList(BlockPipe)
   override def convert(world: World, pos: BlockCoord) = {
-    BlockRef(world, pos.x, pos.y, pos.z).block match {
+    BlockRef(pos.x, pos.y, pos.z).block(world) match {
       case Some(BlockPipe) => new PipePart
       case _ => null
     }

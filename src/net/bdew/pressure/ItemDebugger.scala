@@ -29,14 +29,14 @@ object ItemDebugger extends SimpleItem("Debugger") {
 
   override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, xOff: Float, yOff: Float, zOff: Float): Boolean = {
     if (!world.isRemote) {
-      val br = BlockRef(world, x, y, z)
-      val (ins, outs, seen) = Helper.scanConnectedBlocks(br, false)
+      val br = BlockRef(x, y, z)
+      val (ins, outs, seen) = Helper.scanConnectedBlocks(world, br, false)
       player.addChatMessage("====")
       player.addChatMessage("Ins: " + (ins map (x => "[%d,%d,%d]".format(x.getXCoord, x.getYCoord, x.getZCoord)) mkString " "))
       player.addChatMessage("Outs: " + (outs map (x => "[%d,%d,%d]".format(x.getXCoord, x.getYCoord, x.getZCoord)) mkString " "))
       player.addChatMessage("Seen:")
-      seen.foreach(x => player.addChatMessage(" * %d,%d,%d: %s".format(x.x, x.y, x.z, x.block map (_.getUnlocalizedName) getOrElse "AIR")))
-      player.addChatMessage("PConn: " + Helper.getPipeConnections(br).mkString(","))
+      seen.foreach(x => player.addChatMessage(" * %d,%d,%d: %s".format(x.x, x.y, x.z, x.block(world) map (_.getUnlocalizedName) getOrElse "AIR")))
+      player.addChatMessage("PConn: " + Helper.getPipeConnections(world, br).mkString(","))
     }
     true
   }

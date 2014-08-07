@@ -24,7 +24,7 @@ class TileOutput extends TileDataSlots with FakeTank with IPressureEject with Ti
   override def eject(resource: FluidStack, doEject: Boolean) = {
     if (isFluidAllowed(resource)) {
       val f = getFacing
-      me.neighbour(f).getTile[IFluidHandler] map { dest =>
+      me.neighbour(f).getTile[IFluidHandler](worldObj) map { dest =>
         dest.fill(f.getOpposite, resource, doEject)
       } getOrElse 0
     } else 0
