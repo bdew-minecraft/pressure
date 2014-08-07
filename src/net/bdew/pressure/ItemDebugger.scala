@@ -11,8 +11,9 @@ package net.bdew.pressure
 
 import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.block.BlockRef
 import net.bdew.lib.items.SimpleItem
-import net.bdew.pressure.misc.{BlockRef, Helper}
+import net.bdew.pressure.misc.Helper
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack

@@ -9,9 +9,10 @@
 
 package net.bdew.pressure.blocks.pump
 
+import net.bdew.lib.block.BlockRef
 import net.bdew.lib.data.base.TileDataSlots
 import net.bdew.pressure.blocks.TileFilterable
-import net.bdew.pressure.misc.{BlockRef, FakeTank}
+import net.bdew.pressure.misc.FakeTank
 import net.minecraft.block.Block
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection

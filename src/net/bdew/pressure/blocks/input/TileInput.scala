@@ -9,10 +9,11 @@
 
 package net.bdew.pressure.blocks.input
 
+import net.bdew.lib.block.BlockRef
 import net.bdew.lib.data.base.TileDataSlots
 import net.bdew.pressure.api._
 import net.bdew.pressure.blocks.TileFilterable
-import net.bdew.pressure.misc.{BlockRef, FakeTank, Helper}
+import net.bdew.pressure.misc.{FakeTank, Helper}
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 

@@ -10,6 +10,7 @@
 package net.bdew.pressure.misc
 
 import net.bdew.lib.Misc
+import net.bdew.lib.block.BlockRef
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api._
 import net.bdew.pressure.blocks.BlockPipe

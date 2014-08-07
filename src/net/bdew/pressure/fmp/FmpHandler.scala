@@ -15,9 +15,10 @@ import codechicken.lib.vec.BlockCoord
 import codechicken.multipart.MultiPartRegistry.{IPartConverter, IPartFactory}
 import codechicken.multipart.{MultiPartRegistry, TileMultipart}
 import net.bdew.lib.Misc
+import net.bdew.lib.block.BlockRef
 import net.bdew.pressure.api.IPressureExtension
 import net.bdew.pressure.blocks.BlockPipe
-import net.bdew.pressure.misc.{BlockRef, Helper}
+import net.bdew.pressure.misc.Helper
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
