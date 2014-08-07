@@ -117,7 +117,7 @@ object Helper extends IPressureHelper {
         (maxFill map { case (te, amount) =>
           val toFill = (amount * mul).round
           if (toFill > 0)
-            te.eject(new FluidStack(fluid.getFluid, toFill), true)
+            te.eject(new FluidStack(fluid.getFluid, toFill), doPush)
           else
             0
         }).sum
@@ -128,11 +128,15 @@ object Helper extends IPressureHelper {
   }
 
   override def notifyBlockChanged(world: World, x: Int, y: Int, z: Int) {
-    scanConnectedBlocks(BlockRef(world, x, y, z), true)._1 foreach (_.invalidateConnection())
+    if (!world.isRemote)
+      scanConnectedBlocks(BlockRef(world, x, y, z), true)._1 foreach (_.invalidateConnection())
   }
 
   override def recalculateConnectionInfo(te: IPressureInject, side: ForgeDirection) =
-    ConnectionInfo(te, side, scanConnectedBlocks(BlockRef(te.getWorld, te.getXCoord, te.getYCoord, te.getZCoord), false)._2)
+    if (te.getWorld.isRemote) {
+      Pressure.logWarn("Attempt to generate ConnectionInfo on client side from %s. This is a bug.", te)
+      null
+    } else ConnectionInfo(te, side, scanConnectedBlocks(BlockRef(te.getWorld, te.getXCoord, te.getYCoord, te.getZCoord), false)._2)
 
   def getPipeConnections(ref: BlockRef): List[ForgeDirection] =
     (for {

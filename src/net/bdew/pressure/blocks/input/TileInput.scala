@@ -24,7 +24,12 @@ class TileInput extends TileDataSlots with FakeTank with IPressureInject with Ti
   override def canFill(from: ForgeDirection, fluid: Fluid) = from == getFacing.getOpposite && isFluidAllowed(fluid)
 
   override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int = {
-    if (resource != null && resource.getFluid != null && resource.amount > 0 && canFill(from, resource.getFluid)) {
+    if (worldObj.isRemote) {
+      if (resource != null && resource.getFluid != null && resource.amount > 0 && canFill(from, resource.getFluid))
+        resource.amount
+      else
+        0
+    } else if (resource != null && resource.getFluid != null && resource.amount > 0 && canFill(from, resource.getFluid)) {
       if (connection == null && Helper.canPipeConnectTo(me.neighbour(getFacing), getFacing.getOpposite))
         connection = Helper.recalculateConnectionInfo(this, getFacing)
       if (connection != null)
