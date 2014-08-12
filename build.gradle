@@ -23,7 +23,7 @@ apply plugin: 'scala'
 apply plugin: 'forge'
 
 version = "0.9.2"
-ext.bdlibver = "1.4.1.6"
+ext.bdlibver = "1.4.2.9"
 ext.apiVer = version
 ext.versuffix = "mc1710"
 
@@ -53,8 +53,8 @@ repositories {
 }
 
 dependencies {
-    compile "codechicken:CodeChickenLib:1.7.10-1.1.1.88:dev"
-    compile "codechicken:ForgeMultipart:1.7.10-1.1.0.296:dev"
+    compile "codechicken:CodeChickenLib:1.7.10-1.1.1.98:dev"
+    compile "codechicken:ForgeMultipart:1.7.10-1.1.0.300:dev"
     compile "net.bdew:bdlib:" + bdlibver
 }
 
