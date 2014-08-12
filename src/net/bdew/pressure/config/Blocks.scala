@@ -16,8 +16,9 @@ import net.bdew.pressure.blocks.input.BlockInput
 import net.bdew.pressure.blocks.output.BlockOutput
 import net.bdew.pressure.blocks.pump.BlockPump
 import net.bdew.pressure.blocks.source.BlockWaterSource
+import net.bdew.pressure.misc.PressureCreativeTabs
 
-object Blocks extends BlockManager {
+object Blocks extends BlockManager(PressureCreativeTabs.main) {
   GameRegistry.registerBlock(BlockPipe, classOf[ItemBlockPipe], "Pipe")
   regBlock(BlockPump, "Pump")
   regBlock(BlockOutput, "Output")

@@ -11,7 +11,6 @@ package net.bdew.pressure.items
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.bdew.lib.items.SimpleItem
-import net.bdew.pressure.CreativeTabPressure
 import net.bdew.pressure.config.Tuning
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -28,8 +27,6 @@ import net.minecraftforge.fluids._
 object HandPump extends SimpleItem("HandPump") {
   lazy val cfg = Tuning.getSection("Items").getSection(name)
   lazy val maxDrain = cfg.getInt("MaxDrain")
-
-  setCreativeTab(CreativeTabPressure)
 
   setMaxStackSize(1)
   MinecraftForge.EVENT_BUS.register(this)

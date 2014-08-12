@@ -14,7 +14,7 @@ import java.util
 import net.bdew.lib.Misc
 import net.bdew.lib.items.SimpleItem
 import net.bdew.pressure.config.Tuning
-import net.bdew.pressure.{CreativeTabCanisters, CreativeTabPressure}
+import net.bdew.pressure.misc.PressureCreativeTabs
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
@@ -28,16 +28,16 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
   lazy val maxPour = cfg.getInt("MaxPour")
   lazy val capacity = cfg.getInt("Capacity")
 
-  setCreativeTab(CreativeTabPressure)
   setMaxStackSize(1)
 
-  override def getCreativeTabs = Array(CreativeTabPressure, CreativeTabCanisters)
+  override def getCreativeTabs = Array(PressureCreativeTabs.main, PressureCreativeTabs.canisters)
+
   override def getSubItems(item: Item, tab: CreativeTabs, jstacks: util.List[_]) {
     import scala.collection.JavaConversions._
     val stacks = jstacks.asInstanceOf[java.util.List[ItemStack]]
-    if (tab == CreativeTabPressure)
+    if (tab == PressureCreativeTabs.main)
       stacks.add(new ItemStack(this))
-    else if (tab == CreativeTabCanisters || tab == null)
+    else if (tab == PressureCreativeTabs.canisters || tab == null)
       stacks.addAll(
         FluidRegistry.getRegisteredFluids map { case (id, fluid) =>
           val tag = new NBTTagCompound

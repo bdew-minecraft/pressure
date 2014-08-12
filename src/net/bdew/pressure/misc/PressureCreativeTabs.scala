@@ -7,17 +7,13 @@
  * https://raw.github.com/bdew/pressure/master/MMPL-1.0.txt
  */
 
-package net.bdew.pressure
+package net.bdew.pressure.misc
 
-import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.CreativeTabContainer
+import net.bdew.pressure.config.Items
 import net.bdew.pressure.items.Canister
-import net.minecraft.creativetab.CreativeTabs
 
-object CreativeTabCanisters extends CreativeTabs("bdew.canisters") {
-  def init() {
-    Pressure.logInfo("Creative tab initialized: %s", this)
-  }
-
-  @SideOnly(Side.CLIENT)
-  override def getTabIconItem = Canister
+object PressureCreativeTabs extends CreativeTabContainer {
+  val main = new Tab("bdew.pressure", Items.interface)
+  val canisters = new Tab("bdew.canisters", Canister)
 }

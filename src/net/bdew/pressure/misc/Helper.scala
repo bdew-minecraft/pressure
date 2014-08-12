@@ -53,7 +53,7 @@ object Helper extends IPressureHelper {
     val queue = collection.mutable.Queue(start)
 
     if (forceNeighbours)
-      queue.enqueue(start.neighbours map (_._2): _*)
+      queue ++= start.neighbours.values
 
     val inputs = collection.mutable.Set.empty[IPressureInject]
     val outputs = collection.mutable.Set.empty[IPressureEject]

@@ -22,7 +22,6 @@ import net.minecraft.world.World
 
 object ItemDebugger extends SimpleItem("Debugger") {
   setMaxStackSize(1)
-  setCreativeTab(CreativeTabPressure)
 
   import scala.language.implicitConversions
 

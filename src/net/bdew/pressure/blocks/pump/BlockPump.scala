@@ -12,7 +12,6 @@ package net.bdew.pressure.blocks.pump
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.block.HasTE
 import net.bdew.lib.rotate.{BaseRotateableBlock, IconType}
-import net.bdew.pressure.CreativeTabPressure
 import net.bdew.pressure.blocks.{BlockFilterable, BlockNotifyUpdates}
 import net.bdew.pressure.render.RotatedBlockRenderer
 import net.minecraft.block.Block
@@ -28,7 +27,6 @@ with HasTE[TilePump] with BlockNotifyUpdates with BlockFilterable[TilePump] {
 
   setBlockName("pressure.pump")
   setHardness(2)
-  setCreativeTab(CreativeTabPressure)
 
   @SideOnly(Side.CLIENT)
   override def getRenderType = RotatedBlockRenderer.id

@@ -20,6 +20,7 @@ import net.bdew.lib.Misc
 import net.bdew.pressure.config._
 import net.bdew.pressure.fmp.FmpHandler
 import net.bdew.pressure.items.{Canister, CanisterRenderer}
+import net.bdew.pressure.misc.PressureCreativeTabs
 import net.minecraftforge.client.MinecraftForgeClient
 import org.apache.logging.log4j.Logger
 
@@ -56,11 +57,10 @@ object Pressure {
   def init(event: FMLInitializationEvent) {
     NetworkRegistry.INSTANCE.registerGuiHandler(this, Config.guiHandler)
     TuningLoader.loadDealayed()
-    CreativeTabCanisters.init()
-    CreativeTabPressure.init()
   }
 
   @EventHandler
   def postInit(event: FMLPostInitializationEvent) {
+    PressureCreativeTabs.init()
   }
 }
