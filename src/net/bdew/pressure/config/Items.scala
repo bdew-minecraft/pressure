@@ -19,5 +19,5 @@ object Items extends ItemManager(PressureCreativeTabs.main) {
   val interface = regSimpleItem("Interface")
 
   regItem(HandPump)
-  regItem(Canister)
+  regItem(Canister).setCreativeTab(PressureCreativeTabs.canisters)
 }

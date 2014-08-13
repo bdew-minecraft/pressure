@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.blocks
 
-import net.bdew.pressure.misc.Helper
+import net.bdew.pressure.misc.{PressureCreativeTabs, Helper}
 import net.minecraft.block.Block
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.item.{ItemBlock, ItemStack}
@@ -20,6 +20,8 @@ class ItemBlockPipe(bl: Block) extends ItemBlock(bl) {
   override def func_150936_a(w: World, x: Int, y: Int, z: Int, side: Int, p: EntityPlayer, s: ItemStack) = {
     true
   }
+
+  setCreativeTab(PressureCreativeTabs.main)
 
   override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, xOff: Float, yOff: Float, zOff: Float): Boolean = {
     if (player.isSneaking) return false
