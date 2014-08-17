@@ -1,0 +1,16 @@
+tile.pressure.input.name=High Pressure Input
+tile.pressure.output.name=High Pressure Output
+tile.pressure.pipe.name=High Pressure Piping
+tile.pressure.pump.name=High Pressure Pump
+tile.pressure.water.name=무한 물소스
+
+item.pressure.Debugger.name=Pressure System Debugger
+item.pressure.Interface.name=Pressure System Interface
+item.pressure.HandPump.name=손 펌프
+item.pressure.Canister.name=Canister
+
+pressure.label.filter.set=Setting fluid filter to: %s
+pressure.label.filter.unset=Removing fluid filter
+
+itemGroup.bdew.pressure=Pressure Piping
+itemGroup.bdew.canisters=Fluid Canisters
