@@ -1,0 +1,16 @@
+tile.pressure.input.name=Вход под высоким давлением
+tile.pressure.output.name=Выход под высоким давлением
+tile.pressure.pipe.name=Труба под высоким давлением
+tile.pressure.pump.name=Помпа под высоким давлением
+tile.pressure.water.name=Бесконечный источник воды
+
+item.pressure.Debugger.name=Отладчик системы давления
+item.pressure.Interface.name=Интерфейс системы давления
+item.pressure.HandPump.name=Ручная помпа
+item.pressure.Canister.name=Канистра
+
+pressure.label.filter.set=Установка жидкостного фильтра на: %s
+pressure.label.filter.unset=Удаление жидкостного фильтра
+
+itemGroup.bdew.pressure=Pressure Piping
+itemGroup.bdew.canisters=Жидкостные канистры
