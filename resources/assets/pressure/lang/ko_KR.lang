@@ -1,0 +1,16 @@
+tile.pressure.input.name=고압 인풋
+tile.pressure.output.name=고압 아웃풋
+tile.pressure.pipe.name=고압 파이프
+tile.pressure.pump.name=고압 펌프
+tile.pressure.water.name=무한 물소스
+
+item.pressure.Debugger.name=프레셔 시스템 디버그
+item.pressure.Interface.name=프레셔 시스템 인터페이스
+item.pressure.HandPump.name=손 펌프
+item.pressure.Canister.name=통
+
+pressure.label.filter.set=%s 액체를 필터에 적용했습니다
+pressure.label.filter.unset=액체필터의 설정을 제거했습니다
+
+itemGroup.bdew.pressure=압력 파이프
+itemGroup.bdew.canisters=액체 통
