@@ -13,6 +13,7 @@ import java.util
 
 import net.bdew.lib.Misc
 import net.bdew.lib.items.SimpleItem
+import net.bdew.pressure.Pressure
 import net.bdew.pressure.config.Tuning
 import net.bdew.pressure.misc.PressureCreativeTabs
 import net.minecraft.creativetab.CreativeTabs
@@ -21,7 +22,7 @@ import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
-import net.minecraftforge.fluids.{FluidRegistry, FluidStack, IFluidContainerItem, IFluidHandler}
+import net.minecraftforge.fluids._
 
 object Canister extends SimpleItem("Canister") with IFluidContainerItem {
   lazy val cfg = Tuning.getSection("Items").getSection(name)
@@ -39,13 +40,19 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
       stacks.add(new ItemStack(this))
     else if (tab == PressureCreativeTabs.canisters || tab == null)
       stacks.addAll(
-        FluidRegistry.getRegisteredFluids map { case (id, fluid) =>
-          val tag = new NBTTagCompound
-          val fstack = new FluidStack(fluid, capacity)
-          fstack.writeToNBT(tag)
-          val item = new ItemStack(this)
-          item.setTagCompound(tag)
-          item
+        FluidRegistry.getRegisteredFluids flatMap { case (id, fluid) =>
+          if (FluidRegistry.getFluid(fluid.getName) != fluid) {
+            Pressure.logError("Fluid %s is not registered correctly (%s <=> %s)", id, fluid, FluidRegistry.getFluid(fluid.getName))
+            None
+          } else {
+            Pressure.logInfo("Preparing canister for %s", id)
+            val tag = new NBTTagCompound
+            val fstack = new FluidStack(fluid, capacity)
+            fstack.writeToNBT(tag)
+            val item = new ItemStack(this)
+            item.setTagCompound(tag)
+            Some(item)
+          }
         }
       )
   }
