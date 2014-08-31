@@ -1,0 +1,16 @@
+tile.pressure.input.name=高压输入接口
+tile.pressure.output.name=高压输出接口
+tile.pressure.pipe.name=高压管道
+tile.pressure.pump.name=高压泵
+tile.pressure.water.name=无限水源块
+
+item.pressure.Debugger.name=压力系统调试物品
+item.pressure.Interface.name=压力系统接口
+item.pressure.HandPump.name=手压泵
+item.pressure.Canister.name=金属罐
+
+pressure.label.filter.set=过滤流体设为: %s
+pressure.label.filter.unset=移除流体过滤设定
+
+itemGroup.bdew.pressure=压力管道
+itemGroup.bdew.canisters=压力管道|金属罐
