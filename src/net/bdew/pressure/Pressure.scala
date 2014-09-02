@@ -49,6 +49,7 @@ object Pressure {
     Config.load(event.getSuggestedConfigurationFile)
     if (Misc.haveModVersion("ForgeMultipart")) new FmpHandler()
     if (event.getSide == Side.CLIENT) {
+      IconCache.init()
       MinecraftForgeClient.registerItemRenderer(Canister, CanisterRenderer)
     }
   }

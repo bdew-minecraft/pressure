@@ -23,6 +23,7 @@ object Config {
     try {
       Items.load()
       Blocks.load()
+      Machines.load()
     } finally {
       c.save()
     }
