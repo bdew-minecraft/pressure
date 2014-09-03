@@ -9,41 +9,15 @@
 
 package net.bdew.pressure.blocks.tank
 
-import net.bdew.lib.Misc
-import net.bdew.lib.block.BlockFace
 import net.bdew.lib.multiblock.block.BlockOutput
-import net.bdew.lib.multiblock.data.{OutputConfig, OutputConfigFluid}
-import net.bdew.lib.multiblock.interact.CIFluidOutput
-import net.bdew.lib.multiblock.tile.{RSControllableOutput, TileOutput}
+import net.bdew.lib.multiblock.data.OutputConfig
 import net.minecraftforge.common.util.ForgeDirection
-import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTankInfo, IFluidHandler}
+import net.minecraftforge.fluids.{Fluid, FluidStack}
 
 object BlockFluidOutput extends BaseModule("FluidOutput", "FluidOutput", classOf[TileFluidOutput]) with BlockOutput[TileFluidOutput]
 
-class TileFluidOutput extends TileOutput with RSControllableOutput with IFluidHandler {
-  val kind: String = "FluidOutput"
-
-  override def getCore = getCoreAs[CIFluidOutput]
-
-  def getCfg(dir: ForgeDirection): Option[OutputConfigFluid] =
-    for {
-      core <- getCore
-      onum <- core.outputFaces.get(BlockFace(mypos, dir))
-      cfggen <- core.outputConfig.get(onum)
-      cfg <- Misc.asInstanceOpt(cfggen, classOf[OutputConfigFluid])
-    } yield cfg
-
-  override def makeCfgObject(face: ForgeDirection) = new OutputConfigFluid
-
-  override def canConnectoToFace(d: ForgeDirection) = mypos.neighbour(d).getTile[IFluidHandler](worldObj).isDefined
-
+class TileFluidOutput extends TileFluidOutputBase {
   override def doOutput(face: ForgeDirection, cfg: OutputConfig) {}
-
-  override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean) = 0
-  override def canFill(from: ForgeDirection, fluid: Fluid) = false
-
-  override def getTankInfo(from: ForgeDirection): Array[FluidTankInfo] =
-    getCore map (_.getTankInfo) getOrElse Array.empty
 
   override def canDrain(from: ForgeDirection, fluid: Fluid) =
     (for {
