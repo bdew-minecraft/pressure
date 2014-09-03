@@ -45,7 +45,6 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
             Pressure.logError("Fluid %s is not registered correctly (%s <=> %s)", id, fluid, FluidRegistry.getFluid(fluid.getName))
             None
           } else {
-            Pressure.logInfo("Preparing canister for %s", id)
             val tag = new NBTTagCompound
             val fstack = new FluidStack(fluid, capacity)
             fstack.writeToNBT(tag)
