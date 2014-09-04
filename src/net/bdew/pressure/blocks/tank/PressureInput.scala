@@ -18,11 +18,12 @@ import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.FluidStack
 
 object BlockPressureInput extends BaseModule("TankPressureInput", "FluidInput", classOf[TilePressureInput])
-  with BlockNotifyUpdates with IPressureConnectableBlock {
-  override def canConnectTo(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) = true
+with BlockNotifyUpdates with IPressureConnectableBlock {
+  override def canConnectTo(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
+    getTE(world, x, y, z).getCore.isDefined
 }
 
-class TilePressureInput extends TileModule with IPressureEject {
+class TilePressureInput extends TileModule with PressureModule with IPressureEject {
   val kind: String = "FluidInput"
   override def getCore = getCoreAs[CIFluidInput]
 
@@ -30,8 +31,4 @@ class TilePressureInput extends TileModule with IPressureEject {
     core.inputFluid(resource, doEject)
   } getOrElse 0
 
-  override def getWorld = worldObj
-  override def getXCoord = xCoord
-  override def getYCoord = yCoord
-  override def getZCoord = zCoord
 }
