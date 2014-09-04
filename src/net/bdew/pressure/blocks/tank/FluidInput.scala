@@ -14,7 +14,7 @@ import net.bdew.lib.multiblock.tile.TileModule
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
 
-object BlockFluidInput extends BaseModule("FluidInput", "FluidInput", classOf[TileFluidInput])
+object BlockFluidInput extends BaseModule("TankFluidInput", "FluidInput", classOf[TileFluidInput])
 
 class TileFluidInput extends TileModule with IFluidHandler {
   val kind: String = "FluidInput"

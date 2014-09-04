@@ -15,7 +15,7 @@ import net.bdew.lib.multiblock.data.{OutputConfig, OutputConfigFluid}
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
 
-object BlockFluidAutoOutput extends BaseModule("FluidAutoOutput", "FluidOutput", classOf[TileFluidAutoOutput]) with BlockOutput[TileFluidAutoOutput]
+object BlockFluidAutoOutput extends BaseModule("TankFluidAutoOutput", "FluidOutput", classOf[TileFluidAutoOutput]) with BlockOutput[TileFluidAutoOutput]
 
 class TileFluidAutoOutput extends TileFluidOutputBase {
   override def doOutput(face: ForgeDirection, cfg: OutputConfig) {

@@ -17,7 +17,7 @@ import net.minecraft.world.IBlockAccess
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.FluidStack
 
-object BlockPressureInput extends BaseModule("PressureInput", "FluidInput", classOf[TilePressureInput])
+object BlockPressureInput extends BaseModule("TankPressureInput", "FluidInput", classOf[TilePressureInput])
   with BlockNotifyUpdates with IPressureConnectableBlock {
   override def canConnectTo(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) = true
 }
