@@ -10,7 +10,7 @@
 package net.bdew.pressure.blocks.tank
 
 import net.bdew.lib.multiblock.block.BlockOutput
-import net.bdew.lib.multiblock.data.{OutputConfigFluid, OutputConfig}
+import net.bdew.lib.multiblock.data.OutputConfigFluid
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 

@@ -9,9 +9,7 @@
 
 package net.bdew.pressure.blocks.tank
 
-import net.bdew.lib.Misc
-import net.bdew.lib.block.BlockFace
-import net.bdew.lib.multiblock.data.{OutputConfigPower, OutputConfigFluid}
+import net.bdew.lib.multiblock.data.OutputConfigFluid
 import net.bdew.lib.multiblock.interact.CIFluidOutput
 import net.bdew.lib.multiblock.tile.{RSControllableOutput, TileOutput}
 import net.minecraftforge.common.util.ForgeDirection
@@ -33,7 +31,6 @@ abstract class TileFluidOutputBase extends TileOutput[OutputConfigFluid] with RS
 
   override def getTankInfo(from: ForgeDirection) =
     getCore map (_.getTankInfo) getOrElse Array.empty
-
 
   override def makeCfgObject(face: ForgeDirection) = new OutputConfigFluid
 }
