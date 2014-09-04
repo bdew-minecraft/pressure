@@ -36,6 +36,7 @@ object InternalPressureExtension extends IPressureExtension {
   override def tryPlacePipe(w: World, x: Int, y: Int, z: Int, p: EntityPlayerMP) = {
     if (w.isAirBlock(x, y, z) || (Option(w.getBlock(x, y, z)) exists (_.isReplaceable(w, x, y, z)))) {
       w.setBlock(x, y, z, BlockPipe, 0, 3)
+      BlockPipe.notifyPressureSystemUpdate(w, x, y, z)
       true
     } else false
   }
