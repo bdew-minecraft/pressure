@@ -9,26 +9,24 @@
 
 package net.bdew.pressure.blocks.tank
 
-import net.bdew.lib.Misc
 import net.bdew.lib.multiblock.block.BlockOutput
-import net.bdew.lib.multiblock.data.{OutputConfig, OutputConfigFluid}
+import net.bdew.lib.multiblock.data.OutputConfigFluid
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
 
 object BlockFluidAutoOutput extends BaseModule("TankFluidAutoOutput", "FluidOutput", classOf[TileFluidAutoOutput]) with BlockOutput[TileFluidAutoOutput]
 
 class TileFluidAutoOutput extends TileFluidOutputBase {
-  override def doOutput(face: ForgeDirection, cfg: OutputConfig) {
+  override def doOutput(face: ForgeDirection, cfg: OutputConfigFluid) {
     for {
       core <- getCore
       target <- mypos.neighbour(face).getTile[IFluidHandler](worldObj)
       toSend <- Option(core.outputFluid(Int.MaxValue, false))
-      config <- Misc.asInstanceOpt(cfg, classOf[OutputConfigFluid])
     } {
       val filled = target.fill(face.getOpposite, toSend, true)
       if (filled > 0) {
         core.outputFluid(filled, true)
-        config.updateAvg(filled)
+        cfg.updateAvg(filled)
         core.outputConfig.updated()
       }
     }

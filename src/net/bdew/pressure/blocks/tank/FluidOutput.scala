@@ -10,14 +10,14 @@
 package net.bdew.pressure.blocks.tank
 
 import net.bdew.lib.multiblock.block.BlockOutput
-import net.bdew.lib.multiblock.data.OutputConfig
+import net.bdew.lib.multiblock.data.{OutputConfigFluid, OutputConfig}
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 
 object BlockFluidOutput extends BaseModule("TankFluidOutput", "FluidOutput", classOf[TileFluidOutput]) with BlockOutput[TileFluidOutput]
 
 class TileFluidOutput extends TileFluidOutputBase {
-  override def doOutput(face: ForgeDirection, cfg: OutputConfig) {}
+  override def doOutput(face: ForgeDirection, cfg: OutputConfigFluid) {}
 
   override def canDrain(from: ForgeDirection, fluid: Fluid) =
     (for {
