@@ -9,6 +9,7 @@
 
 package net.bdew.pressure.items
 
+import net.bdew.lib.gui.Color
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.texture.TextureMap
@@ -50,9 +51,9 @@ object CanisterRenderer extends IItemRenderer {
       tessellator.addVertex(0, 0, 1)
       tessellator.draw()
       GL11.glEnable(GL11.GL_TEXTURE_2D)
-      GL11.glColor3d(1, 1, 1)
 
       val flicon = fl.getFluid.getStillIcon
+      Color.fromInt(fl.getFluid.getColor).activate()
       Minecraft.getMinecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture)
       val fill = 15F * fl.amount / Canister.capacity
       val u = flicon.getInterpolatedU(0)
@@ -65,6 +66,8 @@ object CanisterRenderer extends IItemRenderer {
       tessellator.addVertexWithUV(4.5, 15.5 - fill, 1, U, v)
       tessellator.addVertexWithUV(0.5, 15.5 - fill, 1, u, v)
       tessellator.draw()
+
+      GL11.glColor3d(1, 1, 1)
     }
   }
 }
