@@ -10,7 +10,8 @@
 package net.bdew.pressure.blocks.tank.controller
 
 import net.bdew.lib.Misc
-import net.bdew.lib.data.{DataSlotInventory, DataSlotTank}
+import net.bdew.lib.data.base.UpdateKind
+import net.bdew.lib.data.{DataSlotInventory, DataSlotString, DataSlotTank}
 import net.bdew.lib.items.ItemUtils
 import net.bdew.lib.multiblock.interact.{CIFluidInput, CIFluidOutput, CIOutputFaces}
 import net.bdew.lib.multiblock.tile.TileControllerGui
@@ -19,12 +20,14 @@ import net.bdew.pressure.config.Modules
 import net.bdew.pressure.{Pressure, PressureResourceProvider}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraftforge.fluids.{Fluid, FluidContainerRegistry, FluidStack, IFluidContainerItem}
+import net.minecraftforge.fluids._
 
 class TileTankController extends TileControllerGui with CIFluidInput with CIOutputFaces with CIFluidOutput {
   val cfg = MachineTank
 
   val resources = PressureResourceProvider
+
+  val fluidFilter = DataSlotString("fluidFilter", this).setUpdate(UpdateKind.GUI, UpdateKind.SAVE)
 
   val tank = new DataSlotTank("tank", this, 0)
   val inventory = new DataSlotInventory("inv", this, 3) {
@@ -34,6 +37,10 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   }
 
   lazy val maxOutputs = 6
+
+  def getFilterFluid = Option(fluidFilter.cval) flatMap (x => Option(FluidRegistry.getFluid(x)))
+
+  // === Inventory Stuff ===
 
   def canEjectItem(stack: ItemStack) = {
     val outstack = inventory.getStackInSlot(1)
@@ -76,7 +83,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
           filled <- Option(FluidContainerRegistry.fillFluidContainer(tank.getFluid, instack)) if canEjectItem(filled)
           filledFluid <- Option(FluidContainerRegistry.getFluidForFilledItem(filled))
         } {
-          tank.drain(filledFluid.amount, true)
+          outputFluid(filledFluid.amount, true)
           inventory.decrStackSize(0, 1)
           doEjectItem(filled)
         }
@@ -88,13 +95,13 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
         val influid = incont.getFluid(opstack)
         if (influid != null && influid.amount > 0) {
           // It has something, try to drain it
-          val filled = incont.drain(opstack, tank.fill(influid.copy(), false), false)
+          val filled = incont.drain(opstack, inputFluid(influid.copy(), false), false)
           if (filled != null && filled.amount > 0) {
             // Can drain, grab a drained version and see if we can output it
             incont.drain(opstack, filled.amount, true)
             if (canEjectItem(opstack)) {
               // All good, proceed
-              tank.fill(filled, true)
+              inputFluid(filled, true)
               doEjectItem(opstack)
               // put the remaining stack (if any) back
               if (remstack.stackSize > 0)
@@ -105,13 +112,13 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
           }
         } else if (tank.getFluid != null) {
           // It's empty and we have fluid, try to fill it
-          val filled = tank.drain(incont.fill(opstack, tank.getFluid.copy(), false), false)
+          val filled = outputFluid(incont.fill(opstack, tank.getFluid.copy(), false), false)
           if (filled != null && filled.amount > 0) {
             // Can fill, grab a filled version and see if we can output it
             incont.fill(opstack, filled, true)
             if (canEjectItem(opstack)) {
               // All good, proceed
-              tank.drain(filled.amount, true)
+              outputFluid(filled.amount, true)
               doEjectItem(opstack)
               // put the remaining stack (if any) back
               if (remstack.stackSize > 0)
@@ -138,7 +145,10 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   def inputFluid(resource: FluidStack, doFill: Boolean): Int =
     if (canInputFluid(resource.getFluid)) tank.fill(resource, doFill) else 0
 
-  def canInputFluid(fluid: Fluid) = tank.getFluid == null || tank.getFluid.getFluid == fluid
+  def canInputFluid(fluid: Fluid) =
+    (tank.getFluid == null || tank.getFluid.getFluid == fluid) &&
+      ((fluidFilter :== null) || (fluidFilter :== fluid.getName))
+
   def getTankInfo = Array(tank.getInfo)
 
   // === CIFluidOutput ===

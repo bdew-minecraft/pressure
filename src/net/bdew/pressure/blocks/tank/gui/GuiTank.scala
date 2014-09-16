@@ -23,7 +23,14 @@ class GuiTank(val te: TileTankController, player: EntityPlayer) extends BaseScre
     widgets.add(new WidgetFluidGauge(new Rect(8, 19, 16, 58), Textures.tankOverlay, te.tank))
     widgets.add(new WidgetLabel(Misc.toLocal("pressure.gui.tank.title"), 8, 6, Color.darkgray))
 
+    widgets.add(new WidgetFilterIcon(Point(149, 19), te))
+
     for (output <- 0 until 6)
       widgets.add(new TankOutputWidget(te, Point(44 + 21 * output, 43), output))
   }
+
+  protected override def drawScreen(x: Int, y: Int, f: Float) = {
+    super.drawScreen(x, y, f)
+  }
+
 }

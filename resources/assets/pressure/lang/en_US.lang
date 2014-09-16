@@ -23,6 +23,10 @@ pressure.label.filter.unset=Removing fluid filter
 pressure.module.TankBlock.name=Tank Block
 
 pressure.gui.tank.title=Pressure Tank
+pressure.gui.tank.filter=Will only accept %s
+pressure.gui.tank.nofilter=Will accept all fluids
+pressure.gui.tank.filter.tip1=Click with any fluid container to set filter
+pressure.gui.tank.filter.tip2=Click with empty cursor to remove filter
 
 itemGroup.bdew.pressure=Pressure Pipes
 itemGroup.bdew.canisters=Fluid Canisters
