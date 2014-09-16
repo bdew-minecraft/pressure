@@ -4,6 +4,14 @@ tile.pressure.pipe.name=High Pressure Piping
 tile.pressure.pump.name=High Pressure Pump
 tile.pressure.water.name=Infinite Water Source
 
+tile.pressure.TankBlock.name=Tank Block
+tile.pressure.TankController.name=Tank Controller
+tile.pressure.TankPressureInput.name=Tank Pressure Intake
+tile.pressure.TankFluidInput.name=Tank Fluid Intake
+tile.pressure.TankFluidOutput.name=Tank Fluid Outlet
+tile.pressure.TankFluidAutoOutput.name=Powered Tank Fluid Outlet
+tile.pressure.TankPressureOutput.name=Tank Pressure Outlet
+
 item.pressure.Debugger.name=Pressure System Debugger
 item.pressure.Interface.name=Pressure System Interface
 item.pressure.HandPump.name=Hand Pump
@@ -12,5 +20,16 @@ item.pressure.Canister.name=Canister
 pressure.label.filter.set=Setting fluid filter to: %s
 pressure.label.filter.unset=Removing fluid filter
 
-itemGroup.bdew.pressure=Pressure Piping
+pressure.module.TankBlock.name=Tank Block
+
+pressure.gui.tank.title=Pressure Tank
+
+itemGroup.bdew.pressure=Pressure Pipes
 itemGroup.bdew.canisters=Fluid Canisters
+
+pressure.output.0=Red Output
+pressure.output.1=Green Output
+pressure.output.2=Blue Output
+pressure.output.3=Yellow Output
+pressure.output.4=Cyan Output
+pressure.output.5=Purple Output
