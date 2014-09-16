@@ -4,6 +4,14 @@ tile.pressure.pipe.name=高压管道
 tile.pressure.pump.name=高压泵
 tile.pressure.water.name=无限水源块
 
+tile.pressure.TankBlock.name=储水箱方块
+tile.pressure.TankController.name=储水箱主控器
+tile.pressure.TankPressureInput.name=储水箱管道输入接口
+tile.pressure.TankFluidInput.name=储水箱流体输入接口
+tile.pressure.TankFluidOutput.name=储水箱流体输出接口
+tile.pressure.TankFluidAutoOutput.name=储水箱流体自动输出接口
+tile.pressure.TankPressureOutput.name=储水箱管道输出接口
+
 item.pressure.Debugger.name=压力系统调试物品
 item.pressure.Interface.name=压力系统接口
 item.pressure.HandPump.name=手压泵
@@ -12,5 +20,16 @@ item.pressure.Canister.name=金属罐
 pressure.label.filter.set=过滤流体设为: %s
 pressure.label.filter.unset=移除流体过滤设定
 
+pressure.module.TankBlock.name=储水箱方块
+
+pressure.gui.tank.title=高压储水箱
+
 itemGroup.bdew.pressure=压力管道
 itemGroup.bdew.canisters=压力管道|金属罐
+
+pressure.output.0=红色输出端
+pressure.output.1=绿色输出端
+pressure.output.2=蓝色输出端
+pressure.output.3=黄色输出端
+pressure.output.4=青色输出端
+pressure.output.5=紫色输出端
