@@ -11,7 +11,7 @@ package net.bdew.pressure.blocks
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.pressure.api.IPressureConnectableBlock
-import net.bdew.pressure.misc.Helper
+import net.bdew.pressure.misc.{Helper, PressureCreativeTabs}
 import net.bdew.pressure.render.PipeRenderer
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -22,6 +22,8 @@ import net.minecraftforge.common.util.ForgeDirection
 object BlockPipe extends Block(Material.iron) with IPressureConnectableBlock with BlockNotifyUpdates {
   setBlockName("pressure.pipe")
   setHardness(2)
+
+  setCreativeTab(PressureCreativeTabs.main)
 
   override def renderAsNormalBlock() = false
   override def isOpaqueCube = false
