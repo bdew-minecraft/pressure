@@ -1,16 +1,16 @@
 tile.pressure.input.name=高压输入接口
 tile.pressure.output.name=高压输出接口
-tile.pressure.pipe.name=高压管道
+tile.pressure.pipe.name=压力管道
 tile.pressure.pump.name=高压泵
 tile.pressure.water.name=无限水源块
 
 tile.pressure.TankBlock.name=储水箱方块
 tile.pressure.TankController.name=储水箱主控器
-tile.pressure.TankPressureInput.name=储水箱管道输入接口
+tile.pressure.TankPressureInput.name=储水箱压力输入接口
 tile.pressure.TankFluidInput.name=储水箱流体输入接口
 tile.pressure.TankFluidOutput.name=储水箱流体输出接口
 tile.pressure.TankFluidAutoOutput.name=储水箱流体自动输出接口
-tile.pressure.TankPressureOutput.name=储水箱管道输出接口
+tile.pressure.TankPressureOutput.name=储水箱压力输出接口
 
 item.pressure.Debugger.name=压力系统调试物品
 item.pressure.Interface.name=压力系统接口
@@ -23,6 +23,10 @@ pressure.label.filter.unset=移除流体过滤设定
 pressure.module.TankBlock.name=储水箱方块
 
 pressure.gui.tank.title=高压储水箱
+pressure.gui.tank.filter=仅输入流体: %s
+pressure.gui.tank.nofilter=输入任何流体
+pressure.gui.tank.filter.tip1=用任何流体容器左键来设置过滤
+pressure.gui.tank.filter.tip2=左键来移除流体过滤设定
 
 itemGroup.bdew.pressure=压力管道
 itemGroup.bdew.canisters=压力管道|金属罐
