@@ -18,16 +18,18 @@ object BlockFluidAutoOutput extends BaseModule("TankFluidAutoOutput", "FluidOutp
 
 class TileFluidAutoOutput extends TileFluidOutputBase {
   override def doOutput(face: ForgeDirection, cfg: OutputConfigFluid) {
-    for {
-      core <- getCore
-      target <- mypos.neighbour(face).getTile[IFluidHandler](worldObj)
-      toSend <- Option(core.outputFluid(Int.MaxValue, false))
-    } {
-      val filled = target.fill(face.getOpposite, toSend, true)
-      if (filled > 0) {
-        core.outputFluid(filled, true)
-        cfg.updateAvg(filled)
-        core.outputConfig.updated()
+    if (checkCanOutput(cfg)) {
+      for {
+        core <- getCore
+        target <- mypos.neighbour(face).getTile[IFluidHandler](worldObj)
+        toSend <- Option(core.outputFluid(Int.MaxValue, false))
+      } {
+        val filled = target.fill(face.getOpposite, toSend, true)
+        if (filled > 0) {
+          core.outputFluid(filled, true)
+          cfg.updateAvg(filled)
+          core.outputConfig.updated()
+        }
       }
     }
   }
