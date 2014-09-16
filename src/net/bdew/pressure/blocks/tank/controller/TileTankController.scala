@@ -25,7 +25,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   val resources = PressureResourceProvider
 
   val tank = new DataSlotTank("tank", this, 0)
-  val inventory = new DataSlotInventory("inv", this, 2) {
+  val inventory = new DataSlotInventory("inv", this, 3) {
     override def isItemValidForSlot(slot: Int, stack: ItemStack) =
       slot == 0 && stack != null && stack.getItem != null && (
         FluidContainerRegistry.isContainer(stack) || stack.getItem.isInstanceOf[IFluidContainerItem])

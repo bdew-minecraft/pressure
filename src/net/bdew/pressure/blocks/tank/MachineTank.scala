@@ -14,6 +14,7 @@ import net.bdew.lib.gui.GuiProvider
 import net.bdew.lib.machine.Machine
 import net.bdew.lib.multiblock.MachineCore
 import net.bdew.pressure.blocks.tank.controller.{BlockTankController, TileTankController}
+import net.bdew.pressure.blocks.tank.gui.{ContainerTank, GuiTank}
 import net.minecraft.entity.player.EntityPlayer
 
 object MachineTank extends Machine("TankController", BlockTankController) with MachineCore with GuiProvider {

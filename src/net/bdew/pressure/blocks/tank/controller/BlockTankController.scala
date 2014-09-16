@@ -21,8 +21,8 @@ object BlockTankController extends BaseController("TankController", classOf[Tile
 
   @SideOnly(Side.CLIENT)
   override def regIcons(ir: IIconRegister) {
-    topIcon = ir.registerIcon("pressure:" + name.toLowerCase + "/top")
-    bottomIcon = ir.registerIcon("pressure:" + name.toLowerCase + "/bottom")
+    topIcon = ir.registerIcon("pressure:tank/" + name.toLowerCase + "/top")
+    bottomIcon = ir.registerIcon("pressure:tank/" + name.toLowerCase + "/bottom")
   }
 
   override def getIcon(side: Int, meta: Int) =

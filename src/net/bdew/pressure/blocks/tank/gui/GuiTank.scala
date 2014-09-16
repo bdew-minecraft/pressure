@@ -7,11 +7,11 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.tank
+package net.bdew.pressure.blocks.tank.gui
 
 import net.bdew.lib.Misc
 import net.bdew.lib.gui._
-import net.bdew.lib.gui.widgets.{WidgetFluidGauge, WidgetLabel}
+import net.bdew.lib.gui.widgets._
 import net.bdew.pressure.blocks.tank.controller.TileTankController
 import net.bdew.pressure.{Pressure, Textures}
 import net.minecraft.entity.player.EntityPlayer
@@ -22,6 +22,8 @@ class GuiTank(val te: TileTankController, player: EntityPlayer) extends BaseScre
     super.initGui()
     widgets.add(new WidgetFluidGauge(new Rect(8, 19, 16, 58), Textures.tankOverlay, te.tank))
     widgets.add(new WidgetLabel(Misc.toLocal("pressure.gui.tank.title"), 8, 6, Color.darkgray))
-    widgets.add(new WidgetLabel(Misc.toLocal("pressure.gui.tank.manual"), 103, 22, Color.darkgray))
+
+    for (output <- 0 until 6)
+      widgets.add(new TankOutputWidget(te, Point(44 + 21 * output, 43), output))
   }
 }

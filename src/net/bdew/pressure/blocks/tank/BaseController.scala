@@ -26,7 +26,7 @@ class BaseController[T <: TileController](name: String, TEClass: Class[T])
 
   @SideOnly(Side.CLIENT)
   override def registerBlockIcons(ir: IIconRegister) {
-    blockIcon = ir.registerIcon("pressure:" + name.toLowerCase + "/main")
+    blockIcon = ir.registerIcon("pressure:tank/" + name.toLowerCase + "/main")
     regIcons(ir)
   }
 
