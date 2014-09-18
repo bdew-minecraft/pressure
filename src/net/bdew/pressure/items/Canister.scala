@@ -38,7 +38,7 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
     val stacks = jstacks.asInstanceOf[java.util.List[ItemStack]]
     if (tab == PressureCreativeTabs.main)
       stacks.add(new ItemStack(this))
-    else if (tab == PressureCreativeTabs.canisters || tab == null)
+    else if (tab == PressureCreativeTabs.canisters || tab == null) {
       stacks.addAll(
         FluidRegistry.getRegisteredFluids flatMap { case (id, fluid) =>
           if (FluidRegistry.getFluid(fluid.getName) != fluid) {
@@ -54,6 +54,8 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
           }
         }
       )
+      if (tab == null) stacks.add(new ItemStack(this)) // for NEI
+    }
   }
 
   def getFluid(stack: ItemStack): FluidStack = FluidStack.loadFluidStackFromNBT(stack.getTagCompound)
