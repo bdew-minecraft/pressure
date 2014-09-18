@@ -9,7 +9,6 @@
 
 package net.bdew.pressure.blocks
 
-import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.block.HasTE
 import net.bdew.lib.rotate.{BaseRotateableBlock, IconType}
@@ -17,27 +16,36 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ChatComponentTranslation
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
-import net.minecraftforge.fluids.{FluidContainerRegistry, FluidRegistry}
+import net.minecraftforge.fluids.{FluidContainerRegistry, FluidRegistry, IFluidContainerItem}
 
 trait BlockFilterable[T <: TileFilterable] extends BaseRotateableBlock with HasTE[T] {
   override def onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, meta: Int, xoffs: Float, yoffs: Float, zoffs: Float): Boolean = {
-    if (!player.isSneaking) {
-      val item = Option(player.getCurrentEquippedItem)
-      if (item exists (_.getItem == GameRegistry.findItem("minecraft", "bucket"))) {
-        if (!world.isRemote) {
-          getTE(world, x, y, z).fluidFilter := null
-          player.addChatMessage(new ChatComponentTranslation("pressure.label.filter.unset"))
+    if (!player.isSneaking && player.getCurrentEquippedItem != null) {
+      val item = player.getCurrentEquippedItem
+
+      val newFlilter =
+        if (FluidContainerRegistry.isEmptyContainer(item)) {
+          null
+        } else if (FluidContainerRegistry.isFilledContainer(item)) {
+          FluidContainerRegistry.getFluidForFilledItem(item)
+        } else if (item.getItem.isInstanceOf[IFluidContainerItem]) {
+          item.getItem.asInstanceOf[IFluidContainerItem].getFluid(item)
+        } else {
+          return false
         }
-        return true
+
+      if (world.isRemote) return true
+
+      if (newFlilter == null) {
+        getTE(world, x, y, z).fluidFilter := null
+        player.addChatMessage(new ChatComponentTranslation("pressure.label.filter.unset"))
+      } else {
+        getTE(world, x, y, z).fluidFilter := newFlilter.getFluid.getName
+        player.addChatMessage(new ChatComponentTranslation("pressure.label.filter.set", newFlilter.getFluid.getLocalizedName(newFlilter)))
       }
-      val fluid = item flatMap (x => Option(FluidContainerRegistry.getFluidForFilledItem(x))) getOrElse (return false)
-      if (!world.isRemote) {
-        getTE(world, x, y, z).fluidFilter := fluid.getFluid.getName
-        player.addChatMessage(new ChatComponentTranslation("pressure.label.filter.set", fluid.getFluid.getLocalizedName(fluid)))
-      }
-      return true
-    }
-    return false
+
+      true
+    } else false
   }
 
   @SideOnly(Side.CLIENT)
