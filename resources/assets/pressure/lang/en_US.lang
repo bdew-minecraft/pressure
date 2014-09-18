@@ -18,6 +18,8 @@ item.pressure.Debugger.name=Pressure System Debugger
 item.pressure.Interface.name=Pressure System Interface
 item.pressure.HandPump.name=Hand Pump
 item.pressure.Canister.name=Canister
+item.pressure.FluidInterface.name=Fluid Interface
+item.pressure.TankWall.name=Tank Wall
 
 pressure.label.filter.set=Setting fluid filter to: %s
 pressure.label.filter.unset=Removing fluid filter
