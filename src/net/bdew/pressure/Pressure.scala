@@ -24,7 +24,7 @@ import net.bdew.pressure.misc.PressureCreativeTabs
 import net.minecraftforge.client.MinecraftForgeClient
 import org.apache.logging.log4j.Logger
 
-@Mod(modid = Pressure.modId, version = "PRESSURE_VER", name = "Pressure Piping", dependencies = "after:ForgeMultipart;required-after:bdlib", modLanguage = "scala")
+@Mod(modid = Pressure.modId, version = "PRESSURE_VER", name = "Pressure Pipes", dependencies = "after:ForgeMultipart;required-after:bdlib", modLanguage = "scala")
 object Pressure {
   var log: Logger = null
   var instance = this
