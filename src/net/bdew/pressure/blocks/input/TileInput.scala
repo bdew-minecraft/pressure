@@ -15,7 +15,7 @@ import net.bdew.pressure.api._
 import net.bdew.pressure.blocks.TileFilterable
 import net.bdew.pressure.misc.{FakeTank, Helper}
 import net.minecraftforge.common.util.ForgeDirection
-import net.minecraftforge.fluids.{Fluid, FluidStack}
+import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
 
 class TileInput extends TileDataSlots with FakeTank with IPressureInject with TileFilterable {
   def getFacing = BlockInput.getFacing(worldObj, xCoord, yCoord, zCoord)
@@ -37,6 +37,21 @@ class TileInput extends TileDataSlots with FakeTank with IPressureInject with Ti
         return connection.pushFluid(resource, doFill)
     }
     return 0
+  }
+
+  serverTick.listen(doPushFluid)
+
+  def doPushFluid() {
+    if ((me.meta(worldObj) & 8) == 0) return
+    val face = getFacing
+    me.neighbour(face.getOpposite).getTile[IFluidHandler](worldObj).foreach { from =>
+      val res = from.drain(face.getOpposite, Int.MaxValue, false)
+      if (res != null && res.getFluid != null && res.amount > 0 && isFluidAllowed(res)) {
+        val filled = fill(face.getOpposite, res, true)
+        if (filled > 0)
+          from.drain(face, filled, true)
+      }
+    }
   }
 
   override def invalidateConnection() = connection = null

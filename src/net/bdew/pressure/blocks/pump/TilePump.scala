@@ -16,7 +16,7 @@ import net.bdew.pressure.misc.FakeTank
 import net.minecraft.block.Block
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
-import net.minecraftforge.fluids.IFluidHandler
+import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
 
 class TilePump extends TileDataSlots with FakeTank with TileFilterable {
 
@@ -42,6 +42,14 @@ class TilePump extends TileDataSlots with FakeTank with TileFilterable {
       }
     }
   }
+
+  override def canFill(from: ForgeDirection, fluid: Fluid) = from == getFacing.getOpposite && isFluidAllowed(fluid)
+  override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean) =
+    if (resource != null && canFill(from, resource.getFluid))
+      me.neighbour(getFacing).getTile[IFluidHandler](worldObj) map { target =>
+        target.fill(from, resource, doFill)
+      } getOrElse 0
+    else 0
 
   override def isValidDirectionForFakeTank(dir: ForgeDirection) = dir == getFacing || dir.getOpposite == getFacing
 }
