@@ -15,7 +15,7 @@ import net.bdew.lib.data.{DataSlotInventory, DataSlotString, DataSlotTank}
 import net.bdew.lib.items.ItemUtils
 import net.bdew.lib.multiblock.interact.{CIFluidInput, CIFluidOutput, CIOutputFaces}
 import net.bdew.lib.multiblock.tile.TileControllerGui
-import net.bdew.pressure.blocks.tank.MachineTank
+import net.bdew.pressure.blocks.tank.{BlockTankIndicator, MachineTank}
 import net.bdew.pressure.config.Modules
 import net.bdew.pressure.{Pressure, PressureResourceProvider}
 import net.minecraft.entity.player.EntityPlayer
@@ -29,11 +29,20 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
 
   val fluidFilter = DataSlotString("fluidFilter", this).setUpdate(UpdateKind.GUI, UpdateKind.SAVE)
 
-  val tank = new DataSlotTank("tank", this, 0)
+  val tank = new DataSlotTank("tank", this, 0) {
+    setUpdate(UpdateKind.SAVE, UpdateKind.WORLD, UpdateKind.GUI)
+    override val sendCapacityOnUpdateKind = Set(UpdateKind.WORLD, UpdateKind.GUI)
+  }
+
   val inventory = new DataSlotInventory("inv", this, 3) {
     override def isItemValidForSlot(slot: Int, stack: ItemStack) =
       slot == 0 && stack != null && stack.getItem != null && (
         FluidContainerRegistry.isContainer(stack) || stack.getItem.isInstanceOf[IFluidContainerItem])
+  }
+
+  handleClientUpdate listen { tag =>
+    for (ref <- modules if ref.blockIs(worldObj, BlockTankIndicator))
+      worldObj.markBlockRangeForRenderUpdate(ref.x, ref.y, ref.z, ref.x, ref.y, ref.z)
   }
 
   lazy val maxOutputs = 6
@@ -137,7 +146,15 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   override def openGui(player: EntityPlayer) = player.openGui(Pressure, cfg.guiId, worldObj, xCoord, yCoord, zCoord)
 
   def onModulesChanged() {
-    tank.setCapacity(getNumOfMoudules("TankBlock") * Modules.TankBlock.capacity)
+    val newCapacity = getNumOfMoudules("TankBlock") * Modules.TankBlock.capacity
+    tank.setCapacity(newCapacity)
+
+    if (newCapacity == 0)
+      tank.setFluid(null)
+    else if (tank.getFluid != null && tank.getFluid.amount > newCapacity)
+      tank.getFluid.amount = newCapacity
+
+    dataSlotChanged(tank) // ensure update sent to client
   }
 
   // === CIFluidInput ===

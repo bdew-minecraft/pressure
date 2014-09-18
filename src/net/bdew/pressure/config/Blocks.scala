@@ -27,6 +27,7 @@ object Blocks extends BlockManager(PressureCreativeTabs.main) {
   regBlock(BlockWaterSource, "Water")
 
   regBlock(BlockTankBlock)
+  regBlock(BlockTankIndicator)
 
   regBlock(BlockFluidOutput)
   regBlock(BlockFluidAutoOutput)
