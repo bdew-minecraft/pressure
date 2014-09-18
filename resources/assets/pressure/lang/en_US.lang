@@ -12,6 +12,7 @@ tile.pressure.TankFluidOutput.name=Tank Fluid Outlet
 tile.pressure.TankFluidAutoOutput.name=Powered Tank Fluid Outlet
 tile.pressure.TankPressureOutput.name=Tank Pressure Outlet
 tile.pressure.TankIndicator.name=Tank Indicator Block
+tile.pressure.TankInterface.name=Tank Interface
 
 item.pressure.Debugger.name=Pressure System Debugger
 item.pressure.Interface.name=Pressure System Interface
