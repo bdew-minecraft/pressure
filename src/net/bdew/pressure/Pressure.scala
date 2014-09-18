@@ -46,7 +46,7 @@ object Pressure {
     configDir = event.getModConfigurationDirectory
     TuningLoader.load("config")
     TuningLoader.load("override", false)
-    Config.load(event.getSuggestedConfigurationFile)
+    Config.load()
     if (Misc.haveModVersion("ForgeMultipart")) new FmpHandler()
     if (event.getSide == Side.CLIENT) {
       IconCache.init()

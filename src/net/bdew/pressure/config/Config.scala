@@ -9,25 +9,14 @@
 
 package net.bdew.pressure.config
 
-import java.io.File
-
 import net.bdew.lib.gui.GuiHandler
-import net.minecraftforge.common.config.Configuration
 
 object Config {
   val guiHandler = new GuiHandler
 
-  def load(cfg: File): Configuration = {
-    val c = new Configuration(cfg)
-    c.load()
-    try {
-      Items.load()
-      Blocks.load()
-      Machines.load()
-    } finally {
-      c.save()
-    }
-
-    return c
+  def load() {
+    Items.load()
+    Blocks.load()
+    Machines.load()
   }
 }
