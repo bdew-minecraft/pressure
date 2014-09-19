@@ -12,11 +12,14 @@ tile.pressure.TankFluidOutput.name=储水箱流体输出接口
 tile.pressure.TankFluidAutoOutput.name=储水箱流体自动输出接口
 tile.pressure.TankPressureOutput.name=储水箱压力输出接口
 tile.pressure.TankIndicator.name=储水箱流体指示计
+tile.pressure.TankInterface.name=储水箱交接面
 
 item.pressure.Debugger.name=压力系统调试物品
-item.pressure.Interface.name=压力系统接口
+item.pressure.Interface.name=压力系统交接面
 item.pressure.HandPump.name=手压泵
 item.pressure.Canister.name=金属罐
+item.pressure.FluidInterface.name=储水箱交接面
+item.pressure.TankWall.name=储水箱外墙
 
 pressure.label.filter.set=过滤流体设为: %s
 pressure.label.filter.unset=移除流体过滤设定
