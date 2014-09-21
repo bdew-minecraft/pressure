@@ -11,13 +11,21 @@ package net.bdew.pressure.blocks.tank.controller
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.pressure.blocks.tank.BaseController
+import net.minecraft.block.Block
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.util.IIcon
+import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
 
 object BlockTankController extends BaseController("TankController", classOf[TileTankController]) {
   var topIcon: IIcon = null
   var bottomIcon: IIcon = null
+
+  override def breakBlock(world: World, x: Int, y: Int, z: Int, block: Block, meta: Int) {
+    if (!world.isRemote)
+      getTE(world, x, y, z).dropItems()
+    super.breakBlock(world, x, y, z, block, meta)
+  }
 
   @SideOnly(Side.CLIENT)
   override def regIcons(ir: IIconRegister) {

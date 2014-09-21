@@ -157,6 +157,15 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
     dataSlotChanged(tank) // ensure update sent to client
   }
 
+  def dropItems() {
+    if (getWorldObj != null && !getWorldObj.isRemote) {
+      for (stack <- inventory.inv if stack != null) {
+        ItemUtils.throwItemAt(getWorldObj, xCoord, yCoord, zCoord, stack)
+      }
+      inventory.inv = new Array[ItemStack](inventory.size)
+    }
+  }
+
   // === CIFluidInput ===
 
   def inputFluid(resource: FluidStack, doFill: Boolean): Int =
