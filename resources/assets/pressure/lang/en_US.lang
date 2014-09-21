@@ -24,6 +24,13 @@ item.pressure.TankWall.name=Tank Wall
 pressure.label.filter.set=Setting fluid filter to: %s
 pressure.label.filter.unset=Removing fluid filter
 
+pressure.waila.filter=Filter: %s
+pressure.waila.side.input=Input from this side
+pressure.waila.side.output=Output to this side
+pressure.waila.side.pressure=Side connects to Pressure system
+pressure.waila.side.fluid=Side connects to pipes/tanks
+pressure.waila.side.nothing=Side has no connections
+
 pressure.module.TankBlock.name=Tank Block
 
 pressure.gui.tank.title=Pressure Tank
