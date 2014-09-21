@@ -55,6 +55,6 @@ trait BlockFilterable[T <: TileFilterable] extends BaseRotateableBlock with HasT
         name <- Option(getTE(w, x, y, z).fluidFilter.cval)
         fluid <- Option(FluidRegistry.getFluid(name))
         icon <- Option(fluid.getStillIcon)
-      } yield icon
+      } yield (icon, fluid.getColor)
     else None
 }

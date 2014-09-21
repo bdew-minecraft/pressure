@@ -10,6 +10,8 @@
 package net.bdew.pressure.render
 
 import cpw.mods.fml.client.registry.{ISimpleBlockRenderingHandler, RenderingRegistry}
+import net.bdew.lib.Misc
+import net.bdew.lib.render.connected.ConnectedHelper.{EdgeDraw, RectF, Vec3F}
 import net.bdew.pressure.blocks.BlockFilterable
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.{RenderBlocks, Tessellator}
@@ -17,9 +19,16 @@ import net.minecraft.world.IBlockAccess
 import net.minecraftforge.common.util.ForgeDirection
 import org.lwjgl.opengl.GL11
 
-class RotatedBlockRenderer(id: Int) extends ISimpleBlockRenderingHandler {
+object RotatedBlockRenderer extends ISimpleBlockRenderingHandler {
+  val id = RenderingRegistry.getNextAvailableRenderId
+  RenderingRegistry.registerBlockHandler(this)
+
   override def getRenderId = id
   override def shouldRender3DInInventory(model: Int) = true
+
+  val filterIconDraw =
+    (for (dir <- ForgeDirection.VALID_DIRECTIONS)
+    yield (dir, new EdgeDraw(RectF(0.35F, 0.35F, 0.65F, 0.65F), dir))).toMap
 
   def doRenderItemSide(d: ForgeDirection, r: RenderBlocks, block: Block, meta: Int) = {
     val icon = r.getBlockIconFromSideAndMetadata(block, d.ordinal(), meta)
@@ -85,36 +94,17 @@ class RotatedBlockRenderer(id: Int) extends ISimpleBlockRenderingHandler {
     renderer.uvRotateTop = 0
     renderer.uvRotateBottom = 0
 
-    if (block.isInstanceOf[BlockFilterable[_]]) {
-      import net.bdew.pressure.render.RenderHelper._
-      val offs = P3d(x, y, z)
-      val bf = block.asInstanceOf[BlockFilterable[_]]
-
-      for (icon <- bf.getFilterIcon(world, x, y, z, ForgeDirection.UP))
-        draw(YPos(P2d(0.65F, 0.65F), P2d(0.35F, 0.35F), 1.001F, PIcon(16, 16), PIcon(0, 0)), offs, icon)
-
-      for (icon <- bf.getFilterIcon(world, x, y, z, ForgeDirection.DOWN))
-        draw(YNeg(P2d(0.65F, 0.65F), P2d(0.35F, 0.35F), -0.001F, PIcon(16, 16), PIcon(0, 0)), offs, icon)
-
-      for (icon <- bf.getFilterIcon(world, x, y, z, ForgeDirection.EAST))
-        draw(XPos(P2d(0.65F, 0.65F), P2d(0.35F, 0.35F), 1.001F, PIcon(16, 16), PIcon(0, 0)), offs, icon)
-
-      for (icon <- bf.getFilterIcon(world, x, y, z, ForgeDirection.WEST))
-        draw(XNeg(P2d(0.65F, 0.65F), P2d(0.35F, 0.35F), -0.001F, PIcon(16, 16), PIcon(0, 0)), offs, icon)
-
-      for (icon <- bf.getFilterIcon(world, x, y, z, ForgeDirection.SOUTH))
-        draw(ZPos(P2d(0.65F, 0.65F), P2d(0.35F, 0.35F), 1.001F, PIcon(16, 16), PIcon(0, 0)), offs, icon)
-
-      for (icon <- bf.getFilterIcon(world, x, y, z, ForgeDirection.NORTH))
-        draw(ZNeg(P2d(0.65F, 0.65F), P2d(0.35F, 0.35F), -0.001F, PIcon(16, 16), PIcon(0, 0)), offs, icon)
+    Misc.asInstanceOpt(block, classOf[BlockFilterable[_]]) map { bf =>
+      for {
+        dir <- ForgeDirection.VALID_DIRECTIONS
+        (icon, color) <- bf.getFilterIcon(world, x, y, z, dir)
+      } {
+        Tessellator.instance.setColorOpaque_I(color)
+        filterIconDraw(dir).doDraw(Vec3F(x, y, z), icon)
+        Tessellator.instance.setColorOpaque_F(1, 1, 1)
+      }
     }
 
     true
   }
-}
-
-object RotatedBlockRenderer {
-  val id = RenderingRegistry.getNextAvailableRenderId
-  val instance = new RotatedBlockRenderer(id)
-  RenderingRegistry.registerBlockHandler(instance)
 }
