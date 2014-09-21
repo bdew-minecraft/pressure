@@ -24,7 +24,6 @@ class ItemBlockPipe(bl: Block) extends ItemBlock(bl) {
   setCreativeTab(PressureCreativeTabs.main)
 
   override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, xOff: Float, yOff: Float, zOff: Float): Boolean = {
-    if (player.isSneaking) return false
     if (!world.isRemote && player.isInstanceOf[EntityPlayerMP]) {
       val p = player.asInstanceOf[EntityPlayerMP]
       val dir = ForgeDirection.values()(side)
