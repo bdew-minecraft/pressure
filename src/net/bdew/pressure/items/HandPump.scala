@@ -50,39 +50,47 @@ object HandPump extends SimpleItem("HandPump") {
       val fl = bl.drain(world, x, y, z, false)
       val tofill = findFillTarget(fl, player.inventory, true)
       if (tofill != null) {
-        tofill.getItem.asInstanceOf[IFluidContainerItem].fill(tofill, bl.drain(world, x, y, z, true), true)
+        if (!world.isRemote) {
+          tofill.getItem.asInstanceOf[IFluidContainerItem].fill(tofill, bl.drain(world, x, y, z, true), true)
+        }
         return true
       }
     } else if (world.getBlock(x, y, z).getMaterial == Material.water && world.getBlockMetadata(x, y, z) == 0) {
       val ns = new FluidStack(FluidRegistry.WATER, 1000)
       val tofill = findFillTarget(ns, player.inventory, true)
       if (tofill != null) {
-        world.setBlockToAir(x, y, z)
-        tofill.getItem.asInstanceOf[IFluidContainerItem].fill(tofill, ns, true)
+        if (!world.isRemote) {
+          world.setBlockToAir(x, y, z)
+          tofill.getItem.asInstanceOf[IFluidContainerItem].fill(tofill, ns, true)
+        }
         return true
       }
     } else if (world.getBlock(x, y, z).getMaterial == Material.lava && world.getBlockMetadata(x, y, z) == 0) {
       val ns = new FluidStack(FluidRegistry.LAVA, 1000)
       val tofill = findFillTarget(ns, player.inventory, true)
       if (tofill != null) {
-        world.setBlockToAir(x, y, z)
-        tofill.getItem.asInstanceOf[IFluidContainerItem].fill(tofill, ns, true)
+        if (!world.isRemote) {
+          world.setBlockToAir(x, y, z)
+          tofill.getItem.asInstanceOf[IFluidContainerItem].fill(tofill, ns, true)
+        }
         return true
       }
     } else {
       val te = world.getTileEntity(x, y, z)
       if (te != null && te.isInstanceOf[IFluidHandler]) {
-        val fh = te.asInstanceOf[IFluidHandler]
-        val fs = fh.drain(dir, maxDrain, false)
-        val tofill = findFillTarget(fs, player.inventory, false)
-        if (tofill != null) {
-          val fci = tofill.getItem.asInstanceOf[IFluidContainerItem]
-          val canFill = fci.fill(tofill, fs, false)
-          if (canFill > 0) {
-            fci.fill(tofill, fh.drain(dir, canFill, true), true)
-            return true
+        if (!world.isRemote) {
+          val fh = te.asInstanceOf[IFluidHandler]
+          val fs = fh.drain(dir, maxDrain, false)
+          val tofill = findFillTarget(fs, player.inventory, false)
+          if (tofill != null) {
+            val fci = tofill.getItem.asInstanceOf[IFluidContainerItem]
+            val canFill = fci.fill(tofill, fs, false)
+            if (canFill > 0) {
+              fci.fill(tofill, fh.drain(dir, canFill, true), true)
+              return true
+            }
           }
-        }
+        } else return true
       }
     }
     return false
@@ -96,6 +104,8 @@ object HandPump extends SimpleItem("HandPump") {
     val block = Option(world.getBlock(mop.blockX, mop.blockY, mop.blockZ)).getOrElse(return stack)
 
     if (drainBlock(world, block, mop.blockX, mop.blockY, mop.blockZ, stack, ForgeDirection.values()(mop.sideHit).getOpposite, player)) {
+      if (!world.isRemote)
+        player.inventoryContainer.detectAndSendChanges()
       player.swingItem()
       player.playSound("random.drink", 0.5F, world.rand.nextFloat * 0.1F + 0.9F)
       return stack
