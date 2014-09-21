@@ -4,7 +4,7 @@ buildscript {
     }
     repositories {
         mavenCentral()
-	mavenLocal()
+        mavenLocal()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
@@ -22,7 +22,7 @@ buildscript {
 apply plugin: 'scala'
 apply plugin: 'forge'
 
-version = "0.9.3"
+version = "0.9.4"
 ext.bdlibver = "1.4.4.22"
 ext.apiVer = version
 ext.versuffix = "mc1710"
@@ -94,7 +94,7 @@ processResources {
 }
 
 task apiJar(type: Jar, dependsOn: 'classes') {
-    from (sourceSets.main.output) {
+    from(sourceSets.main.output) {
         include 'net/bdew/pressure/api/**'
     }
 
