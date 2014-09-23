@@ -7,7 +7,7 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.tank
+package net.bdew.pressure.blocks.tank.blocks
 
 import cpw.mods.fml.client.registry.{ISimpleBlockRenderingHandler, RenderingRegistry}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
@@ -16,6 +16,7 @@ import net.bdew.lib.block.BlockRef
 import net.bdew.lib.multiblock.tile.{TileController, TileModule}
 import net.bdew.lib.render.connected.ConnectedHelper.{EdgeDraw, RectF, Vec3F}
 import net.bdew.lib.render.connected.ConnectedRenderer
+import net.bdew.pressure.blocks.tank.BaseModule
 import net.bdew.pressure.blocks.tank.controller.TileTankController
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.texture.IIconRegister

@@ -7,7 +7,7 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.tank
+package net.bdew.pressure.blocks.tank.blocks
 
 import net.bdew.lib.multiblock.block.BlockOutput
 import net.bdew.lib.multiblock.data.OutputConfigFluid
@@ -15,6 +15,7 @@ import net.bdew.lib.multiblock.interact.CIFluidOutput
 import net.bdew.lib.multiblock.tile.{RSControllableOutput, TileOutput}
 import net.bdew.pressure.api.{IPressureConnectableBlock, IPressureConnection, IPressureInject}
 import net.bdew.pressure.blocks.BlockNotifyUpdates
+import net.bdew.pressure.blocks.tank.{BaseModule, PressureModule}
 import net.bdew.pressure.misc.Helper
 import net.minecraft.world.IBlockAccess
 import net.minecraftforge.common.util.ForgeDirection

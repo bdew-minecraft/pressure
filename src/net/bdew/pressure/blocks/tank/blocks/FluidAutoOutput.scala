@@ -7,10 +7,11 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.tank
+package net.bdew.pressure.blocks.tank.blocks
 
 import net.bdew.lib.multiblock.block.BlockOutput
 import net.bdew.lib.multiblock.data.OutputConfigFluid
+import net.bdew.pressure.blocks.tank.{BaseModule, TileFluidOutputBase}
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
 

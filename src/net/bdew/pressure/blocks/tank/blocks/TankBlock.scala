@@ -7,9 +7,10 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.tank
+package net.bdew.pressure.blocks.tank.blocks
 
 import net.bdew.lib.multiblock.tile.TileModule
+import net.bdew.pressure.blocks.tank.BaseModule
 
 object BlockTankBlock extends BaseModule("TankBlock", "TankBlock", classOf[TileTankBlock])
 
