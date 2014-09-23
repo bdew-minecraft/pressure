@@ -17,10 +17,12 @@ import cpw.mods.fml.common.event._
 import cpw.mods.fml.common.network.NetworkRegistry
 import cpw.mods.fml.relauncher.Side
 import net.bdew.lib.Misc
+import net.bdew.pressure.compat.enderio.EnderIOProxy
 import net.bdew.pressure.config._
 import net.bdew.pressure.fmp.FmpHandler
 import net.bdew.pressure.items.{Canister, CanisterRenderer}
 import net.bdew.pressure.misc.PressureCreativeTabs
+import net.bdew.pressure.network.NetworkHandler
 import net.minecraftforge.client.MinecraftForgeClient
 import org.apache.logging.log4j.Logger
 
@@ -59,10 +61,13 @@ object Pressure {
     NetworkRegistry.INSTANCE.registerGuiHandler(this, Config.guiHandler)
     TuningLoader.loadDealayed()
     FMLInterModComms.sendMessage("Waila", "register", "net.bdew.pressure.waila.WailaHandler.loadCallabck")
+    NetworkHandler.init()
   }
 
   @EventHandler
   def postInit(event: FMLPostInitializationEvent) {
     PressureCreativeTabs.init()
+    if (Misc.haveModVersion("EnderIO"))
+      EnderIOProxy.init()
   }
 }

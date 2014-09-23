@@ -32,4 +32,9 @@ public interface IPressureHelper extends IPressureExtension {
      * Register a new extension (allows other mods to provide overrides to some logic)
      */
     void registerExtension(IPressureExtension extension);
+
+    /**
+     * Register a IFilterable provider (allows configurator to work with other mod's blocks)
+     */
+    void registerIFilterableProvider(IFilterableProvider provider);
 }

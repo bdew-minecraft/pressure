@@ -20,7 +20,7 @@ import net.minecraftforge.common.util.ForgeDirection
 
 import scala.util.DynamicVariable
 
-object InternalPressureExtension extends IPressureExtension {
+object InternalPressureExtension extends IPressureExtension with IFilterableProvider {
   override def canPipeConnectTo(w: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
     Option(w.getBlock(x, y, z)) flatMap {
       Misc.asInstanceOpt(_, classOf[IPressureConnectableBlock])
@@ -40,12 +40,18 @@ object InternalPressureExtension extends IPressureExtension {
       true
     } else false
   }
+
+  override def getFilterableForWorldCoords(world: World, x: Int, y: Int, z: Int, side: Int) = {
+    (Option(world.getTileEntity(x, y, z)) flatMap Misc.asInstanceOpt(classOf[IFilterable])).orNull
+  }
 }
 
 object Helper extends IPressureHelper {
   var extensions = List.empty[IPressureExtension]
+  var filterable = List.empty[IFilterableProvider]
 
   registerExtension(InternalPressureExtension)
+  registerIFilterableProvider(InternalPressureExtension)
 
   val recursionGuard = new DynamicVariable(Set.empty[IPressureConnection])
 
@@ -130,5 +136,14 @@ object Helper extends IPressureHelper {
   override def tryPlacePipe(w: World, x: Int, y: Int, z: Int, p: EntityPlayerMP) =
     extensions.exists(_.tryPlacePipe(w, x, y, z, p))
 
+  def getFilterableForWorldCoords(world: World, x: Int, y: Int, z: Int, side: Int): IFilterable = {
+    for (fp <- filterable)
+      Option(fp.getFilterableForWorldCoords(world, x, y, z, side)) map {
+        return _
+      }
+    null
+  }
+
   override def registerExtension(ext: IPressureExtension) = extensions :+= ext
+  override def registerIFilterableProvider(provider: IFilterableProvider) = filterable :+= provider
 }

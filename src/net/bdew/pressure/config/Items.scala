@@ -11,6 +11,7 @@ package net.bdew.pressure.config
 
 import net.bdew.lib.config.ItemManager
 import net.bdew.pressure.ItemDebugger
+import net.bdew.pressure.items.configurator.ItemConfigurator
 import net.bdew.pressure.items.{Canister, HandPump}
 import net.bdew.pressure.misc.PressureCreativeTabs
 
@@ -23,4 +24,5 @@ object Items extends ItemManager(PressureCreativeTabs.main) {
 
   regItem(HandPump)
   regItem(Canister).setCreativeTab(PressureCreativeTabs.canisters)
+  regItem(ItemConfigurator)
 }

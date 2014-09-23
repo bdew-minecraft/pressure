@@ -20,9 +20,12 @@ item.pressure.HandPump.name=Hand Pump
 item.pressure.Canister.name=Canister
 item.pressure.FluidInterface.name=Fluid Interface
 item.pressure.TankWall.name=Tank Wall
+item.pressure.Configurator.name=Fluid Filter Configurator
 
 pressure.label.filter.set=Setting fluid filter to: %s
 pressure.label.filter.unset=Removing fluid filter
+
+pressure.label.configurator.clear=Clear current filter
 
 pressure.waila.filter=Filter: %s
 pressure.waila.side.input=Input from this side
