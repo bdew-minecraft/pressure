@@ -2,7 +2,7 @@ tile.pressure.input.name=高压输入接口
 tile.pressure.output.name=高压输出接口
 tile.pressure.pipe.name=压力管道
 tile.pressure.pump.name=高压泵
-tile.pressure.water.name=无限水源块
+tile.pressure.water.name=无限蓄水箱
 
 tile.pressure.TankBlock.name=储水箱方块
 tile.pressure.TankController.name=储水箱主控器
@@ -20,11 +20,12 @@ item.pressure.HandPump.name=手压泵
 item.pressure.Canister.name=金属罐
 item.pressure.FluidInterface.name=储水箱交接面
 item.pressure.TankWall.name=储水箱外墙
+item.pressure.Configurator.name=流体过滤调置器
 
 pressure.label.filter.set=过滤流体设为: %s
 pressure.label.filter.unset=移除流体过滤设定
 
-pressure.module.TankBlock.name=储水箱方块
+pressure.label.configurator.clear=清除流体过滤设定
 
 pressure.waila.filter=过滤流体: %s
 pressure.waila.side.input=从此面输入流体
@@ -32,6 +33,8 @@ pressure.waila.side.output=从此面输出流体
 pressure.waila.side.pressure=此面已连接压力系统
 pressure.waila.side.fluid=此面已连接管道/水箱
 pressure.waila.side.nothing=此面无连接
+
+pressure.module.TankBlock.name=储水箱方块
 
 pressure.gui.tank.title=高压储水箱
 pressure.gui.tank.filter=仅输入流体: %s
