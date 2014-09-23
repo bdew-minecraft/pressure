@@ -16,8 +16,8 @@ import net.bdew.lib.block.BlockRef
 import net.bdew.lib.multiblock.tile.{TileController, TileModule}
 import net.bdew.lib.render.connected.ConnectedHelper.{EdgeDraw, RectF, Vec3F}
 import net.bdew.lib.render.connected.ConnectedRenderer
-import net.bdew.pressure.blocks.tank.BaseModule
 import net.bdew.pressure.blocks.tank.controller.TileTankController
+import net.bdew.pressure.blocks.tank.{BaseModule, ModuleNeedsRenderUpdate}
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.client.renderer.{RenderBlocks, Tessellator}
@@ -25,7 +25,7 @@ import net.minecraft.util.IIcon
 import net.minecraft.world.IBlockAccess
 import net.minecraftforge.common.util.ForgeDirection
 
-object BlockTankIndicator extends BaseModule("TankIndicator", "TankBlock", classOf[TileTankIndicator]) {
+object BlockTankIndicator extends BaseModule("TankIndicator", "TankBlock", classOf[TileTankIndicator]) with ModuleNeedsRenderUpdate {
   private def scanCollumn(r: Range, core: TileController, world: IBlockAccess, x: Int, z: Int, face: ForgeDirection) = r.view.map { yScan =>
     BlockRef(x, yScan, z).getTile[TileTankIndicator](world)
   } prefixLength { tile =>

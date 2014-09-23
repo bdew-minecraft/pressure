@@ -15,19 +15,19 @@ import net.bdew.lib.data.{DataSlotInventory, DataSlotString, DataSlotTank}
 import net.bdew.lib.items.ItemUtils
 import net.bdew.lib.multiblock.interact.{CIFluidInput, CIFluidOutput, CIOutputFaces}
 import net.bdew.lib.multiblock.tile.TileControllerGui
-import net.bdew.pressure.blocks.tank.{BlockTankIndicator, MachineTank}
+import net.bdew.pressure.blocks.tank.{CIFilterable, MachineTank, ModuleNeedsRenderUpdate}
 import net.bdew.pressure.config.Modules
 import net.bdew.pressure.{Pressure, PressureResourceProvider}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids._
 
-class TileTankController extends TileControllerGui with CIFluidInput with CIOutputFaces with CIFluidOutput {
+class TileTankController extends TileControllerGui with CIFluidInput with CIOutputFaces with CIFluidOutput with CIFilterable {
   val cfg = MachineTank
 
   val resources = PressureResourceProvider
 
-  val fluidFilter = DataSlotString("fluidFilter", this).setUpdate(UpdateKind.GUI, UpdateKind.SAVE)
+  val fluidFilter = DataSlotString("fluidFilter", this).setUpdate(UpdateKind.GUI, UpdateKind.SAVE, UpdateKind.WORLD)
 
   val tank = new DataSlotTank("tank", this, 0) {
     setUpdate(UpdateKind.SAVE, UpdateKind.WORLD, UpdateKind.GUI)
@@ -41,13 +41,18 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   }
 
   handleClientUpdate listen { tag =>
-    for (ref <- modules if ref.blockIs(worldObj, BlockTankIndicator))
+    for (ref <- modules if ref.block(worldObj).exists(_.isInstanceOf[ModuleNeedsRenderUpdate]))
       worldObj.markBlockRangeForRenderUpdate(ref.x, ref.y, ref.z, ref.x, ref.y, ref.z)
   }
 
   lazy val maxOutputs = 6
 
-  def getFilterFluid = Option(fluidFilter.cval) flatMap (x => Option(FluidRegistry.getFluid(x)))
+  def getFluidFilter = Option(fluidFilter.cval) flatMap (x => Option(FluidRegistry.getFluid(x)))
+
+  // CIFilterable
+
+  override def clearFluidFilter() = fluidFilter := null
+  override def setFluidFilter(fluid: Fluid) = fluidFilter := (if (fluid == null) null else fluid.getName)
 
   // === Inventory Stuff ===
 

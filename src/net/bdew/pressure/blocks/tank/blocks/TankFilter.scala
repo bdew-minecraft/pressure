@@ -1,0 +1,56 @@
+package net.bdew.pressure.blocks.tank.blocks
+
+import cpw.mods.fml.client.registry.{ISimpleBlockRenderingHandler, RenderingRegistry}
+import net.bdew.lib.multiblock.tile.TileModule
+import net.bdew.lib.render.connected.ConnectedHelper.Vec3F
+import net.bdew.lib.render.connected.ConnectedRenderer
+import net.bdew.pressure.blocks.tank.controller.TileTankController
+import net.bdew.pressure.blocks.tank.{BaseModule, MIFilterable, ModuleNeedsRenderUpdate}
+import net.bdew.pressure.items.configurator.ItemConfigurator
+import net.bdew.pressure.render.RotatedBlockRenderer
+import net.minecraft.block.Block
+import net.minecraft.client.renderer.{RenderBlocks, Tessellator}
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.world.{IBlockAccess, World}
+import net.minecraftforge.common.util.ForgeDirection
+
+object BlockTankFilter extends BaseModule("TankFilter", "FluidFilter", classOf[TileTankFilter]) with ModuleNeedsRenderUpdate {
+  override def getRenderType = TankFilterRenderer.id
+  override def onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, meta: Int, xoffs: Float, yoffs: Float, zoffs: Float) = {
+    if (player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemConfigurator)
+      false // Let the configurator handle the click
+    else
+      super.onBlockActivated(world, x, y, z, player, meta, xoffs, yoffs, zoffs)
+  }
+}
+
+class TileTankFilter extends TileModule with MIFilterable {
+  val kind: String = "FluidFilter"
+}
+
+object TankFilterRenderer extends ISimpleBlockRenderingHandler {
+  val id = RenderingRegistry.getNextAvailableRenderId
+  RenderingRegistry.registerBlockHandler(this)
+
+  override def getRenderId = id
+  override def shouldRender3DInInventory(modelId: Int) = true
+
+  override def renderInventoryBlock(block: Block, metadata: Int, modelId: Int, renderer: RenderBlocks) =
+    ConnectedRenderer.renderInventoryBlock(block, metadata, modelId, renderer)
+
+  override def renderWorldBlock(world: IBlockAccess, x: Int, y: Int, z: Int, block: Block, modelId: Int, renderer: RenderBlocks) = {
+    ConnectedRenderer.renderWorldBlock(world, x, y, z, block, modelId, renderer)
+    for {
+      core <- BlockTankFilter.getTE(world, x, y, z).getCoreAs[TileTankController]
+      fluid <- core.getFluidFilter
+      icon <- Option(fluid.getStillIcon)
+      face <- ForgeDirection.VALID_DIRECTIONS
+      if block.shouldSideBeRendered(world, x + face.offsetX, y + face.offsetY, z + face.offsetZ, face.ordinal())
+    } {
+      Tessellator.instance.setColorOpaque_I(fluid.getColor)
+      RotatedBlockRenderer.filterIconDraw(face).doDraw(Vec3F(x, y, z), icon)
+      Tessellator.instance.setColorOpaque_F(1, 1, 1)
+    }
+    true
+  }
+}

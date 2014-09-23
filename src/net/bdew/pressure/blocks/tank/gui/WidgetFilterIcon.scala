@@ -22,14 +22,14 @@ class WidgetFilterIcon(p: Point, te: TileTankController) extends Widget {
   override val rect = new Rect(p, 16, 16)
   override def draw(mouse: Point) {
     for {
-      fluid <- te.getFilterFluid
+      fluid <- te.getFluidFilter
       icon <- Option(fluid.getIcon)
     } {
       parent.drawTexture(rect, Texture(Texture.BLOCKS, icon), Color.fromInt(fluid.getColor))
     }
   }
   override def handleTooltip(p: Point, tip: mutable.MutableList[String]) = {
-    tip += te.getFilterFluid map { fluid =>
+    tip += te.getFluidFilter map { fluid =>
       Misc.toLocalF("pressure.gui.tank.filter", fluid.getLocalizedName(new FluidStack(fluid, 1)))
     } getOrElse Misc.toLocal("pressure.gui.tank.nofilter")
     tip += EnumChatFormatting.GRAY + Misc.toLocal("pressure.gui.tank.filter.tip1") + EnumChatFormatting.RESET
