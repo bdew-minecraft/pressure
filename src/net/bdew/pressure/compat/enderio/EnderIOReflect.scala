@@ -9,24 +9,24 @@
 
 package net.bdew.pressure.compat.enderio
 
+import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fluids.FluidStack
 
 object EnderIOReflect {
-  val cTCB = Class.forName("crazypants.enderio.conduit.TileConduitBundle")
-  val mTCBgetConduit = cTCB.getMethod("getConduit", classOf[Class[_]])
+  type TileConduitBundle = TileEntity {
+    def getConduit[T](cls: Class[T]): T
+  }
 
-  val cALC = Class.forName("crazypants.enderio.conduit.liquid.AdvancedLiquidConduit")
-  val mALCgetNetwork = cALC.getMethod("getNetwork")
+  type LiquidConduit = {
+    def getNetwork: LiquidConduitNetwork
+  }
 
-  val cALCN = Class.forName("crazypants.enderio.conduit.liquid.AdvancedLiquidConduitNetwork")
-  val mALCNsetFluidType = cALCN.getMethod("setFluidType", classOf[FluidStack])
-  val mALCNsetFluidTypeLocked = cALCN.getMethod("setFluidTypeLocked", classOf[Boolean])
+  type LiquidConduitNetwork = {
+    def setFluidType(f: FluidStack): Unit
+    def setFluidTypeLocked(b: Boolean): Unit
+  }
 
-  val cLC = Class.forName("crazypants.enderio.conduit.liquid.LiquidConduit")
-  val mLCgetNetwork = cLC.getMethod("getNetwork")
-
-  val cLCN = Class.forName("crazypants.enderio.conduit.liquid.LiquidConduitNetwork")
-  val mLCNsetFluidType = cLCN.getMethod("setFluidType", classOf[FluidStack])
-  val mLCNsetFluidTypeLocked = cLCN.getMethod("setFluidTypeLocked", classOf[Boolean])
-
+  val clsTileConduitBundle = Class.forName("crazypants.enderio.conduit.TileConduitBundle").asInstanceOf[Class[TileConduitBundle]]
+  val clsAdvancedLiquidConduit = Class.forName("crazypants.enderio.conduit.liquid.AdvancedLiquidConduit").asInstanceOf[Class[LiquidConduit]]
+  val clsLiquidConduit = Class.forName("crazypants.enderio.conduit.liquid.LiquidConduit").asInstanceOf[Class[LiquidConduit]]
 }

@@ -10,29 +10,28 @@
 package net.bdew.pressure.compat.enderio
 
 import net.bdew.pressure.api.IFilterable
-import net.minecraft.tileentity.TileEntity
+import net.bdew.pressure.compat.enderio.EnderIOReflect._
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 
-class FilterableProxyLC(val b: TileEntity) extends IFilterable {
+import scala.language.reflectiveCalls
 
-  import net.bdew.pressure.compat.enderio.EnderIOReflect._
-
+class FilterableProxy(val b: TileConduitBundle, cl: Class[_ <: LiquidConduit]) extends IFilterable {
   override def setFluidFilter(fluid: Fluid) {
     for {
-      cond <- Option(mTCBgetConduit.invoke(b, cLC))
-      net <- Option(mLCgetNetwork.invoke(cond))
+      cond <- Option(b.getConduit(cl))
+      net <- Option(cond.getNetwork)
     } {
-      mLCNsetFluidType.invoke(net, new FluidStack(fluid, 1))
-      mLCNsetFluidTypeLocked.invoke(net, Boolean.box(true))
+      net.setFluidType(new FluidStack(fluid, 1))
+      net.setFluidTypeLocked(true)
     }
   }
 
   override def clearFluidFilter() {
     for {
-      cond <- Option(mTCBgetConduit.invoke(b, cLC))
-      net <- Option(mLCgetNetwork.invoke(cond))
+      cond <- Option(b.getConduit(cl))
+      net <- Option(cond.getNetwork)
     } {
-      mLCNsetFluidTypeLocked.invoke(net, Boolean.box(false))
+      net.setFluidTypeLocked(false)
     }
   }
 }

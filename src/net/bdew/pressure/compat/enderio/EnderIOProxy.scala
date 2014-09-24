@@ -9,20 +9,21 @@
 
 package net.bdew.pressure.compat.enderio
 
+import net.bdew.lib.Misc
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api.IFilterableProvider
 import net.bdew.pressure.misc.Helper
 import net.minecraft.world.World
 
+import scala.language.reflectiveCalls
+
 object EnderIOProxy extends IFilterableProvider {
   def init() {
     try {
       Pressure.logInfo("Loading EnderIO compatibility...")
-      Pressure.logInfo("TCB=%s", EnderIOReflect.cTCB)
-      Pressure.logInfo("LC=%s", EnderIOReflect.cLC)
-      Pressure.logInfo("LCN=%s", EnderIOReflect.cLCN)
-      Pressure.logInfo("ALC=%s", EnderIOReflect.cALC)
-      Pressure.logInfo("ALCN=%s", EnderIOReflect.cALCN)
+      Pressure.logInfo("TCB=%s", EnderIOReflect.clsTileConduitBundle)
+      Pressure.logInfo("LC=%s", EnderIOReflect.clsLiquidConduit)
+      Pressure.logInfo("ALC=%s", EnderIOReflect.clsAdvancedLiquidConduit)
       Helper.registerIFilterableProvider(this)
     } catch {
       case e: Throwable => Pressure.logErrorException("Error in EnderIO proxy", e)
@@ -31,11 +32,10 @@ object EnderIOProxy extends IFilterableProvider {
 
   override def getFilterableForWorldCoords(world: World, x: Int, y: Int, z: Int, side: Int) = {
     import net.bdew.pressure.compat.enderio.EnderIOReflect._
-    val te = world.getTileEntity(x, y, z)
-    if (te != null && cTCB.isInstance(te)) {
-      if (mTCBgetConduit.invoke(te, cLC) != null) new FilterableProxyLC(te)
-      else if (mTCBgetConduit.invoke(te, cALC) != null) new FilterableProxyALC(te)
+    (Option(world.getTileEntity(x, y, z)) flatMap Misc.asInstanceOpt(clsTileConduitBundle) map { te =>
+      if (te.getConduit(clsLiquidConduit) != null) new FilterableProxy(te, clsLiquidConduit)
+      else if (te.getConduit(clsAdvancedLiquidConduit) != null) new FilterableProxy(te, clsAdvancedLiquidConduit)
       else null
-    } else null
+    }).orNull
   }
 }
