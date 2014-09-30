@@ -1,16 +1,54 @@
-tile.pressure.input.name=고압 인풋
-tile.pressure.output.name=고압 아웃풋
+tile.pressure.input.name=고압 입력
+tile.pressure.output.name=고압 출력
 tile.pressure.pipe.name=고압 파이프
 tile.pressure.pump.name=고압 펌프
-tile.pressure.water.name=무한 물소스
+tile.pressure.water.name=무한 물
 
-item.pressure.Debugger.name=프레셔 시스템 디버그
-item.pressure.Interface.name=프레셔 시스템 인터페이스
-item.pressure.HandPump.name=손 펌프
-item.pressure.Canister.name=통
+tile.pressure.TankBlock.name=탱크 블럭
+tile.pressure.TankController.name=탱크 컨트롤러
+tile.pressure.TankPressureInput.name=압력 탱크 입력
+tile.pressure.TankFluidInput.name=탱크 입력구
+tile.pressure.TankFluidOutput.name=탱크 배출구
+tile.pressure.TankFluidAutoOutput.name=파워드 탱크 배출구
+tile.pressure.TankPressureOutput.name=탱크 압력 배출구
+tile.pressure.TankIndicator.name=탱크 표시 블럭
+tile.pressure.TankInterface.name=탱크 인터페이스
+tile.pressure.TankFilter.name=탱크 엑체 필터
 
-pressure.label.filter.set=%s 액체를 필터에 적용했습니다
-pressure.label.filter.unset=액체필터의 설정을 제거했습니다
+item.pressure.Debugger.name=압력 시스템 디버거
+item.pressure.Interface.name=압력 시스템 인터페이스
+item.pressure.HandPump.name=휴대용 펌프
+item.pressure.Canister.name=캐니스터
+item.pressure.FluidInterface.name=엑체 인터페이스
+item.pressure.TankWall.name=탱크 벽
+item.pressure.Configurator.name=엑체 필터 설정
+
+pressure.label.filter.set=Setting fluid filter to: %s
+pressure.label.filter.unset=엑체 필터를 초기화합니다.
+
+pressure.label.configurator.clear=이 필터를 초기화 합니다.
+
+pressure.waila.filter=필터: %s
+pressure.waila.side.input=이 쪽에서 입력
+pressure.waila.side.output=이 쪽으로 출력
+pressure.waila.side.pressure=옆은 압력 시스템에 연결됨
+pressure.waila.side.fluid=옆은 파이프나 탱크에 연결됨
+pressure.waila.side.nothing=연결되지 않음
+
+pressure.module.TankBlock.name=탱크 블럭
+
+pressure.gui.tank.title=압축 탱크
+pressure.gui.tank.filter=%s 만 가능
+pressure.gui.tank.nofilter=모든 엑체가 가능
+pressure.gui.tank.filter.tip1=아무 엑체 컨테이너를 가지고 우클릭하면 필터가 설정됩니다
+pressure.gui.tank.filter.tip2=빈 커서를 가지고 클릭하면 비워집니다.
 
 itemGroup.bdew.pressure=압력 파이프
-itemGroup.bdew.canisters=액체 통
+itemGroup.bdew.canisters=엑체 캐니스터
+
+pressure.output.0=빨강색 배출구
+pressure.output.1=초록색 배출구
+pressure.output.2=파랑색 배출구
+pressure.output.3=노랑색 배출구
+pressure.output.4=시안색 배출구
+pressure.output.5=보라색 배출구
