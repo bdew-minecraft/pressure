@@ -1,5 +1,5 @@
-tile.pressure.input.name=고압 입력
-tile.pressure.output.name=고압 출력
+tile.pressure.input.name=고압 입력면
+tile.pressure.output.name=고압 출력면
 tile.pressure.pipe.name=고압 파이프
 tile.pressure.pump.name=고압 펌프
 tile.pressure.water.name=무한 물
@@ -23,8 +23,8 @@ item.pressure.FluidInterface.name=엑체 인터페이스
 item.pressure.TankWall.name=탱크 벽
 item.pressure.Configurator.name=엑체 필터 설정
 
-pressure.label.filter.set=Setting fluid filter to: %s
-pressure.label.filter.unset=엑체 필터를 초기화합니다.
+pressure.label.filter.set=액체 필터 설정: %s
+pressure.label.filter.unset=액체 필터를 초기화합니다.
 
 pressure.label.configurator.clear=이 필터를 초기화 합니다.
 
@@ -50,5 +50,5 @@ pressure.output.0=빨강색 배출구
 pressure.output.1=초록색 배출구
 pressure.output.2=파랑색 배출구
 pressure.output.3=노랑색 배출구
-pressure.output.4=시안색 배출구
+pressure.output.4=청록색 배출구
 pressure.output.5=보라색 배출구
