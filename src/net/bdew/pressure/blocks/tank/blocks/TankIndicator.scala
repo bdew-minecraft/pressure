@@ -93,6 +93,8 @@ object TankIndicatorRenderer extends ISimpleBlockRenderingHandler {
     ConnectedRenderer.renderWorldBlock(world, x, y, z, block, modelId, renderer)
     BlockTankIndicator.getTE(world, x, y, z).getCoreAs[TileTankController] map { core =>
       if (core.tank.getFluid != null && core.tank.getFluidAmount > 0) {
+        val icon = Misc.getFluidIcon(core.tank.getFluid)
+        val color = Misc.getFluidColor(core.tank.getFluid)
         for (face <- Array(ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST)) {
           if (block.shouldSideBeRendered(world, x + face.offsetX, y + face.offsetY, z + face.offsetZ, face.ordinal())) {
             val (below, above) = BlockTankIndicator.getPositionInColumn(world, x, y, z, face)
@@ -101,8 +103,8 @@ object TankIndicatorRenderer extends ISimpleBlockRenderingHandler {
             val span = high - low
             val blockVal = core.tank.getCapacity.toFloat / (above + below + 1)
             val myFluid = Misc.clamp(core.tank.getFluidAmount.toFloat - below * blockVal, 0F, blockVal) / blockVal
-            Tessellator.instance.setColorOpaque_I(core.tank.getFluid.getFluid.getColor(core.tank.getFluid))
-            new EdgeDraw(RectF(7 / 16F, low, 9 / 16F, low + span * myFluid), face).doDraw(Vec3F(x, y, z), core.tank.getFluid.getFluid.getIcon)
+            Tessellator.instance.setColorOpaque_I(color)
+            new EdgeDraw(RectF(7 / 16F, low, 9 / 16F, low + span * myFluid), face).doDraw(Vec3F(x, y, z), icon)
             Tessellator.instance.setColorOpaque_F(1, 1, 1)
           }
         }

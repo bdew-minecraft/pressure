@@ -1,6 +1,7 @@
 package net.bdew.pressure.blocks.tank.blocks
 
 import cpw.mods.fml.client.registry.{ISimpleBlockRenderingHandler, RenderingRegistry}
+import net.bdew.lib.Misc
 import net.bdew.lib.multiblock.tile.TileModule
 import net.bdew.lib.render.connected.ConnectedHelper.Vec3F
 import net.bdew.lib.render.connected.ConnectedRenderer
@@ -43,12 +44,11 @@ object TankFilterRenderer extends ISimpleBlockRenderingHandler {
     for {
       core <- BlockTankFilter.getTE(world, x, y, z).getCoreAs[TileTankController]
       fluid <- core.getFluidFilter
-      icon <- Option(fluid.getStillIcon)
       face <- ForgeDirection.VALID_DIRECTIONS
       if block.shouldSideBeRendered(world, x + face.offsetX, y + face.offsetY, z + face.offsetZ, face.ordinal())
     } {
-      Tessellator.instance.setColorOpaque_I(fluid.getColor)
-      RotatedBlockRenderer.filterIconDraw(face).doDraw(Vec3F(x, y, z), icon)
+      Tessellator.instance.setColorOpaque_I(Misc.getFluidColor(fluid))
+      RotatedBlockRenderer.filterIconDraw(face).doDraw(Vec3F(x, y, z), Misc.getFluidIcon(fluid))
       Tessellator.instance.setColorOpaque_F(1, 1, 1)
     }
     true

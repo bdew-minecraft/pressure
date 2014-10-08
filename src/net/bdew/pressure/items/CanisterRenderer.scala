@@ -9,6 +9,7 @@
 
 package net.bdew.pressure.items
 
+import net.bdew.lib.Misc
 import net.bdew.lib.gui.Color
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.Tessellator
@@ -40,7 +41,7 @@ object CanisterRenderer extends IItemRenderer {
     GL11.glPopAttrib()
 
     val fl = Canister.getFluid(item)
-    if (fl != null && fl.getFluid != null && fl.getFluid.getStillIcon != null) {
+    if (fl != null) {
 
       GL11.glDisable(GL11.GL_TEXTURE_2D)
       GL11.glColor3d(0.7, 0.7, 0.7)
@@ -52,8 +53,8 @@ object CanisterRenderer extends IItemRenderer {
       tessellator.draw()
       GL11.glEnable(GL11.GL_TEXTURE_2D)
 
-      val flicon = fl.getFluid.getStillIcon
-      Color.fromInt(fl.getFluid.getColor).activate()
+      val flicon = Misc.getFluidIcon(fl)
+      Color.fromInt(Misc.getFluidColor(fl)).activate()
       Minecraft.getMinecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture)
       val fill = 15F * fl.amount / Canister.capacity
       val u = flicon.getInterpolatedU(0)

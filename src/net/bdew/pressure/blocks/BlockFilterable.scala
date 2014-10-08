@@ -10,6 +10,7 @@
 package net.bdew.pressure.blocks
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.Misc
 import net.bdew.lib.block.HasTE
 import net.bdew.lib.rotate.{BaseRotateableBlock, IconType}
 import net.minecraft.entity.player.EntityPlayer
@@ -54,7 +55,6 @@ trait BlockFilterable[T <: TileFilterable] extends BaseRotateableBlock with HasT
       for {
         name <- Option(getTE(w, x, y, z).fluidFilter.cval)
         fluid <- Option(FluidRegistry.getFluid(name))
-        icon <- Option(fluid.getStillIcon)
-      } yield (icon, fluid.getColor)
+      } yield (Misc.getFluidIcon(fluid), Misc.getFluidColor(fluid))
     else None
 }

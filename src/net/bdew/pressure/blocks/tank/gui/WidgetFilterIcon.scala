@@ -21,11 +21,8 @@ import scala.collection.mutable
 class WidgetFilterIcon(p: Point, te: TileTankController) extends Widget {
   override val rect = new Rect(p, 16, 16)
   override def draw(mouse: Point) {
-    for {
-      fluid <- te.getFluidFilter
-      icon <- Option(fluid.getIcon)
-    } {
-      parent.drawTexture(rect, Texture(Texture.BLOCKS, icon), Color.fromInt(fluid.getColor))
+    te.getFluidFilter.map { fluid =>
+      parent.drawTexture(rect, Texture(Texture.BLOCKS, Misc.getFluidIcon(fluid)), Color.fromInt(Misc.getFluidColor(fluid)))
     }
   }
   override def handleTooltip(p: Point, tip: mutable.MutableList[String]) = {
