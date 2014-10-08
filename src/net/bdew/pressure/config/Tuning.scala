@@ -29,7 +29,7 @@ object TuningLoader {
 
   val loader = new Loader
 
-  def loadDealayed() = loader.processDelayedStatements()
+  def loadDealayed() = loader.processRecipeStatements()
 
   def load(part: String, checkJar: Boolean = true) {
     val f = new File(Pressure.configDir, "%s-%s.cfg".format(Pressure.modId, part))
