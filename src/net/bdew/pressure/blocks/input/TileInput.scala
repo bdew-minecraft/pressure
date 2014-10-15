@@ -45,7 +45,7 @@ class TileInput extends TileDataSlots with FakeTank with IPressureInject with Ti
     if ((me.meta(worldObj) & 8) == 0) return
     val face = getFacing
     me.neighbour(face.getOpposite).getTile[IFluidHandler](worldObj).foreach { from =>
-      val res = from.drain(face.getOpposite, Int.MaxValue, false)
+      val res = from.drain(face, Int.MaxValue, false)
       if (res != null && res.getFluid != null && res.amount > 0 && isFluidAllowed(res)) {
         val filled = fill(face.getOpposite, res, true)
         if (filled > 0)

@@ -34,7 +34,7 @@ class TilePump extends TileDataSlots with FakeTank with TileFilterable {
     val face = getFacing
     for (from <- me.neighbour(face.getOpposite).getTile[IFluidHandler](worldObj);
          to <- me.neighbour(face).getTile[IFluidHandler](worldObj)) {
-      val res = from.drain(face.getOpposite, Int.MaxValue, false)
+      val res = from.drain(face, Int.MaxValue, false)
       if (res != null && res.getFluid != null && res.amount > 0 && isFluidAllowed(res)) {
         val filled = to.fill(face.getOpposite, res, true)
         if (filled > 0)
