@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.render
 
-import cpw.mods.fml.client.registry.{ISimpleBlockRenderingHandler, RenderingRegistry}
+import net.bdew.lib.render.{BaseBlockRenderHandler, RenderUtils}
 import net.bdew.pressure.misc.Helper
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.{RenderBlocks, Tessellator}
@@ -19,22 +19,7 @@ import org.lwjgl.opengl.GL11
 
 import scala.collection.Set
 
-class PipeRenderer(id: Int) extends ISimpleBlockRenderingHandler {
-
-  def doRenderItemSide(d: ForgeDirection, r: RenderBlocks, block: Block, meta: Int) = {
-    val icon = r.getBlockIconFromSideAndMetadata(block, d.ordinal(), meta)
-    Tessellator.instance.setNormal(d.offsetX, d.offsetY, d.offsetZ)
-    d match {
-      case ForgeDirection.DOWN => r.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, icon)
-      case ForgeDirection.UP => r.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, icon)
-      case ForgeDirection.NORTH => r.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, icon)
-      case ForgeDirection.SOUTH => r.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, icon)
-      case ForgeDirection.WEST => r.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, icon)
-      case ForgeDirection.EAST => r.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, icon)
-      case _ => sys.error("Invalid side")
-    }
-  }
-
+object PipeRenderer extends BaseBlockRenderHandler {
   override def renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks) {
     val tessellator = Tessellator.instance
     GL11.glPushMatrix()
@@ -46,7 +31,7 @@ class PipeRenderer(id: Int) extends ISimpleBlockRenderingHandler {
 
     for (side <- ForgeDirection.VALID_DIRECTIONS) {
       tessellator.startDrawingQuads()
-      doRenderItemSide(side, renderer, block, metadata)
+      RenderUtils.doRenderItemSide(side, renderer, block, metadata)
       tessellator.draw()
     }
 
@@ -131,16 +116,6 @@ class PipeRenderer(id: Int) extends ISimpleBlockRenderingHandler {
       draw(YPos(P2d(0.80F, 0.80F), P2d(0.20F, 0.20F), 0.80F, PIcon(16, 16), PIcon(0, 0)), offs, icon)
       draw(YNeg(P2d(0.80F, 0.80F), P2d(0.20F, 0.20F), 0.20F, PIcon(16, 16), PIcon(0, 0)), offs, icon)
     }
-
     true
   }
-
-  override def getRenderId = id
-  override def shouldRender3DInInventory(model: Int) = true
-}
-
-object PipeRenderer {
-  val id = RenderingRegistry.getNextAvailableRenderId
-  val instance = new PipeRenderer(id)
-  RenderingRegistry.registerBlockHandler(instance)
 }

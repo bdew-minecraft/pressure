@@ -9,52 +9,22 @@
 
 package net.bdew.pressure.render
 
-import cpw.mods.fml.client.registry.{ISimpleBlockRenderingHandler, RenderingRegistry}
 import net.bdew.lib.Misc
 import net.bdew.lib.render.connected.ConnectedHelper.{EdgeDraw, RectF, Vec3F}
+import net.bdew.lib.render.{BaseBlockRenderHandler, RenderUtils}
 import net.bdew.pressure.blocks.BlockFilterable
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.{RenderBlocks, Tessellator}
 import net.minecraft.world.IBlockAccess
 import net.minecraftforge.common.util.ForgeDirection
-import org.lwjgl.opengl.GL11
 
-object RotatedBlockRenderer extends ISimpleBlockRenderingHandler {
-  val id = RenderingRegistry.getNextAvailableRenderId
-  RenderingRegistry.registerBlockHandler(this)
-
-  override def getRenderId = id
-  override def shouldRender3DInInventory(model: Int) = true
-
+object RotatedBlockRenderer extends BaseBlockRenderHandler {
   val filterIconDraw =
     (for (dir <- ForgeDirection.VALID_DIRECTIONS)
     yield (dir, new EdgeDraw(RectF(0.35F, 0.35F, 0.65F, 0.65F), dir))).toMap
 
-  def doRenderItemSide(d: ForgeDirection, r: RenderBlocks, block: Block, meta: Int) = {
-    val icon = r.getBlockIconFromSideAndMetadata(block, d.ordinal(), meta)
-    Tessellator.instance.setNormal(d.offsetX, d.offsetY, d.offsetZ)
-    d match {
-      case ForgeDirection.DOWN => r.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, icon)
-      case ForgeDirection.UP => r.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, icon)
-      case ForgeDirection.NORTH => r.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, icon)
-      case ForgeDirection.SOUTH => r.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, icon)
-      case ForgeDirection.WEST => r.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, icon)
-      case ForgeDirection.EAST => r.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, icon)
-      case _ => sys.error("Invalid side")
-    }
-  }
-
   override def renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks) {
-    val tessellator = Tessellator.instance
-    GL11.glTranslatef(-0.5F, -0.5F, -0.5F)
-
-    for (side <- ForgeDirection.VALID_DIRECTIONS) {
-      tessellator.startDrawingQuads()
-      doRenderItemSide(side, renderer, block, metadata)
-      tessellator.draw()
-    }
-
-    GL11.glTranslatef(0.5F, 0.5F, 0.5F)
+    RenderUtils.renderSimpleBlockItem(block, metadata, renderer)
   }
 
   override def renderWorldBlock(world: IBlockAccess, x: Int, y: Int, z: Int, block: Block, modelId: Int, renderer: RenderBlocks): Boolean = {

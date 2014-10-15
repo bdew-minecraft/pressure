@@ -35,7 +35,7 @@ class PipePart extends TCuboidPart with TNormalOcclusion {
   @SideOnly(Side.CLIENT)
   override def renderStatic(pos: Vector3, pass: Int) = {
     if (pass == 0) {
-      PipeRenderer.instance.renderWorldBlock(world, x, y, z, BlockPipe, PipeRenderer.id, new RenderBlocks(world))
+      PipeRenderer.renderWorldBlock(world, x, y, z, BlockPipe, PipeRenderer.id, new RenderBlocks(world))
       true
     } else false
   }

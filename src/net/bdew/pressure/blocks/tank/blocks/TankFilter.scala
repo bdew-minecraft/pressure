@@ -1,8 +1,8 @@
 package net.bdew.pressure.blocks.tank.blocks
 
-import cpw.mods.fml.client.registry.{ISimpleBlockRenderingHandler, RenderingRegistry}
 import net.bdew.lib.Misc
 import net.bdew.lib.multiblock.tile.TileModule
+import net.bdew.lib.render.BaseBlockRenderHandler
 import net.bdew.lib.render.connected.ConnectedHelper.Vec3F
 import net.bdew.lib.render.connected.ConnectedRenderer
 import net.bdew.pressure.blocks.tank.controller.TileTankController
@@ -29,13 +29,7 @@ class TileTankFilter extends TileModule with MIFilterable {
   val kind: String = "FluidFilter"
 }
 
-object TankFilterRenderer extends ISimpleBlockRenderingHandler {
-  val id = RenderingRegistry.getNextAvailableRenderId
-  RenderingRegistry.registerBlockHandler(this)
-
-  override def getRenderId = id
-  override def shouldRender3DInInventory(modelId: Int) = true
-
+object TankFilterRenderer extends BaseBlockRenderHandler {
   override def renderInventoryBlock(block: Block, metadata: Int, modelId: Int, renderer: RenderBlocks) =
     ConnectedRenderer.renderInventoryBlock(block, metadata, modelId, renderer)
 
