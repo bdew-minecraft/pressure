@@ -45,11 +45,10 @@ object Pressure {
   @EventHandler
   def preInit(event: FMLPreInitializationEvent) {
     log = event.getModLog
-    configDir = event.getModConfigurationDirectory
-    TuningLoader.load("config")
-    TuningLoader.load("override", false)
+    configDir = new File(event.getModConfigurationDirectory, "PressurePipes")
+    TuningLoader.loadConfigFiles()
     Config.load()
-    if (Misc.haveModVersion("ForgeMultipart")) new FmpHandler()
+    if (Misc.haveModVersion("ForgeMultipart")) FmpHandler.init()
     if (event.getSide == Side.CLIENT) {
       IconCache.init()
       MinecraftForgeClient.registerItemRenderer(Canister, CanisterRenderer)

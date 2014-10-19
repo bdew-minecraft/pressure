@@ -68,10 +68,12 @@ object FmpPressureExtension extends IPressureExtension {
   }
 }
 
-class FmpHandler {
-  MultiPartRegistry.registerParts(FmpFactory, Array(
-    "bdew.pressure.pipe"
-  ))
-  MultiPartRegistry.registerConverter(FmpConverter)
-  Helper.registerExtension(FmpPressureExtension)
+object FmpHandler {
+  def init() {
+    MultiPartRegistry.registerParts(FmpFactory, Array(
+      "bdew.pressure.pipe"
+    ))
+    MultiPartRegistry.registerConverter(FmpConverter)
+    Helper.registerExtension(FmpPressureExtension)
+  }
 }
