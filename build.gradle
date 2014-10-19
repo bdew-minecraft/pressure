@@ -23,7 +23,7 @@ apply plugin: 'scala'
 apply plugin: 'forge'
 
 version = "0.9.6"
-ext.bdlibver = "1.5.0.30"
+ext.bdlibver = "1.5.0.31"
 ext.apiVer = version
 ext.versuffix = "mc1710"
 
@@ -37,7 +37,7 @@ group = "net.bdew"
 archivesBaseName = "pressure"
 
 minecraft {
-    version = "1.7.10-10.13.0.1180"
+    version = "1.7.10-10.13.2.1231"
     replace("BDLIB_VER", project.bdlibver)
     replace("PRESSURE_VER", project.version)
     replace("PRESSURE_APIVER", project.apiVer)
@@ -61,10 +61,10 @@ repositories {
 }
 
 dependencies {
-    compile "codechicken:CodeChickenLib:1.7.10-1.1.1.98:dev"
-    compile "codechicken:CodeChickenCore:1.7.10-1.0.3.23:dev"
-    compile "codechicken:ForgeMultipart:1.7.10-1.1.0.300:dev"
-    compile "mcp.mobius.waila:Waila:1.5.3_1.7.10"
+    compile "codechicken:CodeChickenLib:1.7.10-1.1.1.104:dev"
+    compile "codechicken:CodeChickenCore:1.7.10-1.0.3.26:dev"
+    compile "codechicken:ForgeMultipart:1.7.10-1.1.0.311:dev"
+    compile "mcp.mobius.waila:Waila:1.5.5_1.7.10"
     compile "net.bdew:bdlib:" + bdlibver
 }
 
