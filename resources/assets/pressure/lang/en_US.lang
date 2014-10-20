@@ -3,6 +3,7 @@ tile.pressure.output.name=High Pressure Output
 tile.pressure.pipe.name=High Pressure Pipe
 tile.pressure.pump.name=High Pressure Pump
 tile.pressure.water.name=Infinite Water Source
+tile.pressure.drain.name=Fluid Drain
 
 tile.pressure.TankBlock.name=Tank Block
 tile.pressure.TankController.name=Tank Controller
