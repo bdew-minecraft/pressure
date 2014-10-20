@@ -27,14 +27,13 @@ class TileDrain extends TileDataSlots with FakeTank with IPressureEject with Til
 
   def doDrain(resource: FluidStack) {
     val target = me.neighbour(getFacing)
-    if (worldObj.isAirBlock(target.x, target.y, target.z)) {
-      if (bufferTank.getFluid != null && bufferTank.getFluid.getFluid != resource.getFluid)
-        bufferTank.setFluid(null)
-      bufferTank.fill(resource, true)
-      if (bufferTank.getFluidAmount >= 1000 && resource.getFluid.canBePlacedInWorld) {
-        worldObj.setBlock(target.x, target.y, target.z, resource.getFluid.getBlock)
-        worldObj.notifyBlockOfNeighborChange(target.x, target.y, target.z, BlockDrain)
-      }
+    if (bufferTank.getFluid != null && bufferTank.getFluid.getFluid != resource.getFluid)
+      bufferTank.setFluid(null)
+    bufferTank.fill(resource, true)
+    if (worldObj.isAirBlock(target.x, target.y, target.z) && bufferTank.getFluidAmount >= 1000 && resource.getFluid.canBePlacedInWorld) {
+      bufferTank.setFluid(null)
+      worldObj.setBlock(target.x, target.y, target.z, resource.getFluid.getBlock)
+      worldObj.notifyBlockOfNeighborChange(target.x, target.y, target.z, BlockDrain)
     }
   }
 
