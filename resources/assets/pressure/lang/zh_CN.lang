@@ -2,24 +2,26 @@ tile.pressure.input.name=高压输入接口
 tile.pressure.output.name=高压输出接口
 tile.pressure.pipe.name=压力管道
 tile.pressure.pump.name=高压泵
-tile.pressure.water.name=无限蓄水箱
+tile.pressure.water.name=无限水源块
+tile.pressure.drain.name=水库排液口
 
-tile.pressure.TankBlock.name=储水箱方块
-tile.pressure.TankController.name=储水箱主控器
-tile.pressure.TankPressureInput.name=储水箱压力输入接口
-tile.pressure.TankFluidInput.name=储水箱流体输入接口
-tile.pressure.TankFluidOutput.name=储水箱流体输出接口
-tile.pressure.TankFluidAutoOutput.name=储水箱流体自动输出接口
-tile.pressure.TankPressureOutput.name=储水箱压力输出接口
-tile.pressure.TankIndicator.name=储水箱流体指示计
-tile.pressure.TankInterface.name=储水箱交接面
+tile.pressure.TankBlock.name=水库方块
+tile.pressure.TankController.name=水库主控器
+tile.pressure.TankPressureInput.name=水库高压输入接口
+tile.pressure.TankFluidInput.name=水库流体输入接口
+tile.pressure.TankFluidOutput.name=水库流体输出接口
+tile.pressure.TankFluidAutoOutput.name=水库自动输出接口
+tile.pressure.TankPressureOutput.name=水库高压输出接口
+tile.pressure.TankIndicator.name=水库流体指示计
+tile.pressure.TankInterface.name=水库端口
+tile.pressure.TankFilter.name=流体过滤器
 
 item.pressure.Debugger.name=压力系统调试物品
-item.pressure.Interface.name=压力系统交接面
+item.pressure.Interface.name=压力系统端口
 item.pressure.HandPump.name=手压泵
 item.pressure.Canister.name=金属罐
-item.pressure.FluidInterface.name=储水箱交接面
-item.pressure.TankWall.name=储水箱外墙
+item.pressure.FluidInterface.name=水库端口
+item.pressure.TankWall.name=水库外墙
 item.pressure.Configurator.name=流体过滤调置器
 
 pressure.label.filter.set=过滤流体设为: %s
@@ -31,12 +33,12 @@ pressure.waila.filter=过滤流体: %s
 pressure.waila.side.input=从此面输入流体
 pressure.waila.side.output=从此面输出流体
 pressure.waila.side.pressure=此面已连接压力系统
-pressure.waila.side.fluid=此面已连接管道/水箱
+pressure.waila.side.fluid=此面已连接管道/水库
 pressure.waila.side.nothing=此面无连接
 
-pressure.module.TankBlock.name=储水箱方块
+pressure.module.TankBlock.name=水库方块
 
-pressure.gui.tank.title=高压储水箱
+pressure.gui.tank.title=高压水库
 pressure.gui.tank.filter=仅输入流体: %s
 pressure.gui.tank.nofilter=输入任何流体
 pressure.gui.tank.filter.tip1=用任何流体容器左键来设置过滤
