@@ -2,23 +2,25 @@ tile.pressure.input.name=高压输入接口
 tile.pressure.output.name=高压输出接口
 tile.pressure.pipe.name=压力管道
 tile.pressure.pump.name=高压泵
-tile.pressure.water.name=无限蓄水箱
+tile.pressure.water.name=无限水块
+tile.pressure.drain.name=排液端口
 
 tile.pressure.TankBlock.name=储水箱方块
 tile.pressure.TankController.name=储水箱主控器
-tile.pressure.TankPressureInput.name=储水箱压力输入接口
+tile.pressure.TankPressureInput.name=储水箱高压输入接口
 tile.pressure.TankFluidInput.name=储水箱流体输入接口
 tile.pressure.TankFluidOutput.name=储水箱流体输出接口
-tile.pressure.TankFluidAutoOutput.name=储水箱流体自动输出接口
-tile.pressure.TankPressureOutput.name=储水箱压力输出接口
+tile.pressure.TankFluidAutoOutput.name=储水箱自动输出接口
+tile.pressure.TankPressureOutput.name=储水箱高压输出接口
 tile.pressure.TankIndicator.name=储水箱流体指示计
-tile.pressure.TankInterface.name=储水箱交接面
+tile.pressure.TankInterface.name=储水箱端口
+tile.pressure.TankFilter.name=流体过滤器
 
 item.pressure.Debugger.name=压力系统调试物品
-item.pressure.Interface.name=压力系统交接面
+item.pressure.Interface.name=压力系统端口
 item.pressure.HandPump.name=手压泵
 item.pressure.Canister.name=金属罐
-item.pressure.FluidInterface.name=储水箱交接面
+item.pressure.FluidInterface.name=储水箱端口
 item.pressure.TankWall.name=储水箱外墙
 item.pressure.Configurator.name=流体过滤调置器
 
