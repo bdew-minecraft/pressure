@@ -3,6 +3,7 @@ tile.pressure.output.name=고압 출력면
 tile.pressure.pipe.name=고압 파이프
 tile.pressure.pump.name=고압 펌프
 tile.pressure.water.name=무한 물
+tile.pressure.drain.name=배수로
 
 tile.pressure.TankBlock.name=탱크 블럭
 tile.pressure.TankController.name=탱크 컨트롤러
@@ -15,11 +16,11 @@ tile.pressure.TankIndicator.name=탱크 표시 블럭
 tile.pressure.TankInterface.name=탱크 인터페이스
 tile.pressure.TankFilter.name=탱크 엑체 필터
 
-item.pressure.Debugger.name=압력 시스템 디버거
-item.pressure.Interface.name=압력 시스템 인터페이스
+item.pressure.Debugger.name=압력시스템 디버거
+item.pressure.Interface.name=압력시스템 인터페이스
 item.pressure.HandPump.name=휴대용 펌프
 item.pressure.Canister.name=캐니스터
-item.pressure.FluidInterface.name=엑체 인터페이스
+item.pressure.FluidInterface.name=액체 인터페이스
 item.pressure.TankWall.name=탱크 벽
 item.pressure.Configurator.name=엑체 필터 설정
 
