@@ -3,14 +3,53 @@ tile.pressure.output.name=Выход под высоким давлением
 tile.pressure.pipe.name=Труба под высоким давлением
 tile.pressure.pump.name=Помпа под высоким давлением
 tile.pressure.water.name=Бесконечный источник воды
+tile.pressure.drain.name=Дренаж
+
+tile.pressure.TankBlock.name=Блок резервуара
+tile.pressure.TankController.name=Контроллер резервуара
+tile.pressure.TankPressureInput.name=Вход в резервуар под давлением
+tile.pressure.TankFluidInput.name=Жидкостный вход в резервуар
+tile.pressure.TankFluidOutput.name=Жидкостный выход из резервуара
+tile.pressure.TankFluidAutoOutput.name=Жидкостный автовыход из резервуара
+tile.pressure.TankPressureOutput.name=Выход из резервуара под давлением
+tile.pressure.TankIndicator.name=Индикаторный блок резервуара
+tile.pressure.TankInterface.name=Интерфейс резервуара
+tile.pressure.TankFilter.name=Жидкостный фильтр резервуара
 
 item.pressure.Debugger.name=Отладчик системы давления
 item.pressure.Interface.name=Интерфейс системы давления
 item.pressure.HandPump.name=Ручная помпа
 item.pressure.Canister.name=Канистра
+item.pressure.FluidInterface.name=Жидкостный интерфейс
+item.pressure.TankWall.name=Стенка резервуара
+item.pressure.Configurator.name=Конфигуратор фильтра жидкостей
 
 pressure.label.filter.set=Установка жидкостного фильтра на: %s
 pressure.label.filter.unset=Удаление жидкостного фильтра
 
-itemGroup.bdew.pressure=Pressure Piping
+pressure.label.configurator.clear=Очистить текущий фильтр
+
+pressure.waila.filter=Фильтр: %s
+pressure.waila.side.input=Вход с этой стороны
+pressure.waila.side.output=Выход на этой стороне
+pressure.waila.side.pressure=Сторона подключена к системе давления
+pressure.waila.side.fluid=Сторона подключена к трубе/резервуару
+pressure.waila.side.nothing=Сторона не подключена
+
+pressure.module.TankBlock.name=Блок резервуара
+
+pressure.gui.tank.title=Резервуар под давлением
+pressure.gui.tank.filter=Будет принимать только %s
+pressure.gui.tank.nofilter=Будет принимать все жидкости
+pressure.gui.tank.filter.tip1=Кликните с жидкостным контейнером в руке, чтобы установить фильтр
+pressure.gui.tank.filter.tip2=Кликните пустой рукой, чтобы очистить фильтр
+
+itemGroup.bdew.pressure=Трубопроводы под давлением
 itemGroup.bdew.canisters=Жидкостные канистры
+
+pressure.output.0=Красный выход
+pressure.output.1=Зеленый выход
+pressure.output.2=Синий выход
+pressure.output.3=Жёлтый выход
+pressure.output.4=Голубой выход
+pressure.output.5=Фиолетовый выход
