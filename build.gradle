@@ -22,8 +22,8 @@ buildscript {
 apply plugin: 'scala'
 apply plugin: 'forge'
 
-version = "1.0.0"
-ext.bdlibver = "1.5.0.31"
+version = "1.0.1"
+ext.bdlibver = "1.5.1.32"
 ext.apiVer = version
 ext.versuffix = "mc1710"
 
