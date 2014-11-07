@@ -171,29 +171,31 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
     }
   }
 
+  def isReady = !revalidateOnNextTick && !modulesChanged
+
   // === CIFluidInput ===
 
   def inputFluid(resource: FluidStack, doFill: Boolean): Int =
     if (canInputFluid(resource.getFluid)) tank.fill(resource, doFill) else 0
 
   def canInputFluid(fluid: Fluid) =
-    (tank.getFluid == null || tank.getFluid.getFluid == fluid) &&
+    isReady && (tank.getFluid == null || tank.getFluid.getFluid == fluid) &&
       ((fluidFilter :== null) || (fluidFilter :== fluid.getName))
 
   def getTankInfo = Array(tank.getInfo)
 
   // === CIFluidOutput ===
 
-  override def canOutputFluid(fluid: Fluid) = fluid == null || tank.getFluid.getFluid == fluid
+  override def canOutputFluid(fluid: Fluid) = fluid == null || (tank.getFluid != null && tank.getFluid.getFluid == fluid)
 
   override def outputFluid(resource: FluidStack, doDrain: Boolean) =
-    if (tank.getFluid == null || resource == null || resource.getFluid == null || tank.getFluid.getFluid != resource.getFluid)
+    if (!isReady || tank.getFluid == null || resource == null || resource.getFluid == null || tank.getFluid.getFluid != resource.getFluid)
       null
     else
       tank.drain(resource.amount, doDrain)
 
   override def outputFluid(ammount: Int, doDrain: Boolean) =
-    if (tank.getFluid == null || ammount <= 0)
+    if (!isReady || tank.getFluid == null || ammount <= 0)
       null
     else
       tank.drain(ammount, doDrain)
