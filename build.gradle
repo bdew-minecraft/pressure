@@ -23,7 +23,7 @@ apply plugin: 'scala'
 apply plugin: 'forge'
 
 version = "1.0.1"
-ext.bdlibver = "1.5.1.32"
+ext.bdlibver = "1.5.2.33"
 ext.apiVer = version
 ext.versuffix = "mc1710"
 
@@ -61,10 +61,10 @@ repositories {
 }
 
 dependencies {
-    compile "codechicken:CodeChickenLib:1.7.10-1.1.1.104:dev"
-    compile "codechicken:CodeChickenCore:1.7.10-1.0.3.26:dev"
-    compile "codechicken:ForgeMultipart:1.7.10-1.1.0.311:dev"
-    compile "mcp.mobius.waila:Waila:1.5.5_1.7.10"
+    compile "codechicken:CodeChickenLib:1.7.10-1.1.1.110:dev"
+    compile "codechicken:CodeChickenCore:1.7.10-1.0.4.29:dev"
+    compile "codechicken:ForgeMultipart:1.7.10-1.1.1.320:dev"
+    compile "mcp.mobius.waila:Waila:1.5.6a_1.7.10"
     compile "net.bdew:bdlib:" + bdlibver
 }
 
@@ -78,6 +78,7 @@ sourceSets {
         resources {
             srcDir 'resources'
         }
+        output.resourcesDir = output.classesDir // Hack for IDEA
     }
 }
 
