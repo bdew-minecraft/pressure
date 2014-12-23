@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) bdew, 2013 - 2014
+ * https://github.com/bdew/pressure
+ *
+ * This mod is distributed under the terms of the Minecraft Mod Public
+ * License 1.0, or MMPL. Please check the contents of the license located in
+ * http://bdew.net/minecraft-mod-public-license/
+ */
+
 package net.bdew.pressure.blocks.tank.blocks
 
 import net.bdew.lib.Misc
@@ -17,11 +26,11 @@ import net.minecraftforge.common.util.ForgeDirection
 
 object BlockTankFilter extends BaseModule("TankFilter", "FluidFilter", classOf[TileTankFilter]) with ModuleNeedsRenderUpdate {
   override def getRenderType = TankFilterRenderer.id
-  override def onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, meta: Int, xoffs: Float, yoffs: Float, zoffs: Float) = {
+  override def onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, meta: Int, xOffs: Float, yOffs: Float, zOffs: Float) = {
     if (player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemConfigurator)
       false // Let the configurator handle the click
     else
-      super.onBlockActivated(world, x, y, z, player, meta, xoffs, yoffs, zoffs)
+      super.onBlockActivated(world, x, y, z, player, meta, xOffs, yOffs, zOffs)
   }
 }
 

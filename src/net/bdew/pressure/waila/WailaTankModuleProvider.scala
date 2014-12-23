@@ -25,7 +25,7 @@ object WailaTankModuleProvider extends BaseDataProvider(classOf[TileModule]) {
     } yield {
       var out = WailaTankProvider.getBodyStrings(controller, stack, acc, cfg)
       if (target.isInstanceOf[MIOutput[_]]) {
-        controller.outputFaces get BlockFace(target.mypos, acc.getSide) map { output =>
+        controller.outputFaces get BlockFace(target.myPos, acc.getSide) map { output =>
           out :+= Misc.toLocal("pressure.output." + output)
         }
       }

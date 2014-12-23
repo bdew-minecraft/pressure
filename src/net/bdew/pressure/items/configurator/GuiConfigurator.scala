@@ -33,7 +33,7 @@ class GuiConfigurator(player: EntityPlayer) extends BaseScreen(new ContainerConf
     super.initGui()
     Keyboard.enableRepeatEvents(true)
 
-    widgets.add(new WidgetLabel(Misc.toLocal("container.inventory"), 8, 77, Color.darkgray))
+    widgets.add(new WidgetLabel(Misc.toLocal("container.inventory"), 8, 77, Color.darkGray))
     widgets.add(new WidgetSimpleIcon(new Rect(8, 4, 16, 16), searchIcon))
 
     searchEdit = widgets.add(new WidgetTextEdit(new Rect(26, 6, 124, 12), getFontRenderer))

@@ -26,7 +26,7 @@ import net.minecraft.world.IBlockAccess
 import net.minecraftforge.common.util.ForgeDirection
 
 object BlockTankIndicator extends BaseModule("TankIndicator", "TankBlock", classOf[TileTankIndicator]) with ModuleNeedsRenderUpdate {
-  private def scanCollumn(r: Range, core: TileController, world: IBlockAccess, x: Int, z: Int, face: ForgeDirection) = r.view.map { yScan =>
+  private def scanColumn(r: Range, core: TileController, world: IBlockAccess, x: Int, z: Int, face: ForgeDirection) = r.view.map { yScan =>
     BlockRef(x, yScan, z).getTile[TileTankIndicator](world)
   } prefixLength { tile =>
     tile.isDefined &&
@@ -38,8 +38,8 @@ object BlockTankIndicator extends BaseModule("TankIndicator", "TankBlock", class
 
   def getPositionInColumn(world: IBlockAccess, x: Int, y: Int, z: Int, face: ForgeDirection) = {
     getTE(world, x, y, z).getCore map { core =>
-      val below = scanCollumn(y - 1 until(0, -1), core, world, x, z, face)
-      val above = scanCollumn(y + 1 until world.getHeight, core, world, x, z, face)
+      val below = scanColumn(y - 1 until(0, -1), core, world, x, z, face)
+      val above = scanColumn(y + 1 until world.getHeight, core, world, x, z, face)
       (below, above)
     } getOrElse ((0, 0))
   }

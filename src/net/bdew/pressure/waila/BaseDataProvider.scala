@@ -28,46 +28,46 @@ class BaseDataProvider[T](cls: Class[T]) extends IWailaDataProvider {
 
   override def getNBTData(te: TileEntity, tag: NBTTagCompound, world: World, x: Int, y: Int, z: Int) = null
 
-  final override def getWailaTail(itemStack: ItemStack, currenttip: util.List[String], accessor: IWailaDataAccessor, config: IWailaConfigHandler) = {
+  final override def getWailaTail(itemStack: ItemStack, tip: util.List[String], accessor: IWailaDataAccessor, config: IWailaConfigHandler) = {
     try {
       if (cls.isInstance(accessor.getTileEntity))
-        currenttip.addAll(getTailStrings(accessor.getTileEntity.asInstanceOf[T], itemStack, accessor, config))
+        tip.addAll(getTailStrings(accessor.getTileEntity.asInstanceOf[T], itemStack, accessor, config))
       else if (cls.isInstance(accessor.getBlock))
-        currenttip.addAll(getTailStrings(accessor.getBlock.asInstanceOf[T], itemStack, accessor, config))
+        tip.addAll(getTailStrings(accessor.getBlock.asInstanceOf[T], itemStack, accessor, config))
     } catch {
       case e: Throwable =>
         Pressure.logWarnException("Error in waila handler", e)
-        currenttip.add("[%s%s%s]".format(EnumChatFormatting.RED, e.toString, EnumChatFormatting.RESET))
+        tip.add("[%s%s%s]".format(EnumChatFormatting.RED, e.toString, EnumChatFormatting.RESET))
     }
-    currenttip
+    tip
   }
 
-  final override def getWailaHead(itemStack: ItemStack, currenttip: util.List[String], accessor: IWailaDataAccessor, config: IWailaConfigHandler) = {
+  final override def getWailaHead(itemStack: ItemStack, tip: util.List[String], accessor: IWailaDataAccessor, config: IWailaConfigHandler) = {
     try {
       if (cls.isInstance(accessor.getTileEntity))
-        currenttip.addAll(getHeadStrings(accessor.getTileEntity.asInstanceOf[T], itemStack, accessor, config))
+        tip.addAll(getHeadStrings(accessor.getTileEntity.asInstanceOf[T], itemStack, accessor, config))
       else if (cls.isInstance(accessor.getBlock))
-        currenttip.addAll(getHeadStrings(accessor.getBlock.asInstanceOf[T], itemStack, accessor, config))
+        tip.addAll(getHeadStrings(accessor.getBlock.asInstanceOf[T], itemStack, accessor, config))
     } catch {
       case e: Throwable =>
         Pressure.logWarnException("Error in waila handler", e)
-        currenttip.add("[%s%s%s]".format(EnumChatFormatting.RED, e.toString, EnumChatFormatting.RESET))
+        tip.add("[%s%s%s]".format(EnumChatFormatting.RED, e.toString, EnumChatFormatting.RESET))
     }
-    currenttip
+    tip
   }
 
-  final override def getWailaBody(itemStack: ItemStack, currenttip: util.List[String], accessor: IWailaDataAccessor, config: IWailaConfigHandler) = {
+  final override def getWailaBody(itemStack: ItemStack, tip: util.List[String], accessor: IWailaDataAccessor, config: IWailaConfigHandler) = {
     try {
       if (cls.isInstance(accessor.getTileEntity))
-        currenttip.addAll(getBodyStrings(accessor.getTileEntity.asInstanceOf[T], itemStack, accessor, config))
+        tip.addAll(getBodyStrings(accessor.getTileEntity.asInstanceOf[T], itemStack, accessor, config))
       else if (cls.isInstance(accessor.getBlock))
-        currenttip.addAll(getBodyStrings(accessor.getBlock.asInstanceOf[T], itemStack, accessor, config))
+        tip.addAll(getBodyStrings(accessor.getBlock.asInstanceOf[T], itemStack, accessor, config))
     } catch {
       case e: Throwable =>
         Pressure.logWarnException("Error in waila handler", e)
-        currenttip.add("[%s%s%s]".format(EnumChatFormatting.RED, e.toString, EnumChatFormatting.RESET))
+        tip.add("[%s%s%s]".format(EnumChatFormatting.RED, e.toString, EnumChatFormatting.RESET))
     }
-    currenttip
+    tip
   }
 
   override def getWailaStack(accessor: IWailaDataAccessor, config: IWailaConfigHandler) = null

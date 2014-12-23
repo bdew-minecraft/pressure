@@ -4,7 +4,7 @@
  *
  * This mod is distributed under the terms of the Minecraft Mod Public
  * License 1.0, or MMPL. Please check the contents of the license located in
- * https://raw.github.com/bdew/pressure/master/MMPL-1.0.txt
+ * http://bdew.net/minecraft-mod-public-license/
  */
 
 package net.bdew.pressure.items
@@ -48,30 +48,30 @@ object HandPump extends SimpleItem("HandPump") {
     if (block.isInstanceOf[BlockFluidBase]) {
       val bl = block.asInstanceOf[BlockFluidBase]
       val fl = bl.drain(world, x, y, z, false)
-      val tofill = findFillTarget(fl, player.inventory, true)
-      if (tofill != null) {
+      val toFill = findFillTarget(fl, player.inventory, true)
+      if (toFill != null) {
         if (!world.isRemote) {
-          tofill.getItem.asInstanceOf[IFluidContainerItem].fill(tofill, bl.drain(world, x, y, z, true), true)
+          toFill.getItem.asInstanceOf[IFluidContainerItem].fill(toFill, bl.drain(world, x, y, z, true), true)
         }
         return true
       }
     } else if (world.getBlock(x, y, z).getMaterial == Material.water && world.getBlockMetadata(x, y, z) == 0) {
       val ns = new FluidStack(FluidRegistry.WATER, 1000)
-      val tofill = findFillTarget(ns, player.inventory, true)
-      if (tofill != null) {
+      val toFill = findFillTarget(ns, player.inventory, true)
+      if (toFill != null) {
         if (!world.isRemote) {
           world.setBlockToAir(x, y, z)
-          tofill.getItem.asInstanceOf[IFluidContainerItem].fill(tofill, ns, true)
+          toFill.getItem.asInstanceOf[IFluidContainerItem].fill(toFill, ns, true)
         }
         return true
       }
     } else if (world.getBlock(x, y, z).getMaterial == Material.lava && world.getBlockMetadata(x, y, z) == 0) {
       val ns = new FluidStack(FluidRegistry.LAVA, 1000)
-      val tofill = findFillTarget(ns, player.inventory, true)
-      if (tofill != null) {
+      val toFill = findFillTarget(ns, player.inventory, true)
+      if (toFill != null) {
         if (!world.isRemote) {
           world.setBlockToAir(x, y, z)
-          tofill.getItem.asInstanceOf[IFluidContainerItem].fill(tofill, ns, true)
+          toFill.getItem.asInstanceOf[IFluidContainerItem].fill(toFill, ns, true)
         }
         return true
       }
@@ -81,12 +81,12 @@ object HandPump extends SimpleItem("HandPump") {
         if (!world.isRemote) {
           val fh = te.asInstanceOf[IFluidHandler]
           val fs = fh.drain(dir, maxDrain, false)
-          val tofill = findFillTarget(fs, player.inventory, false)
-          if (tofill != null) {
-            val fci = tofill.getItem.asInstanceOf[IFluidContainerItem]
-            val canFill = fci.fill(tofill, fs, false)
+          val toFill = findFillTarget(fs, player.inventory, false)
+          if (toFill != null) {
+            val fci = toFill.getItem.asInstanceOf[IFluidContainerItem]
+            val canFill = fci.fill(toFill, fs, false)
             if (canFill > 0) {
-              fci.fill(tofill, fh.drain(dir, canFill, true), true)
+              fci.fill(toFill, fh.drain(dir, canFill, true), true)
               return true
             }
           }

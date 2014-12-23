@@ -17,5 +17,5 @@ public interface IFilterableProvider {
      *
      * @return IFilterable instance or null if not applicable
      */
-    IFilterable getFilterableForWorldCoords(World world, int x, int y, int z, int side);
+    IFilterable getFilterableForWorldCoordinates(World world, int x, int y, int z, int side);
 }

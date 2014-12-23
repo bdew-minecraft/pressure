@@ -42,6 +42,4 @@ class ContainerTank(val te: TileTankController, player: EntityPlayer) extends Ba
   })
 
   bindPlayerInventory(player.inventory, 8, 84, 142)
-
-  def canInteractWith(entityplayer: EntityPlayer) = true
 }

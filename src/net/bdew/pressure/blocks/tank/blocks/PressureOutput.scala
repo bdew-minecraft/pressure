@@ -32,8 +32,8 @@ class TilePressureOutput extends TileOutput[OutputConfigFluid] with PressureModu
   override val outputConfigType = classOf[OutputConfigFluid]
   override def getCore = getCoreAs[CIFluidOutput]
 
-  override def canConnectoToFace(d: ForgeDirection) =
-    Helper.canPipeConnectFrom(worldObj, mypos.neighbour(d), d.getOpposite)
+  override def canConnectToFace(d: ForgeDirection) =
+    Helper.canPipeConnectFrom(worldObj, myPos.neighbour(d), d.getOpposite)
 
   override def makeCfgObject(face: ForgeDirection) = new OutputConfigFluid
 

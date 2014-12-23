@@ -4,7 +4,7 @@
  *
  * This mod is distributed under the terms of the Minecraft Mod Public
  * License 1.0, or MMPL. Please check the contents of the license located in
- * https://raw.github.com/bdew/pressure/master/MMPL-1.0.txt
+ * http://bdew.net/minecraft-mod-public-license/
  */
 
 package net.bdew.pressure.blocks.input
@@ -27,9 +27,7 @@ class TileInput extends TileDataSlots with FakeTank with IPressureInject with Ti
   override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int = {
     if (worldObj.isRemote) {
       if (resource != null && resource.getFluid != null && resource.amount > 0 && canFill(from, resource.getFluid))
-        resource.amount
-      else
-        0
+        return resource.amount
     } else if (resource != null && resource.getFluid != null && resource.amount > 0 && canFill(from, resource.getFluid)) {
       if (connection == null && Helper.canPipeConnectTo(worldObj, me.neighbour(getFacing), getFacing.getOpposite))
         connection = Helper.recalculateConnectionInfo(this, getFacing)

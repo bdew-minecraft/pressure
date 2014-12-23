@@ -4,7 +4,7 @@
  *
  * This mod is distributed under the terms of the Minecraft Mod Public
  * License 1.0, or MMPL. Please check the contents of the license located in
- * https://raw.github.com/bdew/pressure/master/MMPL-1.0.txt
+ * http://bdew.net/minecraft-mod-public-license/
  */
 
 package net.bdew.pressure.api;
@@ -40,7 +40,7 @@ public interface IPressureExtension {
     /**
      * Attempt to place a pipe at the given coordinates, called on the server
      *
-     * @return true if pipe was placed succesfuly
+     * @return true if pipe was placed successfully
      */
     boolean tryPlacePipe(World w, int x, int y, int z, EntityPlayerMP p);
 }

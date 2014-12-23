@@ -11,7 +11,7 @@ package net.bdew.pressure.blocks
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.block.HasTE
-import net.bdew.lib.rotate.{BaseRotateableBlock, IconType}
+import net.bdew.lib.rotate.{BaseRotatableBlock, IconType}
 import net.bdew.pressure.render.RotatedBlockRenderer
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -21,7 +21,7 @@ import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
 
 class BasePoweredBlock[T <: TileFilterable](name: String, teClass: Class[T])
-  extends Block(Material.iron) with BaseRotateableBlock with HasTE[T] with BlockFilterable[T] {
+  extends Block(Material.iron) with BaseRotatableBlock with HasTE[T] with BlockFilterable[T] {
   override val TEClass = teClass
 
   setBlockName("pressure." + name)

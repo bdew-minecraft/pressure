@@ -4,7 +4,7 @@
  *
  * This mod is distributed under the terms of the Minecraft Mod Public
  * License 1.0, or MMPL. Please check the contents of the license located in
- * https://raw.github.com/bdew/pressure/master/MMPL-1.0.txt
+ * http://bdew.net/minecraft-mod-public-license/
  */
 
 package net.bdew.pressure.misc
@@ -41,7 +41,7 @@ object InternalPressureExtension extends IPressureExtension with IFilterableProv
     } else false
   }
 
-  override def getFilterableForWorldCoords(world: World, x: Int, y: Int, z: Int, side: Int) = {
+  override def getFilterableForWorldCoordinates(world: World, x: Int, y: Int, z: Int, side: Int) = {
     (Option(world.getTileEntity(x, y, z)) flatMap Misc.asInstanceOpt(classOf[IFilterable])).orNull
   }
 }
@@ -136,9 +136,9 @@ object Helper extends IPressureHelper {
   override def tryPlacePipe(w: World, x: Int, y: Int, z: Int, p: EntityPlayerMP) =
     extensions.exists(_.tryPlacePipe(w, x, y, z, p))
 
-  def getFilterableForWorldCoords(world: World, x: Int, y: Int, z: Int, side: Int): IFilterable = {
+  def getFilterableForWorldCoordinates(world: World, x: Int, y: Int, z: Int, side: Int): IFilterable = {
     for (fp <- filterable)
-      Option(fp.getFilterableForWorldCoords(world, x, y, z, side)) map {
+      Option(fp.getFilterableForWorldCoordinates(world, x, y, z, side)) map {
         return _
       }
     null

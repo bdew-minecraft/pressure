@@ -21,9 +21,9 @@ abstract class TileFluidOutputBase extends TileOutput[OutputConfigFluid] with RS
   override def getCore = getCoreAs[CIFluidOutput]
   override val outputConfigType = classOf[OutputConfigFluid]
 
-  override def canConnectoToFace(d: ForgeDirection) =
+  override def canConnectToFace(d: ForgeDirection) =
     getCore exists { core =>
-      mypos.neighbour(d).getTile[IFluidHandler](worldObj).isDefined
+      myPos.neighbour(d).getTile[IFluidHandler](worldObj).isDefined
     }
 
   override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean) = 0

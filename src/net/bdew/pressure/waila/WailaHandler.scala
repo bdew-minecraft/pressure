@@ -19,8 +19,8 @@ import net.bdew.pressure.blocks.pump.TilePump
 import net.bdew.pressure.blocks.tank.controller.TileTankController
 
 object WailaHandler {
-  def loadCallabck(reg: IWailaRegistrar) {
-    Pressure.logInfo("Waila callback recieved, loading...")
+  def loadCallback(reg: IWailaRegistrar) {
+    Pressure.logInfo("WAILA callback received, loading...")
     reg.registerBodyProvider(WailaTankProvider, classOf[TileTankController])
     reg.registerBodyProvider(WailaTankModuleProvider, classOf[TileModule])
     reg.registerBodyProvider(WailaFilterableHandler, classOf[TileFilterable])

@@ -21,7 +21,7 @@ class TileFluidAutoOutput extends TileFluidOutputBase {
   override def doOutput(face: ForgeDirection, cfg: OutputConfigFluid) {
     val filled = for {
       core <- getCore if checkCanOutput(cfg)
-      target <- mypos.neighbour(face).getTile[IFluidHandler](worldObj)
+      target <- myPos.neighbour(face).getTile[IFluidHandler](worldObj)
       toSend <- Option(core.outputFluid(Int.MaxValue, false))
     } yield {
       val filled = target.fill(face.getOpposite, toSend, true)

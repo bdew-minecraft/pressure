@@ -4,7 +4,7 @@
  *
  * This mod is distributed under the terms of the Minecraft Mod Public
  * License 1.0, or MMPL. Please check the contents of the license located in
- * https://raw.github.com/bdew/pressure/master/MMPL-1.0.txt
+ * http://bdew.net/minecraft-mod-public-license/
  */
 
 package net.bdew.pressure.api;
@@ -34,7 +34,7 @@ public interface IPressureHelper extends IPressureExtension {
     void registerExtension(IPressureExtension extension);
 
     /**
-     * Register a IFilterable provider (allows configurator to work with other mod's blocks)
+     * Register a IFilterable provider (allows configurator to work with other mods blocks)
      */
     void registerIFilterableProvider(IFilterableProvider provider);
 }

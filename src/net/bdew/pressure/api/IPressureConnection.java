@@ -4,7 +4,7 @@
  *
  * This mod is distributed under the terms of the Minecraft Mod Public
  * License 1.0, or MMPL. Please check the contents of the license located in
- * https://raw.github.com/bdew/pressure/master/MMPL-1.0.txt
+ * http://bdew.net/minecraft-mod-public-license/
  */
 
 package net.bdew.pressure.api;
@@ -20,7 +20,7 @@ public interface IPressureConnection {
      * Tries to push fluid into the system. Call only on server side.
      *
      * @param fluid FluidStack to push
-     * @return how much fluid was actualy pushed
+     * @return how much fluid was actually pushed
      */
     int pushFluid(FluidStack fluid, boolean doPush);
 }

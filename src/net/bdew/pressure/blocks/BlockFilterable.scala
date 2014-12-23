@@ -4,7 +4,7 @@
  *
  * This mod is distributed under the terms of the Minecraft Mod Public
  * License 1.0, or MMPL. Please check the contents of the license located in
- * https://raw.github.com/bdew/pressure/master/MMPL-1.0.txt
+ * http://bdew.net/minecraft-mod-public-license/
  */
 
 package net.bdew.pressure.blocks
@@ -12,19 +12,19 @@ package net.bdew.pressure.blocks
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.Misc
 import net.bdew.lib.block.HasTE
-import net.bdew.lib.rotate.{BaseRotateableBlock, IconType}
+import net.bdew.lib.rotate.{BaseRotatableBlock, IconType}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ChatComponentTranslation
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{FluidContainerRegistry, FluidRegistry, IFluidContainerItem}
 
-trait BlockFilterable[T <: TileFilterable] extends BaseRotateableBlock with HasTE[T] {
-  override def onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, meta: Int, xoffs: Float, yoffs: Float, zoffs: Float): Boolean = {
+trait BlockFilterable[T <: TileFilterable] extends BaseRotatableBlock with HasTE[T] {
+  override def onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, meta: Int, xOffs: Float, yOffs: Float, zOffs: Float): Boolean = {
     if (!player.isSneaking && player.getCurrentEquippedItem != null) {
       val item = player.getCurrentEquippedItem
 
-      val newFlilter =
+      val newFilter =
         if (FluidContainerRegistry.isEmptyContainer(item)) {
           null
         } else if (FluidContainerRegistry.isFilledContainer(item)) {
@@ -37,12 +37,12 @@ trait BlockFilterable[T <: TileFilterable] extends BaseRotateableBlock with HasT
 
       if (world.isRemote) return true
 
-      if (newFlilter == null) {
+      if (newFilter == null) {
         getTE(world, x, y, z).fluidFilter := null
         player.addChatMessage(new ChatComponentTranslation("pressure.label.filter.unset"))
       } else {
-        getTE(world, x, y, z).fluidFilter := newFlilter.getFluid.getName
-        player.addChatMessage(new ChatComponentTranslation("pressure.label.filter.set", newFlilter.getFluid.getLocalizedName(newFlilter)))
+        getTE(world, x, y, z).fluidFilter := newFilter.getFluid.getName
+        player.addChatMessage(new ChatComponentTranslation("pressure.label.filter.set", newFilter.getFluid.getLocalizedName(newFilter)))
       }
 
       true
@@ -53,7 +53,7 @@ trait BlockFilterable[T <: TileFilterable] extends BaseRotateableBlock with HasT
   def getFilterIcon(w: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
     if (IconType.fromSideAndDir(side.ordinal(), getFacing(w, x, y, z)) == IconType.SIDE)
       for {
-        name <- Option(getTE(w, x, y, z).fluidFilter.cval)
+        name <- Option(getTE(w, x, y, z).fluidFilter.value)
         fluid <- Option(FluidRegistry.getFluid(name))
       } yield (Misc.getFluidIcon(fluid), Misc.getFluidColor(fluid))
     else None

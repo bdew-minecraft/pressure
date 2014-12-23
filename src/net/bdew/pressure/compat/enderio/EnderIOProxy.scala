@@ -30,7 +30,7 @@ object EnderIOProxy extends IFilterableProvider {
     }
   }
 
-  override def getFilterableForWorldCoords(world: World, x: Int, y: Int, z: Int, side: Int) = {
+  override def getFilterableForWorldCoordinates(world: World, x: Int, y: Int, z: Int, side: Int) = {
     import net.bdew.pressure.compat.enderio.EnderIOReflect._
     (Option(world.getTileEntity(x, y, z)) flatMap Misc.asInstanceOpt(clsTileConduitBundle) map { te =>
       if (te.getConduit(clsLiquidConduit) != null) new FilterableProxy(te, clsLiquidConduit)

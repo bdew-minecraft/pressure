@@ -10,15 +10,15 @@
 package net.bdew.pressure.blocks.tank.gui
 
 import net.bdew.lib.gui._
-import net.bdew.lib.gui.widgets.{WidgetMultipane, WidgetSubcontainer}
+import net.bdew.lib.gui.widgets.{WidgetMultiPane, WidgetSubContainer}
 import net.bdew.lib.multiblock.data.OutputConfigFluid
 import net.bdew.lib.multiblock.gui.{WidgetOutputIcon, WidgetRSConfig}
 import net.bdew.pressure.blocks.tank.controller.TileTankController
 
-class TankOutputWidget(val te: TileTankController, p: Point, outSlot: Int) extends WidgetMultipane(new Rect(p, 18, 38)) {
+class TankOutputWidget(val te: TileTankController, p: Point, outSlot: Int) extends WidgetMultiPane(new Rect(p, 18, 38)) {
   add(new WidgetOutputIcon(Point(0, 0), te, outSlot))
 
-  val emptyPane = addPane(new WidgetSubcontainer(rect))
+  val emptyPane = addPane(new WidgetSubContainer(rect))
   val fluidPane = addPane(new WidgetRSConfig(te, outSlot, Point(0, 20)))
 
   def getActivePane =

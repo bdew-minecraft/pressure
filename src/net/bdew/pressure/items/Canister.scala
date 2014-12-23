@@ -4,7 +4,7 @@
  *
  * This mod is distributed under the terms of the Minecraft Mod Public
  * License 1.0, or MMPL. Please check the contents of the license located in
- * https://raw.github.com/bdew/pressure/master/MMPL-1.0.txt
+ * http://bdew.net/minecraft-mod-public-license/
  */
 
 package net.bdew.pressure.items
@@ -33,9 +33,9 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
 
   override def getCreativeTabs = Array(PressureCreativeTabs.main, PressureCreativeTabs.canisters)
 
-  override def getSubItems(item: Item, tab: CreativeTabs, jstacks: util.List[_]) {
+  override def getSubItems(item: Item, tab: CreativeTabs, jStacks: util.List[_]) {
     import scala.collection.JavaConversions._
-    val stacks = jstacks.asInstanceOf[java.util.List[ItemStack]]
+    val stacks = jStacks.asInstanceOf[java.util.List[ItemStack]]
     if (tab == PressureCreativeTabs.main)
       stacks.add(new ItemStack(this))
     else if (tab == PressureCreativeTabs.canisters || tab == null) {
@@ -46,8 +46,8 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
             None
           } else {
             val tag = new NBTTagCompound
-            val fstack = new FluidStack(fluid, capacity)
-            fstack.writeToNBT(tag)
+            val fStack = new FluidStack(fluid, capacity)
+            fStack.writeToNBT(tag)
             val item = new ItemStack(this)
             item.setTagCompound(tag)
             Some(item)
@@ -95,7 +95,7 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
     val l = lst.asInstanceOf[util.List[String]].asScala
     val fl = getFluid(stack)
     if (fl == null)
-      l += Misc.toLocal("deepcore.label.empty")
+      l += Misc.toLocal("bdlib.label.empty")
     else
       l += "%d/%d %s".format(fl.amount, capacity, fl.getFluid.getLocalizedName(fl))
   }
@@ -108,9 +108,9 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
       val fl = drain(stack, maxPour, false)
       if (fl == null) return false
       val dir = ForgeDirection.values()(side)
-      val tofill = fh.fill(dir, fl, false)
-      if (tofill > 0) {
-        fh.fill(dir, drain(stack, tofill, true), true)
+      val toFill = fh.fill(dir, fl, false)
+      if (toFill > 0) {
+        fh.fill(dir, drain(stack, toFill, true), true)
         player.swingItem()
         return true
       }

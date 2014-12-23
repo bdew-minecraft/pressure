@@ -4,7 +4,7 @@
  *
  * This mod is distributed under the terms of the Minecraft Mod Public
  * License 1.0, or MMPL. Please check the contents of the license located in
- * https://raw.github.com/bdew/pressure/master/MMPL-1.0.txt
+ * http://bdew.net/minecraft-mod-public-license/
  */
 
 package net.bdew.pressure.items
@@ -53,14 +53,14 @@ object CanisterRenderer extends IItemRenderer {
       tessellator.draw()
       GL11.glEnable(GL11.GL_TEXTURE_2D)
 
-      val flicon = Misc.getFluidIcon(fl)
+      val icon = Misc.getFluidIcon(fl)
       Color.fromInt(Misc.getFluidColor(fl)).activate()
       Minecraft.getMinecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture)
       val fill = 15F * fl.amount / Canister.capacity
-      val u = flicon.getInterpolatedU(0)
-      val U = flicon.getInterpolatedU(4)
-      val v = flicon.getInterpolatedV(1)
-      val V = flicon.getInterpolatedV(1 + fill)
+      val u = icon.getInterpolatedU(0)
+      val U = icon.getInterpolatedU(4)
+      val v = icon.getInterpolatedV(1)
+      val V = icon.getInterpolatedV(1 + fill)
       tessellator.startDrawingQuads()
       tessellator.addVertexWithUV(0.5, 15.5, 1, u, V)
       tessellator.addVertexWithUV(4.5, 15.5, 1, U, V)
