@@ -23,7 +23,7 @@ apply plugin: 'scala'
 apply plugin: 'forge'
 
 version = "1.0.3"
-ext.bdlibver = "1.6.0.36"
+ext.bdlibver = "1.6.1.38"
 ext.apiVer = version
 ext.versuffix = "mc1710"
 
@@ -95,10 +95,11 @@ processResources {
 }
 
 task apiJar(type: Jar, dependsOn: 'classes') {
-    from(sourceSets.main.output.classesDir) {
+    from(sourceSets.main.output) {
         include 'net/bdew/pressure/api/**'
     }
 
+    duplicatesStrategy "exclude"
     extension = 'jar'
     classifier = 'api'
 }
@@ -108,7 +109,9 @@ task sourceJar(type: Jar) {
 }
 
 task deobfJar(type: Jar) {
-    from sourceSets.main.output.classesDir
+    from sourceSets.main.output
+
+    duplicatesStrategy "exclude"
     exclude "**/*.psd"
 }
 

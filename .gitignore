@@ -2,10 +2,9 @@
 /out
 /build
 /run
-/.idea/workspace.xml
-/.idea/dictionaries
+/deps/run
+/.idea
 /eclipse
 /.gradle
 /*.iml
 /*.ipr
-/.idea/libraries/Gradle__*
