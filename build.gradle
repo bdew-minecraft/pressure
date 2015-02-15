@@ -22,8 +22,8 @@ buildscript {
 apply plugin: 'scala'
 apply plugin: 'forge'
 
-version = "1.0.3"
-ext.bdlibver = "1.6.1.38"
+version = "1.0.4"
+ext.bdlibver = "1.6.2.41"
 ext.apiVer = version
 ext.versuffix = "mc1710"
 
@@ -64,7 +64,7 @@ dependencies {
     compile "codechicken:CodeChickenLib:1.7.10-1.1.1.110:dev"
     compile "codechicken:CodeChickenCore:1.7.10-1.0.4.29:dev"
     compile "codechicken:ForgeMultipart:1.7.10-1.1.1.320:dev"
-    compile "mcp.mobius.waila:Waila:1.5.6a_1.7.10"
+    compile "mcp.mobius.waila:Waila:1.5.9_1.7.10"
     compile "net.bdew:bdlib:" + bdlibver
 }
 

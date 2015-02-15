@@ -13,6 +13,7 @@ import java.util
 
 import mcp.mobius.waila.api.{IWailaConfigHandler, IWailaDataAccessor, IWailaDataProvider}
 import net.bdew.pressure.Pressure
+import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
@@ -26,7 +27,7 @@ class BaseDataProvider[T](cls: Class[T]) extends IWailaDataProvider {
   def getHeadStrings(target: T, stack: ItemStack, acc: IWailaDataAccessor, cfg: IWailaConfigHandler): Iterable[String] = None
   def getBodyStrings(target: T, stack: ItemStack, acc: IWailaDataAccessor, cfg: IWailaConfigHandler): Iterable[String] = None
 
-  override def getNBTData(te: TileEntity, tag: NBTTagCompound, world: World, x: Int, y: Int, z: Int) = null
+  override def getNBTData(player: EntityPlayerMP, te: TileEntity, tag: NBTTagCompound, world: World, x: Int, y: Int, z: Int): NBTTagCompound = null
 
   final override def getWailaTail(itemStack: ItemStack, tip: util.List[String], accessor: IWailaDataAccessor, config: IWailaConfigHandler) = {
     try {
@@ -70,5 +71,5 @@ class BaseDataProvider[T](cls: Class[T]) extends IWailaDataProvider {
     tip
   }
 
-  override def getWailaStack(accessor: IWailaDataAccessor, config: IWailaConfigHandler) = null
+  override def getWailaStack(accessor: IWailaDataAccessor, config: IWailaConfigHandler): ItemStack = null
 }
