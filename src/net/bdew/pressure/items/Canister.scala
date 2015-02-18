@@ -12,6 +12,7 @@ package net.bdew.pressure.items
 import java.util
 
 import net.bdew.lib.Misc
+import net.bdew.lib.block.BlockRef
 import net.bdew.lib.items.SimpleItem
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.config.Tuning
@@ -114,7 +115,18 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
         player.swingItem()
         return true
       }
+    } else {
+      val p = BlockRef(x, y, z).neighbour(Misc.forgeDirection(side))
+      if (p.y >= 0 && p.y < world.getActualHeight && world.isAirBlock(p.x, p.y, p.z)) {
+        val fs = getFluid(stack)
+        if (fs != null && fs.getFluid != null && fs.getFluid.canBePlacedInWorld && fs.amount >= FluidContainerRegistry.BUCKET_VOLUME) {
+          drain(stack, FluidContainerRegistry.BUCKET_VOLUME, true)
+          world.setBlock(p.x, p.y, p.z, fs.getFluid.getBlock, 0, 3)
+          world.notifyBlockOfNeighborChange(p.x, p.y, p.z, fs.getFluid.getBlock)
+        }
+      }
     }
+
     return false
   }
 }
