@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.items
 
-import net.bdew.lib.Misc
+import net.bdew.lib.{Client, Misc}
 import net.bdew.lib.gui.Color
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.Tessellator
@@ -27,7 +27,9 @@ object CanisterRenderer extends IItemRenderer {
 
     val icon = Canister.getIcon(item, 0)
 
-    GL11.glPushAttrib(GL11.GL_COLOR_BUFFER_BIT)
+    GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_COLOR_BUFFER_BIT)
+
+    GL11.glDisable(GL11.GL_LIGHTING)
     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
     GL11.glEnable(GL11.GL_BLEND)
 
@@ -38,7 +40,7 @@ object CanisterRenderer extends IItemRenderer {
     tessellator.addVertexWithUV(0, 0, 0, icon.getMinU, icon.getMinV)
     tessellator.draw()
 
-    GL11.glPopAttrib()
+    GL11.glDisable(GL11.GL_BLEND)
 
     val fl = Canister.getFluid(item)
     if (fl != null) {
@@ -55,7 +57,7 @@ object CanisterRenderer extends IItemRenderer {
 
       val icon = Misc.getFluidIcon(fl)
       Color.fromInt(Misc.getFluidColor(fl)).activate()
-      Minecraft.getMinecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture)
+      Client.renderEngine.bindTexture(TextureMap.locationBlocksTexture)
       val fill = 15F * fl.amount / Canister.capacity
       val u = icon.getInterpolatedU(0)
       val U = icon.getInterpolatedU(4)
@@ -70,5 +72,7 @@ object CanisterRenderer extends IItemRenderer {
 
       GL11.glColor3d(1, 1, 1)
     }
+
+    GL11.glPopAttrib()
   }
 }
