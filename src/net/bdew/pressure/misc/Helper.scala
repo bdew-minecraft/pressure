@@ -111,7 +111,8 @@ object Helper extends IPressureHelper {
 
   def getPipeConnections(w: IBlockAccess, x: Int, y: Int, z: Int): List[ForgeDirection] = {
     ForgeDirection.VALID_DIRECTIONS.toList filter { dir =>
-      canPipeConnectFrom(w, x, y, z, dir) && canPipeConnectTo(w, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, dir.getOpposite)
+      y + dir.offsetY >= 0 && y + dir.offsetY < w.getHeight && canPipeConnectFrom(w, x, y, z, dir) &&
+        canPipeConnectTo(w, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, dir.getOpposite)
     }
   }
 
