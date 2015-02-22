@@ -9,8 +9,6 @@
 
 package net.bdew.pressure.waila
 
-import java.text.DecimalFormat
-
 import mcp.mobius.waila.api.{IWailaConfigHandler, IWailaDataAccessor}
 import net.bdew.lib.{DecFormat, Misc}
 import net.bdew.pressure.blocks.tank.controller.TileTankController
