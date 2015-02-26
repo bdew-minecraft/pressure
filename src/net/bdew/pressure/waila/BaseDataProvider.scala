@@ -26,8 +26,19 @@ class BaseDataProvider[T](cls: Class[T]) extends IWailaDataProvider {
   def getTailStrings(target: T, stack: ItemStack, acc: IWailaDataAccessor, cfg: IWailaConfigHandler): Iterable[String] = None
   def getHeadStrings(target: T, stack: ItemStack, acc: IWailaDataAccessor, cfg: IWailaConfigHandler): Iterable[String] = None
   def getBodyStrings(target: T, stack: ItemStack, acc: IWailaDataAccessor, cfg: IWailaConfigHandler): Iterable[String] = None
+  def getNBTTag(player: EntityPlayerMP, te: T, tag: NBTTagCompound, world: World, x: Int, y: Int, z: Int): NBTTagCompound = tag
 
-  override def getNBTData(player: EntityPlayerMP, te: TileEntity, tag: NBTTagCompound, world: World, x: Int, y: Int, z: Int): NBTTagCompound = null
+  final override def getNBTData(player: EntityPlayerMP, te: TileEntity, tag: NBTTagCompound, world: World, x: Int, y: Int, z: Int): NBTTagCompound =
+    try {
+      if (cls.isInstance(te))
+        getNBTTag(player, te.asInstanceOf[T], tag, world, x, y, z)
+      else
+        tag
+    } catch {
+      case e: Throwable =>
+        Pressure.logWarnException("Error in waila handler", e)
+        tag
+    }
 
   final override def getWailaTail(itemStack: ItemStack, tip: util.List[String], accessor: IWailaDataAccessor, config: IWailaConfigHandler) = {
     try {
