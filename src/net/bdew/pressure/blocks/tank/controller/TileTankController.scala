@@ -15,6 +15,7 @@ import net.bdew.lib.data.{DataSlotInventory, DataSlotString, DataSlotTank}
 import net.bdew.lib.items.ItemUtils
 import net.bdew.lib.multiblock.interact.{CIFluidInput, CIFluidOutput, CIOutputFaces}
 import net.bdew.lib.multiblock.tile.TileControllerGui
+import net.bdew.pressure.blocks.tank.blocks.TileTankIndicator
 import net.bdew.pressure.blocks.tank.{CIFilterable, MachineTank, ModuleNeedsRenderUpdate}
 import net.bdew.pressure.config.Modules
 import net.bdew.pressure.{Pressure, PressureResourceProvider}
@@ -153,6 +154,13 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   def onModulesChanged() {
     val newCapacity = getNumOfModules("TankBlock") * Modules.TankBlock.capacity
     tank.setCapacity(newCapacity)
+
+    // If we don't have indicators - don't spam updates
+    if (modules.exists(_.getTile[TileTankIndicator](worldObj).isDefined)) {
+      tank.setUpdate(UpdateKind.SAVE, UpdateKind.GUI, UpdateKind.WORLD)
+    } else {
+      tank.setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
+    }
 
     if (newCapacity == 0)
       tank.setFluid(null)
