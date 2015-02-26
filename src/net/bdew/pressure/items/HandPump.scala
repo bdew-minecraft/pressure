@@ -35,7 +35,7 @@ object HandPump extends SimpleItem("HandPump") {
     if (fs == null) return null
     for (i <- 0 until inventory.getSizeInventory) {
       val item = inventory.getStackInSlot(i)
-      if (item != null && item.getItem != null && item.getItem.isInstanceOf[IFluidContainerItem]) {
+      if (item != null && item.getItem != null && item.stackSize == 1 && item.getItem.isInstanceOf[IFluidContainerItem]) {
         val fc = item.getItem.asInstanceOf[IFluidContainerItem]
         val canFill = fc.fill(item, fs, false)
         if ((mustTakeAll && canFill == fs.amount) || (!mustTakeAll && canFill > 0)) return item
