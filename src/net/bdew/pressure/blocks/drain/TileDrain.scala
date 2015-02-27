@@ -14,7 +14,9 @@ import net.bdew.lib.data.DataSlotTank
 import net.bdew.lib.data.base.TileDataSlots
 import net.bdew.pressure.api.IPressureEject
 import net.bdew.pressure.blocks.TileFilterable
+import net.bdew.pressure.config.Modules
 import net.bdew.pressure.misc.FakeTank
+import net.minecraft.entity.item.EntityXPOrb
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 
@@ -23,17 +25,32 @@ class TileDrain extends TileDataSlots with FakeTank with IPressureEject with Til
 
   lazy val me = BlockRef.fromTile(this)
 
-  val bufferTank = new DataSlotTank("buffer", this, 1000)
+  val bufferTank = new DataSlotTank("buffer", this, Int.MaxValue)
 
   def doDrain(resource: FluidStack) {
     val target = me.neighbour(getFacing)
     if (bufferTank.getFluid != null && bufferTank.getFluid.getFluid != resource.getFluid)
       bufferTank.setFluid(null)
     bufferTank.fill(resource, true)
-    if (worldObj.isAirBlock(target.x, target.y, target.z) && bufferTank.getFluidAmount >= 1000 && resource.getFluid.canBePlacedInWorld) {
-      bufferTank.setFluid(null)
-      worldObj.setBlock(target.x, target.y, target.z, resource.getFluid.getBlock)
-      worldObj.notifyBlockOfNeighborChange(target.x, target.y, target.z, BlockDrain)
+    if (Modules.Drain.makeXPOrbs && Modules.Drain.ratioMap.contains(bufferTank.getFluid.getFluid.getName)) {
+      val ratio = Modules.Drain.ratioMap(bufferTank.getFluid.getFluid.getName)
+      var xpToDrop = (bufferTank.getFluidAmount.toDouble / ratio).floor.toInt
+      bufferTank.drain(xpToDrop * ratio, true)
+      while (xpToDrop > 0) {
+        val dropNow = EntityXPOrb.getXPSplit(xpToDrop)
+        xpToDrop -= dropNow
+        val ent = new EntityXPOrb(this.worldObj, target.x + 0.5D, target.y + 0.5D, target.z + 0.5D, dropNow)
+        ent.motionX = getFacing.offsetX * (Math.random() * 0.5 - 0.25) + (Math.random() * 0.2 - 0.1)
+        ent.motionY = getFacing.offsetY * (Math.random() * 0.5 - 0.25) + (Math.random() * 0.2 - 0.1)
+        ent.motionZ = getFacing.offsetZ * (Math.random() * 0.5 - 0.25) + (Math.random() * 0.2 - 0.1)
+        this.worldObj.spawnEntityInWorld(ent)
+      }
+    } else {
+      if (worldObj.isAirBlock(target.x, target.y, target.z) && bufferTank.getFluidAmount >= 1000 && resource.getFluid.canBePlacedInWorld) {
+        bufferTank.setFluid(null)
+        worldObj.setBlock(target.x, target.y, target.z, resource.getFluid.getBlock)
+        worldObj.notifyBlockOfNeighborChange(target.x, target.y, target.z, BlockDrain)
+      }
     }
   }
 

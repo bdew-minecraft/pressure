@@ -17,4 +17,13 @@ object Modules {
     lazy val capacity = cfg.getInt("Capacity")
   }
 
+  object Drain {
+    lazy val cfg = Modules.cfg.getSection("Drain")
+    lazy val makeXPOrbs = cfg.getBoolean("MakeXPOrbs")
+    lazy val xpJuiceRatio = cfg.getInt("XPJuiceRatio")
+    lazy val mobEssenceRatio = cfg.getInt("MobEssenceRatio")
+
+    lazy val ratioMap = Map("mobessence" -> mobEssenceRatio, "xpjuice" -> xpJuiceRatio)
+  }
+
 }
