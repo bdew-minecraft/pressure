@@ -1,5 +1,5 @@
 /*
- * Copyright (c) bdew, 2013 - 2014
+ * Copyright (c) bdew, 2013 - 2015
  * https://github.com/bdew/pressure
  *
  * This mod is distributed under the terms of the Minecraft Mod Public
@@ -12,7 +12,7 @@ package net.bdew.pressure.blocks
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.block.HasTE
 import net.bdew.lib.rotate.{BaseRotatableBlock, IconType}
-import net.bdew.pressure.render.RotatedBlockRenderer
+import net.bdew.pressure.render.RotatedFilterableBlockRenderer
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
@@ -28,7 +28,7 @@ class BasePoweredBlock[T <: TileFilterable](name: String, teClass: Class[T])
   setHardness(2)
 
   @SideOnly(Side.CLIENT)
-  override def getRenderType = RotatedBlockRenderer.id
+  override def getRenderType = RotatedFilterableBlockRenderer.id
 
   override def getFacing(world: IBlockAccess, x: Int, y: Int, z: Int) =
     ForgeDirection.values()(world.getBlockMetadata(x, y, z) & 7)
