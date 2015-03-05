@@ -25,8 +25,6 @@ class DirectorRSModeButton(p: Point, te: TileDirector, side: ForgeDirection) ext
   val rect = new Rect(p, 16, 16)
   val iconRect = new Rect(p +(1, 1), 14, 14)
 
-  var icon: Texture = null
-
   override def draw(mouse: Point) {
     if (rect.contains(mouse))
       parent.drawTexture(rect, Textures.Button16.hover)
