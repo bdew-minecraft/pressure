@@ -66,9 +66,7 @@ object Helper extends IPressureHelper {
       Pressure.logWarn("Attempt to generate ConnectionInfo on client side from %s. This is a bug.", te)
       null
     } else {
-      val res = PressureConnection(te, side, scanConnectedBlocks(te.getWorld, BlockRef(te.getXCoord, te.getYCoord, te.getZCoord), side, false).outputs)
-      println("Generated connection: " + res)
-      res
+      PressureConnection(te, side, scanConnectedBlocks(te.getWorld, BlockRef(te.getXCoord, te.getYCoord, te.getZCoord), side, false).outputs)
     }
 
   def getPipeConnections(w: IBlockAccess, ref: BlockRef): List[ForgeDirection] =
