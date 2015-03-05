@@ -5,6 +5,8 @@ tile.pressure.pump.name=High Pressure Pump
 tile.pressure.water.name=Infinite Water Source
 tile.pressure.drain.name=Fluid Drain
 
+tile.pressure.Director.name=High Pressure Director
+
 tile.pressure.TankBlock.name=Tank Block
 tile.pressure.TankController.name=Tank Controller
 tile.pressure.TankPressureInput.name=Tank Pressure Intake
@@ -44,6 +46,8 @@ pressure.gui.tank.nofilter=Will accept all fluids
 pressure.gui.tank.filter.tip1=Click with any fluid container to set filter
 pressure.gui.tank.filter.tip2=Click with empty cursor to remove filter
 
+pressure.gui.director.title=Director Configuration
+
 itemGroup.bdew.pressure=Pressure Pipes
 itemGroup.bdew.canisters=Fluid Canisters
 
@@ -53,3 +57,16 @@ pressure.output.2=Blue Output
 pressure.output.3=Yellow Output
 pressure.output.4=Cyan Output
 pressure.output.5=Purple Output
+
+pressure.director.side.0=Red Side
+pressure.director.side.1=Green Side
+pressure.director.side.2=Blue Side
+pressure.director.side.3=Yellow Side
+pressure.director.side.4=Cyan Side
+pressure.director.side.5=Purple Side
+
+pressure.director.mode.disabled=Disabled
+pressure.director.mode.input=Input
+pressure.director.mode.output_low=Output - Low priority
+pressure.director.mode.output_medium=Output - Medium priority
+pressure.director.mode.output_high=Output - High priority

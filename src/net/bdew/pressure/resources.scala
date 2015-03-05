@@ -11,6 +11,7 @@ package net.bdew.pressure
 
 import net.bdew.lib.gui.{Color, ScaledResourceLocation, Texture}
 import net.bdew.lib.multiblock.ResourceProvider
+import net.bdew.lib.multiblock.data.RSMode
 import net.bdew.lib.render.IconPreloader
 
 object IconCache extends IconPreloader(0) {
@@ -35,6 +36,13 @@ object Textures {
     val enabled = Texture(sheet, 49, 17, 14, 14)
     val disabled = Texture(sheet, 65, 17, 14, 14)
   }
+
+  lazy val iconRSMode = Map(
+    RSMode.ALWAYS -> Button16.enabled,
+    RSMode.NEVER -> Button16.disabled,
+    RSMode.RS_ON -> Button16.rsOn,
+    RSMode.RS_OFF -> Button16.rsOff
+  )
 
   def progress(width: Int) = Texture(sheet, 136 - width, 35, width, 16)
 }

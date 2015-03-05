@@ -10,9 +10,11 @@
 package net.bdew.pressure.config
 
 import net.bdew.lib.config.MachineManager
+import net.bdew.pressure.blocks.director.MachineDirector
 import net.bdew.pressure.blocks.tank.MachineTank
 import net.bdew.pressure.misc.PressureCreativeTabs
 
 object Machines extends MachineManager(Tuning.getSection("Machines"), Config.guiHandler, PressureCreativeTabs.main) {
   registerMachine(MachineTank)
+  registerMachine(MachineDirector)
 }
