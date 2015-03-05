@@ -18,7 +18,7 @@ import net.bdew.lib.Misc
 import net.bdew.lib.block.BlockRef
 import net.bdew.pressure.api.IPressureExtension
 import net.bdew.pressure.blocks.BlockPipe
-import net.bdew.pressure.misc.Helper
+import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
@@ -57,6 +57,8 @@ object FmpPressureExtension extends IPressureExtension {
     Option(world.getTileEntity(x, y, z)) flatMap
       (Misc.asInstanceOpt(_, classOf[TileMultipart])) exists
       (_.partList.exists(_.isInstanceOf[PipePart]))
+
+  override def isTraversableBlock(world: IBlockAccess, x: Int, y: Int, z: Int) = isConnectableBlock(world, x, y, z)
 
   override def tryPlacePipe(w: World, x: Int, y: Int, z: Int, p: EntityPlayerMP) = {
     val part = new PipePart

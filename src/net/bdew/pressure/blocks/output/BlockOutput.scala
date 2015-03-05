@@ -17,4 +17,5 @@ import net.minecraftforge.common.util.ForgeDirection
 object BlockOutput extends BaseIOBlock("output", classOf[TileOutput]) with BlockNotifyUpdates with IPressureConnectableBlock {
   override def canConnectTo(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
     getFacing(world, x, y, z) == side.getOpposite
+  override def isTraversable(world: IBlockAccess, x: Int, y: Int, z: Int) = false
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) bdew, 2013 - 2014
+ * Copyright (c) bdew, 2013 - 2015
  * https://github.com/bdew/pressure
  *
  * This mod is distributed under the terms of the Minecraft Mod Public
@@ -7,14 +7,14 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.misc
+package net.bdew.pressure.pressurenet
 
 import net.bdew.pressure.Pressure
-import net.bdew.pressure.api.{IPressureConnection, IPressureEject, IPressureInject}
+import net.bdew.pressure.api.{IPressureConnection, IPressureInject}
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.FluidStack
 
-case class PressureConnection(origin: IPressureInject, side: ForgeDirection, tiles: Set[IPressureEject]) extends IPressureConnection {
+case class PressureConnection(origin: IPressureInject, side: ForgeDirection, tiles: Set[PressureOutputFace]) extends IPressureConnection {
   override def pushFluid(fluid: FluidStack, doPush: Boolean): Int = {
     if (fluid == null || fluid.getFluid == null || fluid.amount == 0 || tiles.isEmpty) return 0
 

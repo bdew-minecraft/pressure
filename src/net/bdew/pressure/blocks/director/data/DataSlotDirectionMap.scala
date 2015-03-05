@@ -27,7 +27,7 @@ abstract class DataSlotDirectionMap[T <: Enumeration](val enum: T, val default: 
   }
 
   override def load(t: NBTTagCompound, kind: UpdateKind.Value): Unit = {
-    val loaded = t.getByteArray(name).zipWithIndex.map { case (v, n) => ForgeDirection.values()(n) -> enum(v)}.toMap
+    val loaded = t.getByteArray(name).zipWithIndex.map { case (v, n) => ForgeDirection.values()(n) -> enum(v) }.toMap
     map = ForgeDirection.VALID_DIRECTIONS.map(x => x -> loaded.getOrElse(x, default)).toMap
   }
 }

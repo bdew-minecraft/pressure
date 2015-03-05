@@ -11,7 +11,7 @@ package net.bdew.pressure.blocks.tank
 
 import net.bdew.lib.multiblock.tile.{TileController, TileModule}
 import net.bdew.pressure.api.IPressureTile
-import net.bdew.pressure.misc.Helper
+import net.bdew.pressure.pressurenet.Helper
 
 trait PressureModule extends TileModule with IPressureTile {
   override def getWorld = getWorldObj

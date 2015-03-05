@@ -16,7 +16,7 @@ import net.bdew.lib.multiblock.tile.{RSControllableOutput, TileOutput}
 import net.bdew.pressure.api.{IPressureConnectableBlock, IPressureConnection, IPressureInject}
 import net.bdew.pressure.blocks.BlockNotifyUpdates
 import net.bdew.pressure.blocks.tank.{BaseModule, PressureModule}
-import net.bdew.pressure.misc.Helper
+import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.world.IBlockAccess
 import net.minecraftforge.common.util.ForgeDirection
 
@@ -24,6 +24,7 @@ object BlockPressureOutput extends BaseModule("TankPressureOutput", "FluidOutput
 with BlockOutput[TilePressureOutput] with BlockNotifyUpdates with IPressureConnectableBlock {
   override def canConnectTo(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
     getTE(world, x, y, z).getCore.isDefined
+  override def isTraversable(world: IBlockAccess, x: Int, y: Int, z: Int) = false
 }
 
 class TilePressureOutput extends TileOutput[OutputConfigFluid] with PressureModule with RSControllableOutput with IPressureInject {
@@ -37,7 +38,7 @@ class TilePressureOutput extends TileOutput[OutputConfigFluid] with PressureModu
 
   override def makeCfgObject(face: ForgeDirection) = new OutputConfigFluid
 
-  override def invalidateConnection() = connections = Map.empty
+  override def invalidateConnection(direction: ForgeDirection) = connections -= direction
 
   var connections = Map.empty[ForgeDirection, IPressureConnection]
 

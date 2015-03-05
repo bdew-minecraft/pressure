@@ -11,7 +11,8 @@ package net.bdew.pressure.blocks
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.pressure.api.IPressureConnectableBlock
-import net.bdew.pressure.misc.{Helper, PressureCreativeTabs}
+import net.bdew.pressure.misc.PressureCreativeTabs
+import net.bdew.pressure.pressurenet.Helper
 import net.bdew.pressure.render.PipeRenderer
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -60,5 +61,5 @@ object BlockPipe extends Block(Material.iron) with IPressureConnectableBlock wit
   }
 
   override def canConnectTo(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) = true
-
+  override def isTraversable(world: IBlockAccess, x: Int, y: Int, z: Int) = true
 }

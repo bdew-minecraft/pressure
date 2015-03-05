@@ -15,7 +15,7 @@ import codechicken.lib.vec.{Cuboid6, Vector3}
 import codechicken.multipart.{TCuboidPart, TMultiPart, TNormalOcclusion}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.pressure.blocks.BlockPipe
-import net.bdew.pressure.misc.Helper
+import net.bdew.pressure.pressurenet.Helper
 import net.bdew.pressure.render.PipeRenderer
 import net.minecraft.client.renderer.RenderBlocks
 import net.minecraft.item.ItemStack

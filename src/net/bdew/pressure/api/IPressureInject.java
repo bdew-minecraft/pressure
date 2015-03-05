@@ -9,9 +9,13 @@
 
 package net.bdew.pressure.api;
 
+import net.minecraftforge.common.util.ForgeDirection;
+
 public interface IPressureInject extends IPressureTile {
     /**
      * Forces invalidation of connection info
+     *
+     * @param side Side from which the connection should be invalidated
      */
-    void invalidateConnection();
+    void invalidateConnection(ForgeDirection side);
 }

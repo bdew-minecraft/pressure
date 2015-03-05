@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.blocks
 
-import net.bdew.pressure.misc.Helper
+import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.Block
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection

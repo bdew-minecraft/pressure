@@ -54,8 +54,8 @@ class TileDrain extends TileDataSlots with FakeTank with IPressureEject with Til
     }
   }
 
-  override def eject(resource: FluidStack, doEject: Boolean) = {
-    if (isFluidAllowed(resource)) {
+  override def eject(resource: FluidStack, direction: ForgeDirection, doEject: Boolean) = {
+    if (isFluidAllowed(resource) && direction == getFacing.getOpposite) {
       if (doEject)
         doDrain(resource)
       resource.amount

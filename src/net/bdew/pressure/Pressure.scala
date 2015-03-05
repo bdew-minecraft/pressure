@@ -22,8 +22,9 @@ import net.bdew.pressure.compat.enderio.EnderIOProxy
 import net.bdew.pressure.config._
 import net.bdew.pressure.fmp.FmpHandler
 import net.bdew.pressure.items.{Canister, CanisterRenderer}
-import net.bdew.pressure.misc.{Helper, PressureCreativeTabs}
+import net.bdew.pressure.misc.PressureCreativeTabs
 import net.bdew.pressure.network.NetworkHandler
+import net.bdew.pressure.pressurenet.Helper
 import net.minecraftforge.client.MinecraftForgeClient
 import org.apache.logging.log4j.Logger
 

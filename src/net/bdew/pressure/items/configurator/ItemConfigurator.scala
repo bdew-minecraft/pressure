@@ -17,8 +17,8 @@ import net.bdew.lib.player.PlayerCache
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api.IFilterable
 import net.bdew.pressure.config.Config
-import net.bdew.pressure.misc.Helper
 import net.bdew.pressure.network.NetworkHandler
+import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ChatComponentTranslation

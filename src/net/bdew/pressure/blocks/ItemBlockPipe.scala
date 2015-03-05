@@ -9,7 +9,8 @@
 
 package net.bdew.pressure.blocks
 
-import net.bdew.pressure.misc.{Helper, PressureCreativeTabs}
+import net.bdew.pressure.misc.PressureCreativeTabs
+import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.Block
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.item.{ItemBlock, ItemStack}

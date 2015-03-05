@@ -10,7 +10,7 @@
 package net.bdew.pressure.blocks.director.gui
 
 import net.bdew.lib.gui.widgets.Widget
-import net.bdew.lib.gui.{Point, Rect, Texture}
+import net.bdew.lib.gui.{Point, Rect}
 import net.bdew.lib.{Client, Misc}
 import net.bdew.pressure.Textures
 import net.bdew.pressure.blocks.director.{MachineDirector, TileDirector}

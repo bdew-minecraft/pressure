@@ -10,7 +10,7 @@
 package net.bdew.pressure.render
 
 import net.bdew.lib.render.{BaseBlockRenderHandler, RenderUtils}
-import net.bdew.pressure.misc.Helper
+import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.{RenderBlocks, Tessellator}
 import net.minecraft.world.IBlockAccess

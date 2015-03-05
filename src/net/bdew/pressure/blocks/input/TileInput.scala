@@ -13,7 +13,8 @@ import net.bdew.lib.block.BlockRef
 import net.bdew.lib.data.base.TileDataSlots
 import net.bdew.pressure.api._
 import net.bdew.pressure.blocks.TileFilterable
-import net.bdew.pressure.misc.{FakeTank, Helper}
+import net.bdew.pressure.misc.FakeTank
+import net.bdew.pressure.pressurenet.Helper
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
 
@@ -52,7 +53,7 @@ class TileInput extends TileDataSlots with FakeTank with IPressureInject with Ti
     }
   }
 
-  override def invalidateConnection() = connection = null
+  override def invalidateConnection(direction: ForgeDirection) = connection = null
 
   override def getZCoord = zCoord
   override def getYCoord = yCoord

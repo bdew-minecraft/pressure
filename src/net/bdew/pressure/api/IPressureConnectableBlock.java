@@ -22,4 +22,12 @@ public interface IPressureConnectableBlock {
      * @return true if connection is possible
      */
     boolean canConnectTo(IBlockAccess world, int x, int y, int z, ForgeDirection side);
+
+    /**
+     * Checks if network connections should pass through this block
+     * Blocks that can be part of separate pressure networks should return false
+     *
+     * @return true if network connections should pass through this block
+     */
+    boolean isTraversable(IBlockAccess world, int x, int y, int z);
 }

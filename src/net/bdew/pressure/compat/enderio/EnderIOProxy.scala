@@ -12,7 +12,7 @@ package net.bdew.pressure.compat.enderio
 import net.bdew.lib.Misc
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api.IFilterableProvider
-import net.bdew.pressure.misc.Helper
+import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.world.World
 
 import scala.language.reflectiveCalls

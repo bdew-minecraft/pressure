@@ -9,9 +9,8 @@
 
 package net.bdew.pressure.items
 
-import net.bdew.lib.{Client, Misc}
 import net.bdew.lib.gui.Color
-import net.minecraft.client.Minecraft
+import net.bdew.lib.{Client, Misc}
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.item.ItemStack

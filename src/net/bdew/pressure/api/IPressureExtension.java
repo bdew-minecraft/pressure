@@ -38,6 +38,11 @@ public interface IPressureExtension {
     boolean isConnectableBlock(IBlockAccess world, int x, int y, int z);
 
     /**
+     * @return true if pressure network connections can pass through this block
+     */
+    boolean isTraversableBlock(IBlockAccess world, int x, int y, int z);
+
+    /**
      * Attempt to place a pipe at the given coordinates, called on the server
      *
      * @return true if pipe was placed successfully
