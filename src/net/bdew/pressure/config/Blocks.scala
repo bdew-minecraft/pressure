@@ -12,6 +12,7 @@ package net.bdew.pressure.config
 import cpw.mods.fml.common.registry.GameRegistry
 import net.bdew.lib.config.BlockManager
 import net.bdew.pressure.blocks._
+import net.bdew.pressure.blocks.checkvalve.BlockCheckValve
 import net.bdew.pressure.blocks.drain.BlockDrain
 import net.bdew.pressure.blocks.input.BlockInput
 import net.bdew.pressure.blocks.output.BlockOutput
@@ -40,4 +41,6 @@ object Blocks extends BlockManager(PressureCreativeTabs.main) {
 
   regBlock(BlockTankInterface)
   regBlock(BlockTankFilter)
+
+  regBlock(BlockCheckValve)
 }
