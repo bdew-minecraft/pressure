@@ -20,8 +20,11 @@ class SlotMode(container: ContainerRouter, index: Int, x: Int, y: Int) extends S
   val dir = Misc.forgeDirection(index)
   override def onClick(button: Int, mods: Int, player: EntityPlayer): ItemStack = {
     val stack = player.inventory.getItemStack
-    if (!container.te.getWorldObj.isRemote) {
-      container.te.sideModes.set(dir, RouterSideMode.order(container.te.sideModes.get(dir)))
+    if (!container.te.getWorldObj.isRemote && mods == 0) {
+      if (button == 0)
+        container.te.sideModes.set(dir, RouterSideMode.order(container.te.sideModes.get(dir)))
+      else if (button == 1)
+        container.te.sideModes.set(dir, RouterSideMode.DISABLED)
     }
     stack
   }
