@@ -11,4 +11,9 @@ package net.bdew.pressure.blocks.director.data
 
 import net.bdew.lib.data.base.TileDataSlots
 
-case class DataSlotSideModes(name: String, parent: TileDataSlots) extends DataSlotDirectionMap(DirectorSideMode, DirectorSideMode.DISABLED)
+case class DataSlotSideModes(name: String, parent: TileDataSlots) extends DataSlotDirectionMap(DirectorSideMode, DirectorSideMode.DISABLED) {
+  def sides(mode: DirectorSideMode.Value) =
+    for ((side, sideMode) <- map if sideMode == mode) yield side
+  def sides(modes: Set[DirectorSideMode.Value]) =
+    for ((side, sideMode) <- map if modes.contains(sideMode)) yield side
+}

@@ -18,5 +18,4 @@ class DirectorSideWidget(val te: TileDirector, p: Point, side: ForgeDirection) e
   add(new DirectorSideIcon(Point(1, 1), te, side))
   add(new DirectorFilterIcon(Point(1, 21), te, side))
   add(new DirectorRSModeButton(Point(1, 41), te, side))
-
 }
