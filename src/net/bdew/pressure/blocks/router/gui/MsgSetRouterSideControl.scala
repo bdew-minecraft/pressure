@@ -7,11 +7,11 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.director.gui
+package net.bdew.pressure.blocks.router.gui
 
 import net.bdew.lib.multiblock.data.RSMode
 import net.bdew.pressure.network.NetworkHandler
 import net.minecraftforge.common.util.ForgeDirection
 
-case class MsgSetDirectorSideControl(side: ForgeDirection, mode: RSMode.Value) extends NetworkHandler.Message
+case class MsgSetRouterSideControl(side: ForgeDirection, mode: RSMode.Value) extends NetworkHandler.Message
 

@@ -7,15 +7,15 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.director.gui
+package net.bdew.pressure.blocks.router.gui
 
 import net.bdew.lib.gui._
 import net.bdew.lib.gui.widgets.WidgetSubContainer
-import net.bdew.pressure.blocks.director.TileDirector
+import net.bdew.pressure.blocks.router.TileRouter
 import net.minecraftforge.common.util.ForgeDirection
 
-class DirectorSideWidget(val te: TileDirector, p: Point, side: ForgeDirection) extends WidgetSubContainer(new Rect(p, 18, 58)) {
-  add(new DirectorSideIcon(Point(1, 1), te, side))
-  add(new DirectorFilterIcon(Point(1, 21), te, side))
-  add(new DirectorRSModeButton(Point(1, 41), te, side))
+class RouterSideWidget(val te: TileRouter, p: Point, side: ForgeDirection) extends WidgetSubContainer(new Rect(p, 18, 58)) {
+  add(new RouterSideIcon(Point(1, 1), te, side))
+  add(new RouterFilterIcon(Point(1, 21), te, side))
+  add(new RouterRSModeButton(Point(1, 41), te, side))
 }

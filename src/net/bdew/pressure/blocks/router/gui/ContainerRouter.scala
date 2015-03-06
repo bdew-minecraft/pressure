@@ -7,15 +7,15 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.director.gui
+package net.bdew.pressure.blocks.router.gui
 
 import net.bdew.lib.data.base.ContainerDataSlots
 import net.bdew.lib.gui.NoInvContainer
 import net.bdew.lib.tile.inventory.SimpleInventory
-import net.bdew.pressure.blocks.director.TileDirector
+import net.bdew.pressure.blocks.router.TileRouter
 import net.minecraft.entity.player.EntityPlayer
 
-class ContainerDirector(val te: TileDirector, player: EntityPlayer) extends NoInvContainer with ContainerDataSlots {
+class ContainerRouter(val te: TileRouter, player: EntityPlayer) extends NoInvContainer with ContainerDataSlots {
   lazy val dataSource = te
 
   val inventory = new SimpleInventory(6)

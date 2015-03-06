@@ -15,9 +15,11 @@ import cpw.mods.fml.common.Mod
 import cpw.mods.fml.common.Mod.EventHandler
 import cpw.mods.fml.common.event._
 import cpw.mods.fml.common.network.NetworkRegistry
+import cpw.mods.fml.common.registry.GameRegistry
 import cpw.mods.fml.relauncher.Side
 import net.bdew.lib.Misc
 import net.bdew.pressure.api.PressureAPI
+import net.bdew.pressure.blocks.router.BlockRouter
 import net.bdew.pressure.compat.enderio.EnderIOProxy
 import net.bdew.pressure.config._
 import net.bdew.pressure.fmp.FmpHandler
@@ -25,6 +27,7 @@ import net.bdew.pressure.items.{Canister, CanisterRenderer}
 import net.bdew.pressure.misc.PressureCreativeTabs
 import net.bdew.pressure.network.NetworkHandler
 import net.bdew.pressure.pressurenet.Helper
+import net.minecraft.item.Item
 import net.minecraftforge.client.MinecraftForgeClient
 import org.apache.logging.log4j.Logger
 
@@ -71,5 +74,17 @@ object Pressure {
     PressureCreativeTabs.init()
     if (Misc.haveModVersion("EnderIO"))
       EnderIOProxy.init()
+  }
+
+  @EventHandler
+  def missingMappings(event: FMLMissingMappingsEvent): Unit = {
+    import scala.collection.JavaConversions._
+    for (missing <- event.getAll) {
+      (missing.name, missing.`type`) match {
+        case ("pressure:Director", GameRegistry.Type.BLOCK) => missing.remap(BlockRouter)
+        case ("pressure:Director", GameRegistry.Type.ITEM) => missing.remap(Item.getItemFromBlock(BlockRouter))
+        case _ => // do nothing
+      }
+    }
   }
 }

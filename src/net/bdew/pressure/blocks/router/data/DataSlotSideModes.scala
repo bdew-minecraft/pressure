@@ -7,13 +7,13 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.director.data
+package net.bdew.pressure.blocks.router.data
 
 import net.bdew.lib.data.base.TileDataSlots
 
-case class DataSlotSideModes(name: String, parent: TileDataSlots) extends DataSlotDirectionMap(DirectorSideMode, DirectorSideMode.DISABLED) {
-  def sides(mode: DirectorSideMode.Value) =
+case class DataSlotSideModes(name: String, parent: TileDataSlots) extends DataSlotDirectionMap(RouterSideMode, RouterSideMode.DISABLED) {
+  def sides(mode: RouterSideMode.Value) =
     for ((side, sideMode) <- map if sideMode == mode) yield side
-  def sides(modes: Set[DirectorSideMode.Value]) =
+  def sides(modes: Set[RouterSideMode.Value]) =
     for ((side, sideMode) <- map if modes.contains(sideMode)) yield side
 }

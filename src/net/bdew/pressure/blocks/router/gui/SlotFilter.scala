@@ -7,7 +7,7 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.director.gui
+package net.bdew.pressure.blocks.router.gui
 
 import net.bdew.lib.Misc
 import net.bdew.lib.gui.SlotClickable
@@ -16,7 +16,7 @@ import net.minecraft.inventory.Slot
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.{FluidContainerRegistry, IFluidContainerItem}
 
-class SlotFilter(container: ContainerDirector, index: Int, x: Int, y: Int) extends Slot(container.inventory, index, x, y) with SlotClickable {
+class SlotFilter(container: ContainerRouter, index: Int, x: Int, y: Int) extends Slot(container.inventory, index, x, y) with SlotClickable {
   val dir = Misc.forgeDirection(index)
   override def onClick(button: Int, mods: Int, player: EntityPlayer): ItemStack = {
     val stack = player.inventory.getItemStack

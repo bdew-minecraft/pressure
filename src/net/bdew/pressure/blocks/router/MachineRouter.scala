@@ -7,7 +7,7 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.director
+package net.bdew.pressure.blocks.router
 
 import cpw.mods.fml.common.FMLCommonHandler
 import cpw.mods.fml.relauncher.{Side, SideOnly}
@@ -15,27 +15,27 @@ import net.bdew.lib.Misc
 import net.bdew.lib.gui.GuiProvider
 import net.bdew.lib.machine.Machine
 import net.bdew.lib.multiblock.data.RSMode
-import net.bdew.pressure.blocks.director.gui.{ContainerDirector, GuiDirector, MsgSetDirectorSideControl}
+import net.bdew.pressure.blocks.router.gui.{ContainerRouter, GuiRouter, MsgSetRouterSideControl}
 import net.bdew.pressure.network.NetworkHandler
 import net.minecraft.entity.player.EntityPlayer
 
-object MachineDirector extends Machine("Director", BlockDirector) with GuiProvider {
+object MachineRouter extends Machine("Router", BlockRouter) with GuiProvider {
   def guiId: Int = 3
-  type TEClass = TileDirector
+  type TEClass = TileRouter
 
   if (FMLCommonHandler.instance().getSide.isClient)
-    DirectorIcons.init()
+    RouterIcons.init()
 
   NetworkHandler.regServerHandler({
-    case (MsgSetDirectorSideControl(side, mode), player) =>
-      Misc.asInstanceOpt(player.openContainer, classOf[ContainerDirector]) map { container =>
+    case (MsgSetRouterSideControl(side, mode), player) =>
+      Misc.asInstanceOpt(player.openContainer, classOf[ContainerRouter]) map { container =>
         container.te.sideControl.set(side, mode)
       }
   })
 
   @SideOnly(Side.CLIENT)
-  def getGui(te: TileDirector, player: EntityPlayer) = new GuiDirector(te, player)
-  def getContainer(te: TileDirector, player: EntityPlayer) = new ContainerDirector(te, player)
+  def getGui(te: TileRouter, player: EntityPlayer) = new GuiRouter(te, player)
+  def getContainer(te: TileRouter, player: EntityPlayer) = new ContainerRouter(te, player)
 
   val rsModeOrder = Map(
     RSMode.ALWAYS -> RSMode.RS_ON,

@@ -7,21 +7,21 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.director.gui
+package net.bdew.pressure.blocks.router.gui
 
 import net.bdew.lib.Misc
 import net.bdew.lib.gui.SlotClickable
-import net.bdew.pressure.blocks.director.data.DirectorSideMode
+import net.bdew.pressure.blocks.router.data.RouterSideMode
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.Slot
 import net.minecraft.item.ItemStack
 
-class SlotMode(container: ContainerDirector, index: Int, x: Int, y: Int) extends Slot(container.inventory, index, x, y) with SlotClickable {
+class SlotMode(container: ContainerRouter, index: Int, x: Int, y: Int) extends Slot(container.inventory, index, x, y) with SlotClickable {
   val dir = Misc.forgeDirection(index)
   override def onClick(button: Int, mods: Int, player: EntityPlayer): ItemStack = {
     val stack = player.inventory.getItemStack
     if (!container.te.getWorldObj.isRemote) {
-      container.te.sideModes.set(dir, DirectorSideMode.order(container.te.sideModes.get(dir)))
+      container.te.sideModes.set(dir, RouterSideMode.order(container.te.sideModes.get(dir)))
     }
     stack
   }

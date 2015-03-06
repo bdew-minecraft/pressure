@@ -7,9 +7,9 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.director.data
+package net.bdew.pressure.blocks.router.data
 
-object DirectorSideMode extends Enumeration {
+object RouterSideMode extends Enumeration {
   val DISABLED = Value(0)
   val INPUT = Value(1)
   val OUTPUT_LOW = Value(2)

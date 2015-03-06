@@ -7,7 +7,7 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.director.data
+package net.bdew.pressure.blocks.router.data
 
 import net.bdew.lib.data.base.TileDataSlots
 import net.bdew.lib.multiblock.data.RSMode

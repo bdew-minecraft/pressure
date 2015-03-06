@@ -7,13 +7,13 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.director.gui
+package net.bdew.pressure.blocks.router.gui
 
 import net.bdew.lib.gui.widgets.Widget
 import net.bdew.lib.gui.{Point, Rect}
 import net.bdew.lib.{Client, Misc}
 import net.bdew.pressure.Textures
-import net.bdew.pressure.blocks.director.{MachineDirector, TileDirector}
+import net.bdew.pressure.blocks.router.{MachineRouter, TileRouter}
 import net.bdew.pressure.network.NetworkHandler
 import net.minecraft.client.audio.PositionedSoundRecord
 import net.minecraft.util.ResourceLocation
@@ -21,7 +21,7 @@ import net.minecraftforge.common.util.ForgeDirection
 
 import scala.collection.mutable
 
-class DirectorRSModeButton(p: Point, te: TileDirector, side: ForgeDirection) extends Widget {
+class RouterRSModeButton(p: Point, te: TileRouter, side: ForgeDirection) extends Widget {
   val rect = new Rect(p, 16, 16)
   val iconRect = new Rect(p +(1, 1), 14, 14)
 
@@ -40,6 +40,6 @@ class DirectorRSModeButton(p: Point, te: TileDirector, side: ForgeDirection) ext
 
   override def mouseClicked(p: Point, button: Int) {
     Client.minecraft.getSoundHandler.playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F))
-    NetworkHandler.sendToServer(MsgSetDirectorSideControl(side, MachineDirector.rsModeOrder(te.sideControl.get(side))))
+    NetworkHandler.sendToServer(MsgSetRouterSideControl(side, MachineRouter.rsModeOrder(te.sideControl.get(side))))
   }
 }

@@ -7,19 +7,19 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks.director.gui
+package net.bdew.pressure.blocks.router.gui
 
 import net.bdew.lib.Misc
 import net.bdew.lib.gui.widgets.Widget
 import net.bdew.lib.gui.{Color, Point, Rect, Texture}
-import net.bdew.pressure.blocks.director.TileDirector
+import net.bdew.pressure.blocks.router.TileRouter
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.FluidStack
 
 import scala.collection.mutable
 
-class DirectorFilterIcon(p: Point, te: TileDirector, side: ForgeDirection) extends Widget {
+class RouterFilterIcon(p: Point, te: TileRouter, side: ForgeDirection) extends Widget {
   override val rect = new Rect(p, 16, 16)
   override def draw(mouse: Point) {
     if (te.sideFilters.isSet(side)) {
