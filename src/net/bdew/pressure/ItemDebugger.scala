@@ -38,7 +38,7 @@ object ItemDebugger extends SimpleItem("Debugger") {
       player.addChatMessage("Ins: " + (ins map (_.blockRefFace) mkString ", "))
       player.addChatMessage("Outs: " + (outs map (_.blockRefFace) mkString ", "))
       player.addChatMessage("Seen:")
-      seen.foreach(x => player.addChatMessage(" * %s: %s".format(x, x.block.block(world) map (_.getUnlocalizedName) getOrElse "AIR")))
+      seen.foreach(x => player.addChatMessage(" * %s: %s".format(x, x.block(world) map (_.getUnlocalizedName) getOrElse "AIR")))
       player.addChatMessage("PConn: " + Helper.getPipeConnections(world, br).mkString(","))
       player.addChatMessage("Scanned %d blocks, took %d μs".format(seen.size, scanTime / 1000))
     }

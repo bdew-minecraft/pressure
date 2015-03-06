@@ -28,7 +28,7 @@ object Helper extends IPressureHelper {
   val recursionGuard = new DynamicVariable(Set.empty[IPressureConnection])
 
   def scanConnectedBlocks(w: IBlockAccess, start: BlockRef, face: ForgeDirection, forceNeighbours: Boolean) = {
-    val seen = collection.mutable.Set.empty[BlockRefFace]
+    val seen = collection.mutable.Set.empty[BlockRef]
     val queue = collection.mutable.Queue(BlockRefFace(start, face))
 
     if (forceNeighbours)
@@ -41,16 +41,18 @@ object Helper extends IPressureHelper {
 
     while (queue.nonEmpty) {
       val current = queue.dequeue()
-      seen.add(current)
-      if (isTraversableBlock(w, current))
-        queue ++= (getPipeConnections(w, current) map (x => BlockRefFace(current.neighbour(x), x.getOpposite)) filterNot seen.contains)
+
+      if (isTraversableBlock(w, current)) {
+        seen.add(current.block)
+        queue ++= (getPipeConnections(w, current) map (x => BlockRefFace(current.neighbour(x), x.getOpposite)) filterNot (x => seen.contains(x.block)))
+      }
+
       if (current.face != ForgeDirection.UNKNOWN && canPipeConnectTo(w, current, current.face)) {
-        current.tile(w) collect {
-          case t: IPressureInject =>
-            inputs.add(PressureInputFace(t, current.face))
-          case t: IPressureEject =>
-            outputs.add(PressureOutputFace(t, current.face))
-        }
+        val tile = current.tile(w).orNull
+        if (tile.isInstanceOf[IPressureInject])
+          inputs += PressureInputFace(tile.asInstanceOf[IPressureInject], current.face)
+        if (tile.isInstanceOf[IPressureEject])
+          outputs += PressureOutputFace(tile.asInstanceOf[IPressureEject], current.face)
       }
     }
     ScanResult(inputs.toSet, outputs.toSet, seen.toSet)

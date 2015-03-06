@@ -9,4 +9,6 @@
 
 package net.bdew.pressure.pressurenet
 
-case class ScanResult(inputs: Set[PressureInputFace], outputs: Set[PressureOutputFace], seen: Set[BlockRefFace])
+import net.bdew.lib.block.BlockRef
+
+case class ScanResult(inputs: Set[PressureInputFace], outputs: Set[PressureOutputFace], seen: Set[BlockRef])
