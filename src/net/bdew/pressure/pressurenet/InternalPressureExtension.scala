@@ -11,8 +11,9 @@ package net.bdew.pressure.pressurenet
 
 import net.bdew.lib.Misc
 import net.bdew.pressure.api.{IFilterable, IFilterableProvider, IPressureConnectableBlock, IPressureExtension}
-import net.bdew.pressure.blocks.BlockPipe
+import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.item.ItemStack
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
 
@@ -34,10 +35,11 @@ object InternalPressureExtension extends IPressureExtension with IFilterableProv
       block.isInstanceOf[IPressureConnectableBlock] && block.asInstanceOf[IPressureConnectableBlock].isTraversable(world, x, y, z)
     }
 
-  override def tryPlacePipe(w: World, x: Int, y: Int, z: Int, p: EntityPlayerMP) = {
+  override def tryPlaceBlock(w: World, x: Int, y: Int, z: Int, b: Block, p: EntityPlayerMP) = {
     if (w.isAirBlock(x, y, z) || (Option(w.getBlock(x, y, z)) exists (_.isReplaceable(w, x, y, z)))) {
-      w.setBlock(x, y, z, BlockPipe, 0, 3)
-      BlockPipe.notifyPressureSystemUpdate(w, x, y, z)
+      w.setBlock(x, y, z, b, 0, 3)
+      b.onBlockPlacedBy(w, x, y, z, p, new ItemStack(b))
+      b.onPostBlockPlaced(w, x, y, z, w.getBlockMetadata(x, y, z))
       true
     } else false
   }

@@ -10,17 +10,17 @@
 package net.bdew.pressure.blocks
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.block.SimpleBlock
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.bdew.pressure.misc.PressureCreativeTabs
 import net.bdew.pressure.pressurenet.Helper
 import net.bdew.pressure.render.PipeRenderer
-import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
 
-object BlockPipe extends Block(Material.iron) with IPressureConnectableBlock with BlockNotifyUpdates {
+object BlockPipe extends SimpleBlock("Pipe", Material.iron) with IPressureConnectableBlock with BlockNotifyUpdates {
   setBlockName("pressure.pipe")
   setHardness(2)
 

@@ -17,7 +17,7 @@ import net.minecraft.item.{ItemBlock, ItemStack}
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
 
-class ItemBlockPipe(bl: Block) extends ItemBlock(bl) {
+class CustomItemBlock(bl: Block) extends ItemBlock(bl) {
   override def func_150936_a(w: World, x: Int, y: Int, z: Int, side: Int, p: EntityPlayer, s: ItemStack) = {
     true
   }
@@ -28,7 +28,7 @@ class ItemBlockPipe(bl: Block) extends ItemBlock(bl) {
     if (!world.isRemote && player.isInstanceOf[EntityPlayerMP]) {
       val p = player.asInstanceOf[EntityPlayerMP]
       val dir = ForgeDirection.values()(side)
-      if (Helper.tryPlacePipe(world, x, y, z, p) || Helper.tryPlacePipe(world, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, p)) {
+      if (Helper.tryPlaceBlock(world, x, y, z, bl, p) || Helper.tryPlaceBlock(world, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, bl, p)) {
         if (!p.capabilities.isCreativeMode)
           player.inventory.decrStackSize(player.inventory.currentItem, 1)
         true

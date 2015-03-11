@@ -12,6 +12,7 @@ package net.bdew.pressure.pressurenet
 import net.bdew.lib.block.BlockRef
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api._
+import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
@@ -108,8 +109,8 @@ object Helper extends IPressureHelper {
   def isTraversableBlock(w: IBlockAccess, ref: BlockRef) =
     extensions.exists(_.isTraversableBlock(w, ref.x, ref.y, ref.z))
 
-  override def tryPlacePipe(w: World, x: Int, y: Int, z: Int, p: EntityPlayerMP) =
-    extensions.exists(_.tryPlacePipe(w, x, y, z, p))
+  override def tryPlaceBlock(w: World, x: Int, y: Int, z: Int, b: Block, p: EntityPlayerMP) =
+    extensions.exists(_.tryPlaceBlock(w, x, y, z, b, p))
 
   def getFilterableForWorldCoordinates(world: World, x: Int, y: Int, z: Int, side: Int): IFilterable = {
     for (fp <- filterable)

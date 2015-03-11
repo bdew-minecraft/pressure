@@ -9,6 +9,7 @@
 
 package net.bdew.pressure.api;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -43,9 +44,10 @@ public interface IPressureExtension {
     boolean isTraversableBlock(IBlockAccess world, int x, int y, int z);
 
     /**
-     * Attempt to place a pipe at the given coordinates, called on the server
+     * Attempt to place a block at the given coordinates, called on the server
+     * Implement to allow alternative presentations of blocks from the mod (eg. FMP parts)
      *
-     * @return true if pipe was placed successfully
+     * @return true if block was placed successfully
      */
-    boolean tryPlacePipe(World w, int x, int y, int z, EntityPlayerMP p);
+    boolean tryPlaceBlock(World w, int x, int y, int z, Block block, EntityPlayerMP p);
 }

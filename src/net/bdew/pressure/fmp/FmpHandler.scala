@@ -16,12 +16,14 @@ import codechicken.multipart.MultiPartRegistry.{IPartConverter, IPartFactory}
 import codechicken.multipart.{MultiPartRegistry, MultipartGenerator, TileMultipart}
 import net.bdew.lib.Misc
 import net.bdew.lib.block.BlockRef
+import net.bdew.lib.rotate.RotatedHelper
 import net.bdew.pressure.api.IPressureExtension
 import net.bdew.pressure.blocks.BlockPipe
 import net.bdew.pressure.blocks.checkvalve.BlockCheckValve
 import net.bdew.pressure.fmp.parts.{CheckValvePart, PipePart}
 import net.bdew.pressure.fmp.traits.TConnectablePart
 import net.bdew.pressure.pressurenet.Helper
+import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
@@ -65,13 +67,20 @@ object FmpPressureExtension extends IPressureExtension {
   override def canPipeConnectTo(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
     findTypedParts(world, x, y, z, classOf[TConnectablePart]).exists(_.canConnectTo(side))
 
-  override def tryPlacePipe(w: World, x: Int, y: Int, z: Int, p: EntityPlayerMP) = {
-    val part = new PipePart
+  override def tryPlaceBlock(w: World, x: Int, y: Int, z: Int, block: Block, p: EntityPlayerMP) = {
     val pos = new BlockCoord(x, y, z)
-    if (TileMultipart.getTile(w, pos) != null && TileMultipart.canPlacePart(w, pos, part)) {
-      TileMultipart.addPart(w, pos, part)
-      true
-    } else false
+    (block match {
+      case BlockPipe => Some(new PipePart)
+      case BlockCheckValve =>
+        Some(new CheckValvePart(RotatedHelper.getFacingFromEntity(
+          p, BlockCheckValve.getValidFacings, BlockCheckValve.getDefaultFacing)))
+      case _ => None
+    }) exists { part =>
+      if (TileMultipart.getTile(w, pos) != null && TileMultipart.canPlacePart(w, pos, part)) {
+        TileMultipart.addPart(w, pos, part)
+        true
+      } else false
+    }
   }
 }
 
