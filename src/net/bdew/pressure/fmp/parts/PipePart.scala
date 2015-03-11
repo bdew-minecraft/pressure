@@ -7,7 +7,7 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.fmp
+package net.bdew.pressure.fmp.parts
 
 import java.util
 
@@ -15,13 +15,18 @@ import codechicken.lib.vec.{Cuboid6, Vector3}
 import codechicken.multipart.{TCuboidPart, TMultiPart, TNormalOcclusion}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.pressure.blocks.BlockPipe
+import net.bdew.pressure.fmp.traits.TConnectablePart
 import net.bdew.pressure.pressurenet.Helper
 import net.bdew.pressure.render.PipeRenderer
 import net.minecraft.client.renderer.RenderBlocks
 import net.minecraft.item.ItemStack
+import net.minecraftforge.common.util.ForgeDirection
 
-class PipePart extends TCuboidPart with TNormalOcclusion {
+class PipePart extends TCuboidPart with TNormalOcclusion with TConnectablePart {
   override def getType = "bdew.pressure.pipe"
+
+  override def isTraversable = true
+  override def canConnectTo(side: ForgeDirection) = !tile.isSolid(side.ordinal())
 
   override def getBounds = new Cuboid6(0.2, 0.2, 0.2, 0.8, 0.8, 0.8)
   override def getOcclusionBoxes = util.Arrays.asList(getBounds)
@@ -39,8 +44,4 @@ class PipePart extends TCuboidPart with TNormalOcclusion {
       true
     } else false
   }
-
-  //  override def drawBreaking(renderBlocks: RenderBlocks) {
-  //    PipeRenderer.instance.renderWorldBlock(world, x, y, z, BlockPipe, PipeRenderer.id, renderBlocks)
-  //  }
 }
