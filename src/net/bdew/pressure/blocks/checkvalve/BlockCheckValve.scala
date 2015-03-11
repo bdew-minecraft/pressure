@@ -17,12 +17,16 @@ import net.bdew.pressure.api.IPressureConnectableBlock
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
+import net.minecraft.entity.EntityLivingBase
+import net.minecraft.item.ItemStack
 import net.minecraft.util.IIcon
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
 
 object BlockCheckValve extends SimpleBlock("CheckValve", Material.iron) with HasTE[TileCheckValve] with BaseRotatableBlock with IPressureConnectableBlock {
   override val TEClass = classOf[TileCheckValve]
+
+  setHardness(2)
 
   override def getRenderType = RotatedBlockRenderer.id
 
@@ -77,6 +81,11 @@ object BlockCheckValve extends SimpleBlock("CheckValve", Material.iron) with Has
       world.setBlockMetadataWithNotify(x, y, z, (meta & 7) | 8, 2)
     else if (!powered && ((meta & 8) == 8))
       world.setBlockMetadataWithNotify(x, y, z, meta & 7, 2)
+  }
+
+  override def onBlockPlacedBy(world: World, x: Int, y: Int, z: Int, ent: EntityLivingBase, stack: ItemStack): Unit = {
+    super.onBlockPlacedBy(world, x, y, z, ent, stack)
+    onNeighborBlockChange(world, x, y, z, this)
   }
 
   @SideOnly(Side.CLIENT)
