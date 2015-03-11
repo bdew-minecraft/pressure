@@ -24,6 +24,7 @@ case class PressureConnection(origin: IPressureInject, side: ForgeDirection, til
     if (Helper.recursionGuard.value.contains(this)) {
       Pressure.logInfo("Detected loop, blowing up %d,%d,%d (dim %d)",
         origin.getXCoord, origin.getYCoord, origin.getZCoord, origin.getWorld.provider.dimensionId)
+      origin.getWorld.setBlockToAir(origin.getXCoord, origin.getYCoord, origin.getZCoord)
       origin.getWorld.createExplosion(null, origin.getXCoord, origin.getYCoord, origin.getZCoord, 1, true)
       return 0
     }
