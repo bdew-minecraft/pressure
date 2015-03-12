@@ -39,7 +39,7 @@ object InternalPressureExtension extends IPressureExtension with IFilterableProv
     if (w.isAirBlock(x, y, z) || (Option(w.getBlock(x, y, z)) exists (_.isReplaceable(w, x, y, z)))) {
       w.setBlock(x, y, z, b, 0, 3)
       b.onBlockPlacedBy(w, x, y, z, p, new ItemStack(b))
-      b.onPostBlockPlaced(w, x, y, z, w.getBlockMetadata(x, y, z))
+      b.onBlockPlaced(w, x, y, z, 0, 0, 0, 0, w.getBlockMetadata(x, y, z))
       true
     } else false
   }

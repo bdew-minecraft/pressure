@@ -11,7 +11,7 @@ package net.bdew.pressure.fmp.traits
 
 import codechicken.multipart.TileMultipart
 import net.bdew.pressure.api.IPressureEject
-import net.bdew.pressure.fmp.FmpHandler
+import net.bdew.pressure.fmp.FmpUtils
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.FluidStack
 
@@ -21,7 +21,7 @@ trait TEjectPart {
 
 trait TileEject extends TileMultipart with IPressureEject {
   override def eject(resource: FluidStack, face: ForgeDirection, doEject: Boolean) =
-    FmpHandler.getTypedPart(classOf[TEjectPart], this).map(_.eject(resource, face, doEject)).getOrElse(0)
+    FmpUtils.getTypedPart(classOf[TEjectPart], this).map(_.eject(resource, face, doEject)).getOrElse(0)
 
   override def getXCoord = xCoord
   override def getYCoord = yCoord

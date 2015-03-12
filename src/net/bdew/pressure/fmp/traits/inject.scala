@@ -11,7 +11,7 @@ package net.bdew.pressure.fmp.traits
 
 import codechicken.multipart.TileMultipart
 import net.bdew.pressure.api.IPressureInject
-import net.bdew.pressure.fmp.FmpHandler
+import net.bdew.pressure.fmp.FmpUtils
 import net.minecraftforge.common.util.ForgeDirection
 
 trait TInjectPart {
@@ -20,7 +20,7 @@ trait TInjectPart {
 
 trait TileInject extends TileMultipart with IPressureInject {
   override def invalidateConnection(side: ForgeDirection) =
-    FmpHandler.getTypedPart(classOf[TInjectPart], this).map(_.invalidateConnection(side))
+    FmpUtils.getTypedPart(classOf[TInjectPart], this).map(_.invalidateConnection(side))
 
   override def getXCoord = xCoord
   override def getYCoord = yCoord

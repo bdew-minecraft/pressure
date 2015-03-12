@@ -12,12 +12,13 @@ package net.bdew.pressure.fmp.parts
 import java.util
 
 import codechicken.lib.data.{MCDataInput, MCDataOutput}
-import codechicken.lib.vec.{Cuboid6, Vector3}
+import codechicken.lib.vec.Vector3
 import codechicken.multipart.{TCuboidPart, TMultiPart, TNormalOcclusion}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.Misc
 import net.bdew.pressure.api.{IPressureConnection, IPressureInject}
 import net.bdew.pressure.blocks.checkvalve.BlockCheckValve
+import net.bdew.pressure.fmp.FmpUtils
 import net.bdew.pressure.fmp.traits._
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.client.renderer.RenderBlocks
@@ -33,24 +34,18 @@ class CheckValvePart(var facing: ForgeDirection = BlockCheckValve.getDefaultFaci
 
   override def getType = "bdew.pressure.checkvalve"
 
-  override def getBounds = facing match {
-    case ForgeDirection.UP => new Cuboid6(0.2F, 0, 0.2F, 0.8F, 1F, 0.8F)
-    case ForgeDirection.DOWN => new Cuboid6(0.2F, 0, 0.2F, 0.8F, 1F, 0.8F)
-    case ForgeDirection.NORTH => new Cuboid6(0.2F, 0.2F, 0F, 0.8F, 0.8F, 1F)
-    case ForgeDirection.SOUTH => new Cuboid6(0.2F, 0.2F, 0F, 0.8F, 0.8F, 1F)
-    case ForgeDirection.EAST => new Cuboid6(0F, 0.2F, 0.2F, 1F, 0.8F, 0.8F)
-    case ForgeDirection.WEST => new Cuboid6(0F, 0.2F, 0.2F, 1F, 0.8F, 0.8F)
-    case _ => new Cuboid6(0, 0, 0, 1, 1, 1)
-  }
+  override def getBounds = FmpUtils.cub6(BlockCheckValve.boundsFromFacing(facing))
 
-  override def canConnectTo(side: ForgeDirection) = side == facing || side == facing.getOpposite
+  override def canConnectTo(side: ForgeDirection) =
+    (side == facing || side == facing.getOpposite) && !tile.isSolid(side.ordinal())
+
   override def isTraversable = false
 
   var outputConnection: IPressureConnection = null
 
   override def invalidateConnection(side: ForgeDirection) = outputConnection = null
   override def eject(resource: FluidStack, face: ForgeDirection, doEject: Boolean) = {
-    if (!isPowered && face == facing.getOpposite) {
+    if (!isPowered && face == facing.getOpposite && !tile.isSolid(facing.ordinal())) {
       if (outputConnection == null)
         outputConnection = Helper.recalculateConnectionInfo(tile.asInstanceOf[IPressureInject], facing)
       outputConnection.pushFluid(resource, doEject)

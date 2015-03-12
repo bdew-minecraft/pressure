@@ -11,9 +11,10 @@ package net.bdew.pressure.blocks.checkvalve
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.block.{HasTE, SimpleBlock}
-import net.bdew.lib.render.RotatedBlockRenderer
 import net.bdew.lib.rotate.{BaseRotatableBlock, IconType}
 import net.bdew.pressure.api.IPressureConnectableBlock
+import net.bdew.pressure.blocks.BlockNotifyUpdates
+import net.bdew.pressure.render.ValveRenderer
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
@@ -23,12 +24,14 @@ import net.minecraft.util.IIcon
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
 
-object BlockCheckValve extends SimpleBlock("CheckValve", Material.iron) with HasTE[TileCheckValve] with BaseRotatableBlock with IPressureConnectableBlock {
+object BlockCheckValve extends SimpleBlock("CheckValve", Material.iron) with HasTE[TileCheckValve] with BaseRotatableBlock with IPressureConnectableBlock with BlockNotifyUpdates {
   override val TEClass = classOf[TileCheckValve]
 
   setHardness(2)
 
-  override def getRenderType = RotatedBlockRenderer.id
+  override def getRenderType = ValveRenderer.id
+  override def renderAsNormalBlock() = false
+  override def isOpaqueCube = false
 
   override def canConnectTo(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) = {
     val facing = getFacing(world, x, y, z)
@@ -39,20 +42,19 @@ object BlockCheckValve extends SimpleBlock("CheckValve", Material.iron) with Has
 
   override def getDefaultFacing: ForgeDirection = ForgeDirection.NORTH
 
-  override def setBlockBoundsBasedOnState(world: IBlockAccess, x: Int, y: Int, z: Int): Unit = {
-    getFacing(world, x, y, z) match {
-      case ForgeDirection.UP => setBlockBounds(0.2F, 0, 0.2F, 0.8F, 1F, 0.8F)
-      case ForgeDirection.DOWN => setBlockBounds(0.2F, 0, 0.2F, 0.8F, 1F, 0.8F)
-      case ForgeDirection.NORTH => setBlockBounds(0.2F, 0.2F, 0F, 0.8F, 0.8F, 1F)
-      case ForgeDirection.SOUTH => setBlockBounds(0.2F, 0.2F, 0F, 0.8F, 0.8F, 1F)
-      case ForgeDirection.EAST => setBlockBounds(0F, 0.2F, 0.2F, 1F, 0.8F, 0.8F)
-      case ForgeDirection.WEST => setBlockBounds(0F, 0.2F, 0.2F, 1F, 0.8F, 0.8F)
-      case _ =>
-    }
-  }
+  val boundsFromFacing = Map(
+    ForgeDirection.UP ->(0.2F, 0.125F, 0.2F, 0.8F, 0.875F, 0.8F),
+    ForgeDirection.DOWN ->(0.2F, 0.125F, 0.2F, 0.8F, 0.875F, 0.8F),
+    ForgeDirection.NORTH ->(0.2F, 0.2F, 0.125F, 0.8F, 0.8F, 0.875F),
+    ForgeDirection.SOUTH ->(0.2F, 0.2F, 0.125F, 0.8F, 0.8F, 0.875F),
+    ForgeDirection.EAST ->(0.125F, 0.2F, 0.2F, 0.875F, 0.8F, 0.8F),
+    ForgeDirection.WEST ->(0.125F, 0.2F, 0.2F, 0.875F, 0.8F, 0.8F)
+  )
 
-  override def renderAsNormalBlock() = false
-  override def isOpaqueCube = false
+  val setBlockBoundsTupled = (setBlockBounds _).tupled
+
+  override def setBlockBoundsBasedOnState(world: IBlockAccess, x: Int, y: Int, z: Int): Unit =
+    setBlockBoundsTupled(boundsFromFacing(getFacing(world, x, y, z)))
 
   override def getCollisionBoundingBoxFromPool(w: World, x: Int, y: Int, z: Int) = {
     setBlockBoundsBasedOnState(w, x, y, z)
@@ -60,7 +62,7 @@ object BlockCheckValve extends SimpleBlock("CheckValve", Material.iron) with Has
   }
 
   override def setBlockBoundsForItemRender(): Unit = {
-    setBlockBounds(0.2F, 0.2F, 0F, 0.8F, 0.8F, 1F)
+    setBlockBoundsTupled(boundsFromFacing(getDefaultFacing))
   }
 
   override def getFacing(world: IBlockAccess, x: Int, y: Int, z: Int) =
