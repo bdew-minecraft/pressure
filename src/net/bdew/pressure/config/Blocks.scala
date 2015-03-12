@@ -11,18 +11,20 @@ package net.bdew.pressure.config
 
 import net.bdew.lib.config.BlockManager
 import net.bdew.pressure.blocks._
-import net.bdew.pressure.blocks.checkvalve.BlockCheckValve
 import net.bdew.pressure.blocks.drain.BlockDrain
 import net.bdew.pressure.blocks.input.BlockInput
 import net.bdew.pressure.blocks.output.BlockOutput
 import net.bdew.pressure.blocks.pump.BlockPump
 import net.bdew.pressure.blocks.source.BlockWaterSource
 import net.bdew.pressure.blocks.tank.blocks._
+import net.bdew.pressure.blocks.valves.check.BlockCheckValve
+import net.bdew.pressure.blocks.valves.sensor.BlockPipeSensor
 import net.bdew.pressure.misc.PressureCreativeTabs
 
 object Blocks extends BlockManager(PressureCreativeTabs.main) {
   regBlock(BlockPipe, classOf[CustomItemBlock])
   regBlock(BlockCheckValve, classOf[CustomItemBlock])
+  regBlock(BlockPipeSensor, classOf[CustomItemBlock])
 
   regBlock(BlockPump, "Pump")
   regBlock(BlockOutput, "Output")

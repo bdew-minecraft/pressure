@@ -17,7 +17,7 @@ import codechicken.multipart.{TCuboidPart, TMultiPart, TNormalOcclusion}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.Misc
 import net.bdew.pressure.api.{IPressureConnection, IPressureInject}
-import net.bdew.pressure.blocks.checkvalve.BlockCheckValve
+import net.bdew.pressure.blocks.valves.check.BlockCheckValve
 import net.bdew.pressure.fmp.FmpUtils
 import net.bdew.pressure.fmp.traits._
 import net.bdew.pressure.pressurenet.Helper

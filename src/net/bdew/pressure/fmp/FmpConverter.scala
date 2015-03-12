@@ -15,7 +15,7 @@ import codechicken.lib.vec.BlockCoord
 import codechicken.multipart.MultiPartRegistry.IPartConverter
 import net.bdew.lib.block.BlockRef
 import net.bdew.pressure.blocks.BlockPipe
-import net.bdew.pressure.blocks.checkvalve.BlockCheckValve
+import net.bdew.pressure.blocks.valves.check.BlockCheckValve
 import net.bdew.pressure.fmp.parts.{CheckValvePart, PipePart}
 import net.minecraft.world.World
 

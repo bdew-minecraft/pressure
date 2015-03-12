@@ -14,7 +14,7 @@ import codechicken.multipart.TileMultipart
 import net.bdew.lib.rotate.RotatedHelper
 import net.bdew.pressure.api.IPressureExtension
 import net.bdew.pressure.blocks.BlockPipe
-import net.bdew.pressure.blocks.checkvalve.BlockCheckValve
+import net.bdew.pressure.blocks.valves.check.BlockCheckValve
 import net.bdew.pressure.fmp.parts.{CheckValvePart, PipePart}
 import net.bdew.pressure.fmp.traits.TConnectablePart
 import net.minecraft.block.Block

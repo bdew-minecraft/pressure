@@ -7,6 +7,7 @@ tile.pressure.drain.name=Fluid Drain
 
 tile.pressure.Router.name=High Pressure Router
 tile.pressure.CheckValve.name=High Pressure Check Valve
+tile.pressure.PipeSensor.name=High Pressure Pipe Sensor
 
 tile.pressure.TankBlock.name=Tank Block
 tile.pressure.TankController.name=Tank Controller

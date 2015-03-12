@@ -10,7 +10,7 @@
 package net.bdew.pressure.fmp
 
 import codechicken.multipart.MultiPartRegistry.IPartFactory
-import net.bdew.pressure.blocks.checkvalve.BlockCheckValve
+import net.bdew.pressure.blocks.valves.check.BlockCheckValve
 import net.bdew.pressure.fmp.parts.{CheckValvePart, PipePart}
 
 object FmpFactory extends IPartFactory {
