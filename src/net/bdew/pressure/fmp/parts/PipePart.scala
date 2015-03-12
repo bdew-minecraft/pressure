@@ -20,6 +20,7 @@ import net.bdew.pressure.pressurenet.Helper
 import net.bdew.pressure.render.PipeRenderer
 import net.minecraft.client.renderer.RenderBlocks
 import net.minecraft.item.ItemStack
+import net.minecraft.util.MovingObjectPosition
 import net.minecraftforge.common.util.ForgeDirection
 
 class PipePart extends TCuboidPart with TNormalOcclusion with TConnectablePart {
@@ -36,6 +37,7 @@ class PipePart extends TCuboidPart with TNormalOcclusion with TConnectablePart {
   override def onPartChanged(part: TMultiPart) = Helper.notifyBlockChanged(world, x, y, z)
 
   override def getDrops = util.Arrays.asList(new ItemStack(BlockPipe))
+  override def pickItem(hit: MovingObjectPosition) = new ItemStack(BlockPipe)
 
   @SideOnly(Side.CLIENT)
   override def renderStatic(pos: Vector3, pass: Int) = {

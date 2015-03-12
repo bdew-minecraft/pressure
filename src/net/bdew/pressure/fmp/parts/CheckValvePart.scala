@@ -24,6 +24,7 @@ import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.client.renderer.RenderBlocks
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.MovingObjectPosition
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.FluidStack
 
@@ -79,6 +80,7 @@ class CheckValvePart(var facing: ForgeDirection = BlockCheckValve.getDefaultFaci
   override def onPartChanged(part: TMultiPart) = Helper.notifyBlockChanged(world, x, y, z)
 
   override def getDrops = util.Arrays.asList(new ItemStack(BlockCheckValve))
+  override def pickItem(hit: MovingObjectPosition) = new ItemStack(BlockCheckValve)
 
   override def getBlock = BlockCheckValve
   override def getBlockMetadata = facing.ordinal() | (if (isPowered) 8 else 0)
