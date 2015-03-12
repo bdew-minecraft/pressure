@@ -16,15 +16,17 @@ import codechicken.multipart.MultiPartRegistry.IPartConverter
 import net.bdew.lib.block.BlockRef
 import net.bdew.pressure.blocks.BlockPipe
 import net.bdew.pressure.blocks.valves.check.BlockCheckValve
-import net.bdew.pressure.fmp.parts.{CheckValvePart, PipePart}
+import net.bdew.pressure.blocks.valves.sensor.BlockPipeSensor
+import net.bdew.pressure.fmp.parts.{CheckValvePart, PipePart, PipeSensorPart}
 import net.minecraft.world.World
 
 object FmpConverter extends IPartConverter {
-  override def blockTypes = util.Arrays.asList(BlockPipe, BlockCheckValve)
+  override def blockTypes = util.Arrays.asList(BlockPipe, BlockCheckValve, BlockPipeSensor)
   override def convert(world: World, pos: BlockCoord) = {
     BlockRef(pos.x, pos.y, pos.z).block(world) match {
       case Some(BlockPipe) => new PipePart
       case Some(BlockCheckValve) => new CheckValvePart(world.getBlockMetadata(pos.x, pos.y, pos.z))
+      case Some(BlockPipeSensor) => new PipeSensorPart(world.getBlockMetadata(pos.x, pos.y, pos.z))
       case _ => null
     }
   }

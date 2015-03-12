@@ -15,7 +15,8 @@ import net.bdew.lib.rotate.RotatedHelper
 import net.bdew.pressure.api.IPressureExtension
 import net.bdew.pressure.blocks.BlockPipe
 import net.bdew.pressure.blocks.valves.check.BlockCheckValve
-import net.bdew.pressure.fmp.parts.{CheckValvePart, PipePart}
+import net.bdew.pressure.blocks.valves.sensor.BlockPipeSensor
+import net.bdew.pressure.fmp.parts.{CheckValvePart, PipePart, PipeSensorPart}
 import net.bdew.pressure.fmp.traits.TConnectablePart
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayerMP
@@ -42,6 +43,9 @@ object FmpPressureExtension extends IPressureExtension {
       case BlockCheckValve =>
         Some(new CheckValvePart(RotatedHelper.getFacingFromEntity(
           p, BlockCheckValve.getValidFacings, BlockCheckValve.getDefaultFacing)))
+      case BlockPipeSensor =>
+        Some(new PipeSensorPart(RotatedHelper.getFacingFromEntity(
+          p, BlockPipeSensor.getValidFacings, BlockPipeSensor.getDefaultFacing)))
       case _ => None
     }) exists { part =>
       if (TileMultipart.getTile(w, pos) != null && TileMultipart.canPlacePart(w, pos, part)) {

@@ -16,7 +16,8 @@ object FmpHandler {
   def init() {
     MultiPartRegistry.registerParts(FmpFactory, Array(
       "bdew.pressure.pipe",
-      "bdew.pressure.checkvalve"
+      "bdew.pressure.checkvalve",
+      "bdew.pressure.pipesensor"
     ))
     MultiPartRegistry.registerConverter(FmpConverter)
     Helper.registerExtension(FmpPressureExtension)

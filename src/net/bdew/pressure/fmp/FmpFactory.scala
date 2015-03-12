@@ -11,12 +11,13 @@ package net.bdew.pressure.fmp
 
 import codechicken.multipart.MultiPartRegistry.IPartFactory
 import net.bdew.pressure.blocks.valves.check.BlockCheckValve
-import net.bdew.pressure.fmp.parts.{CheckValvePart, PipePart}
+import net.bdew.pressure.fmp.parts.{CheckValvePart, PipePart, PipeSensorPart}
 
 object FmpFactory extends IPartFactory {
   override def createPart(name: String, client: Boolean) = (name, client) match {
     case ("bdew.pressure.pipe", _) => new PipePart
     case ("bdew.pressure.checkvalve", _) => new CheckValvePart(BlockCheckValve.getDefaultFacing)
+    case ("bdew.pressure.pipesensor", _) => new PipeSensorPart(BlockCheckValve.getDefaultFacing)
     case _ => null
   }
 }
