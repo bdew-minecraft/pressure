@@ -22,12 +22,14 @@ trait TDataSlots extends TMultiPart with DataSlotContainer {
   override def getWorldObj = world
 
   override def dataSlotChanged(slot: DataSlot) = {
-    if (slot.updateKind.contains(UpdateKind.GUI))
-      lastChange = getWorldObj.getTotalWorldTime
-    if (slot.updateKind.contains(UpdateKind.WORLD))
-      sendDescUpdate()
-    if (slot.updateKind.contains(UpdateKind.SAVE))
-      tile.markDirty()
+    if (getWorldObj != null) {
+      if (slot.updateKind.contains(UpdateKind.GUI))
+        lastChange = getWorldObj.getTotalWorldTime
+      if (slot.updateKind.contains(UpdateKind.WORLD))
+        sendDescUpdate()
+      if (slot.updateKind.contains(UpdateKind.SAVE))
+        tile.markDirty()
+    }
   }
 
   override def writeDesc(packet: MCDataOutput) = {
