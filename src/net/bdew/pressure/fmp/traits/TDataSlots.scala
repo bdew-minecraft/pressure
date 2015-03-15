@@ -25,7 +25,7 @@ trait TDataSlots extends TMultiPart with DataSlotContainer {
     if (getWorldObj != null) {
       if (slot.updateKind.contains(UpdateKind.GUI))
         lastChange = getWorldObj.getTotalWorldTime
-      if (slot.updateKind.contains(UpdateKind.WORLD))
+      if (slot.updateKind.contains(UpdateKind.WORLD) && !getWorldObj.isRemote)
         sendDescUpdate()
       if (slot.updateKind.contains(UpdateKind.SAVE))
         tile.markDirty()
@@ -40,6 +40,11 @@ trait TDataSlots extends TMultiPart with DataSlotContainer {
 
   override def readDesc(packet: MCDataInput) = {
     doLoad(UpdateKind.WORLD, packet.readNBTTagCompound())
+  }
+
+  override final def update() = {
+    // can't call super here as something (ASM voodoo i guess) eats the synthetic needed to do so
+    serverTick.trigger()
   }
 
   override def save(tag: NBTTagCompound) = doSave(UpdateKind.SAVE, tag)

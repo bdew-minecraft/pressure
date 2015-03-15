@@ -72,3 +72,6 @@ pressure.router.mode.input=Input
 pressure.router.mode.output_low=Output - Low priority
 pressure.router.mode.output_medium=Output - Medium priority
 pressure.router.mode.output_high=Output - High priority
+
+pressure.message.flow.head=Average fluid flow (%s ticks):
+pressure.message.flow.empty=No fluid flowing

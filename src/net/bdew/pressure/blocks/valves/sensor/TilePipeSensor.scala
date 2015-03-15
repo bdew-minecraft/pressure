@@ -10,23 +10,26 @@
 package net.bdew.pressure.blocks.valves.sensor
 
 import net.bdew.lib.block.BlockRef
+import net.bdew.lib.data.base.{TileDataSlots, UpdateKind}
 import net.bdew.pressure.api.{IPressureConnection, IPressureEject, IPressureInject}
+import net.bdew.pressure.misc.DataSlotFluidAverages
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.Block
-import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 import net.minecraftforge.common.util.ForgeDirection
-import net.minecraftforge.fluids.FluidStack
+import net.minecraftforge.fluids.{Fluid, FluidStack}
 
-class TilePipeSensor extends TileEntity with IPressureEject with IPressureInject {
+class TilePipeSensor extends TileDataSlots with IPressureEject with IPressureInject {
   var connection: IPressureConnection = null
   lazy val me = BlockRef.fromTile(this)
+
+  var flowThisTick = Map.empty[Fluid, Double]
+  val averages = DataSlotFluidAverages("flow", this, 50).setUpdate(UpdateKind.SAVE)
 
   var flowTicks = 10L
   var coolDown = 0L
 
-  override def updateEntity(): Unit = {
-    if (worldObj.isRemote) return
+  serverTick.listen { () =>
     coolDown -= 1
     flowTicks += 1
     if (coolDown <= 0) {
@@ -35,6 +38,8 @@ class TilePipeSensor extends TileEntity with IPressureEject with IPressureInject
         BlockPipeSensor.setPowered(worldObj, xCoord, yCoord, zCoord, state)
       coolDown = 10
     }
+    averages.update(flowThisTick)
+    flowThisTick = Map.empty
   }
 
   override def shouldRefresh(oldBlock: Block, newBlock: Block, oldMeta: Int, newMeta: Int, world: World, x: Int, y: Int, z: Int) =
@@ -47,8 +52,11 @@ class TilePipeSensor extends TileEntity with IPressureEject with IPressureInject
       if (connection == null)
         connection = Helper.recalculateConnectionInfo(this, getFacing)
       val res = connection.pushFluid(resource, doEject)
-      if (res > 0)
+      if (res > 0) {
         flowTicks = 0
+        if (doEject)
+          flowThisTick += resource.getFluid -> (flowThisTick.getOrElse(resource.getFluid, 0D) + res)
+      }
       res
     } else 0
   }
@@ -59,5 +67,4 @@ class TilePipeSensor extends TileEntity with IPressureEject with IPressureInject
   override def getYCoord = yCoord
   override def getXCoord = xCoord
   override def getWorld = worldObj
-
 }

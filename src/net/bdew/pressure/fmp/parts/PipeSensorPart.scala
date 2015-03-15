@@ -15,9 +15,13 @@ import net.bdew.lib.data.base.UpdateKind
 import net.bdew.lib.data.{DataSlotBoolean, DataSlotDirection}
 import net.bdew.pressure.api.IPressureInject
 import net.bdew.pressure.blocks.valves.sensor.BlockPipeSensor
+import net.bdew.pressure.misc.DataSlotFluidAverages
 import net.bdew.pressure.pressurenet.Helper
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
+import net.minecraft.util.MovingObjectPosition
 import net.minecraftforge.common.util.ForgeDirection
-import net.minecraftforge.fluids.FluidStack
+import net.minecraftforge.fluids.{Fluid, FluidStack}
 
 class PipeSensorPart(aFacing: ForgeDirection = BlockPipeSensor.getDefaultFacing, aIsPowered: Boolean = false) extends BaseValvePart(BlockPipeSensor, "bdew.pressure.pipesensor") with IRedstonePart {
   def this(meta: Int) = this(Misc.forgeDirection(meta & 7), (meta & 8) == 8)
@@ -27,11 +31,12 @@ class PipeSensorPart(aFacing: ForgeDirection = BlockPipeSensor.getDefaultFacing,
 
   facing.update(aFacing)
 
-  var flowTicks = 10L
-  var coolDown = 0L
+  val averages = DataSlotFluidAverages("flow", this, 50).setUpdate(UpdateKind.SAVE)
+  var flowThisTick = Map.empty[Fluid, Double]
 
-  override def update(): Unit = {
-    if (world.isRemote) return
+  onServerTick(() => {
+    averages.update(flowThisTick)
+    flowThisTick = Map.empty
     coolDown -= 1
     flowTicks += 1
     if (coolDown <= 0) {
@@ -42,15 +47,29 @@ class PipeSensorPart(aFacing: ForgeDirection = BlockPipeSensor.getDefaultFacing,
       }
       coolDown = 10
     }
-  }
+  })
+
+  var flowTicks = 10L
+  var coolDown = 0L
+
+  override def activate(player: EntityPlayer, hit: MovingObjectPosition, item: ItemStack): Boolean =
+    if (!player.isSneaking) {
+      if (!world.isRemote) {
+        BlockPipeSensor.sendAveragesToPlayer(averages, player)
+        true
+      } else true
+    } else false
 
   override def eject(resource: FluidStack, face: ForgeDirection, doEject: Boolean) = {
     if (face == facing.getOpposite && !tile.isSolid(facing.ordinal())) {
       if (outputConnection == null)
         outputConnection = Helper.recalculateConnectionInfo(tile.asInstanceOf[IPressureInject], facing)
       val res = outputConnection.pushFluid(resource, doEject)
-      if (res > 0)
+      if (res > 0) {
         flowTicks = 0
+        if (doEject)
+          flowThisTick += resource.getFluid -> (flowThisTick.getOrElse(resource.getFluid, 0D) + res)
+      }
       res
     } else 0
   }
