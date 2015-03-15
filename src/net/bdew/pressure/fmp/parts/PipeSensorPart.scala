@@ -11,6 +11,7 @@ package net.bdew.pressure.fmp.parts
 
 import codechicken.multipart.IRedstonePart
 import net.bdew.lib.Misc
+import net.bdew.lib.data.base.UpdateKind
 import net.bdew.lib.data.{DataSlotBoolean, DataSlotDirection}
 import net.bdew.pressure.api.IPressureInject
 import net.bdew.pressure.blocks.valves.sensor.BlockPipeSensor
@@ -21,8 +22,8 @@ import net.minecraftforge.fluids.FluidStack
 class PipeSensorPart(aFacing: ForgeDirection = BlockPipeSensor.getDefaultFacing, aIsPowered: Boolean = false) extends BaseValvePart(BlockPipeSensor, "bdew.pressure.pipesensor") with IRedstonePart {
   def this(meta: Int) = this(Misc.forgeDirection(meta & 7), (meta & 8) == 8)
 
-  override val facing: DataSlotDirection = DataSlotDirection("facing", this)
-  override val isPowered: DataSlotBoolean = DataSlotBoolean("state", this, aIsPowered)
+  override val facing = DataSlotDirection("facing", this).setUpdate(UpdateKind.WORLD, UpdateKind.SAVE)
+  override val isPowered = DataSlotBoolean("state", this, aIsPowered).setUpdate(UpdateKind.WORLD, UpdateKind.SAVE)
 
   facing.update(aFacing)
 
@@ -38,8 +39,6 @@ class PipeSensorPart(aFacing: ForgeDirection = BlockPipeSensor.getDefaultFacing,
       if (isPowered.value != state) {
         isPowered := state
         tile.notifyPartChange(this)
-        tile.markDirty()
-        sendDescUpdate()
       }
       coolDown = 10
     }

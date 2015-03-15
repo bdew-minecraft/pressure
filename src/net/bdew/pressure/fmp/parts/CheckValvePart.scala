@@ -10,6 +10,7 @@
 package net.bdew.pressure.fmp.parts
 
 import net.bdew.lib.Misc
+import net.bdew.lib.data.base.UpdateKind
 import net.bdew.lib.data.{DataSlotBoolean, DataSlotDirection}
 import net.bdew.pressure.api.IPressureInject
 import net.bdew.pressure.blocks.valves.check.BlockCheckValve
@@ -20,8 +21,8 @@ import net.minecraftforge.fluids.FluidStack
 class CheckValvePart(aFacing: ForgeDirection = BlockCheckValve.getDefaultFacing, aIsPowered: Boolean = false) extends BaseValvePart(BlockCheckValve, "bdew.pressure.checkvalve") {
   def this(meta: Int) = this(Misc.forgeDirection(meta & 7), (meta & 8) == 8)
 
-  override val facing: DataSlotDirection = DataSlotDirection("facing", this)
-  override val isPowered: DataSlotBoolean = DataSlotBoolean("state", this, aIsPowered)
+  override val facing = DataSlotDirection("facing", this).setUpdate(UpdateKind.WORLD, UpdateKind.SAVE)
+  override val isPowered = DataSlotBoolean("state", this, aIsPowered).setUpdate(UpdateKind.WORLD, UpdateKind.SAVE)
 
   facing.update(aFacing)
 
@@ -38,8 +39,6 @@ class CheckValvePart(aFacing: ForgeDirection = BlockCheckValve.getDefaultFacing,
     if (powered != isPowered.value) {
       isPowered := powered
       tile.notifyPartChange(this)
-      tile.markDirty()
-      sendDescUpdate()
     }
   }
 }
