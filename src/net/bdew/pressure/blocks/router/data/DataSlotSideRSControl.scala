@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.blocks.router.data
 
-import net.bdew.lib.data.base.TileDataSlots
+import net.bdew.lib.data.base.DataSlotContainer
 import net.bdew.lib.multiblock.data.RSMode
 
-case class DataSlotSideRSControl(name: String, parent: TileDataSlots) extends DataSlotDirectionMap(RSMode, RSMode.ALWAYS)
+case class DataSlotSideRSControl(name: String, parent: DataSlotContainer) extends DataSlotDirectionMap(RSMode, RSMode.ALWAYS)

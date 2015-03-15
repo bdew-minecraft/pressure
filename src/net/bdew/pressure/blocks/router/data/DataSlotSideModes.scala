@@ -9,9 +9,9 @@
 
 package net.bdew.pressure.blocks.router.data
 
-import net.bdew.lib.data.base.TileDataSlots
+import net.bdew.lib.data.base.DataSlotContainer
 
-case class DataSlotSideModes(name: String, parent: TileDataSlots) extends DataSlotDirectionMap(RouterSideMode, RouterSideMode.DISABLED) {
+case class DataSlotSideModes(name: String, parent: DataSlotContainer) extends DataSlotDirectionMap(RouterSideMode, RouterSideMode.DISABLED) {
   def sides(mode: RouterSideMode.Value) =
     for ((side, sideMode) <- map if sideMode == mode) yield side
   def sides(modes: Set[RouterSideMode.Value]) =

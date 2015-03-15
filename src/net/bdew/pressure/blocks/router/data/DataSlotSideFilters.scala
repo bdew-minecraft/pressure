@@ -9,12 +9,12 @@
 
 package net.bdew.pressure.blocks.router.data
 
-import net.bdew.lib.data.base.{DataSlot, TileDataSlots, UpdateKind}
+import net.bdew.lib.data.base.{DataSlot, DataSlotContainer, UpdateKind}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidRegistry}
 
-case class DataSlotSideFilters(name: String, parent: TileDataSlots) extends DataSlot {
+case class DataSlotSideFilters(name: String, parent: DataSlotContainer) extends DataSlot {
   var map = Map.empty[ForgeDirection, Fluid]
 
   def get(d: ForgeDirection) = map(d)
