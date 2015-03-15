@@ -11,11 +11,10 @@ package net.bdew.pressure.fmp.parts
 
 import java.util
 
-import codechicken.lib.data.{MCDataInput, MCDataOutput}
 import codechicken.lib.vec.Vector3
 import codechicken.multipart.{TCuboidPart, TMultiPart, TNormalOcclusion}
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.bdew.lib.Misc
+import net.bdew.lib.data.{DataSlotBoolean, DataSlotDirection}
 import net.bdew.pressure.api.IPressureConnection
 import net.bdew.pressure.blocks.valves.BlockValve
 import net.bdew.pressure.fmp.FmpUtils
@@ -23,20 +22,19 @@ import net.bdew.pressure.fmp.traits._
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.client.renderer.RenderBlocks
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.MovingObjectPosition
 import net.minecraftforge.common.util.ForgeDirection
 
-abstract class BaseValvePart(val block: BlockValve, id: String) extends TCuboidPart with TNormalOcclusion with TBlockAccessPart with TConnectablePart with TInjectPart with TEjectPart {
-  var facing: ForgeDirection
-  var isPowered: Boolean
+abstract class BaseValvePart(val block: BlockValve, id: String) extends TCuboidPart with TDataSlots with TNormalOcclusion with TBlockAccessPart with TConnectablePart with TInjectPart with TEjectPart {
+  val facing: DataSlotDirection
+  val isPowered: DataSlotBoolean
 
   override def getType = id
 
   // ==== PRESSURE NET ====
 
   override def canConnectTo(side: ForgeDirection) =
-    (side == facing || side == facing.getOpposite) && !tile.isSolid(side.ordinal())
+    (side == facing.value || side == facing.getOpposite) && !tile.isSolid(side.ordinal())
 
   override def isTraversable = false
 
@@ -71,27 +69,5 @@ abstract class BaseValvePart(val block: BlockValve, id: String) extends TCuboidP
       new RenderBlocks(new PartBlockAccess(this)).renderBlockByRenderType(block, x, y, z)
       true
     } else false
-  }
-
-  // ==== SERIALIZATION ====
-
-  override def save(tag: NBTTagCompound) = {
-    tag.setInteger("facing", facing.ordinal())
-    tag.setBoolean("state", isPowered)
-  }
-
-  override def load(tag: NBTTagCompound) = {
-    facing = Misc.forgeDirection(tag.getInteger("facing"))
-    isPowered = tag.getBoolean("state")
-  }
-
-  override def writeDesc(packet: MCDataOutput) = {
-    packet.writeInt(facing.ordinal())
-    packet.writeBoolean(isPowered)
-  }
-
-  override def readDesc(packet: MCDataInput) = {
-    facing = Misc.forgeDirection(packet.readInt())
-    isPowered = packet.readBoolean()
   }
 }
