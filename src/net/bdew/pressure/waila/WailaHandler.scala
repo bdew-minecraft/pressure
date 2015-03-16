@@ -17,17 +17,22 @@ import net.bdew.pressure.blocks.input.TileInput
 import net.bdew.pressure.blocks.output.TileOutput
 import net.bdew.pressure.blocks.pump.TilePump
 import net.bdew.pressure.blocks.tank.controller.TileTankController
+import net.bdew.pressure.blocks.valves.BlockValve
+import net.bdew.pressure.blocks.valves.sensor.TilePipeSensor
 
 object WailaHandler {
   def loadCallback(reg: IWailaRegistrar) {
     Pressure.logInfo("WAILA callback received, loading...")
     reg.registerNBTProvider(WailaTankProvider, classOf[TileTankController])
     reg.registerNBTProvider(WailaTankModuleProvider, classOf[TileModule])
+    reg.registerNBTProvider(WailaPipeSensorHandler, classOf[TilePipeSensor])
     reg.registerBodyProvider(WailaTankProvider, classOf[TileTankController])
     reg.registerBodyProvider(WailaTankModuleProvider, classOf[TileModule])
     reg.registerBodyProvider(WailaFilterableHandler, classOf[TileFilterable])
     reg.registerBodyProvider(WailaPumpHandler, classOf[TilePump])
     reg.registerBodyProvider(WailaPressureOutputHandler, classOf[TileOutput])
     reg.registerBodyProvider(WailaPressureInputHandler, classOf[TileInput])
+    reg.registerBodyProvider(WailaValveHandler, classOf[BlockValve])
+    reg.registerBodyProvider(WailaPipeSensorHandler, classOf[TilePipeSensor])
   }
 }

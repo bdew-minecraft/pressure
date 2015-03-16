@@ -66,6 +66,8 @@ object Pressure {
     NetworkRegistry.INSTANCE.registerGuiHandler(this, Config.guiHandler)
     TuningLoader.loadDelayed()
     FMLInterModComms.sendMessage("Waila", "register", "net.bdew.pressure.waila.WailaHandler.loadCallback")
+    if (Misc.haveModVersion("ForgeMultipart"))
+      FMLInterModComms.sendMessage("Waila", "register", "net.bdew.pressure.fmp.waila.FMPWailaHandler.loadCallback")
     NetworkHandler.init()
   }
 

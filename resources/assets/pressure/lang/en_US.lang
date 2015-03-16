@@ -39,6 +39,8 @@ pressure.waila.side.output=Output to this side
 pressure.waila.side.pressure=Side connects to Pressure system
 pressure.waila.side.fluid=Side connects to pipes/tanks
 pressure.waila.side.nothing=Side has no connections
+pressure.waila.valve.open=Valve Open
+pressure.waila.valve.closed=Valve Closed
 
 pressure.module.TankBlock.name=Tank Block
 
@@ -74,4 +76,5 @@ pressure.router.mode.output_medium=Output - Medium priority
 pressure.router.mode.output_high=Output - High priority
 
 pressure.message.flow.head=Average fluid flow (%s ticks):
+pressure.message.flow.unknown=Fluid is flowing
 pressure.message.flow.empty=No fluid flowing

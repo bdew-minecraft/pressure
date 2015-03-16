@@ -32,7 +32,62 @@ case class DataSlotFluidAverages(name: String, parent: DataSlotContainer, size: 
     parent.dataSlotChanged(this)
   }
 
-  def getAverages: Map[Fluid, Double] = {
+  def getAverages = DataSlotFluidAverages.getAverages(values)
+
+  override def save(t: NBTTagCompound, kind: UpdateKind.Value) = {
+    if (values.size > 0)
+      t.setByteArray(name, DataSlotFluidAverages.serializeAverages(values))
+  }
+
+  override def load(t: NBTTagCompound, kind: UpdateKind.Value) = {
+    reset()
+    val bytes = t.getByteArray(name)
+    if (bytes.size > 0) {
+      values ++= DataSlotFluidAverages.unSerializeAverages(bytes)
+    }
+  }
+}
+
+object DataSlotFluidAverages {
+  def serializeAverages(values: Seq[Map[Fluid, Double]]) = {
+    val stream = new ByteArrayOutputStream()
+    val output = new DataOutputStream(stream)
+    output.writeInt(values.size)
+    for (map <- values) {
+      output.writeInt(map.size)
+      for ((fluid, amount) <- map) {
+        output.writeUTF(fluid.getName)
+        output.writeDouble(amount)
+      }
+    }
+    stream.toByteArray
+  }
+
+  def unSerializeAverages(bytes: Array[Byte]) = {
+    try {
+      val stream = new ByteArrayInputStream(bytes)
+      val input = new DataInputStream(stream)
+      val queueSize = input.readInt()
+      for (i <- 0 until queueSize) yield {
+        val mapSize = input.readInt()
+        val map = for (j <- 0 until mapSize) yield {
+          val name = input.readUTF()
+          val amount = input.readDouble()
+          if (FluidRegistry.isFluidRegistered(name))
+            Some(FluidRegistry.getFluid(name) -> amount)
+          else
+            None
+        }
+        map.flatten.toMap
+      }
+    } catch {
+      case e: Throwable =>
+        Pressure.logErrorException("Failed loading FluidAverages data", e)
+        List.empty
+    }
+  }
+
+  def getAverages(values: Seq[Map[Fluid, Double]]): Map[Fluid, Double] = {
     val sums = mutable.Map.empty[Fluid, Double].withDefaultValue(0)
     val len = values.size
     if (len > 0) {
@@ -44,47 +99,5 @@ case class DataSlotFluidAverages(name: String, parent: DataSlotContainer, size: 
       }
       sums.toMap.mapValues(_ / len)
     } else Map.empty
-  }
-
-  override def save(t: NBTTagCompound, kind: UpdateKind.Value) = {
-    if (values.size > 0) {
-      val stream = new ByteArrayOutputStream()
-      val output = new DataOutputStream(stream)
-      output.writeInt(values.size)
-      for (map <- values) {
-        output.writeInt(map.size)
-        for ((fluid, amount) <- map) {
-          output.writeUTF(fluid.getName)
-          output.writeDouble(amount)
-        }
-      }
-      t.setByteArray(name, stream.toByteArray)
-    }
-  }
-
-  override def load(t: NBTTagCompound, kind: UpdateKind.Value) = {
-    reset()
-    try {
-      val bytes = t.getByteArray(name)
-      if (bytes.size > 0) {
-        val stream = new ByteArrayInputStream(bytes)
-        val input = new DataInputStream(stream)
-        val queueSize = input.readInt()
-        for (i <- 0 until queueSize) {
-          val mapSize = input.readInt()
-          val map = for (j <- 0 until mapSize) yield {
-            val name = input.readUTF()
-            val amount = input.readDouble()
-            if (FluidRegistry.isFluidRegistered(name))
-              Some(FluidRegistry.getFluid(name) -> amount)
-            else
-              None
-          }
-          values += map.flatten.toMap
-        }
-      }
-    } catch {
-      case e: Throwable => Pressure.logErrorException("Failed loading FluidAverages data", e)
-    }
   }
 }
