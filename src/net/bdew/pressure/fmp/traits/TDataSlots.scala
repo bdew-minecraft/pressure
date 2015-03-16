@@ -44,7 +44,8 @@ trait TDataSlots extends TMultiPart with DataSlotContainer {
 
   override final def update() = {
     // can't call super here as something (ASM voodoo i guess) eats the synthetic needed to do so
-    serverTick.trigger()
+    if (world != null && !world.isRemote)
+      serverTick.trigger()
   }
 
   override def save(tag: NBTTagCompound) = doSave(UpdateKind.SAVE, tag)
