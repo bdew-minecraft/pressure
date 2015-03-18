@@ -19,13 +19,13 @@ trait TDataSlots extends TMultiPart with DataSlotContainer {
   val serverTick = Event()
 
   override def onServerTick(f: () => Unit) = serverTick.listen(f)
-  override def getWorldObj = world
+  override def getWorldObject = world
 
   override def dataSlotChanged(slot: DataSlot) = {
-    if (getWorldObj != null) {
+    if (getWorldObject != null) {
       if (slot.updateKind.contains(UpdateKind.GUI))
-        lastChange = getWorldObj.getTotalWorldTime
-      if (slot.updateKind.contains(UpdateKind.WORLD) && !getWorldObj.isRemote)
+        lastChange = getWorldObject.getTotalWorldTime
+      if (slot.updateKind.contains(UpdateKind.WORLD) && !getWorldObject.isRemote)
         sendDescUpdate()
       if (slot.updateKind.contains(UpdateKind.SAVE))
         tile.markDirty()
