@@ -10,16 +10,17 @@
 package net.bdew.pressure.blocks.valves
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.block.SimpleBlock
 import net.bdew.lib.rotate.{BaseRotatableBlock, IconType}
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.bdew.pressure.blocks.BlockNotifyUpdates
 import net.bdew.pressure.render.ValveRenderer
-import net.minecraft.block.Block
+import net.minecraft.block.material.Material
 import net.minecraft.util.IIcon
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
 
-trait BlockValve extends Block with BaseRotatableBlock with IPressureConnectableBlock with BlockNotifyUpdates {
+class BlockValve(name: String) extends SimpleBlock(name, Material.iron) with BaseRotatableBlock with IPressureConnectableBlock with BlockNotifyUpdates {
   // ==== BLOCK SETTINGS ====
 
   override def getRenderType = ValveRenderer.id

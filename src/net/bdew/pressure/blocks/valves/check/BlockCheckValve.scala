@@ -10,16 +10,15 @@
 package net.bdew.pressure.blocks.valves.check
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.bdew.lib.block.{HasTE, SimpleBlock}
+import net.bdew.lib.block.HasTE
 import net.bdew.pressure.blocks.valves.BlockValve
 import net.minecraft.block.Block
-import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 
-object BlockCheckValve extends SimpleBlock("CheckValve", Material.iron) with HasTE[TileCheckValve] with BlockValve {
+object BlockCheckValve extends BlockValve("CheckValve") with HasTE[TileCheckValve] {
   override val TEClass = classOf[TileCheckValve]
 
   setHardness(2)
