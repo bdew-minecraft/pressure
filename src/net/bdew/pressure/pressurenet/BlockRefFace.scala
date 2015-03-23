@@ -12,6 +12,8 @@ package net.bdew.pressure.pressurenet
 import net.bdew.lib.block.BlockRef
 import net.minecraftforge.common.util.ForgeDirection
 
+import scala.language.implicitConversions
+
 case class BlockRefFace(block: BlockRef, face: ForgeDirection) {
   override def toString = "(x=%d y=%d z=%d %s)".format(block.x, block.y, block.z, face)
 }
