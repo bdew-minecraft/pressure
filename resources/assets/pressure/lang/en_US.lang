@@ -19,6 +19,7 @@ tile.pressure.TankPressureOutput.name=Tank Pressure Outlet
 tile.pressure.TankIndicator.name=Tank Indicator Block
 tile.pressure.TankInterface.name=Tank Interface
 tile.pressure.TankFilter.name=Tank Fluid Filter
+tile.pressure.Sensor.name=Tank Sensor
 
 item.pressure.Debugger.name=Pressure System Debugger
 item.pressure.Interface.name=Pressure System Interface
@@ -49,6 +50,7 @@ pressure.gui.tank.filter=Will only accept %s
 pressure.gui.tank.nofilter=Will accept all fluids
 pressure.gui.tank.filter.tip1=Click with any fluid container to set filter
 pressure.gui.tank.filter.tip2=Click with empty cursor to remove filter
+pressure.gui.sensor.title=Tank Sensor Configuration
 
 pressure.gui.router.title=Router Configuration
 
@@ -78,3 +80,19 @@ pressure.router.mode.output_high=Output - High priority
 pressure.message.flow.head=Average fluid flow (%s ticks):
 pressure.message.flow.unknown=Fluid is flowing
 pressure.message.flow.empty=No fluid flowing
+
+pressure.sensor.on=Signal on
+pressure.sensor.off=Signal off
+
+pressure.sensor.disabled=Disabled
+pressure.sensor.param.disabled=Disabled
+
+pressure.sensor.tank=Tank fill
+
+pressure.sensor.param.fill.empty=Empty
+pressure.sensor.param.fill.not.empty=Not empty
+pressure.sensor.param.fill.gt25=Over 25% full
+pressure.sensor.param.fill.gt50=Over 50% full
+pressure.sensor.param.fill.gt75=Over 75% full
+pressure.sensor.param.fill.full=Full
+pressure.sensor.param.fill.not.full=Not full

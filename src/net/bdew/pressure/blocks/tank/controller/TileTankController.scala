@@ -15,15 +15,17 @@ import net.bdew.lib.data.{DataSlotInventory, DataSlotString, DataSlotTank}
 import net.bdew.lib.items.ItemUtils
 import net.bdew.lib.multiblock.interact.{CIFluidInput, CIFluidOutput, CIOutputFaces}
 import net.bdew.lib.multiblock.tile.TileControllerGui
+import net.bdew.lib.sensors.multiblock.CIRedstoneSensors
 import net.bdew.pressure.blocks.tank.blocks.TileTankIndicator
 import net.bdew.pressure.blocks.tank.{CIFilterable, MachineTank, ModuleNeedsRenderUpdate}
 import net.bdew.pressure.config.Modules
+import net.bdew.pressure.sensor.Sensors
 import net.bdew.pressure.{Pressure, PressureResourceProvider}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids._
 
-class TileTankController extends TileControllerGui with CIFluidInput with CIOutputFaces with CIFluidOutput with CIFilterable {
+class TileTankController extends TileControllerGui with CIFluidInput with CIOutputFaces with CIFluidOutput with CIFilterable with CIRedstoneSensors {
   val cfg = MachineTank
 
   val resources = PressureResourceProvider
@@ -102,7 +104,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
           inventory.decrStackSize(0, 1)
           doEjectItem(filled)
         }
-      } else Misc.asInstanceOpt(inStack.getItem, classOf[IFluidContainerItem]) map { inCont =>
+      } else Misc.asInstanceOpt(inStack.getItem, classOf[IFluidContainerItem]) foreach { inCont =>
         // Its a fluid container, figure out what to do with it
         // Operating on a stack makes no sense, grab a single item
         val remStack = inStack.copy()
@@ -207,4 +209,6 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
       null
     else
       tank.drain(amount, doDrain)
+
+  override def sensorTypes = Sensors.tankSensors
 }

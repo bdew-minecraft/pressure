@@ -17,6 +17,7 @@ import net.bdew.pressure.blocks.output.BlockOutput
 import net.bdew.pressure.blocks.pump.BlockPump
 import net.bdew.pressure.blocks.source.BlockWaterSource
 import net.bdew.pressure.blocks.tank.blocks._
+import net.bdew.pressure.blocks.tank.sensor.BlockSensor
 import net.bdew.pressure.blocks.valves.check.BlockCheckValve
 import net.bdew.pressure.blocks.valves.sensor.BlockPipeSensor
 import net.bdew.pressure.misc.PressureCreativeTabs
@@ -44,4 +45,6 @@ object Blocks extends BlockManager(PressureCreativeTabs.main) {
 
   regBlock(BlockTankInterface)
   regBlock(BlockTankFilter)
+
+  regBlock(BlockSensor)
 }
