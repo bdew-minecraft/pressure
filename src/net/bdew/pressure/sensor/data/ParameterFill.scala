@@ -11,7 +11,7 @@ package net.bdew.pressure.sensor.data
 
 import net.bdew.pressure.sensor.{Icons, Sensors}
 
-case class ParameterFill(uid: String, iconName: String, test: (Double, Double) => Boolean) extends Sensors.SensorParameter with Icons.Loader
+case class ParameterFill(uid: String, iconName: String, test: (Double, Double) => Boolean) extends Sensors.SimpleParameter with Icons.Loader
 
 object ParameterFill {
   val empty = ParameterFill("fill.empty", "fillEmpty", (n, c) => n <= 0)

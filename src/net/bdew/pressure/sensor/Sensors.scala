@@ -22,6 +22,7 @@ object Sensors extends RedstoneSensors[TileEntity] {
 
   val tankSensors = List(
     DisabledSensor,
-    SensorTank[TileTankController]("tank", "tank", _.tank)
+    SensorTank[TileTankController]("tank", "tank", _.tank),
+    SensorOutputFlow("flow", "flow")
   )
 }

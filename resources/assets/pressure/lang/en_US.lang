@@ -88,6 +88,7 @@ pressure.sensor.disabled=Disabled
 pressure.sensor.param.disabled=Disabled
 
 pressure.sensor.tank=Tank fill
+pressure.sensor.flow=Output module is active
 
 pressure.sensor.param.fill.empty=Empty
 pressure.sensor.param.fill.not.empty=Not empty
