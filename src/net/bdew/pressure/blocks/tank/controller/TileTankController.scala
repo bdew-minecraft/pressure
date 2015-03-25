@@ -15,6 +15,7 @@ import net.bdew.lib.data.{DataSlotInventory, DataSlotString, DataSlotTank}
 import net.bdew.lib.items.ItemUtils
 import net.bdew.lib.multiblock.interact.{CIFluidInput, CIFluidOutput, CIOutputFaces}
 import net.bdew.lib.multiblock.tile.TileControllerGui
+import net.bdew.lib.sensors.SensorSystem
 import net.bdew.lib.sensors.multiblock.CIRedstoneSensors
 import net.bdew.pressure.blocks.tank.blocks.TileTankIndicator
 import net.bdew.pressure.blocks.tank.{CIFilterable, MachineTank, ModuleNeedsRenderUpdate}
@@ -23,6 +24,7 @@ import net.bdew.pressure.sensor.Sensors
 import net.bdew.pressure.{Pressure, PressureResourceProvider}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
+import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fluids._
 
 class TileTankController extends TileControllerGui with CIFluidInput with CIOutputFaces with CIFluidOutput with CIFilterable with CIRedstoneSensors {
@@ -210,5 +212,6 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
     else
       tank.drain(amount, doDrain)
 
-  override def sensorTypes = Sensors.tankSensors
+  override def redstoneSensorSystem: SensorSystem[TileEntity, Boolean] = Sensors
+  override def redstoneSensorsType = Sensors.tankSensors
 }
