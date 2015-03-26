@@ -15,7 +15,7 @@ import net.bdew.pressure.blocks.drain.BlockDrain
 import net.bdew.pressure.blocks.input.BlockInput
 import net.bdew.pressure.blocks.output.BlockOutput
 import net.bdew.pressure.blocks.pump.BlockPump
-import net.bdew.pressure.blocks.source.BlockWaterSource
+import net.bdew.pressure.blocks.source.{BlockCreativeSource, BlockWaterSource}
 import net.bdew.pressure.blocks.tank.blocks._
 import net.bdew.pressure.blocks.tank.sensor.BlockSensor
 import net.bdew.pressure.blocks.valves.check.BlockCheckValve
@@ -31,6 +31,7 @@ object Blocks extends BlockManager(PressureCreativeTabs.main) {
   regBlock(BlockOutput, "Output")
   regBlock(BlockInput, "Input")
   regBlock(BlockWaterSource, "Water")
+  regBlock(BlockCreativeSource, "Creative")
   regBlock(BlockDrain, "Drain")
 
   regBlock(BlockTankBlock)

@@ -3,6 +3,7 @@ tile.pressure.output.name=High Pressure Output
 tile.pressure.pipe.name=High Pressure Pipe
 tile.pressure.pump.name=High Pressure Pump
 tile.pressure.water.name=Infinite Water Source
+tile.pressure.creative.name=Creative Fluid Source
 tile.pressure.drain.name=Fluid Drain
 
 tile.pressure.Router.name=High Pressure Router
