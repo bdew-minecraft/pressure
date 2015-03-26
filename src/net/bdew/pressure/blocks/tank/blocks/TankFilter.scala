@@ -17,7 +17,7 @@ import net.bdew.lib.render.connected.ConnectedRenderer
 import net.bdew.pressure.blocks.tank.controller.TileTankController
 import net.bdew.pressure.blocks.tank.{BaseModule, MIFilterable, ModuleNeedsRenderUpdate}
 import net.bdew.pressure.items.configurator.ItemConfigurator
-import net.bdew.pressure.render.RotatedFilterableBlockRenderer
+import net.bdew.pressure.render.FilterableBlockRenderer
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.{RenderBlocks, Tessellator}
 import net.minecraft.entity.player.EntityPlayer
@@ -51,7 +51,7 @@ object TankFilterRenderer extends BaseBlockRenderHandler {
       if block.shouldSideBeRendered(world, x + face.offsetX, y + face.offsetY, z + face.offsetZ, face.ordinal())
     } {
       Tessellator.instance.setColorOpaque_I(Misc.getFluidColor(fluid))
-      RotatedFilterableBlockRenderer.filterIconDraw(face).doDraw(Vec3F(x, y, z), Misc.getFluidIcon(fluid))
+      FilterableBlockRenderer.filterIconDraw(face).doDraw(Vec3F(x, y, z), Misc.getFluidIcon(fluid))
       Tessellator.instance.setColorOpaque_F(1, 1, 1)
     }
     true

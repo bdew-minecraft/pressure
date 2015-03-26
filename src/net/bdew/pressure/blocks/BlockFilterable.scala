@@ -12,14 +12,14 @@ package net.bdew.pressure.blocks
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.Misc
 import net.bdew.lib.block.HasTE
-import net.bdew.lib.rotate.{BaseRotatableBlock, IconType}
+import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ChatComponentTranslation
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{FluidContainerRegistry, FluidRegistry, IFluidContainerItem}
 
-trait BlockFilterable[T <: TileFilterable] extends BaseRotatableBlock with HasTE[T] {
+trait BlockFilterable[T <: TileFilterable] extends Block with HasTE[T] {
   override def onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, meta: Int, xOffs: Float, yOffs: Float, zOffs: Float): Boolean = {
     if (!player.isSneaking && player.getCurrentEquippedItem != null) {
       val item = player.getCurrentEquippedItem
@@ -49,9 +49,11 @@ trait BlockFilterable[T <: TileFilterable] extends BaseRotatableBlock with HasTE
     } else false
   }
 
+  def shouldShowFilterIconOnSide(w: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection): Boolean
+
   @SideOnly(Side.CLIENT)
   def getFilterIcon(w: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
-    if (IconType.fromSideAndDir(side.ordinal(), getFacing(w, x, y, z)) == IconType.SIDE)
+    if (shouldShowFilterIconOnSide(w, x, y, z, side))
       for {
         name <- Option(getTE(w, x, y, z).fluidFilter.value)
         fluid <- Option(FluidRegistry.getFluid(name))

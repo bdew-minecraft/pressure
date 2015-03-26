@@ -12,7 +12,7 @@ package net.bdew.pressure.blocks
 import net.bdew.lib.data.DataSlotString
 import net.bdew.lib.data.base.{TileDataSlots, UpdateKind}
 import net.bdew.pressure.api.IFilterable
-import net.minecraftforge.fluids.{Fluid, FluidStack}
+import net.minecraftforge.fluids.{Fluid, FluidRegistry, FluidStack}
 
 trait TileFilterable extends TileDataSlots with IFilterable {
   val fluidFilter = new DataSlotString("fluidFilter", this).setUpdate(UpdateKind.SAVE, UpdateKind.WORLD, UpdateKind.RENDER)
@@ -25,4 +25,10 @@ trait TileFilterable extends TileDataSlots with IFilterable {
 
   override def setFluidFilter(fluid: Fluid) = fluidFilter := (if (fluid == null) null else fluid.getName)
   override def clearFluidFilter() = fluidFilter := null
+
+  def getFluidFilter =
+    if ((fluidFilter :!= null) && FluidRegistry.isFluidRegistered(fluidFilter))
+      Option(FluidRegistry.getFluid(fluidFilter))
+    else
+      None
 }
