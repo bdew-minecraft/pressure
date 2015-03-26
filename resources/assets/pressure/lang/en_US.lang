@@ -89,6 +89,10 @@ pressure.sensor.param.disabled=Disabled
 
 pressure.sensor.tank=Tank fill
 pressure.sensor.flow=Output module is active
+pressure.sensor.fluid=Fluid type
+
+pressure.sensor.fluid.tip.unset=Click with any fluid container to set fluid
+pressure.sensor.fluid.tip.set=Click with empty cursor to clear fluid
 
 pressure.sensor.param.fill.empty=Empty
 pressure.sensor.param.fill.not.empty=Not empty

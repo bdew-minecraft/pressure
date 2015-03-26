@@ -32,4 +32,5 @@ object Icons extends IconPreloader(1) {
   val fill50 = TextureLoc("pressure:sensor/fill_50")
   val fill75 = TextureLoc("pressure:sensor/fill_75")
   val flow = TextureLoc("pressure:sensor/flow")
+  val fluid = TextureLoc("pressure:sensor/fluid")
 }

@@ -12,7 +12,7 @@ package net.bdew.pressure.sensor
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.sensors.RedstoneSensors
 import net.bdew.pressure.blocks.tank.controller.TileTankController
-import net.bdew.pressure.sensor.data.SensorTank
+import net.bdew.pressure.sensor.data.{SensorFluidType, SensorTank}
 import net.minecraft.tileentity.TileEntity
 
 object Sensors extends RedstoneSensors[TileEntity] {
@@ -23,6 +23,7 @@ object Sensors extends RedstoneSensors[TileEntity] {
   val tankSensors = List(
     DisabledSensor,
     SensorTank[TileTankController]("tank", "tank", _.tank),
-    SensorOutputFlow("flow", "flow")
+    SensorOutputFlow("flow", "flow"),
+    SensorFluidType[TileTankController]("fluid", "fluid", _.tank)
   )
 }
