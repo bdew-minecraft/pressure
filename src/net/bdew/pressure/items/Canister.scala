@@ -45,13 +45,22 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
           if (FluidRegistry.getFluid(fluid.getName) != fluid) {
             Pressure.logError("Fluid %s is not registered correctly (%s <=> %s)", id, fluid, FluidRegistry.getFluid(fluid.getName))
             None
+          } else if (!FluidRegistry.isFluidRegistered(fluid)) {
+            Pressure.logError("Forge claims fluid '%s' is not registered after returning it from getRegisteredFluids", fluid.getName)
+            None
           } else {
-            val tag = new NBTTagCompound
-            val fStack = new FluidStack(fluid, capacity)
-            fStack.writeToNBT(tag)
-            val item = new ItemStack(this)
-            item.setTagCompound(tag)
-            Some(item)
+            try {
+              val tag = new NBTTagCompound
+              val fStack = new FluidStack(fluid, capacity)
+              fStack.writeToNBT(tag)
+              val item = new ItemStack(this)
+              item.setTagCompound(tag)
+              Some(item)
+            } catch {
+              case e: Throwable =>
+                Pressure.logErrorException("Exception while creating canister for fluid '%s'", e, fluid.getName)
+                None
+            }
           }
         }
       )

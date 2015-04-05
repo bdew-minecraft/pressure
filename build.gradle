@@ -22,7 +22,7 @@ buildscript {
 apply plugin: 'scala'
 apply plugin: 'forge'
 
-version = "1.1.0"
+version = "1.1.1"
 ext.bdlibver = "1.7.0.70"
 ext.apiVer = version
 ext.versuffix = "mc1710"
@@ -42,7 +42,6 @@ minecraft {
     replace("PRESSURE_VER", project.version)
     replace("PRESSURE_APIVER", project.apiVer)
 }
-
 
 repositories {
     mavenCentral()
