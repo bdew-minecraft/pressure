@@ -73,7 +73,7 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
   def drain(stack: ItemStack, max: Int, doDrain: Boolean): FluidStack = {
     val fl = getFluid(stack)
     if (fl == null) return null
-    val ns = new FluidStack(fl.fluidID, Misc.clamp(fl.amount, 0, max))
+    val ns = new FluidStack(fl, Misc.clamp(fl.amount, 0, max))
     if (doDrain) {
       fl.amount -= ns.amount
       val nbt = new NBTTagCompound()
