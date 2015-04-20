@@ -22,26 +22,34 @@ buildscript {
 apply plugin: 'scala'
 apply plugin: 'forge'
 
-version = "1.1.1"
-ext.bdlibver = "1.7.0.70"
-ext.apiVer = version
-ext.versuffix = "mc1710"
+file "build.properties" withReader {
+    def prop = new Properties()
+    prop.load(it)
+    ext.config = new ConfigSlurper().parse prop
+}
+
+if (project.hasProperty('forgeOverride')) {
+    config.forge.version = forgeOverride
+}
 
 if (project.hasProperty('buildnum')) {
-    project.version = project.version + '.' + project.buildnum
+    ext.simpleVersion = "${config.pressure.version}.${project.buildnum}"
 } else {
-    project.version = project.version + '-DEV'
+    ext.simpleVersion = "${config.pressure.version}-DEV"
 }
+
+version = simpleVersion + '-mc' + config.minecraft.version
 
 group = "net.bdew"
 archivesBaseName = "pressure"
 
 minecraft {
-    version = "1.7.10-10.13.2.1291"
-    replace("BDLIB_VER", project.bdlibver)
-    replace("PRESSURE_VER", project.version)
-    replace("PRESSURE_APIVER", project.apiVer)
+    version = "${config.minecraft.version}-${config.forge.version}"
+    replace("BDLIB_VER", config.bdlib.version)
+    replace("PRESSURE_VER", simpleVersion.toString())
+    replace("PRESSURE_APIVER", simpleVersion.toString())
 }
+
 
 repositories {
     mavenCentral()
@@ -60,11 +68,12 @@ repositories {
 }
 
 dependencies {
-    compile "codechicken:CodeChickenLib:1.7.10-1.1.1.110:dev"
-    compile "codechicken:CodeChickenCore:1.7.10-1.0.4.29:dev"
-    compile "codechicken:ForgeMultipart:1.7.10-1.1.1.320:dev"
-    compile "mcp.mobius.waila:Waila:1.5.9_1.7.10"
-    compile "net.bdew:bdlib:" + bdlibver
+    compile "net.bdew:bdlib:${config.bdlib.version}-mc${config.minecraft.version}:dev"
+    compile "codechicken:NotEnoughItems:${config.minecraft.version}-${config.nei.version}:dev"
+    compile "codechicken:CodeChickenLib:${config.minecraft.version}-${config.ccl.version}:dev"
+    compile "codechicken:CodeChickenCore:${config.minecraft.version}-${config.ccc.version}:dev"
+    compile "codechicken:ForgeMultipart:${config.minecraft.version}-${config.fmp.version}:dev"
+    compile "mcp.mobius.waila:Waila:${config.waila.version}_${config.minecraft.version}"
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -105,18 +114,18 @@ task apiJar(type: Jar, dependsOn: 'classes') {
 
 
 task sourceJar(type: Jar) {
+    classifier "sources"
 }
 
 task deobfJar(type: Jar) {
     from sourceSets.main.output
-
+    classifier "dev"
     duplicatesStrategy "exclude"
     exclude "**/*.psd"
 }
 
 jar {
     exclude "**/*.psd"
-    appendix = project.versuffix
 }
 
 afterEvaluate { project ->
@@ -139,11 +148,7 @@ publishing {
     publications {
         maven(MavenPublication) {
             artifact deobfJar
-
-            artifact sourceJar {
-                classifier "sources"
-            }
-
+            artifact sourceJar
             artifact apiJar
         }
     }
