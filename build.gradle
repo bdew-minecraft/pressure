@@ -73,7 +73,10 @@ dependencies {
     compile "codechicken:CodeChickenLib:${config.minecraft.version}-${config.ccl.version}:dev"
     compile "codechicken:CodeChickenCore:${config.minecraft.version}-${config.ccc.version}:dev"
     compile "codechicken:ForgeMultipart:${config.minecraft.version}-${config.fmp.version}:dev"
-    compile "mcp.mobius.waila:Waila:${config.waila.version}_${config.minecraft.version}"
+
+    compile module("mcp.mobius.waila:Waila:${config.waila.version}_${config.minecraft.version}") {
+        transitive = false // WAILA is depending on an invalid combination of CCC/NEI that doesn't run...
+    }
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -157,4 +160,18 @@ publishing {
             url "file://var/www/maven"
         }
     }
+}
+
+apply plugin: 'curseforge'
+
+curse {
+    projectId = config.curseforge.id
+    apiKey = project.hasProperty("curseForgeApiKey") ? project.curseForgeApiKey : ""
+    releaseType = 'alpha'
+
+    artifact = jar
+    changelog = project.hasProperty("changelog") ? project.changelog : "No changelog available"
+
+    additionalArtifact deobfJar
+    additionalArtifact sourceJar
 }
