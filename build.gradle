@@ -174,4 +174,8 @@ curse {
 
     additionalArtifact deobfJar
     additionalArtifact sourceJar
+
+    relatedProject 'bdlib': 'requiredLibrary'
+    relatedProject 'notenoughitems': 'optionalLibrary'
+    relatedProject 'waila': 'optionalLibrary'
 }
