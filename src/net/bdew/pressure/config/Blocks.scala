@@ -9,6 +9,7 @@
 
 package net.bdew.pressure.config
 
+import net.bdew.lib.Misc
 import net.bdew.lib.config.BlockManager
 import net.bdew.pressure.blocks._
 import net.bdew.pressure.blocks.drain.BlockDrain
@@ -48,4 +49,8 @@ object Blocks extends BlockManager(PressureCreativeTabs.main) {
   regBlock(BlockTankFilter)
 
   regBlock(BlockSensor)
+
+  if (Misc.haveModVersion("ComputerCraft")) {
+    regBlock(BlockDataport)
+  }
 }
