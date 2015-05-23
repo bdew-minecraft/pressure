@@ -20,6 +20,7 @@ tile.pressure.TankPressureOutput.name=Tank Pressure Outlet
 tile.pressure.TankIndicator.name=Tank Indicator Block
 tile.pressure.TankInterface.name=Tank Interface
 tile.pressure.TankFilter.name=Tank Fluid Filter
+tile.pressure.TankDataPort.name=Tank Data Port
 tile.pressure.Sensor.name=Tank Sensor
 
 item.pressure.Debugger.name=Pressure System Debugger

@@ -51,6 +51,6 @@ object Blocks extends BlockManager(PressureCreativeTabs.main) {
   regBlock(BlockSensor)
 
   if (Misc.haveModVersion("ComputerCraft")) {
-    regBlock(BlockDataport)
+    regBlock(BlockDataPort)
   }
 }
