@@ -58,8 +58,10 @@ object CCResult {
     override def wrap = Array(null)
   }
 
-  def List(vals: CCResult*) = vals.toList
-  def Map(vals: (String, CCResult)*) = vals.toMap
+  def apply(v: CCResult) = v
+
+  def List(vals: CCResult*): CCResult = vals.toList
+  def Map(vals: (String, CCResult)*): CCResult = vals.toMap
 
   implicit def resInt(v: Int): CCResult = ResInt(v)
   implicit def resFloat(v: Float): CCResult = ResFloat(v)
