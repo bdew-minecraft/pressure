@@ -15,20 +15,15 @@ import net.minecraft.tileentity.TileEntity
 
 import scala.concurrent.Future
 
-class TileCommandHandler[T <: TileEntity] {
-  var commands = Map.empty[String, CallContext[T] => Future[Array[AnyRef]]]
 
-  private def wrapInFuture(f: CallContext[T] => Array[AnyRef]): CallContext[T] => Future[Array[AnyRef]] =
+class TileCommandHandler[T <: TileEntity] {
+  var commands = Map.empty[String, CallContext[T] => Future[CCResult]]
+
+  private def wrapInFuture(f: CallContext[T] => CCResult): CallContext[T] => Future[CCResult] =
     (x: CallContext[T]) => Async.inServerThread(f(x))
 
-  def async(name: String)(f: CallContext[T] => Future[Array[AnyRef]]) = commands += (name -> f)
-  def command(name: String)(f: CallContext[T] => Array[AnyRef]) = commands += (name -> wrapInFuture(f))
-
-  def res(v: Int): Array[AnyRef] = Array(Int.box(v))
-  def res(v: Float): Array[AnyRef] = Array(Float.box(v))
-  def res(v: Double): Array[AnyRef] = Array(Double.box(v))
-  def res(v: Boolean): Array[AnyRef] = Array(Boolean.box(v))
-  def res(v: String): Array[AnyRef] = Array(v)
+  def async(name: String)(f: CallContext[T] => Future[CCResult]) = commands += (name -> f)
+  def command(name: String)(f: CallContext[T] => CCResult) = commands += (name -> wrapInFuture(f))
 
   def err(err: String) = throw new LuaException(err)
 

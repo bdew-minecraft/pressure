@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.compat.computercraft
 
-import dan200.computercraft.api.lua.ILuaContext
+import dan200.computercraft.api.lua.{ILuaContext, LuaException}
 import dan200.computercraft.api.peripheral.{IComputerAccess, IPeripheral}
 import net.bdew.lib.async.ServerTickExecutionContext
 import net.minecraft.tileentity.TileEntity
@@ -48,7 +48,10 @@ case class TilePeripheralWrapper[T <: TileEntity](kind: String, commands: TileCo
     }
 
     future.value match {
-      case Some(Success(v)) => v
+      case Some(Success(null)) => null
+      case Some(Success(v)) => v.wrap
+      case Some(Failure(e: ParameterErrorException)) =>
+        throw new LuaException("Usage: %s(%s)".format(commands.idToCommand(method), e.params.map(_.name).mkString(", ")))
       case Some(Failure(t)) => throw t
       case None => sys.error("Future not resolved after waiting, this is a bug")
     }
