@@ -33,6 +33,8 @@ item.pressure.Configurator.name=Fluid Filter Configurator
 
 tile.pressure.gasinput.name=Pressurized Gas Input
 tile.pressure.gasoutput.name=Pressurized Gas Output
+tile.pressure.TankGasOutput.name=Tank Gas Outlet
+tile.pressure.TankGasInput.name=Tank Gas Intake
 
 pressure.label.filter.set=Setting fluid filter to: %s
 pressure.label.filter.unset=Removing fluid filter
