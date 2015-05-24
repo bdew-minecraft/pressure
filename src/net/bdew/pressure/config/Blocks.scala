@@ -13,6 +13,7 @@ import net.bdew.lib.Misc
 import net.bdew.lib.config.BlockManager
 import net.bdew.pressure.blocks._
 import net.bdew.pressure.blocks.drain.BlockDrain
+import net.bdew.pressure.blocks.gas.{BlockPressureGasInput, BlockPressureGasOutput}
 import net.bdew.pressure.blocks.input.BlockInput
 import net.bdew.pressure.blocks.output.BlockOutput
 import net.bdew.pressure.blocks.pump.BlockPump
@@ -52,5 +53,10 @@ object Blocks extends BlockManager(PressureCreativeTabs.main) {
 
   if (Misc.haveModVersion("ComputerCraft")) {
     regBlock(BlockDataPort)
+  }
+
+  if (Misc.haveModVersion("MekanismAPI|gas@[8.0.0,)")) {
+    regBlock(BlockPressureGasInput, "GasInput")
+    regBlock(BlockPressureGasOutput, "GasOutput")
   }
 }

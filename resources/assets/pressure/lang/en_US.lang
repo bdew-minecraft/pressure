@@ -31,6 +31,9 @@ item.pressure.FluidInterface.name=Fluid Interface
 item.pressure.TankWall.name=Tank Wall
 item.pressure.Configurator.name=Fluid Filter Configurator
 
+tile.pressure.gasinput.name=Pressurized Gas Input
+tile.pressure.gasoutput.name=Pressurized Gas Output
+
 pressure.label.filter.set=Setting fluid filter to: %s
 pressure.label.filter.unset=Removing fluid filter
 
