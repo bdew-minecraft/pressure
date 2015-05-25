@@ -11,19 +11,21 @@ package net.bdew.pressure.blocks.router.data
 
 object RouterSideMode extends Enumeration {
   val DISABLED = Value(0)
-  val INPUT = Value(1)
+  val INPUT_PASSIVE = Value(1)
   val OUTPUT_LOW = Value(2)
   val OUTPUT_MEDIUM = Value(3)
   val OUTPUT_HIGH = Value(4)
+  val INPUT_ACTIVE = Value(5)
 
   val order = Map(
-    DISABLED -> INPUT,
-    INPUT -> OUTPUT_LOW,
+    DISABLED -> INPUT_PASSIVE,
+    INPUT_PASSIVE -> INPUT_ACTIVE,
+    INPUT_ACTIVE -> OUTPUT_LOW,
     OUTPUT_LOW -> OUTPUT_MEDIUM,
     OUTPUT_MEDIUM -> OUTPUT_HIGH,
     OUTPUT_HIGH -> DISABLED
   )
 
   val outputs = Set(OUTPUT_LOW, OUTPUT_MEDIUM, OUTPUT_HIGH)
-  val inputs = Set(INPUT)
+  val inputs = Set(INPUT_PASSIVE, INPUT_ACTIVE)
 }

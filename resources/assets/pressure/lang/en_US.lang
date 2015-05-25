@@ -79,7 +79,8 @@ pressure.router.side.4=Cyan Side
 pressure.router.side.5=Purple Side
 
 pressure.router.mode.disabled=Disabled
-pressure.router.mode.input=Input
+pressure.router.mode.input_passive=Input (Passive)
+pressure.router.mode.input_active=Input (Active)
 pressure.router.mode.output_low=Output - Low priority
 pressure.router.mode.output_medium=Output - Medium priority
 pressure.router.mode.output_high=Output - High priority
