@@ -91,7 +91,7 @@ object TankIndicatorRenderer extends ISimpleBlockRenderingHandler {
 
   override def renderWorldBlock(world: IBlockAccess, x: Int, y: Int, z: Int, block: Block, modelId: Int, renderer: RenderBlocks) = {
     ConnectedRenderer.renderWorldBlock(world, x, y, z, block, modelId, renderer)
-    BlockTankIndicator.getTE(world, x, y, z).getCoreAs[TileTankController] map { core =>
+    BlockTankIndicator.getTE(world, x, y, z).getCoreAs[TileTankController] foreach { core =>
       if (core.tank.getFluid != null && core.tank.getFluidAmount > 0) {
         val icon = Misc.getFluidIcon(core.tank.getFluid)
         val color = Misc.getFluidColor(core.tank.getFluid)

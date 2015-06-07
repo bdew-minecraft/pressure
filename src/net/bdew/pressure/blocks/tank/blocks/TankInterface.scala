@@ -36,7 +36,7 @@ class TileTankInterface extends TileModule with ISidedInventory {
   override def decrStackSize(slot: Int, amount: Int) = getInv.map(_.decrStackSize(slot, amount)).orNull
   override def isItemValidForSlot(slot: Int, item: ItemStack) = getInv.exists(_.isItemValidForSlot(slot, item))
   override def getStackInSlotOnClosing(slot: Int) = getInv.map(_.getStackInSlotOnClosing(slot)).orNull
-  override def setInventorySlotContents(slot: Int, item: ItemStack) = getInv.map(_.setInventorySlotContents(slot, item))
+  override def setInventorySlotContents(slot: Int, item: ItemStack) = getInv.foreach(_.setInventorySlotContents(slot, item))
   override def getStackInSlot(slot: Int) = getInv.map(_.getStackInSlot(slot)).orNull
 
   override def isUseableByPlayer(player: EntityPlayer) = player.getDistance(xCoord, yCoord, zCoord) <= 5D

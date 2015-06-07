@@ -36,7 +36,7 @@ object BlockPipeSensor extends BlockValve("PipeSensor") with HasTE[TilePipeSenso
 
   def sendAveragesToPlayer(ds: DataSlotFluidAverages, player: EntityPlayer): Unit = {
     val flow = ds.getAverages.toList.filter(_._2 > 0.000001).sortBy(-_._2)
-    if (flow.size > 0) {
+    if (flow.nonEmpty) {
       val chatYellow = new ChatStyle().setColor(EnumChatFormatting.YELLOW).setBold(true)
       player.addChatComponentMessage(new ChatComponentTranslation("pressure.message.flow.head", Integer.valueOf(ds.values.size)))
       for ((fluid, amount) <- flow) {

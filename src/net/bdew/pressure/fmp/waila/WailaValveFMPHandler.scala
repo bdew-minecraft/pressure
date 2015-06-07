@@ -33,10 +33,10 @@ object WailaValveFMPHandler extends BaseFMPDataProvider {
         list :+= Misc.toLocal("pressure.waila.valve.closed")
     } else if (acc.getID == "bdew.pressure.pipesensor") {
       val bytes = acc.getNBTData.getByteArray("flow")
-      if (acc.getNBTData.getBoolean("state") && bytes.size > 0) {
+      if (acc.getNBTData.getBoolean("state") && bytes.nonEmpty) {
         val data = DataSlotFluidAverages.unSerializeAverages(bytes)
         val values = DataSlotFluidAverages.getAverages(data).filter(_._2 > 0.000001).toList.sortBy(-_._2)
-        if (values.size > 0) {
+        if (values.nonEmpty) {
           list :+= EnumChatFormatting.UNDERLINE + Misc.toLocalF("pressure.message.flow.head", data.size) + EnumChatFormatting.RESET
           list ++= WailaPipeSensorHandler.makeFluidList(values)
         } else {

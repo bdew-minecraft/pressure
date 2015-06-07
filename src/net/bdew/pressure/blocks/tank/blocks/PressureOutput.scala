@@ -44,11 +44,11 @@ class TilePressureOutput extends TileOutput[OutputConfigFluid] with PressureModu
 
   override def doOutput(face: ForgeDirection, cfg: OutputConfigFluid) =
     if (checkCanOutput(cfg)) {
-      getCore map { core =>
+      getCore foreach { core =>
         if (!connections.isDefinedAt(face))
-          Option(Helper.recalculateConnectionInfo(this, face)) map { cObj => connections += face -> cObj }
+          connections ++= Option(Helper.recalculateConnectionInfo(this, face)) map { cObj => face -> cObj }
 
-        connections.get(face) map { conn =>
+        connections.get(face) foreach { conn =>
           val fs = core.outputFluid(Int.MaxValue, false)
           val out = conn.pushFluid(fs, true)
           if (out > 0) {

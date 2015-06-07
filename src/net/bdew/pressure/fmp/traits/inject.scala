@@ -20,7 +20,7 @@ trait TInjectPart {
 
 trait TileInject extends TileMultipart with IPressureInject {
   override def invalidateConnection(side: ForgeDirection) =
-    FmpUtils.getTypedPart(classOf[TInjectPart], this).map(_.invalidateConnection(side))
+    FmpUtils.getTypedPart(classOf[TInjectPart], this).foreach(_.invalidateConnection(side))
 
   override def getXCoord = xCoord
   override def getYCoord = yCoord

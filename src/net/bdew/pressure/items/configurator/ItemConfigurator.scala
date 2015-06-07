@@ -40,7 +40,7 @@ object ItemConfigurator extends SimpleItem("Configurator") with GuiProvider {
 
   override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, xOff: Float, yOff: Float, zOff: Float): Boolean = {
     if (!world.isRemote && player.isInstanceOf[EntityPlayerMP]) {
-      Option(Helper.getFilterableForWorldCoordinates(world, x, y, z, side)) map { filterable =>
+      Option(Helper.getFilterableForWorldCoordinates(world, x, y, z, side)) foreach { filterable =>
         filterableCache.update(player, filterable)
         player.openGui(Pressure, ItemConfigurator.guiId, world, x, y, z)
       }

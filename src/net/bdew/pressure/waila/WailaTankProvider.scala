@@ -39,7 +39,7 @@ object WailaTankProvider extends BaseDataProvider(classOf[TileTankController]) {
     } else {
       out :+= Misc.toLocal("bdlib.label.empty")
     }
-    target.getFluidFilter map { filter =>
+    target.getFluidFilter foreach { filter =>
       out :+= Misc.toLocalF("pressure.waila.filter", filter.getLocalizedName(new FluidStack(filter, 1)))
     }
     out

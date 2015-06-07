@@ -19,6 +19,6 @@ trait CIFilterable extends TileController with IFilterable {
 
 trait MIFilterable extends TileModule with IFilterable {
   override def getCore = getCoreAs[CIFilterable]
-  override def setFluidFilter(fluid: Fluid) = getCore map (_.setFluidFilter(fluid))
-  override def clearFluidFilter() = getCore map (_.clearFluidFilter())
+  override def setFluidFilter(fluid: Fluid) = getCore foreach (_.setFluidFilter(fluid))
+  override def clearFluidFilter() = getCore foreach (_.clearFluidFilter())
 }

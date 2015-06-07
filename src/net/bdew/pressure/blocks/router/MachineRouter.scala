@@ -28,7 +28,7 @@ object MachineRouter extends Machine("Router", BlockRouter) with GuiProvider {
 
   NetworkHandler.regServerHandler({
     case (MsgSetRouterSideControl(side, mode), player) =>
-      Misc.asInstanceOpt(player.openContainer, classOf[ContainerRouter]) map { container =>
+      Misc.asInstanceOpt(player.openContainer, classOf[ContainerRouter]) foreach { container =>
         container.te.sideControl.set(side, mode)
       }
   })

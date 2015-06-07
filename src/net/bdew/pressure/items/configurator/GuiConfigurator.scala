@@ -66,7 +66,7 @@ class GuiConfigurator(player: EntityPlayer) extends BaseScreen(new ContainerConf
       lastSearch = search
       displayMap = (
         for (((name, fluid), idx) <- allFluids.zipWithIndex
-             if search.size == 0 || name.toLowerCase.contains(search)) yield idx)
+             if search.isEmpty || name.toLowerCase.contains(search)) yield idx)
         .splitAt(27)._1.zipWithIndex.map(_.swap).toMap
     }
     super.updateScreen()

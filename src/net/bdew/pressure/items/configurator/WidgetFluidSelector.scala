@@ -28,13 +28,13 @@ class WidgetFluidSelector(p: Point, conf: GuiConfigurator, n: Int) extends Widge
   }
 
   override def draw(mouse: Point) {
-    getFluid map { fluid =>
+    getFluid foreach { fluid =>
       parent.drawTexture(rect, Texture(Texture.BLOCKS, fluid.getIcon), Color.fromInt(fluid.getColor))
     }
   }
 
   override def mouseClicked(p: Point, button: Int) {
-    getFluid map { fluid =>
+    getFluid foreach { fluid =>
       NetworkHandler.sendToServer(MsgSetFluidFilter(fluid.getName))
       Client.player.closeScreen()
     }

@@ -17,10 +17,10 @@ public interface IFilterable {
      *
      * @param fluid new filter setting
      */
-    public void setFluidFilter(Fluid fluid);
+    void setFluidFilter(Fluid fluid);
 
     /**
      * Removes the filter
      */
-    public void clearFluidFilter();
+    void clearFluidFilter();
 }

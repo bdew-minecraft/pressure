@@ -39,7 +39,7 @@ case class DataSlotSideFilters(name: String, parent: DataSlotContainer) extends 
     if (t.hasKey(name)) {
       for {
         dir <- ForgeDirection.VALID_DIRECTIONS
-        fName <- Option(t.getCompoundTag(name).getString(dir.ordinal().toString)) if fName.size > 0 && FluidRegistry.isFluidRegistered(fName)
+        fName <- Option(t.getCompoundTag(name).getString(dir.ordinal().toString)) if fName.nonEmpty && FluidRegistry.isFluidRegistered(fName)
         fluid <- Option(FluidRegistry.getFluid(fName))
       } {
         map += dir -> fluid

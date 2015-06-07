@@ -35,14 +35,14 @@ case class DataSlotFluidAverages(name: String, parent: DataSlotContainer, size: 
   def getAverages = DataSlotFluidAverages.getAverages(values)
 
   override def save(t: NBTTagCompound, kind: UpdateKind.Value) = {
-    if (values.size > 0)
+    if (values.nonEmpty)
       t.setByteArray(name, DataSlotFluidAverages.serializeAverages(values))
   }
 
   override def load(t: NBTTagCompound, kind: UpdateKind.Value) = {
     reset()
     val bytes = t.getByteArray(name)
-    if (bytes.size > 0) {
+    if (bytes.nonEmpty) {
       values ++= DataSlotFluidAverages.unSerializeAverages(bytes)
     }
   }
