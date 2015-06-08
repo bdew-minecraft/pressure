@@ -64,6 +64,10 @@ repositories {
         name "waila"
         url "http://mobiusstrip.eu/maven"
     }
+    maven {
+        name "OpenComputers"
+        url "http://maven.cil.li/"
+    }
 }
 
 dependencies {
@@ -76,6 +80,8 @@ dependencies {
     compile module("mcp.mobius.waila:Waila:${config.waila.version}_${config.minecraft.version}") {
         transitive = false // WAILA is depending on an invalid combination of CCC/NEI that doesn't run...
     }
+
+    compile "li.cil.oc:OpenComputers:MC${config.minecraft.version}-${config.opencomputers.version}:api"
 
     compile "net.bdew.thirdparty:computercraft:${config.computercraft.version}-mc${config.minecraft.version}:api"
     compile "net.bdew.thirdparty:mekanism:${config.mekanism.version}-mc${config.minecraft.version}:api"
