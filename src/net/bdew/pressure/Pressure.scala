@@ -79,7 +79,7 @@ object Pressure {
     PressureCreativeTabs.init()
     if (Misc.haveModVersion("EnderIO"))
       EnderIOProxy.init()
-    if (Misc.haveModVersion("OpenComputers"))
+    if (Misc.haveModVersion("OpenComputers") && Misc.haveModVersion("ComputerCraft"))
       ExecutionHelpers.registry +:= OpenComputersExecutionHelper
   }
 
