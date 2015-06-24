@@ -10,7 +10,8 @@
 package net.bdew.pressure.blocks.valves.check
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.bdew.lib.block.HasTE
+import net.bdew.lib.block.{HasItemBlock, HasTE}
+import net.bdew.pressure.blocks.CustomItemBlock
 import net.bdew.pressure.blocks.valves.BlockValve
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.texture.IIconRegister
@@ -18,8 +19,9 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
 
-object BlockCheckValve extends BlockValve("CheckValve") with HasTE[TileCheckValve] {
+object BlockCheckValve extends BlockValve("CheckValve") with HasTE[TileCheckValve] with HasItemBlock {
   override val TEClass = classOf[TileCheckValve]
+  override val ItemBlockClass = classOf[CustomItemBlock]
 
   setHardness(2)
 

@@ -25,9 +25,9 @@ import net.bdew.pressure.blocks.valves.sensor.BlockPipeSensor
 import net.bdew.pressure.misc.PressureCreativeTabs
 
 object Blocks extends BlockManager(PressureCreativeTabs.main) {
-  regBlock(BlockPipe, classOf[CustomItemBlock])
-  regBlock(BlockCheckValve, classOf[CustomItemBlock])
-  regBlock(BlockPipeSensor, classOf[CustomItemBlock])
+  regBlock(BlockPipe)
+  regBlock(BlockCheckValve)
+  regBlock(BlockPipeSensor)
 
   regBlock(BlockPump, "Pump")
   regBlock(BlockOutput, "Output")

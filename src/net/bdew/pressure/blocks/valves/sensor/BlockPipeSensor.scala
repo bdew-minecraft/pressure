@@ -11,7 +11,8 @@ package net.bdew.pressure.blocks.valves.sensor
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.DecFormat
-import net.bdew.lib.block.HasTE
+import net.bdew.lib.block.{HasItemBlock, HasTE}
+import net.bdew.pressure.blocks.CustomItemBlock
 import net.bdew.pressure.blocks.valves.BlockValve
 import net.bdew.pressure.misc.{DataSlotFluidAverages, FluidNameHelper}
 import net.minecraft.client.renderer.texture.IIconRegister
@@ -19,8 +20,9 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util._
 import net.minecraft.world.{IBlockAccess, World}
 
-object BlockPipeSensor extends BlockValve("PipeSensor") with HasTE[TilePipeSensor] {
+object BlockPipeSensor extends BlockValve("PipeSensor") with HasTE[TilePipeSensor] with HasItemBlock {
   override val TEClass = classOf[TilePipeSensor]
+  override val ItemBlockClass = classOf[CustomItemBlock]
 
   setHardness(2)
 
