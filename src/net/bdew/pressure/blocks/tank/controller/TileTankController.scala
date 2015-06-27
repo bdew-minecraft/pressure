@@ -39,16 +39,34 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
     override val sendCapacityOnUpdateKind = Set(UpdateKind.WORLD, UpdateKind.GUI)
   }
 
+  var lastRenderUpdate = 0L
+  var needsRenderUpdate = false
+
   val inventory = new DataSlotInventory("inv", this, 3) {
     override def isItemValidForSlot(slot: Int, stack: ItemStack) =
       slot == 0 && stack != null && stack.getItem != null && (
         FluidContainerRegistry.isContainer(stack) || stack.getItem.isInstanceOf[IFluidContainerItem])
   }
 
-  handleClientUpdate listen { tag =>
+  def doRenderUpdate(): Unit = {
+    needsRenderUpdate = false
+    println("render %d".format(worldObj.getTotalWorldTime - lastRenderUpdate))
+    lastRenderUpdate = worldObj.getTotalWorldTime
     for (ref <- modules if ref.block(worldObj).exists(_.isInstanceOf[ModuleNeedsRenderUpdate]))
       worldObj.markBlockRangeForRenderUpdate(ref.x, ref.y, ref.z, ref.x, ref.y, ref.z)
   }
+
+  handleClientUpdate listen { tag =>
+    if (worldObj.getTotalWorldTime > lastRenderUpdate + 10)
+      doRenderUpdate()
+    else
+      needsRenderUpdate = true
+  }
+
+  clientTick.listen(() => {
+    if (needsRenderUpdate && worldObj.getTotalWorldTime > lastRenderUpdate + 10)
+      doRenderUpdate()
+  })
 
   lazy val maxOutputs = 6
 
