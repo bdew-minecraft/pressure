@@ -3,7 +3,12 @@ tile.pressure.output.name=Выход под высоким давлением
 tile.pressure.pipe.name=Труба под высоким давлением
 tile.pressure.pump.name=Помпа под высоким давлением
 tile.pressure.water.name=Бесконечный источник воды
+tile.pressure.creative.name=Творческий источник воды
 tile.pressure.drain.name=Дренаж
+
+tile.pressure.Router.name=Роутер высокого давления
+tile.pressure.CheckValve.name=Обратный клапан высокого даавления
+tile.pressure.PipeSensor.name=Сенсор труб высокого давления
 
 tile.pressure.TankBlock.name=Блок резервуара
 tile.pressure.TankController.name=Контроллер резервуара
@@ -14,7 +19,9 @@ tile.pressure.TankFluidAutoOutput.name=Жидкостный автовыход �
 tile.pressure.TankPressureOutput.name=Выход из резервуара под давлением
 tile.pressure.TankIndicator.name=Индикаторный блок резервуара
 tile.pressure.TankInterface.name=Интерфейс резервуара
-tile.pressure.TankFilter.name=Жидкостный фильтр резервуара
+tile.pressure.TankFilter.name=Фильтр жидкостей
+tile.pressure.TankDataPort.name=Порт данных резервуара
+tile.pressure.Sensor.name=Сенсор резервуара
 
 item.pressure.Debugger.name=Отладчик системы давления
 item.pressure.Interface.name=Интерфейс системы давления
@@ -23,6 +30,11 @@ item.pressure.Canister.name=Канистра
 item.pressure.FluidInterface.name=Жидкостный интерфейс
 item.pressure.TankWall.name=Стенка резервуара
 item.pressure.Configurator.name=Конфигуратор фильтра жидкостей
+
+tile.pressure.gasinput.name=Газовый вход под давлением
+tile.pressure.gasoutput.name=Газовый выход под давлением
+tile.pressure.TankGasOutput.name=Газовый выход из резервуара
+tile.pressure.TankGasInput.name=Газовый вход в резервуар
 
 pressure.label.filter.set=Установка жидкостного фильтра на: %s
 pressure.label.filter.unset=Удаление жидкостного фильтра
@@ -35,6 +47,8 @@ pressure.waila.side.output=Выход на этой стороне
 pressure.waila.side.pressure=Сторона подключена к системе давления
 pressure.waila.side.fluid=Сторона подключена к трубе/резервуару
 pressure.waila.side.nothing=Сторона не подключена
+pressure.waila.valve.open=Клапан открыт
+pressure.waila.valve.closed=Клапан закрыт
 
 pressure.module.TankBlock.name=Блок резервуара
 
@@ -43,6 +57,9 @@ pressure.gui.tank.filter=Будет принимать только %s
 pressure.gui.tank.nofilter=Будет принимать все жидкости
 pressure.gui.tank.filter.tip1=Кликните с жидкостным контейнером в руке, чтобы установить фильтр
 pressure.gui.tank.filter.tip2=Кликните пустой рукой, чтобы очистить фильтр
+pressure.gui.sensor.title=Конфигуратор сенсора резервуара
+
+pressure.gui.router.title=Конфигурация роутера
 
 itemGroup.bdew.pressure=Трубопроводы под давлением
 itemGroup.bdew.canisters=Жидкостные канистры
@@ -53,3 +70,41 @@ pressure.output.2=Синий выход
 pressure.output.3=Жёлтый выход
 pressure.output.4=Голубой выход
 pressure.output.5=Фиолетовый выход
+
+pressure.router.side.0=Красная сторона
+pressure.router.side.1=Зелёная сторона
+pressure.router.side.2=Синяя сторона
+pressure.router.side.3=Жёлтая сторона
+pressure.router.side.4=Голубая сторона
+pressure.router.side.5=Фиолетовая сторона
+pressure.router.mode.disabled=Выключено
+pressure.router.mode.input_passive=Вход (Пассив)
+pressure.router.mode.input_active=Вход (Актив)
+pressure.router.mode.output_low=Выход - Низкий приоритет
+pressure.router.mode.output_medium=Выход - Средний приоритет
+pressure.router.mode.output_high=Выход - Высокий приоритет
+
+pressure.message.flow.head=Средний ток жидкости (%s тиков):
+pressure.message.flow.unknown=Есть поток
+pressure.message.flow.empty=Нет потока
+
+pressure.sensor.on=Сигнал ВКЛ
+pressure.sensor.off=Сигнал ВЫКЛ
+
+pressure.sensor.disabled=Выключено
+pressure.sensor.param.disabled=Выключено
+
+pressure.sensor.tank=Резервуар заполнен
+pressure.sensor.flow=Выходной модуль активен
+pressure.sensor.fluid=Тип жидкости
+
+pressure.sensor.fluid.tip.unset=Щёлкните с любым контейнером, содержащим жидкость
+pressure.sensor.fluid.tip.set=Щёлкните пустым курсором для очистки
+
+pressure.sensor.param.fill.empty=Пусто
+pressure.sensor.param.fill.not.empty=Не пусто
+pressure.sensor.param.fill.gt25=На 25% заполнено
+pressure.sensor.param.fill.gt50=На 50% заполнено
+pressure.sensor.param.fill.gt75=На 75% заполнено
+pressure.sensor.param.fill.full=Заполнено
+pressure.sensor.param.fill.not.full=Не заполнено
