@@ -44,15 +44,15 @@ case class PressureConnection(origin: IPressureInject, side: ForgeDirection, til
       } else {
         val maxFill = tiles.map(target => target -> target.eject(fluid.copy(), false)).toMap
         val totalFill = maxFill.values.sum
-        if (!doPush) return totalFill
         val mul = if (totalFill > fluid.amount) fluid.amount.toFloat / totalFill else 1
-        (maxFill map { case (te, amount) =>
+        val filled = maxFill map { case (te, amount) =>
           val toFill = (amount * mul).floor.toInt
           if (toFill > 0)
             te.eject(new FluidStack(fluid.getFluid, toFill), doPush)
           else
             0
-        }).sum
+        }
+        filled.sum
       }
     }
   }
