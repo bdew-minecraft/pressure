@@ -23,6 +23,7 @@ object BlockPressureGasOutput extends BaseIOBlock("gasoutput", classOf[TilePress
   override def canConnectTo(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
     getFacing(world, x, y, z) == side.getOpposite
   override def isTraversable(world: IBlockAccess, x: Int, y: Int, z: Int) = false
+  override def canConnectRedstone(world: IBlockAccess, x: Int, y: Int, z: Int, side: Int) = true
 }
 
 class TilePressureGasOutput extends TileDataSlots with FakeGasTank with IPressureEject with TileFilterable {

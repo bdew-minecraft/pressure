@@ -39,6 +39,11 @@ class BasePoweredBlock[T <: TileFilterable](name: String, teClass: Class[T]) ext
     world.setBlockMetadataWithNotify(x, y, z, (meta & 8) | (((meta & 7) + 1) % 6), 3)
   }
 
+  override def canConnectRedstone(world: IBlockAccess, x: Int, y: Int, z: Int, side: Int): Boolean = {
+    val facing = getFacing(world, x, y, z)
+    side != facing.ordinal() && side != facing.getOpposite.ordinal()
+  }
+
   override def onNeighborBlockChange(world: World, x: Int, y: Int, z: Int, block: Block) {
     val meta = world.getBlockMetadata(x, y, z)
     val powered = world.isBlockIndirectlyGettingPowered(x, y, z)

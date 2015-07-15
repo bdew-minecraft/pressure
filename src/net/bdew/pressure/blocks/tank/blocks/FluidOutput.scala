@@ -12,10 +12,13 @@ package net.bdew.pressure.blocks.tank.blocks
 import net.bdew.lib.multiblock.block.BlockOutput
 import net.bdew.lib.multiblock.data.OutputConfigFluid
 import net.bdew.pressure.blocks.tank.{BaseModule, TileFluidOutputBase}
+import net.minecraft.world.IBlockAccess
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 
-object BlockFluidOutput extends BaseModule("TankFluidOutput", "FluidOutput", classOf[TileFluidOutput]) with BlockOutput[TileFluidOutput]
+object BlockFluidOutput extends BaseModule("TankFluidOutput", "FluidOutput", classOf[TileFluidOutput]) with BlockOutput[TileFluidOutput] {
+  override def canConnectRedstone(world: IBlockAccess, x: Int, y: Int, z: Int, side: Int) = true
+}
 
 class TileFluidOutput extends TileFluidOutputBase {
   override def doOutput(face: ForgeDirection, cfg: OutputConfigFluid) {}

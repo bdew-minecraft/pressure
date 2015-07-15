@@ -15,9 +15,12 @@ import net.bdew.lib.multiblock.data.OutputConfigFluid
 import net.bdew.lib.multiblock.interact.CIFluidOutput
 import net.bdew.lib.multiblock.tile.{RSControllableOutput, TileOutput}
 import net.bdew.pressure.blocks.tank.BaseModule
+import net.minecraft.world.IBlockAccess
 import net.minecraftforge.common.util.ForgeDirection
 
-object BlockTankGasOutput extends BaseModule("TankGasOutput", "FluidOutput", classOf[TileTankGasOutput]) with BlockOutput[TileTankGasOutput]
+object BlockTankGasOutput extends BaseModule("TankGasOutput", "FluidOutput", classOf[TileTankGasOutput]) with BlockOutput[TileTankGasOutput] {
+  override def canConnectRedstone(world: IBlockAccess, x: Int, y: Int, z: Int, side: Int) = true
+}
 
 class TileTankGasOutput extends TileOutput[OutputConfigFluid] with RSControllableOutput with ITubeConnection {
   val kind: String = "FluidOutput"
