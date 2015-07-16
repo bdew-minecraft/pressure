@@ -9,14 +9,25 @@
 
 package net.bdew.pressure.config
 
+import java.io.File
+
 import net.bdew.lib.gui.GuiHandler
+import net.minecraftforge.common.config.Configuration
 
 object Config {
   val guiHandler = new GuiHandler
 
-  def load() {
-    Items.load()
-    Blocks.load()
-    Machines.load()
+  var showCanisters = true
+  var showFluidName = false
+
+  def load(cfg: File) {
+    val c = new Configuration(cfg)
+    c.load()
+    try {
+      showCanisters = c.get(Configuration.CATEGORY_GENERAL, "Add filled canisters to NEI", true).getBoolean(false)
+      showFluidName = c.get(Configuration.CATEGORY_GENERAL, "Show fluid identifier on canisters", false).getBoolean(false)
+    } finally {
+      c.save()
+    }
   }
 }

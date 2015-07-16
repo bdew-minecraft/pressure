@@ -15,7 +15,7 @@ import net.bdew.lib.Misc
 import net.bdew.lib.block.BlockRef
 import net.bdew.lib.items.SimpleItem
 import net.bdew.pressure.Pressure
-import net.bdew.pressure.config.Tuning
+import net.bdew.pressure.config.{Config, Tuning}
 import net.bdew.pressure.misc.PressureCreativeTabs
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
@@ -40,30 +40,32 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
     if (tab == PressureCreativeTabs.main)
       stacks.add(new ItemStack(this))
     else if (tab == PressureCreativeTabs.canisters || tab == null) {
-      stacks.addAll(
-        FluidRegistry.getRegisteredFluids flatMap { case (id, fluid) =>
-          if (FluidRegistry.getFluid(fluid.getName) != fluid) {
-            Pressure.logError("Fluid %s is not registered correctly (%s <=> %s)", id, fluid, FluidRegistry.getFluid(fluid.getName))
-            None
-          } else if (!FluidRegistry.isFluidRegistered(fluid)) {
-            Pressure.logError("Forge claims fluid '%s' is not registered after returning it from getRegisteredFluids", fluid.getName)
-            None
-          } else {
-            try {
-              val tag = new NBTTagCompound
-              val fStack = new FluidStack(fluid, capacity)
-              fStack.writeToNBT(tag)
-              val item = new ItemStack(this)
-              item.setTagCompound(tag)
-              Some(item)
-            } catch {
-              case e: Throwable =>
-                Pressure.logErrorException("Exception while creating canister for fluid '%s'", e, fluid.getName)
-                None
+      if (tab == PressureCreativeTabs.canisters || Config.showCanisters) {
+        stacks.addAll(
+          FluidRegistry.getRegisteredFluids flatMap { case (id, fluid) =>
+            if (FluidRegistry.getFluid(fluid.getName) != fluid) {
+              Pressure.logError("Fluid %s is not registered correctly (%s <=> %s)", id, fluid, FluidRegistry.getFluid(fluid.getName))
+              None
+            } else if (!FluidRegistry.isFluidRegistered(fluid)) {
+              Pressure.logError("Forge claims fluid '%s' is not registered after returning it from getRegisteredFluids", fluid.getName)
+              None
+            } else {
+              try {
+                val tag = new NBTTagCompound
+                val fStack = new FluidStack(fluid, capacity)
+                fStack.writeToNBT(tag)
+                val item = new ItemStack(this)
+                item.setTagCompound(tag)
+                Some(item)
+              } catch {
+                case e: Throwable =>
+                  Pressure.logErrorException("Exception while creating canister for fluid '%s'", e, fluid.getName)
+                  None
+              }
             }
           }
-        }
-      )
+        )
+      }
       if (tab == null) stacks.add(new ItemStack(this)) // for NEI
     }
   }
@@ -104,10 +106,12 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
     import scala.collection.JavaConverters._
     val l = lst.asInstanceOf[util.List[String]].asScala
     val fl = getFluid(stack)
-    if (fl == null)
+    if (fl == null) {
       l += Misc.toLocal("bdlib.label.empty")
-    else
+    } else {
       l += "%d/%d %s".format(fl.amount, capacity, fl.getFluid.getLocalizedName(fl))
+      if (Config.showFluidName) l += "ID: " + fl.getFluid.getName
+    }
   }
 
   override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
