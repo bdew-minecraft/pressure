@@ -18,7 +18,6 @@ import net.bdew.pressure.pressurenet.{Helper, ScanResult}
 import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.util.ChatComponentText
 import net.minecraft.world.World
 
 object ItemDebugger extends SimpleItem("Debugger") {
@@ -26,9 +25,8 @@ object ItemDebugger extends SimpleItem("Debugger") {
 
   import scala.language.implicitConversions
 
-  implicit def string2chatComponent(s: String): ChatComponentText = new ChatComponentText(s)
-
   override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, xOff: Float, yOff: Float, zOff: Float): Boolean = {
+    import net.bdew.lib.helpers.ChatHelper._
     if (!world.isRemote) {
       val br = BlockRef(x, y, z)
       var scanTime = System.nanoTime()
@@ -38,7 +36,8 @@ object ItemDebugger extends SimpleItem("Debugger") {
       player.addChatMessage("Ins: " + (ins map (_.blockRefFace) mkString ", "))
       player.addChatMessage("Outs: " + (outs map (_.blockRefFace) mkString ", "))
       player.addChatMessage("Seen:")
-      seen.foreach(x => player.addChatMessage(" * %s: %s".format(x, x.block(world) map (_.getUnlocalizedName) getOrElse "AIR")))
+      for (x <- seen)
+        player.addChatMessage(" * %s: %s".format(x, x.block(world) map (_.getUnlocalizedName) getOrElse "AIR"))
       player.addChatMessage("PConn: " + Helper.getPipeConnections(world, br).mkString(","))
       player.addChatMessage("Scanned %d blocks, took %d μs".format(seen.size, scanTime / 1000))
     }
