@@ -51,6 +51,12 @@ pressure.waila.valve.open=Valve Open
 pressure.waila.valve.closed=Valve Closed
 
 pressure.module.TankBlock.name=Tank Block
+pressure.module.FluidInput.name=Fluid Intake
+pressure.module.FluidOutput.name=Fluid Outlet
+pressure.module.TankInterface.name=Tank Interface
+pressure.module.FluidFilter.name=Fluid Filter
+pressure.module.TankDataPort.name=Tank Data Port
+pressure.module.Sensor.name=Sensor Module
 
 pressure.gui.tank.title=Pressure Tank
 pressure.gui.tank.filter=Will only accept %s
