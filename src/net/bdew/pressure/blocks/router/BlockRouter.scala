@@ -10,6 +10,7 @@
 package net.bdew.pressure.blocks.router
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.Misc
 import net.bdew.lib.block.{HasTE, SimpleBlock}
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api.IPressureConnectableBlock
@@ -43,6 +44,6 @@ object BlockRouter extends SimpleBlock("Router", Material.iron) with HasTE[TileR
 
   @SideOnly(Side.CLIENT)
   override def registerBlockIcons(reg: IIconRegister) {
-    blockIcon = reg.registerIcon(modId + ":" + name.toLowerCase + "/main")
+    blockIcon = reg.registerIcon(Misc.iconName(Pressure.modId, name, "main"))
   }
 }

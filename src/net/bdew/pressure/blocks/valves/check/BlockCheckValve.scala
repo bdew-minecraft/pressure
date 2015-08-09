@@ -10,7 +10,9 @@
 package net.bdew.pressure.blocks.valves.check
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.Misc
 import net.bdew.lib.block.{HasItemBlock, HasTE}
+import net.bdew.pressure.Pressure
 import net.bdew.pressure.blocks.CustomItemBlock
 import net.bdew.pressure.blocks.valves.BlockValve
 import net.minecraft.block.Block
@@ -41,8 +43,8 @@ object BlockCheckValve extends BlockValve("CheckValve") with HasTE[TileCheckValv
 
   @SideOnly(Side.CLIENT)
   override def registerBlockIcons(ir: IIconRegister) = {
-    frontIcon = ir.registerIcon("pressure:%s/front".format(name.toLowerCase))
-    sideIconOn = ir.registerIcon("pressure:%s/side_on".format(name.toLowerCase))
-    sideIconOff = ir.registerIcon("pressure:%s/side_off".format(name.toLowerCase))
+    frontIcon = ir.registerIcon(Misc.iconName(Pressure.modId, name, "front"))
+    sideIconOn = ir.registerIcon(Misc.iconName(Pressure.modId, name, "side_on"))
+    sideIconOff = ir.registerIcon(Misc.iconName(Pressure.modId, name, "side_off"))
   }
 }

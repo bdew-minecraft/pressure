@@ -9,6 +9,8 @@
 
 package net.bdew.pressure.blocks.router.gui
 
+import java.util.Locale
+
 import net.bdew.lib.gui.widgets.Widget
 import net.bdew.lib.gui.{Point, Rect}
 import net.bdew.lib.{Client, Misc}
@@ -35,7 +37,7 @@ class RouterRSModeButton(p: Point, te: TileRouter, side: ForgeDirection) extends
   }
 
   override def handleTooltip(p: Point, tip: mutable.MutableList[String]) {
-    tip += Misc.toLocal("bdlib.rsmode." + te.sideControl.get(side).toString.toLowerCase)
+    tip += Misc.toLocal("bdlib.rsmode." + te.sideControl.get(side).toString.toLowerCase(Locale.US))
   }
 
   override def mouseClicked(p: Point, button: Int) {

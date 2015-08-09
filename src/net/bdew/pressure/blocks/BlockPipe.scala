@@ -10,7 +10,9 @@
 package net.bdew.pressure.blocks
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.Misc
 import net.bdew.lib.block.{HasItemBlock, SimpleBlock}
+import net.bdew.pressure.Pressure
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.bdew.pressure.pressurenet.Helper
 import net.bdew.pressure.render.PipeRenderer
@@ -33,7 +35,7 @@ object BlockPipe extends SimpleBlock("Pipe", Material.iron) with IPressureConnec
 
   @SideOnly(Side.CLIENT)
   override def registerBlockIcons(ir: IIconRegister) = {
-    blockIcon = ir.registerIcon("pressure:pipe")
+    blockIcon = ir.registerIcon(Misc.iconName(Pressure.modId, "pipe"))
   }
 
   override def setBlockBoundsBasedOnState(w: IBlockAccess, x: Int, y: Int, z: Int) {

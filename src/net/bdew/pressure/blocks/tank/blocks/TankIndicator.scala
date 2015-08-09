@@ -16,6 +16,7 @@ import net.bdew.lib.block.BlockRef
 import net.bdew.lib.multiblock.tile.{TileController, TileModule}
 import net.bdew.lib.render.connected.ConnectedHelper.{EdgeDraw, RectF, Vec3F}
 import net.bdew.lib.render.connected.ConnectedRenderer
+import net.bdew.pressure.Pressure
 import net.bdew.pressure.blocks.tank.controller.TileTankController
 import net.bdew.pressure.blocks.tank.{BaseModule, ModuleNeedsRenderUpdate}
 import net.minecraft.block.Block
@@ -68,10 +69,10 @@ object BlockTankIndicator extends BaseModule("TankIndicator", "TankBlock", class
 
   @SideOnly(Side.CLIENT)
   override def regIcons(ir: IIconRegister) {
-    iconFull = ir.registerIcon("pressure:tank/" + name.toLowerCase + "/full")
-    iconSingle = ir.registerIcon("pressure:tank/" + name.toLowerCase + "/single")
-    iconUp = ir.registerIcon("pressure:tank/" + name.toLowerCase + "/up")
-    iconDown = ir.registerIcon("pressure:tank/" + name.toLowerCase + "/down")
+    iconFull = ir.registerIcon(Misc.iconName(Pressure.modId, "tank", name, "full"))
+    iconSingle = ir.registerIcon(Misc.iconName(Pressure.modId, "tank", name, "single"))
+    iconUp = ir.registerIcon(Misc.iconName(Pressure.modId, "tank", name, "up"))
+    iconDown = ir.registerIcon(Misc.iconName(Pressure.modId, "tank", name, "down"))
   }
 }
 

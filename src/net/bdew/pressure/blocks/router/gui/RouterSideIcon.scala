@@ -9,6 +9,8 @@
 
 package net.bdew.pressure.blocks.router.gui
 
+import java.util.Locale
+
 import net.bdew.lib.Misc
 import net.bdew.lib.gui.widgets.Widget
 import net.bdew.lib.gui.{Point, Rect}
@@ -26,7 +28,7 @@ class RouterSideIcon(p: Point, te: TileRouter, side: ForgeDirection) extends Wid
   }
 
   override def handleTooltip(p: Point, tip: mutable.MutableList[String]) {
-    tip += "%s (%s)".format(Misc.toLocal("pressure.router.side." + side.ordinal()), Misc.toLocal("bdlib.multiblock.face." + side.toString.toLowerCase))
-    tip += Misc.toLocal("pressure.router.mode." + te.sideModes.get(side).toString.toLowerCase)
+    tip += "%s (%s)".format(Misc.toLocal("pressure.router.side." + side.ordinal()), Misc.toLocal("bdlib.multiblock.face." + side.toString.toLowerCase(Locale.US)))
+    tip += Misc.toLocal("pressure.router.mode." + te.sideModes.get(side).toString.toLowerCase(Locale.US))
   }
 }

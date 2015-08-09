@@ -9,6 +9,8 @@
 
 package net.bdew.pressure.blocks.tank.blocks
 
+import java.util.Locale
+
 import dan200.computercraft.api.ComputerCraftAPI
 import net.bdew.lib.multiblock.data.{OutputConfigFluid, OutputConfigRSControllable, RSMode}
 import net.bdew.lib.multiblock.tile.TileModule
@@ -82,9 +84,9 @@ object DataPortCommands extends TileCommandHandler[TileDataPort] {
 
   command("setOutputMode") { ctx =>
     val (oName, mode) = ctx.params(CCString, CCString)
-    val oNum = outputNames.getOrElse(oName.toLowerCase, err("Invalid output name"))
+    val oNum = outputNames.getOrElse(oName.toLowerCase(Locale.US), err("Invalid output name"))
     val newMode = try {
-      RSMode.withName(mode.toUpperCase)
+      RSMode.withName(mode.toUpperCase(Locale.US))
     } catch {
       case e: NoSuchElementException => err("Invalid output mode")
     }

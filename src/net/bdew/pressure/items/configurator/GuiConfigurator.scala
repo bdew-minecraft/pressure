@@ -9,6 +9,8 @@
 
 package net.bdew.pressure.items.configurator
 
+import java.util.Locale
+
 import net.bdew.lib.gui._
 import net.bdew.lib.gui.widgets._
 import net.bdew.lib.{Client, Misc}
@@ -52,7 +54,7 @@ class GuiConfigurator(player: EntityPlayer) extends BaseScreen(new ContainerConf
     import scala.collection.JavaConversions._
 
     allFluids = (for ((name, fluid) <- FluidRegistry.getRegisteredFluids)
-    yield fluid.getLocalizedName(new FluidStack(fluid, 1)) -> fluid).toVector.sortBy(_._1.toLowerCase)
+      yield fluid.getLocalizedName(new FluidStack(fluid, 1)) -> fluid).toVector.sortBy(_._1.toLowerCase(Locale.US))
   }
 
   def resetClicked(bt: WidgetButtonIcon) {
@@ -61,12 +63,12 @@ class GuiConfigurator(player: EntityPlayer) extends BaseScreen(new ContainerConf
   }
 
   override def updateScreen() = {
-    val search = searchEdit.getText.toLowerCase
+    val search = searchEdit.getText.toLowerCase(Locale.US)
     if (search != lastSearch) {
       lastSearch = search
       displayMap = (
         for (((name, fluid), idx) <- allFluids.zipWithIndex
-             if search.isEmpty || name.toLowerCase.contains(search)) yield idx)
+             if search.isEmpty || name.toLowerCase(Locale.US).contains(search)) yield idx)
         .splitAt(27)._1.zipWithIndex.map(_.swap).toMap
     }
     super.updateScreen()

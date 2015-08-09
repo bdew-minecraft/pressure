@@ -10,8 +10,9 @@
 package net.bdew.pressure.blocks.valves.sensor
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.bdew.lib.DecFormat
 import net.bdew.lib.block.{HasItemBlock, HasTE}
+import net.bdew.lib.{DecFormat, Misc}
+import net.bdew.pressure.Pressure
 import net.bdew.pressure.blocks.CustomItemBlock
 import net.bdew.pressure.blocks.valves.BlockValve
 import net.bdew.pressure.misc.{DataSlotFluidAverages, FluidNameHelper}
@@ -65,8 +66,8 @@ object BlockPipeSensor extends BlockValve("PipeSensor") with HasTE[TilePipeSenso
 
   @SideOnly(Side.CLIENT)
   override def registerBlockIcons(ir: IIconRegister) = {
-    frontIcon = ir.registerIcon("pressure:%s/front".format(name.toLowerCase))
-    sideIconOn = ir.registerIcon("pressure:%s/side_on".format(name.toLowerCase))
-    sideIconOff = ir.registerIcon("pressure:%s/side_off".format(name.toLowerCase))
+    frontIcon = ir.registerIcon(Misc.iconName(Pressure.modId, name, "front"))
+    sideIconOn = ir.registerIcon(Misc.iconName(Pressure.modId, name, "side_on"))
+    sideIconOff = ir.registerIcon(Misc.iconName(Pressure.modId, name, "side_off"))
   }
 }

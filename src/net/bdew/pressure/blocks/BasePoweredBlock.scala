@@ -10,7 +10,9 @@
 package net.bdew.pressure.blocks
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.Misc
 import net.bdew.lib.rotate.IconType
+import net.bdew.pressure.Pressure
 import net.bdew.pressure.render.RotatedFilterableBlockRenderer
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -65,9 +67,10 @@ class BasePoweredBlock[T <: TileFilterable](name: String, teClass: Class[T]) ext
 
   @SideOnly(Side.CLIENT)
   override def registerBlockIcons(ir: IIconRegister) = {
-    frontIcon = ir.registerIcon("pressure:%s/front".format(name))
-    backIcon = ir.registerIcon("pressure:%s/back".format(name))
-    sideIconOn = ir.registerIcon("pressure:%s/side_on".format(name))
-    sideIconOff = ir.registerIcon("pressure:%s/side_off".format(name))
+
+    frontIcon = ir.registerIcon(Misc.iconName(Pressure.modId, name, "front"))
+    backIcon = ir.registerIcon(Misc.iconName(Pressure.modId, name, "back"))
+    sideIconOn = ir.registerIcon(Misc.iconName(Pressure.modId, name, "side_on"))
+    sideIconOff = ir.registerIcon(Misc.iconName(Pressure.modId, name, "side_off"))
   }
 }

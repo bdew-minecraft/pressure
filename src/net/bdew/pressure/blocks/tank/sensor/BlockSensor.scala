@@ -10,6 +10,7 @@
 package net.bdew.pressure.blocks.tank.sensor
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.Misc
 import net.bdew.lib.sensors.multiblock.{BlockRedstoneSensorModule, TileRedstoneSensorModule}
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.blocks.tank.BaseModule
@@ -36,11 +37,11 @@ object BlockSensor extends BaseModule("Sensor", "Sensor", classOf[TileSensor]) w
 
   @SideOnly(Side.CLIENT) override
   def registerBlockIcons(reg: IIconRegister): Unit = {
-    sideIcon = reg.registerIcon(Pressure.modId + ":tank/sensor/side_off")
-    frontIcon = reg.registerIcon(Pressure.modId + ":tank/sensor/front_off")
-    bottomIcon = reg.registerIcon(Pressure.modId + ":tank/sensor/back")
-    frontIconOn = reg.registerIcon(Pressure.modId + ":tank/sensor/front_on")
-    sideIconOn = reg.registerIcon(Pressure.modId + ":tank/sensor/side_on")
+    sideIcon = reg.registerIcon(Misc.iconName(Pressure.modId, "tank", "sensor", "side_off"))
+    frontIcon = reg.registerIcon(Misc.iconName(Pressure.modId, "tank", "sensor", "front_off"))
+    bottomIcon = reg.registerIcon(Misc.iconName(Pressure.modId, "tank", "sensor", "back"))
+    frontIconOn = reg.registerIcon(Misc.iconName(Pressure.modId, "tank", "sensor", "front_on"))
+    sideIconOn = reg.registerIcon(Misc.iconName(Pressure.modId, "tank", "sensor", "side_on"))
   }
 
 }

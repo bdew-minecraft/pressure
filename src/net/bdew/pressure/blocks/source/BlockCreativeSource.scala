@@ -10,6 +10,8 @@
 package net.bdew.pressure.blocks.source
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.Misc
+import net.bdew.pressure.Pressure
 import net.bdew.pressure.blocks.BlockFilterable
 import net.bdew.pressure.render.FilterableBlockRenderer
 import net.minecraft.block.Block
@@ -29,6 +31,6 @@ object BlockCreativeSource extends Block(Material.iron) with BlockFilterable[Til
 
   @SideOnly(Side.CLIENT)
   override def registerBlockIcons(ir: IIconRegister) = {
-    blockIcon = ir.registerIcon("pressure:creative")
+    blockIcon = ir.registerIcon(Misc.iconName(Pressure.modId, "creative"))
   }
 }

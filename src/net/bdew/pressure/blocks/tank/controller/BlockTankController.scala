@@ -10,6 +10,8 @@
 package net.bdew.pressure.blocks.tank.controller
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.Misc
+import net.bdew.pressure.Pressure
 import net.bdew.pressure.blocks.tank.BaseController
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.texture.IIconRegister
@@ -29,8 +31,8 @@ object BlockTankController extends BaseController("TankController", classOf[Tile
 
   @SideOnly(Side.CLIENT)
   override def regIcons(ir: IIconRegister) {
-    topIcon = ir.registerIcon("pressure:tank/" + name.toLowerCase + "/top")
-    bottomIcon = ir.registerIcon("pressure:tank/" + name.toLowerCase + "/bottom")
+    topIcon = ir.registerIcon(Misc.iconName(Pressure.modId, "tank", name, "top"))
+    bottomIcon = ir.registerIcon(Misc.iconName(Pressure.modId, "tank", name, "bottom"))
   }
 
   override def getIcon(side: Int, meta: Int) =

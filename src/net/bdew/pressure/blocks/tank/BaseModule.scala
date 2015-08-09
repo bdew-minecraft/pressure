@@ -10,11 +10,12 @@
 package net.bdew.pressure.blocks.tank
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
+import net.bdew.lib.Misc
 import net.bdew.lib.block.NamedBlock
 import net.bdew.lib.multiblock.block.BlockModule
 import net.bdew.lib.multiblock.tile.TileModule
-import net.bdew.pressure.PressureResourceProvider
 import net.bdew.pressure.config.Machines
+import net.bdew.pressure.{Pressure, PressureResourceProvider}
 import net.minecraft.block.material.Material
 import net.minecraft.client.renderer.texture.IIconRegister
 
@@ -27,7 +28,7 @@ class BaseModule[T <: TileModule](name: String, kind: String, TEClass: Class[T])
 
   @SideOnly(Side.CLIENT)
   override def registerBlockIcons(ir: IIconRegister) {
-    blockIcon = ir.registerIcon("pressure:tank/" + name.toLowerCase + "/main")
+    blockIcon = ir.registerIcon(Misc.iconName(Pressure.modId, "tank", name, "main"))
     regIcons(ir)
   }
 
