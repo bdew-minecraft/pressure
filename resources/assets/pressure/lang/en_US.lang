@@ -5,6 +5,7 @@ tile.pressure.pump.name=High Pressure Pump
 tile.pressure.water.name=Infinite Water Source
 tile.pressure.creative.name=Creative Fluid Source
 tile.pressure.drain.name=Fluid Drain
+tile.pressure.sluice.name=Sluice
 
 tile.pressure.Router.name=High Pressure Router
 tile.pressure.CheckValve.name=High Pressure Check Valve

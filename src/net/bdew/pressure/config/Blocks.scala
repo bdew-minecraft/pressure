@@ -12,7 +12,7 @@ package net.bdew.pressure.config
 import net.bdew.lib.Misc
 import net.bdew.lib.config.BlockManager
 import net.bdew.pressure.blocks._
-import net.bdew.pressure.blocks.drain.BlockDrain
+import net.bdew.pressure.blocks.drain.{BlockDrain, BlockSluice}
 import net.bdew.pressure.blocks.gas.{BlockPressureGasInput, BlockPressureGasOutput, BlockTankGasInput, BlockTankGasOutput}
 import net.bdew.pressure.blocks.input.BlockInput
 import net.bdew.pressure.blocks.output.BlockOutput
@@ -35,6 +35,7 @@ object Blocks extends BlockManager(PressureCreativeTabs.main) {
   regBlock(BlockWaterSource, "Water")
   regBlock(BlockCreativeSource, "Creative")
   regBlock(BlockDrain, "Drain")
+  regBlock(BlockSluice, "Sluice")
 
   regBlock(BlockTankBlock)
   regBlock(BlockTankIndicator)
