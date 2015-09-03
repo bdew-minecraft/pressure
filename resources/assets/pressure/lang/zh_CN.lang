@@ -5,6 +5,7 @@ tile.pressure.pump.name=高压泵
 tile.pressure.water.name=无限水源块
 tile.pressure.creative.name=创造液体源块
 tile.pressure.drain.name=水库排液口
+tile.pressure.sluice.name=水闸
 
 tile.pressure.Router.name=高压路由器
 tile.pressure.CheckValve.name=高压遏制阀门
