@@ -47,6 +47,10 @@ object TuningLoader {
       configDir = Pressure.configDir,
       resBaseName = "/assets/pressure/config/",
       loader = loader)
+
+    if (1.0 * Modules.TankBlock.capacity * Tuning.getSection("Machines").getSection("TankController").getSection("Modules").getInt("TankBlock") > Int.MaxValue) {
+      Pressure.logWarn("Current configuration allows building tanks larger than %d mb which is known to cause issues, all tanks will be capped to that capacity", Int.MaxValue)
+    }
   }
 }
 

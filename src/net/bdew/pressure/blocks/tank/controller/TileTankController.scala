@@ -173,8 +173,12 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   override def openGui(player: EntityPlayer) = player.openGui(Pressure, cfg.guiId, worldObj, xCoord, yCoord, zCoord)
 
   def onModulesChanged() {
-    val newCapacity = getNumOfModules("TankBlock") * Modules.TankBlock.capacity
-    tank.setCapacity(newCapacity)
+    val newCapacity = 1.0 * getNumOfModules("TankBlock") * Modules.TankBlock.capacity
+
+    if (newCapacity <= Int.MaxValue)
+      tank.setCapacity(newCapacity.toInt)
+    else
+      tank.setCapacity(Int.MaxValue)
 
     // If we don't have indicators - don't spam updates
     if (modules.exists(_.getTile[TileTankIndicator](worldObj).isDefined)) {
@@ -186,7 +190,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
     if (newCapacity == 0)
       tank.setFluid(null)
     else if (tank.getFluid != null && tank.getFluid.amount > newCapacity)
-      tank.getFluid.amount = newCapacity
+      tank.getFluid.amount = newCapacity.toInt
 
     dataSlotChanged(tank) // ensure update sent to client
   }
