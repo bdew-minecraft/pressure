@@ -12,9 +12,9 @@ package net.bdew.pressure.blocks.router.gui
 import net.bdew.lib.gui._
 import net.bdew.lib.gui.widgets.WidgetSubContainer
 import net.bdew.pressure.blocks.router.TileRouter
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 
-class RouterSideWidget(val te: TileRouter, p: Point, side: ForgeDirection) extends WidgetSubContainer(new Rect(p, 18, 58)) {
+class RouterSideWidget(val te: TileRouter, p: Point, side: EnumFacing) extends WidgetSubContainer(new Rect(p, 18, 58)) {
   add(new RouterSideIcon(Point(1, 1), te, side))
   add(new RouterFilterIcon(Point(1, 21), te, side))
   add(new RouterRSModeButton(Point(1, 41), te, side))

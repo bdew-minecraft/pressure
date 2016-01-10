@@ -9,22 +9,22 @@
 
 package net.bdew.pressure.pressurenet
 
-import net.bdew.lib.block.BlockRef
+import net.bdew.lib.block.BlockFace
 import net.bdew.pressure.api.{IPressureEject, IPressureInject, IPressureTile}
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.FluidStack
 
 trait PressureTileFace {
   val tile: IPressureTile
-  val face: ForgeDirection
-  def blockRef = BlockRef(tile.getXCoord, tile.getYCoord, tile.getZCoord)
-  def blockRefFace = BlockRefFace(blockRef, face)
+  val face: EnumFacing
+  def blockRef = tile.getPos
+  def blockRefFace = BlockFace(tile.getPos, face)
 }
 
-case class PressureOutputFace(tile: IPressureEject, face: ForgeDirection) extends PressureTileFace {
+case class PressureOutputFace(tile: IPressureEject, face: EnumFacing) extends PressureTileFace {
   def eject(resource: FluidStack, doEject: Boolean) = tile.eject(resource, face, doEject)
 }
 
-case class PressureInputFace(tile: IPressureInject, face: ForgeDirection) extends PressureTileFace {
+case class PressureInputFace(tile: IPressureInject, face: EnumFacing) extends PressureTileFace {
   def invalidateConnection() = tile.invalidateConnection(face)
 }

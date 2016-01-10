@@ -9,25 +9,25 @@
 
 package net.bdew.pressure.blocks.router
 
-import net.bdew.lib.render.IconPreloader
+import net.bdew.lib.gui.Texture
 import net.bdew.pressure.blocks.router.data.RouterSideMode
 
-object RouterIcons extends IconPreloader(0) {
+object RouterIcons {
   val overlays = Map(
-    RouterSideMode.DISABLED -> TextureLoc("pressure:router/closed_over"),
-    RouterSideMode.INPUT_PASSIVE -> TextureLoc("pressure:router/input_over"),
-    RouterSideMode.INPUT_ACTIVE -> TextureLoc("pressure:router/input_act_over"),
-    RouterSideMode.OUTPUT_HIGH -> TextureLoc("pressure:router/output_over_high"),
-    RouterSideMode.OUTPUT_MEDIUM -> TextureLoc("pressure:router/output_over_med"),
-    RouterSideMode.OUTPUT_LOW -> TextureLoc("pressure:router/output_over_low")
+    RouterSideMode.DISABLED -> Texture("pressure:router/closed_over"),
+    RouterSideMode.INPUT_PASSIVE -> Texture("pressure:router/input_over"),
+    RouterSideMode.INPUT_ACTIVE -> Texture("pressure:router/input_act_over"),
+    RouterSideMode.OUTPUT_HIGH -> Texture("pressure:router/output_over_high"),
+    RouterSideMode.OUTPUT_MEDIUM -> Texture("pressure:router/output_over_med"),
+    RouterSideMode.OUTPUT_LOW -> Texture("pressure:router/output_over_low")
   )
 
   val modeIcons = Map(
-    RouterSideMode.DISABLED -> TextureLoc("pressure:router/closed"),
-    RouterSideMode.INPUT_PASSIVE -> TextureLoc("pressure:router/in"),
-    RouterSideMode.INPUT_ACTIVE -> TextureLoc("pressure:router/in_act"),
-    RouterSideMode.OUTPUT_HIGH -> TextureLoc("pressure:router/out_high"),
-    RouterSideMode.OUTPUT_MEDIUM -> TextureLoc("pressure:router/out_med"),
-    RouterSideMode.OUTPUT_LOW -> TextureLoc("pressure:router/out_low")
+    RouterSideMode.DISABLED -> Texture("pressure:router/closed"),
+    RouterSideMode.INPUT_PASSIVE -> Texture("pressure:router/in"),
+    RouterSideMode.INPUT_ACTIVE -> Texture("pressure:router/in_act"),
+    RouterSideMode.OUTPUT_HIGH -> Texture("pressure:router/out_high"),
+    RouterSideMode.OUTPUT_MEDIUM -> Texture("pressure:router/out_med"),
+    RouterSideMode.OUTPUT_LOW -> Texture("pressure:router/out_low")
   )
 }

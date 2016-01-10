@@ -13,7 +13,6 @@ import net.bdew.lib.Misc
 import net.bdew.lib.config.BlockManager
 import net.bdew.pressure.blocks._
 import net.bdew.pressure.blocks.drain.{BlockDrain, BlockSluice}
-import net.bdew.pressure.blocks.gas.{BlockPressureGasInput, BlockPressureGasOutput, BlockTankGasInput, BlockTankGasOutput}
 import net.bdew.pressure.blocks.input.BlockInput
 import net.bdew.pressure.blocks.output.BlockOutput
 import net.bdew.pressure.blocks.pump.BlockPump
@@ -29,13 +28,13 @@ object Blocks extends BlockManager(PressureCreativeTabs.main) {
   regBlock(BlockCheckValve)
   regBlock(BlockPipeSensor)
 
-  regBlock(BlockPump, "Pump")
-  regBlock(BlockOutput, "Output")
-  regBlock(BlockInput, "Input")
-  regBlock(BlockWaterSource, "Water")
-  regBlock(BlockCreativeSource, "Creative")
-  regBlock(BlockDrain, "Drain")
-  regBlock(BlockSluice, "Sluice")
+  regBlock(BlockPump)
+  regBlock(BlockOutput)
+  regBlock(BlockInput)
+  regBlock(BlockWaterSource)
+  regBlock(BlockCreativeSource)
+  regBlock(BlockDrain)
+  regBlock(BlockSluice)
 
   regBlock(BlockTankBlock)
   regBlock(BlockTankIndicator)
@@ -54,12 +53,5 @@ object Blocks extends BlockManager(PressureCreativeTabs.main) {
 
   if (Misc.haveModVersion("ComputerCraft")) {
     regBlock(BlockDataPort)
-  }
-
-  if (Misc.haveModVersion("MekanismAPI|gas@[8.0.0,)")) {
-    regBlock(BlockPressureGasInput, "GasInput")
-    regBlock(BlockPressureGasOutput, "GasOutput")
-    regBlock(BlockTankGasOutput)
-    regBlock(BlockTankGasInput)
   }
 }

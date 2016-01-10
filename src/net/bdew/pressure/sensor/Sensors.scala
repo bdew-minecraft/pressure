@@ -9,11 +9,11 @@
 
 package net.bdew.pressure.sensor
 
-import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.sensors.RedstoneSensors
 import net.bdew.pressure.blocks.tank.controller.TileTankController
 import net.bdew.pressure.sensor.data.{SensorFluidType, SensorTank}
 import net.minecraft.tileentity.TileEntity
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 object Sensors extends RedstoneSensors[TileEntity] {
   @SideOnly(Side.CLIENT)

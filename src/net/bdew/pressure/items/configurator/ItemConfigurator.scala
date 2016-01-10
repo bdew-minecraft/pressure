@@ -9,7 +9,6 @@
 
 package net.bdew.pressure.items.configurator
 
-import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.Misc
 import net.bdew.lib.gui.GuiProvider
 import net.bdew.lib.items.SimpleItem
@@ -21,9 +20,10 @@ import net.bdew.pressure.network.NetworkHandler
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.item.ItemStack
-import net.minecraft.util.ChatComponentTranslation
+import net.minecraft.util.{BlockPos, ChatComponentTranslation, EnumFacing}
 import net.minecraft.world.World
 import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 object ItemConfigurator extends SimpleItem("Configurator") with GuiProvider {
   override def guiId = 2
@@ -38,11 +38,11 @@ object ItemConfigurator extends SimpleItem("Configurator") with GuiProvider {
 
   override def getContainer(te: TEClass, player: EntityPlayer) = new ContainerConfigurator(player)
 
-  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, xOff: Float, yOff: Float, zOff: Float): Boolean = {
+  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
     if (!world.isRemote && player.isInstanceOf[EntityPlayerMP]) {
-      Option(Helper.getFilterableForWorldCoordinates(world, x, y, z, side)) foreach { filterable =>
+      Option(Helper.getFilterableForWorldCoordinates(world, pos, side)) foreach { filterable =>
         filterableCache.update(player, filterable)
-        player.openGui(Pressure, ItemConfigurator.guiId, world, x, y, z)
+        player.openGui(Pressure, ItemConfigurator.guiId, world, pos.getX, pos.getY, pos.getZ)
       }
     }
     true

@@ -10,22 +10,22 @@
 package net.bdew.pressure.blocks.source
 
 import net.minecraft.tileentity.TileEntity
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids._
 
 class TileWaterSource extends TileEntity with IFluidHandler {
   val fullStack = new FluidStack(FluidRegistry.WATER, Int.MaxValue)
-  override def getTankInfo(from: ForgeDirection) = Array(new FluidTankInfo(fullStack, Int.MaxValue))
-  override def canDrain(from: ForgeDirection, fluid: Fluid) = fluid == FluidRegistry.WATER
-  override def canFill(from: ForgeDirection, fluid: Fluid) = false
+  override def getTankInfo(from: EnumFacing) = Array(new FluidTankInfo(fullStack, Int.MaxValue))
+  override def canDrain(from: EnumFacing, fluid: Fluid) = fluid == FluidRegistry.WATER
+  override def canFill(from: EnumFacing, fluid: Fluid) = false
 
-  override def drain(from: ForgeDirection, maxDrain: Int, doDrain: Boolean) =
+  override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean) =
     new FluidStack(FluidRegistry.WATER, maxDrain)
 
-  override def drain(from: ForgeDirection, resource: FluidStack, doDrain: Boolean) =
+  override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean) =
     if (resource.getFluid == FluidRegistry.WATER)
       new FluidStack(FluidRegistry.WATER, resource.amount)
     else null
 
-  override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean) = 0
+  override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean) = 0
 }

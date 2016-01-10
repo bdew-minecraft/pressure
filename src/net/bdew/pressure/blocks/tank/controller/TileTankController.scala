@@ -51,8 +51,8 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   def doRenderUpdate(): Unit = {
     needsRenderUpdate = false
     lastRenderUpdate = worldObj.getTotalWorldTime
-    for (ref <- modules if ref.block(worldObj).exists(_.isInstanceOf[ModuleNeedsRenderUpdate]))
-      worldObj.markBlockRangeForRenderUpdate(ref.x, ref.y, ref.z, ref.x, ref.y, ref.z)
+    for (ref <- modules if worldObj.getBlockState(ref).isInstanceOf[ModuleNeedsRenderUpdate])
+      worldObj.markBlockRangeForRenderUpdate(ref, ref)
   }
 
   handleClientUpdate listen { tag =>
@@ -170,7 +170,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
 
   serverTick.listen(doUpdate)
 
-  override def openGui(player: EntityPlayer) = player.openGui(Pressure, cfg.guiId, worldObj, xCoord, yCoord, zCoord)
+  override def openGui(player: EntityPlayer) = player.openGui(Pressure, cfg.guiId, worldObj, pos.getX, pos.getY, pos.getZ)
 
   def onModulesChanged() {
     val newCapacity = 1.0 * getNumOfModules("TankBlock") * Modules.TankBlock.capacity
@@ -181,7 +181,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
       tank.setCapacity(Int.MaxValue)
 
     // If we don't have indicators - don't spam updates
-    if (modules.exists(_.getTile[TileTankIndicator](worldObj).isDefined)) {
+    if (modules.exists(x => worldObj.getTileEntity(x).isInstanceOf[TileTankIndicator])) {
       tank.setUpdate(UpdateKind.SAVE, UpdateKind.GUI, UpdateKind.WORLD)
     } else {
       tank.setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
@@ -196,9 +196,9 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   }
 
   def dropItems() {
-    if (getWorldObj != null && !getWorldObj.isRemote) {
+    if (getWorld != null && !getWorld.isRemote) {
       for (stack <- inventory.inv if stack != null) {
-        ItemUtils.throwItemAt(getWorldObj, xCoord, yCoord, zCoord, stack)
+        ItemUtils.throwItemAt(getWorld, pos, stack)
       }
       inventory.inv = new Array[ItemStack](inventory.size)
     }

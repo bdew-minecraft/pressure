@@ -9,14 +9,11 @@
 
 package net.bdew.pressure.api;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public interface IPressureTile {
-    int getXCoord();
-
-    int getYCoord();
-
-    int getZCoord();
+    BlockPos getPos();
 
     World getWorld();
 }

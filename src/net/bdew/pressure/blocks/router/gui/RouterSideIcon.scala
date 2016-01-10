@@ -16,11 +16,11 @@ import net.bdew.lib.gui.widgets.Widget
 import net.bdew.lib.gui.{Point, Rect}
 import net.bdew.pressure.PressureResourceProvider
 import net.bdew.pressure.blocks.router.{RouterIcons, TileRouter}
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 
 import scala.collection.mutable
 
-class RouterSideIcon(p: Point, te: TileRouter, side: ForgeDirection) extends Widget {
+class RouterSideIcon(p: Point, te: TileRouter, side: EnumFacing) extends Widget {
   val rect = new Rect(p, 16, 16)
 
   override def draw(mouse: Point) {

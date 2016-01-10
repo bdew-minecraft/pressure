@@ -17,7 +17,7 @@ import net.bdew.pressure.blocks.valves.sensor.TilePipeSensor
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumChatFormatting
+import net.minecraft.util.{BlockPos, EnumChatFormatting}
 import net.minecraft.world.World
 import net.minecraftforge.fluids.{Fluid, FluidRegistry, FluidStack}
 
@@ -41,7 +41,7 @@ object WailaValveHandler extends BaseDataProvider(classOf[BlockValve]) {
 }
 
 object WailaPipeSensorHandler extends BaseDataProvider(classOf[TilePipeSensor]) {
-  override def getNBTTag(player: EntityPlayerMP, te: TilePipeSensor, tag: NBTTagCompound, world: World, x: Int, y: Int, z: Int) = {
+  override def getNBTTag(player: EntityPlayerMP, te: TilePipeSensor, tag: NBTTagCompound, world: World, pos: BlockPos) = {
     val data = new NBTTagCompound
     for ((fluid, amount) <- te.averages.getAverages.toList.filter(_._2 > 0.000001)) {
       data.setDouble(fluid.getName, amount)
@@ -68,7 +68,7 @@ object WailaPipeSensorHandler extends BaseDataProvider(classOf[TilePipeSensor]) 
       if (acc.getNBTData.hasKey("flow_averages")) {
         val data = acc.getNBTData.getCompoundTag("flow_averages")
         val averages = (for {
-          name <- Misc.filterType(data.func_150296_c, classOf[String]) if FluidRegistry.isFluidRegistered(name)
+          name <- data.getKeySet if FluidRegistry.isFluidRegistered(name)
           fluid <- Option(FluidRegistry.getFluid(name))
         } yield fluid -> data.getDouble(name)).toList.sortBy(-_._2)
         List(

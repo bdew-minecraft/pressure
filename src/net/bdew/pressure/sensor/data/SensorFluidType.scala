@@ -9,7 +9,6 @@
 
 package net.bdew.pressure.sensor.data
 
-import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.Misc
 import net.bdew.lib.data.DataSlotTankBase
 import net.bdew.lib.gui._
@@ -20,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fluids._
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.reflect.ClassTag
 
@@ -73,8 +73,7 @@ case class SensorFluidType[T: ClassTag](uid: String, iconName: String, accessor:
   @SideOnly(Side.CLIENT)
   override def drawParameter(rect: Rect, target: DrawTarget, obj: TileEntity, param: GenericSensorParameter): Unit = param match {
     case FluidTypeParameter(fluid) =>
-      if (fluid.getStillIcon != null)
-        target.drawTexture(rect, Texture(Texture.BLOCKS, fluid.getStillIcon), Color.fromInt(fluid.getColor))
+      target.drawTexture(rect, Misc.getFluidIcon(fluid), Color.fromInt(fluid.getColor))
     case _ => target.drawTexture(rect, Sensors.DisabledSensor.texture)
   }
 

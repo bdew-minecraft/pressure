@@ -11,10 +11,10 @@ package net.bdew.pressure.pressurenet
 
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api.{IPressureConnection, IPressureInject}
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.FluidStack
 
-case class PressureConnection(origin: IPressureInject, side: ForgeDirection, tiles: Set[PressureOutputFace]) extends IPressureConnection {
+case class PressureConnection(origin: IPressureInject, side: EnumFacing, tiles: Set[PressureOutputFace]) extends IPressureConnection {
   override def pushFluid(fluid: FluidStack, doPush: Boolean): Int = {
     if (fluid == null || fluid.getFluid == null || fluid.amount == 0 || tiles.isEmpty) return 0
 
@@ -22,10 +22,9 @@ case class PressureConnection(origin: IPressureInject, side: ForgeDirection, til
     // and if a loop is detected we blow up the block.
 
     if (Helper.recursionGuard.value.contains(this)) {
-      Pressure.logInfo("Detected loop, blowing up %d,%d,%d (dim %d)",
-        origin.getXCoord, origin.getYCoord, origin.getZCoord, origin.getWorld.provider.dimensionId)
-      origin.getWorld.setBlockToAir(origin.getXCoord, origin.getYCoord, origin.getZCoord)
-      origin.getWorld.createExplosion(null, origin.getXCoord, origin.getYCoord, origin.getZCoord, 1, true)
+      Pressure.logInfo("Detected loop, blowing up %s (dim %d)", origin.getPos, origin.getWorld.provider.getDimensionId)
+      origin.getWorld.setBlockToAir(origin.getPos)
+      origin.getWorld.createExplosion(null, origin.getPos.getX, origin.getPos.getY, origin.getPos.getZ, 1, true)
       return 0
     }
 

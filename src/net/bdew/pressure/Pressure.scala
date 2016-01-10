@@ -11,12 +11,6 @@ package net.bdew.pressure
 
 import java.io.File
 
-import cpw.mods.fml.common.Mod
-import cpw.mods.fml.common.Mod.EventHandler
-import cpw.mods.fml.common.event._
-import cpw.mods.fml.common.network.NetworkRegistry
-import cpw.mods.fml.common.registry.GameRegistry
-import cpw.mods.fml.relauncher.Side
 import net.bdew.lib.Misc
 import net.bdew.pressure.api.PressureAPI
 import net.bdew.pressure.blocks.router.BlockRouter
@@ -24,13 +18,16 @@ import net.bdew.pressure.compat.OpenComputersExecutionHelper
 import net.bdew.pressure.compat.computercraft.ExecutionHelpers
 import net.bdew.pressure.compat.enderio.EnderIOProxy
 import net.bdew.pressure.config._
-import net.bdew.pressure.fmp.FmpHandler
-import net.bdew.pressure.items.{Canister, CanisterRenderer}
 import net.bdew.pressure.misc.PressureCreativeTabs
 import net.bdew.pressure.network.NetworkHandler
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.item.Item
-import net.minecraftforge.client.MinecraftForgeClient
+import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.common.Mod.EventHandler
+import net.minecraftforge.fml.common.event._
+import net.minecraftforge.fml.common.network.NetworkRegistry
+import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraftforge.fml.relauncher.Side
 import org.apache.logging.log4j.Logger
 
 @Mod(modid = Pressure.modId, version = "PRESSURE_VER", name = "Pressure Pipes", dependencies = "after:ForgeMultipart;after:ComputerCraft;required-after:bdlib", modLanguage = "scala")
@@ -58,11 +55,11 @@ object Pressure {
     Items.load()
     Blocks.load()
     Machines.load()
-    if (Misc.haveModVersion("ForgeMultipart")) FmpHandler.init()
     if (event.getSide == Side.CLIENT) {
-      IconCache.init()
-      sensor.Icons.init()
-      MinecraftForgeClient.registerItemRenderer(Canister, CanisterRenderer)
+      // todo: rendering stuff
+      //      IconCache.init()
+      //      sensor.Icons.init()
+      //      MinecraftForgeClient.registerItemRenderer(Canister, CanisterRenderer)
     }
   }
 

@@ -38,7 +38,7 @@ class GuiConfigurator(player: EntityPlayer) extends BaseScreen(new ContainerConf
     widgets.add(new WidgetLabel(Misc.toLocal("container.inventory"), 8, 77, Color.darkGray))
     widgets.add(new WidgetSimpleIcon(new Rect(8, 4, 16, 16), searchIcon))
 
-    searchEdit = widgets.add(new WidgetTextEdit(new Rect(26, 6, 124, 12), getFontRenderer))
+    searchEdit = widgets.add(new WidgetTextEdit(0, new Rect(26, 6, 124, 12), getFontRenderer))
     searchEdit.setTextColor(-1)
     searchEdit.setDisabledTextColour(-1)
     searchEdit.setMaxStringLength(256)

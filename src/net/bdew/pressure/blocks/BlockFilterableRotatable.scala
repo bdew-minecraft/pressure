@@ -9,11 +9,9 @@
 
 package net.bdew.pressure.blocks
 
-import net.bdew.lib.rotate.{BaseRotatableBlock, IconType}
-import net.minecraft.world.IBlockAccess
-import net.minecraftforge.common.util.ForgeDirection
+import net.bdew.lib.block.HasTE
+import net.bdew.lib.rotate.BaseRotatableBlock
 
-trait BlockFilterableRotatable[T <: TileFilterable] extends BlockFilterable[T] with BaseRotatableBlock {
-  override def shouldShowFilterIconOnSide(w: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection): Boolean =
-    IconType.fromSideAndDir(side.ordinal(), getFacing(w, x, y, z)) == IconType.SIDE
+trait BlockFilterableRotatable extends BlockFilterable with BaseRotatableBlock {
+  this: HasTE[_ <: TileFilterable] =>
 }

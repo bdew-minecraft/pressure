@@ -10,4 +10,4 @@
 @API(apiVersion = "PRESSURE_APIVER", owner = "pressure", provides = "pressureAPI") //
         package net.bdew.pressure.api;
 
-import cpw.mods.fml.common.API;
+import net.minecraftforge.fml.common.API;

@@ -11,7 +11,7 @@ package net.bdew.pressure.blocks.tank.gui
 
 import net.bdew.lib.Misc
 import net.bdew.lib.gui.widgets.Widget
-import net.bdew.lib.gui.{Color, Point, Rect, Texture}
+import net.bdew.lib.gui.{Color, Point, Rect}
 import net.bdew.pressure.blocks.tank.controller.TileTankController
 import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fluids.FluidStack
@@ -22,7 +22,7 @@ class WidgetFilterIcon(p: Point, te: TileTankController) extends Widget {
   override val rect = new Rect(p, 16, 16)
   override def draw(mouse: Point) {
     te.getFluidFilter.foreach { fluid =>
-      parent.drawTexture(rect, Texture(Texture.BLOCKS, Misc.getFluidIcon(fluid)), Color.fromInt(Misc.getFluidColor(fluid)))
+      parent.drawTexture(rect, Misc.getFluidIcon(fluid), Color.fromInt(Misc.getFluidColor(fluid)))
     }
   }
   override def handleTooltip(p: Point, tip: mutable.MutableList[String]) = {

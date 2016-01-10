@@ -11,7 +11,7 @@ package net.bdew.pressure.blocks.router.gui
 
 import net.bdew.lib.multiblock.data.RSMode
 import net.bdew.pressure.network.NetworkHandler
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 
-case class MsgSetRouterSideControl(side: ForgeDirection, mode: RSMode.Value) extends NetworkHandler.Message
+case class MsgSetRouterSideControl(side: EnumFacing, mode: RSMode.Value) extends NetworkHandler.Message
 

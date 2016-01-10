@@ -9,6 +9,8 @@
 
 package net.bdew.pressure.api;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public interface IFilterableProvider {
@@ -17,5 +19,5 @@ public interface IFilterableProvider {
      *
      * @return IFilterable instance or null if not applicable
      */
-    IFilterable getFilterableForWorldCoordinates(World world, int x, int y, int z, int side);
+    IFilterable getFilterableForWorldCoordinates(World world, BlockPos pos, EnumFacing side);
 }

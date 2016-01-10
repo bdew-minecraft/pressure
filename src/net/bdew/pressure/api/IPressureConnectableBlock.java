@@ -9,8 +9,9 @@
 
 package net.bdew.pressure.api;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Implemented on all blocks that can connect to Pressure pipes or blocks
@@ -21,7 +22,7 @@ public interface IPressureConnectableBlock {
      *
      * @return true if connection is possible
      */
-    boolean canConnectTo(IBlockAccess world, int x, int y, int z, ForgeDirection side);
+    boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing side);
 
     /**
      * Checks if network connections should pass through this block
@@ -29,5 +30,5 @@ public interface IPressureConnectableBlock {
      *
      * @return true if network connections should pass through this block
      */
-    boolean isTraversable(IBlockAccess world, int x, int y, int z);
+    boolean isTraversable(IBlockAccess world, BlockPos pos);
 }

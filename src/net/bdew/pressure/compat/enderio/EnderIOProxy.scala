@@ -13,11 +13,14 @@ import net.bdew.lib.Misc
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api.IFilterableProvider
 import net.bdew.pressure.pressurenet.Helper
+import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.World
 
 import scala.language.reflectiveCalls
 
 object EnderIOProxy extends IFilterableProvider {
+  // Todo: EnderIO is not out for 1.8, this will probably need tweaking.
+
   def init() {
     try {
       Pressure.logInfo("Loading EnderIO compatibility...")
@@ -30,9 +33,9 @@ object EnderIOProxy extends IFilterableProvider {
     }
   }
 
-  override def getFilterableForWorldCoordinates(world: World, x: Int, y: Int, z: Int, side: Int) = {
+  override def getFilterableForWorldCoordinates(world: World, pos: BlockPos, side: EnumFacing) = {
     import net.bdew.pressure.compat.enderio.EnderIOReflect._
-    (Option(world.getTileEntity(x, y, z)) flatMap Misc.asInstanceOpt(clsTileConduitBundle) map { te =>
+    (Option(world.getTileEntity(pos)) flatMap Misc.asInstanceOpt(clsTileConduitBundle) map { te =>
       if (te.getConduit(clsLiquidConduit) != null) new FilterableProxy(te, clsLiquidConduit)
       else if (te.getConduit(clsAdvancedLiquidConduit) != null) new FilterableProxy(te, clsAdvancedLiquidConduit)
       else null

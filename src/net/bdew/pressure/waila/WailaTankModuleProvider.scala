@@ -19,10 +19,11 @@ import net.bdew.pressure.blocks.tank.controller.TileTankController
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.BlockPos
 import net.minecraft.world.World
 
 object WailaTankModuleProvider extends BaseDataProvider(classOf[TileModule]) {
-  override def getNBTTag(player: EntityPlayerMP, te: TileModule, tag: NBTTagCompound, world: World, x: Int, y: Int, z: Int) = {
+  override def getNBTTag(player: EntityPlayerMP, te: TileModule, tag: NBTTagCompound, world: World, pos: BlockPos) = {
     val data = new NBTTagCompound
     for {
       core <- te.getCoreAs[TileTankController]
@@ -44,7 +45,7 @@ object WailaTankModuleProvider extends BaseDataProvider(classOf[TileModule]) {
       }
       var out = WailaTankProvider.getBodyStrings(controller, stack, acc, cfg)
       if (target.isInstanceOf[MIOutput[_]]) {
-        out ++= controller.outputFaces get BlockFace(target.myPos, acc.getSide) map { output => Misc.toLocal("pressure.output." + output) }
+        out ++= controller.outputFaces get BlockFace(target.getPos, acc.getSide) map { output => Misc.toLocal("pressure.output." + output) }
       }
       out
     }).getOrElse(List.empty)

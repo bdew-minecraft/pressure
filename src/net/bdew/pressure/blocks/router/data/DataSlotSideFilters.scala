@@ -11,19 +11,19 @@ package net.bdew.pressure.blocks.router.data
 
 import net.bdew.lib.data.base.{DataSlot, DataSlotContainer, UpdateKind}
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.{Fluid, FluidRegistry}
 
 case class DataSlotSideFilters(name: String, parent: DataSlotContainer) extends DataSlot {
-  var map = Map.empty[ForgeDirection, Fluid]
+  var map = Map.empty[EnumFacing, Fluid]
 
-  def get(d: ForgeDirection) = map(d)
-  def isSet(d: ForgeDirection) = map.isDefinedAt(d)
-  def set(d: ForgeDirection, f: Fluid) = {
+  def get(d: EnumFacing) = map(d)
+  def isSet(d: EnumFacing) = map.isDefinedAt(d)
+  def set(d: EnumFacing, f: Fluid) = {
     map += d -> f
     parent.dataSlotChanged(this)
   }
-  def clear(d: ForgeDirection) = {
+  def clear(d: EnumFacing) = {
     map -= d
     parent.dataSlotChanged(this)
   }
@@ -38,7 +38,7 @@ case class DataSlotSideFilters(name: String, parent: DataSlotContainer) extends 
     map = Map.empty
     if (t.hasKey(name)) {
       for {
-        dir <- ForgeDirection.VALID_DIRECTIONS
+        dir <- EnumFacing.values()
         fName <- Option(t.getCompoundTag(name).getString(dir.ordinal().toString)) if fName.nonEmpty && FluidRegistry.isFluidRegistered(fName)
         fluid <- Option(FluidRegistry.getFluid(fName))
       } {

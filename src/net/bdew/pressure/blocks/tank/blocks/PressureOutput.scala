@@ -17,15 +17,15 @@ import net.bdew.pressure.api.{IPressureConnectableBlock, IPressureConnection, IP
 import net.bdew.pressure.blocks.BlockNotifyUpdates
 import net.bdew.pressure.blocks.tank.{BaseModule, PressureModule}
 import net.bdew.pressure.pressurenet.Helper
+import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.IBlockAccess
-import net.minecraftforge.common.util.ForgeDirection
 
 object BlockPressureOutput extends BaseModule("TankPressureOutput", "FluidOutput", classOf[TilePressureOutput])
 with BlockOutput[TilePressureOutput] with BlockNotifyUpdates with IPressureConnectableBlock {
-  override def canConnectTo(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
-    getTE(world, x, y, z).getCore.isDefined
-  override def isTraversable(world: IBlockAccess, x: Int, y: Int, z: Int) = false
-  override def canConnectRedstone(world: IBlockAccess, x: Int, y: Int, z: Int, side: Int) = true
+  override def canConnectTo(world: IBlockAccess, pos: BlockPos, side: EnumFacing) =
+    getTE(world, pos).getCore.isDefined
+  override def isTraversable(world: IBlockAccess, pos: BlockPos) = false
+  override def canConnectRedstone(world: IBlockAccess, pos: BlockPos, side: EnumFacing) = true
 }
 
 class TilePressureOutput extends TileOutput[OutputConfigFluid] with PressureModule with RSControllableOutput with IPressureInject {
@@ -34,16 +34,16 @@ class TilePressureOutput extends TileOutput[OutputConfigFluid] with PressureModu
   override val outputConfigType = classOf[OutputConfigFluid]
   override def getCore = getCoreAs[CIFluidOutput]
 
-  override def canConnectToFace(d: ForgeDirection) =
-    Helper.canPipeConnectFrom(worldObj, myPos.neighbour(d), d.getOpposite)
+  override def canConnectToFace(d: EnumFacing) =
+    Helper.canPipeConnectFrom(worldObj, pos.offset(d), d.getOpposite)
 
-  override def makeCfgObject(face: ForgeDirection) = new OutputConfigFluid
+  override def makeCfgObject(face: EnumFacing) = new OutputConfigFluid
 
-  override def invalidateConnection(direction: ForgeDirection) = connections -= direction
+  override def invalidateConnection(direction: EnumFacing) = connections -= direction
 
-  var connections = Map.empty[ForgeDirection, IPressureConnection]
+  var connections = Map.empty[EnumFacing, IPressureConnection]
 
-  override def doOutput(face: ForgeDirection, cfg: OutputConfigFluid) =
+  override def doOutput(face: EnumFacing, cfg: OutputConfigFluid) =
     if (checkCanOutput(cfg)) {
       getCore foreach { core =>
         if (!connections.isDefinedAt(face))

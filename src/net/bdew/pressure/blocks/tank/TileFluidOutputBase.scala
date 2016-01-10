@@ -9,10 +9,11 @@
 
 package net.bdew.pressure.blocks.tank
 
+import net.bdew.lib.PimpVanilla._
 import net.bdew.lib.multiblock.data.OutputConfigFluid
 import net.bdew.lib.multiblock.interact.CIFluidOutput
 import net.bdew.lib.multiblock.tile.{RSControllableOutput, TileOutput}
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
 
 abstract class TileFluidOutputBase extends TileOutput[OutputConfigFluid] with RSControllableOutput with IFluidHandler {
@@ -21,16 +22,14 @@ abstract class TileFluidOutputBase extends TileOutput[OutputConfigFluid] with RS
   override def getCore = getCoreAs[CIFluidOutput]
   override val outputConfigType = classOf[OutputConfigFluid]
 
-  override def canConnectToFace(d: ForgeDirection) =
-    getCore exists { core =>
-      myPos.neighbour(d).getTile[IFluidHandler](worldObj).isDefined
-    }
+  override def canConnectToFace(d: EnumFacing) =
+    getCore.isDefined && worldObj.getTileSafe[IFluidHandler](pos.offset(d)).isDefined
 
-  override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean) = 0
-  override def canFill(from: ForgeDirection, fluid: Fluid) = false
+  override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean) = 0
+  override def canFill(from: EnumFacing, fluid: Fluid) = false
 
-  override def getTankInfo(from: ForgeDirection) =
+  override def getTankInfo(from: EnumFacing) =
     getCore map (_.getTankInfo) getOrElse Array.empty
 
-  override def makeCfgObject(face: ForgeDirection) = new OutputConfigFluid
+  override def makeCfgObject(face: EnumFacing) = new OutputConfigFluid
 }

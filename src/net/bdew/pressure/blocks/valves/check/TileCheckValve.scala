@@ -9,37 +9,29 @@
 
 package net.bdew.pressure.blocks.valves.check
 
-import net.bdew.lib.block.BlockRef
 import net.bdew.pressure.api.{IPressureConnection, IPressureEject, IPressureInject}
 import net.bdew.pressure.pressurenet.Helper
-import net.minecraft.block.Block
+import net.minecraft.block.state.IBlockState
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.World
-import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.FluidStack
 
 class TileCheckValve extends TileEntity with IPressureEject with IPressureInject {
   var connection: IPressureConnection = null
-  lazy val me = BlockRef.fromTile(this)
 
-  override def shouldRefresh(oldBlock: Block, newBlock: Block, oldMeta: Int, newMeta: Int, world: World, x: Int, y: Int, z: Int) =
-    oldBlock != newBlock
+  override def shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newSate: IBlockState) =
+    oldState.getBlock != newSate.getBlock
 
-  def getFacing = BlockCheckValve.getFacing(worldObj, xCoord, yCoord, zCoord)
+  def getFacing = BlockCheckValve.getFacing(worldObj, pos)
 
-  override def eject(resource: FluidStack, face: ForgeDirection, doEject: Boolean): Int = {
-    if (face == getFacing.getOpposite && !BlockCheckValve.isPowered(worldObj, xCoord, yCoord, zCoord)) {
+  override def eject(resource: FluidStack, face: EnumFacing, doEject: Boolean): Int = {
+    if (face == getFacing.getOpposite && !BlockCheckValve.isPowered(worldObj, pos)) {
       if (connection == null)
         connection = Helper.recalculateConnectionInfo(this, getFacing)
       connection.pushFluid(resource, doEject)
     } else 0
   }
 
-  override def invalidateConnection(direction: ForgeDirection) = connection = null
-
-  override def getZCoord = zCoord
-  override def getYCoord = yCoord
-  override def getXCoord = xCoord
-  override def getWorld = worldObj
-
+  override def invalidateConnection(direction: EnumFacing) = connection = null
 }

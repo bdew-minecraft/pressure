@@ -9,12 +9,12 @@
 
 package net.bdew.pressure.compat
 
-import cpw.mods.fml.common.FMLCommonHandler
-import cpw.mods.fml.relauncher.Side
 import dan200.computercraft.api.lua.{ILuaContext, LuaException}
 import dan200.computercraft.api.peripheral.IComputerAccess
 import net.bdew.lib.async.ServerTickExecutionContext
 import net.bdew.pressure.compat.computercraft.ExecutionHelper
+import net.minecraftforge.fml.common.FMLCommonHandler
+import net.minecraftforge.fml.relauncher.Side
 
 import scala.concurrent.Future
 import scala.util.Try

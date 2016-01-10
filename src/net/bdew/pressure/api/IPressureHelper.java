@@ -9,8 +9,9 @@
 
 package net.bdew.pressure.api;
 
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public interface IPressureHelper extends IPressureExtension {
     /**
@@ -21,12 +22,12 @@ public interface IPressureHelper extends IPressureExtension {
      * @param side Side of the connection
      * @return new connection object
      */
-    IPressureConnection recalculateConnectionInfo(IPressureInject te, ForgeDirection side);
+    IPressureConnection recalculateConnectionInfo(IPressureInject te, EnumFacing side);
 
     /**
      * Notify system of block change (call on server for any pipes/inputs/outputs placed / broken / rotated, etc.
      */
-    void notifyBlockChanged(World world, int x, int y, int z);
+    void notifyBlockChanged(World world, BlockPos pos);
 
     /**
      * Register a new extension (allows other mods to provide overrides to some logic)

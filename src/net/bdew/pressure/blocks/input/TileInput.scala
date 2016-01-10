@@ -9,28 +9,27 @@
 
 package net.bdew.pressure.blocks.input
 
-import net.bdew.lib.block.BlockRef
-import net.bdew.lib.data.base.TileDataSlots
+import net.bdew.lib.PimpVanilla._
+import net.bdew.lib.data.base.TileDataSlotsTicking
 import net.bdew.pressure.api._
 import net.bdew.pressure.blocks.TileFilterable
 import net.bdew.pressure.misc.FakeTank
 import net.bdew.pressure.pressurenet.Helper
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
 
-class TileInput extends TileDataSlots with FakeTank with IPressureInject with TileFilterable {
-  def getFacing = BlockInput.getFacing(worldObj, xCoord, yCoord, zCoord)
-  lazy val me = BlockRef.fromTile(this)
+class TileInput extends TileDataSlotsTicking with FakeTank with IPressureInject with TileFilterable {
+  def getFacing = BlockInput.getFacing(worldObj, pos)
   var connection: IPressureConnection = null
 
-  override def canFill(from: ForgeDirection, fluid: Fluid) = from == getFacing.getOpposite && isFluidAllowed(fluid)
+  override def canFill(from: EnumFacing, fluid: Fluid) = from == getFacing.getOpposite && isFluidAllowed(fluid)
 
-  override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int = {
+  override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
     if (worldObj.isRemote) {
       if (resource != null && resource.getFluid != null && resource.amount > 0 && canFill(from, resource.getFluid))
         return resource.amount
     } else if (resource != null && resource.getFluid != null && resource.amount > 0 && canFill(from, resource.getFluid)) {
-      if (connection == null && Helper.canPipeConnectTo(worldObj, me.neighbour(getFacing), getFacing.getOpposite))
+      if (connection == null && Helper.canPipeConnectTo(worldObj, pos.offset(getFacing), getFacing.getOpposite))
         connection = Helper.recalculateConnectionInfo(this, getFacing)
       if (connection != null)
         return connection.pushFluid(resource, doFill)
@@ -41,9 +40,9 @@ class TileInput extends TileDataSlots with FakeTank with IPressureInject with Ti
   serverTick.listen(doPushFluid)
 
   def doPushFluid() {
-    if ((me.meta(worldObj) & 8) == 0) return
+    if (!BlockInput.isPowered(worldObj, pos)) return
     val face = getFacing
-    me.neighbour(face.getOpposite).getTile[IFluidHandler](worldObj).foreach { from =>
+    worldObj.getTileSafe[IFluidHandler](pos.offset(face.getOpposite)).foreach { from =>
       val res = from.drain(face, Int.MaxValue, false)
       if (res != null && res.getFluid != null && res.amount > 0 && isFluidAllowed(res)) {
         val filled = fill(face.getOpposite, res, true)
@@ -53,12 +52,6 @@ class TileInput extends TileDataSlots with FakeTank with IPressureInject with Ti
     }
   }
 
-  override def invalidateConnection(direction: ForgeDirection) = connection = null
-
-  override def getZCoord = zCoord
-  override def getYCoord = yCoord
-  override def getXCoord = xCoord
-  override def getWorld = worldObj
-
-  override def isValidDirectionForFakeTank(dir: ForgeDirection) = dir == getFacing.getOpposite
+  override def invalidateConnection(direction: EnumFacing) = connection = null
+  override def isValidDirectionForFakeTank(dir: EnumFacing) = dir == getFacing.getOpposite
 }

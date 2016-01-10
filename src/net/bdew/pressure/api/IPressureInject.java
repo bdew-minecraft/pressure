@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.api;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public interface IPressureInject extends IPressureTile {
     /**
@@ -17,5 +17,5 @@ public interface IPressureInject extends IPressureTile {
      *
      * @param side Side from which the connection should be invalidated
      */
-    void invalidateConnection(ForgeDirection side);
+    void invalidateConnection(EnumFacing side);
 }

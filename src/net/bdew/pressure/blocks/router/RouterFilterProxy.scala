@@ -10,10 +10,10 @@
 package net.bdew.pressure.blocks.router
 
 import net.bdew.pressure.api.IFilterable
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.Fluid
 
-case class RouterFilterProxy(tile: TileRouter, side: ForgeDirection) extends IFilterable {
+case class RouterFilterProxy(tile: TileRouter, side: EnumFacing) extends IFilterable {
   override def setFluidFilter(fluid: Fluid): Unit = tile.sideFilters.set(side, fluid)
   override def clearFluidFilter(): Unit = tile.sideFilters.clear(side)
 }

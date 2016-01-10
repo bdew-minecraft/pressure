@@ -9,9 +9,9 @@
 
 package net.bdew.pressure.items.configurator
 
-import net.bdew.lib.Client
 import net.bdew.lib.gui._
 import net.bdew.lib.gui.widgets.Widget
+import net.bdew.lib.{Client, Misc}
 import net.bdew.pressure.network.NetworkHandler
 import net.minecraftforge.fluids.FluidStack
 
@@ -29,7 +29,7 @@ class WidgetFluidSelector(p: Point, conf: GuiConfigurator, n: Int) extends Widge
 
   override def draw(mouse: Point) {
     getFluid foreach { fluid =>
-      parent.drawTexture(rect, Texture(Texture.BLOCKS, fluid.getIcon), Color.fromInt(fluid.getColor))
+      parent.drawTexture(rect, Misc.getFluidIcon(fluid), Color.fromInt(fluid.getColor))
     }
   }
 

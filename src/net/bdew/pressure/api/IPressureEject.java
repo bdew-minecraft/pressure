@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.api;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
@@ -24,5 +24,5 @@ public interface IPressureEject extends IPressureTile {
      * @param doEject  true if fluid should actually be ejected, false if simulation
      * @return amount of fluid accepted
      */
-    int eject(FluidStack resource, ForgeDirection face, boolean doEject);
+    int eject(FluidStack resource, EnumFacing face, boolean doEject);
 }

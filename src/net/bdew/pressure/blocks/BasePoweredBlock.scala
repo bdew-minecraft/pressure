@@ -9,68 +9,48 @@
 
 package net.bdew.pressure.blocks
 
-import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.bdew.lib.Misc
-import net.bdew.lib.rotate.IconType
-import net.bdew.pressure.Pressure
-import net.bdew.pressure.render.RotatedFilterableBlockRenderer
+import net.bdew.lib.PimpVanilla._
+import net.bdew.lib.block.{HasTE, SimpleBlock}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.util.IIcon
+import net.minecraft.block.properties.{PropertyBool, PropertyDirection}
+import net.minecraft.block.state.IBlockState
+import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
-import net.minecraftforge.common.util.ForgeDirection
 
-class BasePoweredBlock[T <: TileFilterable](name: String, teClass: Class[T]) extends Block(Material.iron) with BlockFilterableRotatable[T] {
+class BasePoweredBlock[T <: TileFilterable](name: String, teClass: Class[T]) extends SimpleBlock(name, Material.iron) with HasTE[T] with BlockFilterableRotatable {
   override val TEClass = teClass
+  override val facingProperty = PropertyDirection.create("facing")
+  val stateProperty = PropertyBool.create("state")
 
-  setBlockName("pressure." + name)
   setHardness(2)
 
-  @SideOnly(Side.CLIENT)
-  override def getRenderType = RotatedFilterableBlockRenderer.id
-
-  override def getFacing(world: IBlockAccess, x: Int, y: Int, z: Int) =
-    ForgeDirection.values()(world.getBlockMetadata(x, y, z) & 7)
-
-  override def setFacing(world: World, x: Int, y: Int, z: Int, facing: ForgeDirection) =
-    world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) & 8 | facing.ordinal(), 3)
-
-  override def rotateBlock(world: World, x: Int, y: Int, z: Int, axis: ForgeDirection) = {
-    val meta = world.getBlockMetadata(x, y, z)
-    world.setBlockMetadataWithNotify(x, y, z, (meta & 8) | (((meta & 7) + 1) % 6), 3)
+  override def canConnectRedstone(world: IBlockAccess, pos: BlockPos, side: EnumFacing) = {
+    val facing = getFacing(world, pos)
+    side != facing && side != facing.getOpposite
   }
 
-  override def canConnectRedstone(world: IBlockAccess, x: Int, y: Int, z: Int, side: Int): Boolean = {
-    val facing = getFacing(world, x, y, z)
-    side != facing.ordinal() && side != facing.getOpposite.ordinal()
+  override def getStateFromMeta(meta: Int) =
+    getDefaultState
+      .withProperty(facingProperty, EnumFacing.getFront(meta & 7))
+      .withProperty(stateProperty, Boolean.box((meta & 8) > 0))
+
+  override def getMetaFromState(state: IBlockState) = {
+    state.getValue(facingProperty).ordinal() | (if (state.getValue(stateProperty)) 8 else 0)
   }
 
-  override def onNeighborBlockChange(world: World, x: Int, y: Int, z: Int, block: Block) {
-    val meta = world.getBlockMetadata(x, y, z)
-    val powered = world.isBlockIndirectlyGettingPowered(x, y, z)
-    if (powered && ((meta & 8) == 0))
-      world.setBlockMetadataWithNotify(x, y, z, (meta & 7) | 8, 2)
-    else if (!powered && ((meta & 8) == 8))
-      world.setBlockMetadataWithNotify(x, y, z, meta & 7, 2)
+  def isPowered(world: IBlockAccess, pos: BlockPos) =
+    world.getBlockState(pos).getValue(stateProperty)
+
+  def setPowered(world: World, pos: BlockPos, signal: Boolean): Unit = {
+    world.changeBlockState(pos, 3) { state =>
+      state.withProperty(stateProperty, Boolean.box(signal))
+    }
   }
 
-  @SideOnly(Side.CLIENT)
-  override def getIcon(meta: Int, kind: IconType.Value) = kind match {
-    case IconType.BACK => backIcon
-    case IconType.FRONT => frontIcon
-    case IconType.SIDE if (meta & 8) == 8 => sideIconOn
-    case _ => sideIconOff
-  }
-
-  var frontIcon, sideIconOff, sideIconOn, backIcon: IIcon = null
-
-  @SideOnly(Side.CLIENT)
-  override def registerBlockIcons(ir: IIconRegister) = {
-
-    frontIcon = ir.registerIcon(Misc.iconName(Pressure.modId, name, "front"))
-    backIcon = ir.registerIcon(Misc.iconName(Pressure.modId, name, "back"))
-    sideIconOn = ir.registerIcon(Misc.iconName(Pressure.modId, name, "side_on"))
-    sideIconOff = ir.registerIcon(Misc.iconName(Pressure.modId, name, "side_off"))
+  override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, neighborBlock: Block) = {
+    val powered = world.isBlockIndirectlyGettingPowered(pos) > 0
+    if (powered != isPowered(world, pos))
+      setPowered(world, pos, powered)
   }
 }

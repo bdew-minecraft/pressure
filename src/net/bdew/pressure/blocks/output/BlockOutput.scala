@@ -11,11 +11,11 @@ package net.bdew.pressure.blocks.output
 
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.bdew.pressure.blocks.{BaseIOBlock, BlockNotifyUpdates}
+import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.IBlockAccess
-import net.minecraftforge.common.util.ForgeDirection
 
 object BlockOutput extends BaseIOBlock("output", classOf[TileOutput]) with BlockNotifyUpdates with IPressureConnectableBlock {
-  override def canConnectTo(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
-    getFacing(world, x, y, z) == side.getOpposite
-  override def isTraversable(world: IBlockAccess, x: Int, y: Int, z: Int) = false
+  override def canConnectTo(world: IBlockAccess, pos: BlockPos, side: EnumFacing) =
+    getFacing(world, pos) == side.getOpposite
+  override def isTraversable(world: IBlockAccess, pos: BlockPos) = false
 }

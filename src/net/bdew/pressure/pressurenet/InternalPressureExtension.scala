@@ -10,41 +10,41 @@
 package net.bdew.pressure.pressurenet
 
 import net.bdew.lib.Misc
+import net.bdew.lib.PimpVanilla._
 import net.bdew.pressure.api.{IFilterable, IFilterableProvider, IPressureConnectableBlock, IPressureExtension}
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
+import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
-import net.minecraftforge.common.util.ForgeDirection
 
 object InternalPressureExtension extends IPressureExtension with IFilterableProvider {
-  override def canPipeConnectTo(w: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
-    Option(w.getBlock(x, y, z)) flatMap {
-      Misc.asInstanceOpt(_, classOf[IPressureConnectableBlock])
-    } exists {
-      _.canConnectTo(w, x, y, z, side)
+  override def canPipeConnectTo(w: IBlockAccess, pos: BlockPos, side: EnumFacing) =
+    w.getBlockSafe[IPressureConnectableBlock](pos) exists {
+      _.canConnectTo(w, pos, side)
     }
 
-  override def canPipeConnectFrom(w: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) = isConnectableBlock(w, x, y, z)
+  override def canPipeConnectFrom(w: IBlockAccess, pos: BlockPos, side: EnumFacing) = isConnectableBlock(w, pos)
 
-  override def isConnectableBlock(w: IBlockAccess, x: Int, y: Int, z: Int) =
-    Option(w.getBlock(x, y, z)) exists (_.isInstanceOf[IPressureConnectableBlock])
+  override def isConnectableBlock(w: IBlockAccess, pos: BlockPos) =
+    w.getBlockSafe[IPressureConnectableBlock](pos).isDefined
 
-  override def isTraversableBlock(world: IBlockAccess, x: Int, y: Int, z: Int) =
-    Option(world.getBlock(x, y, z)) exists { block =>
-      block.isInstanceOf[IPressureConnectableBlock] && block.asInstanceOf[IPressureConnectableBlock].isTraversable(world, x, y, z)
+  override def isTraversableBlock(world: IBlockAccess, pos: BlockPos) =
+    world.getBlockSafe[IPressureConnectableBlock](pos) exists {
+      _.isTraversable(world, pos)
     }
 
-  override def tryPlaceBlock(w: World, x: Int, y: Int, z: Int, b: Block, p: EntityPlayerMP) = {
-    if (w.isAirBlock(x, y, z) || (Option(w.getBlock(x, y, z)) exists (_.isReplaceable(w, x, y, z)))) {
-      w.setBlock(x, y, z, b, 0, 3)
-      b.onBlockPlacedBy(w, x, y, z, p, new ItemStack(b))
-      b.onBlockPlaced(w, x, y, z, 0, 0, 0, 0, w.getBlockMetadata(x, y, z))
-      true
+  override def tryPlaceBlock(w: World, pos: BlockPos, b: Block, p: EntityPlayerMP) = {
+    if (w.isAirBlock(pos) || w.getBlockState(pos).getBlock.isReplaceable(w, pos)) {
+      val st = b.onBlockPlaced(w, pos, EnumFacing.UP, 0, 0, 0, 0, p)
+      if (w.setBlockState(pos, st, 3)) {
+        b.onBlockPlacedBy(w, pos, st, p, new ItemStack(b))
+        true
+      } else false
     } else false
   }
 
-  override def getFilterableForWorldCoordinates(world: World, x: Int, y: Int, z: Int, side: Int) = {
-    (Option(world.getTileEntity(x, y, z)) flatMap Misc.asInstanceOpt(classOf[IFilterable])).orNull
+  override def getFilterableForWorldCoordinates(world: World, pos: BlockPos, side: EnumFacing) = {
+    (Option(world.getTileEntity(pos)) flatMap Misc.asInstanceOpt(classOf[IFilterable])).orNull
   }
 }

@@ -12,7 +12,7 @@ package net.bdew.pressure.blocks.tank.blocks
 import net.bdew.lib.multiblock.interact.CIFluidInput
 import net.bdew.lib.multiblock.tile.TileModule
 import net.bdew.pressure.blocks.tank.BaseModule
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
 
 object BlockFluidInput extends BaseModule("TankFluidInput", "FluidInput", classOf[TileFluidInput])
@@ -22,16 +22,16 @@ class TileFluidInput extends TileModule with IFluidHandler {
 
   override def getCore = getCoreAs[CIFluidInput]
 
-  override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean) =
+  override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean) =
     getCore map (_.inputFluid(resource, doFill)) getOrElse 0
 
-  override def canFill(from: ForgeDirection, fluid: Fluid) =
+  override def canFill(from: EnumFacing, fluid: Fluid) =
     getCore exists (_.canInputFluid(fluid))
 
-  override def getTankInfo(from: ForgeDirection) =
+  override def getTankInfo(from: EnumFacing) =
     getCore map (_.getTankInfo) getOrElse Array.empty
 
-  override def canDrain(from: ForgeDirection, fluid: Fluid) = false
-  override def drain(from: ForgeDirection, resource: FluidStack, doDrain: Boolean) = null
-  override def drain(from: ForgeDirection, maxDrain: Int, doDrain: Boolean) = null
+  override def canDrain(from: EnumFacing, fluid: Fluid) = false
+  override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean) = null
+  override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean) = null
 }

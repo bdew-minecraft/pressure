@@ -9,20 +9,20 @@
 
 package net.bdew.pressure.items
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.bdew.lib.items.SimpleItem
 import net.bdew.pressure.config.Tuning
-import net.minecraft.block.Block
 import net.minecraft.block.material.Material
+import net.minecraft.block.{Block, BlockLiquid}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.World
 import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action
 import net.minecraftforge.fluids._
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
 object HandPump extends SimpleItem("HandPump") {
   lazy val cfg = Tuning.getSection("Items").getSection(name)
@@ -44,53 +44,57 @@ object HandPump extends SimpleItem("HandPump") {
     return null
   }
 
-  def drainBlock(world: World, block: Block, x: Int, y: Int, z: Int, stack: ItemStack, dir: ForgeDirection, player: EntityPlayer): Boolean = {
+  def drainBlock(world: World, block: Block, pos: BlockPos, stack: ItemStack, dir: EnumFacing, player: EntityPlayer): Boolean = {
     if (block.isInstanceOf[BlockFluidBase]) {
       val bl = block.asInstanceOf[BlockFluidBase]
-      val fl = bl.drain(world, x, y, z, false)
+      val fl = bl.drain(world, pos, false)
       val toFill = findFillTarget(fl, player.inventory, true)
       if (toFill != null) {
         if (!world.isRemote) {
-          toFill.getItem.asInstanceOf[IFluidContainerItem].fill(toFill, bl.drain(world, x, y, z, true), true)
-        }
-        return true
-      }
-    } else if (world.getBlock(x, y, z).getMaterial == Material.water && world.getBlockMetadata(x, y, z) == 0) {
-      val ns = new FluidStack(FluidRegistry.WATER, 1000)
-      val toFill = findFillTarget(ns, player.inventory, true)
-      if (toFill != null) {
-        if (!world.isRemote) {
-          world.setBlockToAir(x, y, z)
-          toFill.getItem.asInstanceOf[IFluidContainerItem].fill(toFill, ns, true)
-        }
-        return true
-      }
-    } else if (world.getBlock(x, y, z).getMaterial == Material.lava && world.getBlockMetadata(x, y, z) == 0) {
-      val ns = new FluidStack(FluidRegistry.LAVA, 1000)
-      val toFill = findFillTarget(ns, player.inventory, true)
-      if (toFill != null) {
-        if (!world.isRemote) {
-          world.setBlockToAir(x, y, z)
-          toFill.getItem.asInstanceOf[IFluidContainerItem].fill(toFill, ns, true)
+          toFill.getItem.asInstanceOf[IFluidContainerItem].fill(toFill, bl.drain(world, pos, true), true)
         }
         return true
       }
     } else {
-      val te = world.getTileEntity(x, y, z)
-      if (te != null && te.isInstanceOf[IFluidHandler]) {
-        if (!world.isRemote) {
-          val fh = te.asInstanceOf[IFluidHandler]
-          val fs = fh.drain(dir, maxDrain, false)
-          val toFill = findFillTarget(fs, player.inventory, false)
-          if (toFill != null) {
-            val fci = toFill.getItem.asInstanceOf[IFluidContainerItem]
-            val canFill = fci.fill(toFill, fs, false)
-            if (canFill > 0) {
-              fci.fill(toFill, fh.drain(dir, canFill, true), true)
-              return true
-            }
+      //todo: do we still need this?
+      val bState = world.getBlockState(pos)
+      if (bState.getBlock.getMaterial == Material.water && bState.getValue(BlockLiquid.LEVEL) == 15) {
+        val ns = new FluidStack(FluidRegistry.WATER, 1000)
+        val toFill = findFillTarget(ns, player.inventory, true)
+        if (toFill != null) {
+          if (!world.isRemote) {
+            world.setBlockToAir(pos)
+            toFill.getItem.asInstanceOf[IFluidContainerItem].fill(toFill, ns, true)
           }
-        } else return true
+          return true
+        }
+      } else if (bState.getBlock.getMaterial == Material.lava && bState.getValue(BlockLiquid.LEVEL) == 15) {
+        val ns = new FluidStack(FluidRegistry.LAVA, 1000)
+        val toFill = findFillTarget(ns, player.inventory, true)
+        if (toFill != null) {
+          if (!world.isRemote) {
+            world.setBlockToAir(pos)
+            toFill.getItem.asInstanceOf[IFluidContainerItem].fill(toFill, ns, true)
+          }
+          return true
+        }
+      } else {
+        val te = world.getTileEntity(pos)
+        if (te != null && te.isInstanceOf[IFluidHandler]) {
+          if (!world.isRemote) {
+            val fh = te.asInstanceOf[IFluidHandler]
+            val fs = fh.drain(dir, maxDrain, false)
+            val toFill = findFillTarget(fs, player.inventory, false)
+            if (toFill != null) {
+              val fci = toFill.getItem.asInstanceOf[IFluidContainerItem]
+              val canFill = fci.fill(toFill, fs, false)
+              if (canFill > 0) {
+                fci.fill(toFill, fh.drain(dir, canFill, true), true)
+                return true
+              }
+            }
+          } else return true
+        }
       }
     }
     return false
@@ -101,9 +105,9 @@ object HandPump extends SimpleItem("HandPump") {
     val mop = getMovingObjectPositionFromPlayer(world, player, true)
     if (mop == null) return stack
 
-    val block = Option(world.getBlock(mop.blockX, mop.blockY, mop.blockZ)).getOrElse(return stack)
+    val block = world.getBlockState(mop.getBlockPos).getBlock
 
-    if (drainBlock(world, block, mop.blockX, mop.blockY, mop.blockZ, stack, ForgeDirection.values()(mop.sideHit).getOpposite, player)) {
+    if (drainBlock(world, block, mop.getBlockPos, stack, mop.sideHit.getOpposite, player)) {
       if (!world.isRemote)
         player.inventoryContainer.detectAndSendChanges()
       player.swingItem()

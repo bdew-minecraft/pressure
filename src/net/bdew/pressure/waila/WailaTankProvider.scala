@@ -16,11 +16,12 @@ import net.bdew.pressure.blocks.tank.controller.TileTankController
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.fluids.FluidStack
 
 object WailaTankProvider extends BaseDataProvider(classOf[TileTankController]) {
-  override def getNBTTag(player: EntityPlayerMP, te: TileTankController, tag: NBTTagCompound, world: World, x: Int, y: Int, z: Int) = {
+  override def getNBTTag(player: EntityPlayerMP, te: TileTankController, tag: NBTTagCompound, world: World, pos: BlockPos) = {
     tag.setTag("pressure_waila_tank_data", Misc.applyMutator(new NBTTagCompound) {
       te.doSave(UpdateKind.GUI, _)
     })

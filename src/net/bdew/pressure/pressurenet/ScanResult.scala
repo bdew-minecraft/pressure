@@ -9,6 +9,6 @@
 
 package net.bdew.pressure.pressurenet
 
-import net.bdew.lib.block.BlockRef
+import net.minecraft.util.BlockPos
 
-case class ScanResult(inputs: Set[PressureInputFace], outputs: Set[PressureOutputFace], seen: Set[BlockRef])
+case class ScanResult(inputs: Set[PressureInputFace], outputs: Set[PressureOutputFace], seen: Set[BlockPos])

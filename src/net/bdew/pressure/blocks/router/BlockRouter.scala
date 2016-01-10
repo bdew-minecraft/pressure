@@ -9,18 +9,16 @@
 
 package net.bdew.pressure.blocks.router
 
-import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.bdew.lib.Misc
 import net.bdew.lib.block.{HasTE, SimpleBlock}
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.bdew.pressure.blocks.BlockNotifyUpdates
 import net.bdew.pressure.blocks.router.data.RouterSideMode
 import net.minecraft.block.material.Material
-import net.minecraft.client.renderer.texture.IIconRegister
+import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
-import net.minecraftforge.common.util.ForgeDirection
 
 object BlockRouter extends SimpleBlock("Router", Material.iron) with HasTE[TileRouter] with BlockNotifyUpdates with IPressureConnectableBlock {
   override val TEClass = classOf[TileRouter]
@@ -28,22 +26,16 @@ object BlockRouter extends SimpleBlock("Router", Material.iron) with HasTE[TileR
 
   setHardness(2)
 
-  override def getRenderType = RouterRenderer.id
+  override def canConnectTo(world: IBlockAccess, pos: BlockPos, side: EnumFacing) =
+    getTE(world, pos).sideModes.get(side) != RouterSideMode.DISABLED
 
-  override def canConnectTo(world: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
-    getTE(world, x, y, z).sideModes.get(side) != RouterSideMode.DISABLED
+  override def isTraversable(world: IBlockAccess, pos: BlockPos) = false
 
-  override def isTraversable(world: IBlockAccess, x: Int, y: Int, z: Int) = false
-
-  override def onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, meta: Int, xOffs: Float, yOffs: Float, zOffs: Float): Boolean = {
+  override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
     if (player.isSneaking) return false
     if (world.isRemote) return true
-    player.openGui(Pressure, cfg.guiId, world, x, y, z)
+    player.openGui(Pressure, cfg.guiId, world, pos.getX, pos.getY, pos.getZ)
     true
   }
 
-  @SideOnly(Side.CLIENT)
-  override def registerBlockIcons(reg: IIconRegister) {
-    blockIcon = reg.registerIcon(Misc.iconName(Pressure.modId, name, "main"))
-  }
 }

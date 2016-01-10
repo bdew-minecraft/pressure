@@ -10,43 +10,43 @@
 package net.bdew.pressure.blocks.router
 
 import net.bdew.lib.Misc
-import net.bdew.lib.data.base.{TileDataSlots, UpdateKind}
+import net.bdew.lib.data.base.{TileDataSlotsTicking, UpdateKind}
 import net.bdew.lib.multiblock.data.RSMode
 import net.bdew.pressure.api.{IPressureConnection, IPressureEject, IPressureInject}
 import net.bdew.pressure.blocks.router.data.{DataSlotSideFilters, DataSlotSideModes, DataSlotSideRSControl, RouterSideMode}
 import net.bdew.pressure.misc.FakeTank
 import net.bdew.pressure.pressurenet.Helper
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
 
 import scala.collection.mutable
 
-class TileRouter extends TileDataSlots with IPressureInject with IPressureEject with FakeTank {
+class TileRouter extends TileDataSlotsTicking with IPressureInject with IPressureEject with FakeTank {
   val sideModes = DataSlotSideModes("modes", this).setUpdate(UpdateKind.SAVE, UpdateKind.GUI, UpdateKind.WORLD, UpdateKind.RENDER)
   val sideControl = DataSlotSideRSControl("control", this).setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
   val sideFilters = DataSlotSideFilters("filters", this).setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
 
-  val connections = mutable.Map.empty[ForgeDirection, IPressureConnection]
+  val connections = mutable.Map.empty[EnumFacing, IPressureConnection]
 
-  override def invalidateConnection(side: ForgeDirection): Unit = connections -= side
+  override def invalidateConnection(side: EnumFacing): Unit = connections -= side
 
-  override def isValidDirectionForFakeTank(dir: ForgeDirection) = sideModes.get(dir) != RouterSideMode.DISABLED
+  override def isValidDirectionForFakeTank(dir: EnumFacing) = sideModes.get(dir) != RouterSideMode.DISABLED
 
   def canWorkWithRsMode(rsMode: RSMode.Value) = rsMode match {
     case RSMode.ALWAYS => true
     case RSMode.NEVER => false
-    case _ => getWorldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord) ^ (rsMode == RSMode.RS_OFF)
+    case _ => (getWorld.isBlockIndirectlyGettingPowered(pos) > 0) ^ (rsMode == RSMode.RS_OFF)
   }
 
-  def isSideValidIO(side: ForgeDirection, fluid: Fluid, modes: Set[RouterSideMode.Value]): Boolean =
+  def isSideValidIO(side: EnumFacing, fluid: Fluid, modes: Set[RouterSideMode.Value]): Boolean =
     fluid != null && fluid != null && modes.contains(sideModes.get(side)) && canWorkWithRsMode(sideControl.get(side)) && (
       !sideFilters.isSet(side) || sideFilters.get(side) == fluid
       )
 
-  def isSideValidIO(side: ForgeDirection, stack: FluidStack, modes: Set[RouterSideMode.Value]): Boolean =
+  def isSideValidIO(side: EnumFacing, stack: FluidStack, modes: Set[RouterSideMode.Value]): Boolean =
     stack != null && isSideValidIO(side, stack.getFluid, modes)
 
-  override def eject(resource: FluidStack, face: ForgeDirection, doEject: Boolean): Int =
+  override def eject(resource: FluidStack, face: EnumFacing, doEject: Boolean): Int =
     if (isSideValidIO(face, resource, RouterSideMode.inputs)) {
       distributeFluid(resource, doEject)
     } else
@@ -70,7 +70,7 @@ class TileRouter extends TileDataSlots with IPressureInject with IPressureEject 
     resource.amount - fluid.amount
   }
 
-  def pushFromSide(resource: FluidStack, side: ForgeDirection, doEject: Boolean) = {
+  def pushFromSide(resource: FluidStack, side: EnumFacing, doEject: Boolean) = {
     if (isSideValidIO(side, resource, RouterSideMode.outputs)) {
       Misc.getNeighbourTile(this, side, classOf[IFluidHandler]) map { handler =>
         handler.fill(side.getOpposite, resource, doEject)
@@ -99,16 +99,11 @@ class TileRouter extends TileDataSlots with IPressureInject with IPressureEject 
     }
   })
 
-  override def canFill(from: ForgeDirection, fluid: Fluid): Boolean = isSideValidIO(from, fluid, RouterSideMode.inputs)
+  override def canFill(from: EnumFacing, fluid: Fluid): Boolean = isSideValidIO(from, fluid, RouterSideMode.inputs)
 
-  override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int =
+  override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int =
     if (isSideValidIO(from, resource, RouterSideMode.inputs))
       distributeFluid(resource, doFill)
     else
       0
-
-  override def getXCoord = xCoord
-  override def getYCoord = yCoord
-  override def getZCoord = zCoord
-  override def getWorld = worldObj
 }

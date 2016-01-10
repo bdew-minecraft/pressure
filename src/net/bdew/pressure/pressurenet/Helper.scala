@@ -9,13 +9,14 @@
 
 package net.bdew.pressure.pressurenet
 
-import net.bdew.lib.block.BlockRef
+import net.bdew.lib.PimpVanilla._
+import net.bdew.lib.block.BlockFace
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api._
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
-import net.minecraftforge.common.util.ForgeDirection
 
 import scala.util.DynamicVariable
 
@@ -28,14 +29,14 @@ object Helper extends IPressureHelper {
 
   val recursionGuard = new DynamicVariable(Set.empty[IPressureConnection])
 
-  def scanConnectedBlocks(w: IBlockAccess, start: BlockRef, face: ForgeDirection, forceNeighbours: Boolean) = {
-    val seen = collection.mutable.Set.empty[BlockRef]
-    val queue = collection.mutable.Queue(BlockRefFace(start, face))
+  def scanConnectedBlocks(w: IBlockAccess, start: BlockPos, face: EnumFacing, forceNeighbours: Boolean) = {
+    val seen = collection.mutable.Set.empty[BlockPos]
+    val queue = collection.mutable.Queue(BlockFace(start, face))
 
     if (forceNeighbours)
-      for ((face, block) <- start.neighbours) queue.enqueue(BlockRefFace(block, face.getOpposite))
-    else if (face != ForgeDirection.UNKNOWN && isConnectableBlock(w, start.neighbour(face)))
-      queue.enqueue(BlockRefFace(start.neighbour(face), face.getOpposite))
+      for ((face, block) <- start.neighbours) queue.enqueue(BlockFace(block, face.getOpposite))
+    else if (face != null && isConnectableBlock(w, start.offset(face)))
+      queue.enqueue(BlockFace(start.offset(face), face.getOpposite))
 
     val inputs = collection.mutable.Set.empty[PressureInputFace]
     val outputs = collection.mutable.Set.empty[PressureOutputFace]
@@ -43,13 +44,17 @@ object Helper extends IPressureHelper {
     while (queue.nonEmpty) {
       val current = queue.dequeue()
 
-      if (isTraversableBlock(w, current)) {
-        seen.add(current.block)
-        queue ++= (getPipeConnections(w, current) map (x => BlockRefFace(current.neighbour(x), x.getOpposite)) filterNot (x => seen.contains(x.block)))
+      if (isTraversableBlock(w, current.pos)) {
+        seen.add(current.pos)
+        queue ++= (
+          getPipeConnections(w, current.pos)
+            map (x => BlockFace(current.pos.offset(x), x.getOpposite))
+            filterNot (x => seen.contains(x.pos))
+          )
       }
 
-      if (current.face != ForgeDirection.UNKNOWN && canPipeConnectTo(w, current, current.face)) {
-        val tile = current.tile(w).orNull
+      if (current.face != null && canPipeConnectTo(w, current.pos, current.face)) {
+        val tile = w.getTileEntity(current.pos)
         if (tile.isInstanceOf[IPressureInject])
           inputs += PressureInputFace(tile.asInstanceOf[IPressureInject], current.face)
         if (tile.isInstanceOf[IPressureEject])
@@ -59,62 +64,43 @@ object Helper extends IPressureHelper {
     ScanResult(inputs.toSet, outputs.toSet, seen.toSet)
   }
 
-  override def notifyBlockChanged(world: World, x: Int, y: Int, z: Int) {
+  override def notifyBlockChanged(world: World, pos: BlockPos) {
     if (!world.isRemote)
-      scanConnectedBlocks(world, BlockRef(x, y, z), ForgeDirection.UNKNOWN, true).inputs foreach (_.invalidateConnection())
+      scanConnectedBlocks(world, pos, null, true).inputs foreach (_.invalidateConnection())
   }
 
-  override def recalculateConnectionInfo(te: IPressureInject, side: ForgeDirection) =
+  override def recalculateConnectionInfo(te: IPressureInject, side: EnumFacing) =
     if (te.getWorld.isRemote) {
       Pressure.logWarn("Attempt to generate ConnectionInfo on client side from %s. This is a bug.", te)
       null
     } else {
-      PressureConnection(te, side, scanConnectedBlocks(te.getWorld, BlockRef(te.getXCoord, te.getYCoord, te.getZCoord), side, false).outputs)
+      PressureConnection(te, side, scanConnectedBlocks(te.getWorld, te.getPos, side, false).outputs)
     }
 
-  def getPipeConnections(w: IBlockAccess, ref: BlockRef): List[ForgeDirection] =
+  def getPipeConnections(w: IBlockAccess, pos: BlockPos): List[EnumFacing] =
     (for {
-      (dir, target) <- ref.neighbours
-      if canPipeConnectFrom(w, ref, dir) && canPipeConnectTo(w, target, dir.getOpposite)
+      (dir, target) <- pos.neighbours
+      if canPipeConnectFrom(w, pos, dir) && canPipeConnectTo(w, target, dir.getOpposite)
     } yield dir).toList
 
-  def getPipeConnections(w: IBlockAccess, x: Int, y: Int, z: Int): List[ForgeDirection] = {
-    ForgeDirection.VALID_DIRECTIONS.toList filter { dir =>
-      y + dir.offsetY >= 0 && y + dir.offsetY < 256 && canPipeConnectFrom(w, x, y, z, dir) &&
-        canPipeConnectTo(w, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, dir.getOpposite)
-    }
-  }
+  def canPipeConnectFrom(w: IBlockAccess, pos: BlockPos, side: EnumFacing) =
+    extensions.exists(_.canPipeConnectFrom(w, pos, side))
 
-  def canPipeConnectTo(w: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
-    extensions.exists(_.canPipeConnectTo(w, x, y, z, side))
+  def isConnectableBlock(w: IBlockAccess, pos: BlockPos) =
+    extensions.exists(_.isConnectableBlock(w, pos))
 
-  def canPipeConnectFrom(w: IBlockAccess, x: Int, y: Int, z: Int, side: ForgeDirection) =
-    extensions.exists(_.canPipeConnectFrom(w, x, y, z, side))
+  def isTraversableBlock(w: IBlockAccess, pos: BlockPos) =
+    extensions.exists(_.isTraversableBlock(w, pos))
 
-  def isConnectableBlock(w: IBlockAccess, x: Int, y: Int, z: Int) =
-    extensions.exists(_.isConnectableBlock(w, x, y, z))
+  def canPipeConnectTo(w: IBlockAccess, pos: BlockPos, side: EnumFacing) =
+    extensions.exists(_.canPipeConnectTo(w, pos, side))
 
-  def isTraversableBlock(w: IBlockAccess, x: Int, y: Int, z: Int) =
-    extensions.exists(_.isTraversableBlock(w, x, y, z))
+  override def tryPlaceBlock(w: World, pos: BlockPos, b: Block, p: EntityPlayerMP) =
+    extensions.exists(_.tryPlaceBlock(w, pos, b, p))
 
-  def canPipeConnectTo(w: IBlockAccess, ref: BlockRef, side: ForgeDirection) =
-    extensions.exists(_.canPipeConnectTo(w, ref.x, ref.y, ref.z, side))
-
-  def canPipeConnectFrom(w: IBlockAccess, ref: BlockRef, side: ForgeDirection) =
-    extensions.exists(_.canPipeConnectFrom(w, ref.x, ref.y, ref.z, side))
-
-  def isConnectableBlock(w: IBlockAccess, ref: BlockRef) =
-    extensions.exists(_.isConnectableBlock(w, ref.x, ref.y, ref.z))
-
-  def isTraversableBlock(w: IBlockAccess, ref: BlockRef) =
-    extensions.exists(_.isTraversableBlock(w, ref.x, ref.y, ref.z))
-
-  override def tryPlaceBlock(w: World, x: Int, y: Int, z: Int, b: Block, p: EntityPlayerMP) =
-    extensions.exists(_.tryPlaceBlock(w, x, y, z, b, p))
-
-  def getFilterableForWorldCoordinates(world: World, x: Int, y: Int, z: Int, side: Int): IFilterable = {
+  def getFilterableForWorldCoordinates(world: World, pos: BlockPos, side: EnumFacing): IFilterable = {
     for (fp <- filterable)
-      Option(fp.getFilterableForWorldCoordinates(world, x, y, z, side)) map {
+      Option(fp.getFilterableForWorldCoordinates(world, pos, side)) map {
         return _
       }
     null

@@ -9,12 +9,12 @@
 
 package net.bdew.pressure.sensor
 
-import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.bdew.lib.gui.{DrawTarget, Rect}
 import net.bdew.lib.multiblock.data.OutputConfigFluid
 import net.bdew.lib.multiblock.interact.CIOutputFaces
 import net.bdew.lib.sensors.multiblock.SensorOutput
 import net.minecraft.tileentity.TileEntity
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 case class SensorOutputFlow(uid: String, iconName: String) extends Sensors.SensorType with Icons.Loader with SensorOutput {
   override def system = Sensors

@@ -15,12 +15,12 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
     }
 }
 
 apply plugin: 'scala'
-apply plugin: 'forge'
+apply plugin: 'net.minecraftforge.gradle.forge'
 
 file "build.properties" withReader {
     def prop = new Properties()
@@ -45,6 +45,8 @@ archivesBaseName = "pressure"
 
 minecraft {
     version = "${config.minecraft.version}-${config.forge.version}"
+    mappings = "${config.minecraft.mappings}"
+    useDepAts = true
     replace("BDLIB_VER", config.bdlib.version)
     replace("PRESSURE_VER", simpleVersion.toString())
     replace("PRESSURE_APIVER", simpleVersion.toString())
@@ -57,8 +59,8 @@ repositories {
         url = "http://jenkins.bdew.net/maven"
     }
     maven {
-        name = "chickenbones"
-        url = "http://chickenbones.net/maven"
+        name "JEI"
+        url "http://dvs1.progwml6.com/files/maven"
     }
     maven {
         name "waila"
@@ -71,20 +73,15 @@ repositories {
 }
 
 dependencies {
-    compile "net.bdew:bdlib:${config.bdlib.version}-mc${config.minecraft.version}:dev"
-    compile "codechicken:NotEnoughItems:${config.minecraft.version}-${config.nei.version}:dev"
-    compile "codechicken:CodeChickenLib:${config.minecraft.version}-${config.ccl.version}:dev"
-    compile "codechicken:CodeChickenCore:${config.minecraft.version}-${config.ccc.version}:dev"
-    compile "codechicken:ForgeMultipart:${config.minecraft.version}-${config.fmp.version}:dev"
+//    compile "net.bdew:bdlib:${config.bdlib.version}-mc${config.minecraft.version}:dev"
 
-    compile module("mcp.mobius.waila:Waila:${config.waila.version}_${config.minecraft.version}") {
-        transitive = false // WAILA is depending on an invalid combination of CCC/NEI that doesn't run...
-    }
-
-    compile "li.cil.oc:OpenComputers:MC${config.minecraft.version}-${config.opencomputers.version}:api"
+    deobfCompile "mezz.jei:jei_${config.minecraft.version}:${config.jei.version}"
 
     compile "net.bdew.thirdparty:computercraft:${config.computercraft.version}-mc${config.minecraft.version}:api"
-    compile "net.bdew.thirdparty:mekanism:${config.mekanism.version}-mc${config.minecraft.version}:api"
+
+    compile module("mcp.mobius.waila:Waila:${config.waila.version}") {
+        transitive = false // WAILA is depending on an invalid combination of CCC/NEI that doesn't run...
+    }
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -123,10 +120,9 @@ task apiJar(type: Jar, dependsOn: 'classes') {
     classifier = 'api'
 }
 
-
-task sourceJar(type: Jar) {
-    classifier "sources"
-}
+//task sourceJar(type: Jar) {
+//    classifier "sources"
+//}
 
 task deobfJar(type: Jar) {
     from sourceSets.main.output
@@ -141,7 +137,7 @@ jar {
 
 afterEvaluate { project ->
     // Fudge the inputs of api/source jars so we get the version after replacements
-    tasks.getByPath(":sourceJar").from(tasks.getByPath(":sourceMainScala").outputs.files)
+    //tasks.getByPath(":sourceJar").from(tasks.getByPath(":sourceMainScala").outputs.files)
     tasks.getByPath(":apiJar").from(tasks.getByPath(":sourceMainScala").outputs.files, {
         include 'net/bdew/pressure/api/**'
     })
@@ -168,23 +164,4 @@ publishing {
             url "file://var/www/maven"
         }
     }
-}
-
-apply plugin: 'curseforge'
-
-curse {
-    projectId = config.curseforge.id
-    apiKey = project.hasProperty("curseForgeApiKey") ? project.curseForgeApiKey : ""
-    releaseType = 'alpha'
-
-    artifact = jar
-    changelog = project.hasProperty("changelog") ? project.changelog : "No changelog available"
-
-    additionalArtifact deobfJar
-    additionalArtifact sourceJar
-    additionalArtifact apiJar
-
-    relatedProject 'bdlib': 'requiredLibrary'
-    relatedProject 'notenoughitems': 'optionalLibrary'
-    relatedProject 'waila': 'optionalLibrary'
 }

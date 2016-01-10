@@ -9,52 +9,42 @@
 
 package net.bdew.pressure.blocks.drain
 
-import net.bdew.lib.block.BlockRef
 import net.bdew.lib.data.DataSlotTank
-import net.bdew.lib.data.base.TileDataSlots
+import net.bdew.lib.data.base.TileDataSlotsTicking
 import net.bdew.pressure.api.IPressureEject
 import net.bdew.pressure.blocks.TileFilterable
-import net.bdew.pressure.config.Modules
 import net.bdew.pressure.misc.FakeTank
-import net.minecraft.entity.item.EntityXPOrb
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 
-class TileSluice extends TileDataSlots with FakeTank with IPressureEject with TileFilterable {
-  def getFacing = BlockSluice.getFacing(worldObj, xCoord, yCoord, zCoord)
-
-  lazy val me = BlockRef.fromTile(this)
+class TileSluice extends TileDataSlotsTicking with FakeTank with IPressureEject with TileFilterable {
+  def getFacing = BlockSluice.getFacing(worldObj, pos)
 
   val BucketVolume = net.minecraftforge.fluids.FluidContainerRegistry.BUCKET_VOLUME
   val bufferTank = new DataSlotTank("buffer", this, BucketVolume)
-  
-  override def eject(resource: FluidStack, direction: ForgeDirection, doEject: Boolean) = fill(direction, resource, doEject)
 
-  override def canFill(from: ForgeDirection, fluid: Fluid) = {
-    val target = me.neighbour(getFacing)
-    from == getFacing.getOpposite && fluid != null && fluid.canBePlacedInWorld && isFluidAllowed(fluid) && worldObj.isAirBlock(target.x, target.y, target.z)
+  override def eject(resource: FluidStack, direction: EnumFacing, doEject: Boolean) = fill(direction, resource, doEject)
+
+  override def canFill(from: EnumFacing, fluid: Fluid) = {
+    val target = pos.offset(getFacing)
+    from == getFacing.getOpposite && fluid != null && fluid.canBePlacedInWorld && isFluidAllowed(fluid) && worldObj.isAirBlock(target)
   }
 
-  override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int = {
+  override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
     if (resource != null && resource.getFluid != null && resource.amount > 0 && canFill(from, resource.getFluid)) {
       if (bufferTank.getFluid != null && bufferTank.getFluid.getFluid != resource.getFluid)
         bufferTank.setFluid(null)
       var amountFilled = bufferTank.fill(resource, doFill)
       if (doFill && !worldObj.isRemote && bufferTank.getFluidAmount >= BucketVolume) {
-        val target = me.neighbour(getFacing)
-        worldObj.setBlock(target.x, target.y, target.z, bufferTank.getFluid.getFluid.getBlock)
-        worldObj.notifyBlockOfNeighborChange(target.x, target.y, target.z, BlockSluice)
+        val target = pos.offset(getFacing)
+        worldObj.setBlockState(pos, bufferTank.getFluid.getFluid.getBlock.getDefaultState, 3)
+        worldObj.notifyBlockOfStateChange(pos, BlockSluice)
         bufferTank.setFluid(null)
       }
       amountFilled
     } else 0
   }
 
-  override def getXCoord = xCoord
-  override def getYCoord = yCoord
-  override def getZCoord = zCoord
-  override def getWorld = worldObj
-
-  override def isValidDirectionForFakeTank(dir: ForgeDirection) = getFacing.getOpposite == dir
+  override def isValidDirectionForFakeTank(dir: EnumFacing) = getFacing.getOpposite == dir
 }
 

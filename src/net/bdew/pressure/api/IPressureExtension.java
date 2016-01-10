@@ -11,9 +11,10 @@ package net.bdew.pressure.api;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Extension of the pipe system to allow interoperability with other mods
@@ -24,24 +25,24 @@ public interface IPressureExtension {
      *
      * @return true if connection is possible
      */
-    boolean canPipeConnectTo(IBlockAccess world, int x, int y, int z, ForgeDirection side);
+    boolean canPipeConnectTo(IBlockAccess world, BlockPos pos, EnumFacing side);
 
     /**
      * Checks if pipe can connect on a given side
      *
      * @return true if connection is possible and the block is a valid pipe
      */
-    boolean canPipeConnectFrom(IBlockAccess world, int x, int y, int z, ForgeDirection side);
+    boolean canPipeConnectFrom(IBlockAccess world, BlockPos pos, EnumFacing side);
 
     /**
      * @return true if block is valid for pipe connections (including other pipes)
      */
-    boolean isConnectableBlock(IBlockAccess world, int x, int y, int z);
+    boolean isConnectableBlock(IBlockAccess world, BlockPos pos);
 
     /**
      * @return true if pressure network connections can pass through this block
      */
-    boolean isTraversableBlock(IBlockAccess world, int x, int y, int z);
+    boolean isTraversableBlock(IBlockAccess world, BlockPos pos);
 
     /**
      * Attempt to place a block at the given coordinates, called on the server
@@ -49,5 +50,5 @@ public interface IPressureExtension {
      *
      * @return true if block was placed successfully
      */
-    boolean tryPlaceBlock(World w, int x, int y, int z, Block block, EntityPlayerMP p);
+    boolean tryPlaceBlock(World w, BlockPos pos, Block block, EntityPlayerMP p);
 }

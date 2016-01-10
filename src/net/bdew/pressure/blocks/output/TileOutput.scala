@@ -9,33 +9,26 @@
 
 package net.bdew.pressure.blocks.output
 
-import net.bdew.lib.block.BlockRef
+import net.bdew.lib.PimpVanilla._
 import net.bdew.lib.data.base.TileDataSlots
 import net.bdew.pressure.api.IPressureEject
 import net.bdew.pressure.blocks.TileFilterable
 import net.bdew.pressure.misc.FakeTank
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.{FluidStack, IFluidHandler}
 
 class TileOutput extends TileDataSlots with FakeTank with IPressureEject with TileFilterable {
-  def getFacing = BlockOutput.getFacing(worldObj, xCoord, yCoord, zCoord)
+  def getFacing = BlockOutput.getFacing(worldObj, pos)
 
-  lazy val me = BlockRef.fromTile(this)
-
-  override def eject(resource: FluidStack, direction: ForgeDirection, doEject: Boolean) = {
+  override def eject(resource: FluidStack, direction: EnumFacing, doEject: Boolean) = {
     if (isFluidAllowed(resource) && direction == getFacing.getOpposite) {
       val f = getFacing
-      me.neighbour(f).getTile[IFluidHandler](worldObj) map { dest =>
+      worldObj.getTileSafe[IFluidHandler](pos.offset(f)) map { dest =>
         dest.fill(f.getOpposite, resource, doEject)
       } getOrElse 0
     } else 0
   }
 
-  override def getXCoord = xCoord
-  override def getYCoord = yCoord
-  override def getZCoord = zCoord
-  override def getWorld = worldObj
-
-  override def isValidDirectionForFakeTank(dir: ForgeDirection) = getFacing == dir
+  override def isValidDirectionForFakeTank(dir: EnumFacing) = getFacing == dir
 }
 

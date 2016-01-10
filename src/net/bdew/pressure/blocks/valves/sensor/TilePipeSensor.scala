@@ -9,19 +9,17 @@
 
 package net.bdew.pressure.blocks.valves.sensor
 
-import net.bdew.lib.block.BlockRef
-import net.bdew.lib.data.base.{TileDataSlots, UpdateKind}
+import net.bdew.lib.data.base.{TileDataSlotsTicking, UpdateKind}
 import net.bdew.pressure.api.{IPressureConnection, IPressureEject, IPressureInject}
 import net.bdew.pressure.misc.DataSlotFluidAverages
 import net.bdew.pressure.pressurenet.Helper
-import net.minecraft.block.Block
+import net.minecraft.block.state.IBlockState
+import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.World
-import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 
-class TilePipeSensor extends TileDataSlots with IPressureEject with IPressureInject {
+class TilePipeSensor extends TileDataSlotsTicking with IPressureEject with IPressureInject {
   var connection: IPressureConnection = null
-  lazy val me = BlockRef.fromTile(this)
 
   var flowThisTick = Map.empty[Fluid, Double]
   val averages = DataSlotFluidAverages("flow", this, 50).setUpdate(UpdateKind.SAVE)
@@ -34,20 +32,20 @@ class TilePipeSensor extends TileDataSlots with IPressureEject with IPressureInj
     flowTicks += 1
     if (coolDown <= 0) {
       val state = flowTicks < 10
-      if (BlockPipeSensor.isPowered(worldObj, xCoord, yCoord, zCoord) != state)
-        BlockPipeSensor.setPowered(worldObj, xCoord, yCoord, zCoord, state)
+      if (BlockPipeSensor.isPowered(worldObj, pos) != state)
+        BlockPipeSensor.setPowered(worldObj, pos, state)
       coolDown = 10
     }
     averages.update(flowThisTick)
     flowThisTick = Map.empty
   }
 
-  override def shouldRefresh(oldBlock: Block, newBlock: Block, oldMeta: Int, newMeta: Int, world: World, x: Int, y: Int, z: Int) =
-    oldBlock != newBlock
+  override def shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newSate: IBlockState) =
+    oldState.getBlock != newSate.getBlock
 
-  def getFacing = BlockPipeSensor.getFacing(worldObj, xCoord, yCoord, zCoord)
+  def getFacing = BlockPipeSensor.getFacing(worldObj, pos)
 
-  override def eject(resource: FluidStack, face: ForgeDirection, doEject: Boolean): Int = {
+  override def eject(resource: FluidStack, face: EnumFacing, doEject: Boolean): Int = {
     if (face == getFacing.getOpposite) {
       if (connection == null)
         connection = Helper.recalculateConnectionInfo(this, getFacing)
@@ -61,10 +59,5 @@ class TilePipeSensor extends TileDataSlots with IPressureEject with IPressureInj
     } else 0
   }
 
-  override def invalidateConnection(direction: ForgeDirection) = connection = null
-
-  override def getZCoord = zCoord
-  override def getYCoord = yCoord
-  override def getXCoord = xCoord
-  override def getWorld = worldObj
+  override def invalidateConnection(direction: EnumFacing) = connection = null
 }

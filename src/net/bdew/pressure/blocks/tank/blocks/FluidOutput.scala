@@ -12,24 +12,24 @@ package net.bdew.pressure.blocks.tank.blocks
 import net.bdew.lib.multiblock.block.BlockOutput
 import net.bdew.lib.multiblock.data.OutputConfigFluid
 import net.bdew.pressure.blocks.tank.{BaseModule, TileFluidOutputBase}
+import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.IBlockAccess
-import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 
 object BlockFluidOutput extends BaseModule("TankFluidOutput", "FluidOutput", classOf[TileFluidOutput]) with BlockOutput[TileFluidOutput] {
-  override def canConnectRedstone(world: IBlockAccess, x: Int, y: Int, z: Int, side: Int) = true
+  override def canConnectRedstone(world: IBlockAccess, pos: BlockPos, side: EnumFacing) = true
 }
 
 class TileFluidOutput extends TileFluidOutputBase {
-  override def doOutput(face: ForgeDirection, cfg: OutputConfigFluid) {}
+  override def doOutput(face: EnumFacing, cfg: OutputConfigFluid) {}
 
-  override def canDrain(from: ForgeDirection, fluid: Fluid) =
+  override def canDrain(from: EnumFacing, fluid: Fluid) =
     (for {
       core <- getCore
       cfg <- getCfg(from) if checkCanOutput(cfg)
     } yield core.canOutputFluid(fluid)).getOrElse(false)
 
-  override def drain(from: ForgeDirection, resource: FluidStack, doDrain: Boolean) =
+  override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean) =
     (for {
       core <- getCore
       cfg <- getCfg(from) if checkCanOutput(cfg)
@@ -39,7 +39,7 @@ class TileFluidOutput extends TileFluidOutputBase {
       out
     }).orNull
 
-  override def drain(from: ForgeDirection, maxDrain: Int, doDrain: Boolean) =
+  override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean) =
     (for {
       core <- getCore
       cfg <- getCfg(from) if checkCanOutput(cfg)
@@ -49,9 +49,9 @@ class TileFluidOutput extends TileFluidOutputBase {
       out
     }).orNull
 
-  var outThisTick = Map.empty[ForgeDirection, Float]
+  var outThisTick = Map.empty[EnumFacing, Float]
 
-  def addOutput(side: ForgeDirection, amt: Int) =
+  def addOutput(side: EnumFacing, amt: Int) =
     outThisTick += side -> (outThisTick.getOrElse(side, 0F) + amt)
 
   def updateOutput() {

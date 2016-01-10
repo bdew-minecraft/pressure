@@ -9,26 +9,23 @@
 
 package net.bdew.pressure.blocks.drain
 
-import net.bdew.lib.block.BlockRef
 import net.bdew.lib.data.DataSlotTank
-import net.bdew.lib.data.base.TileDataSlots
+import net.bdew.lib.data.base.TileDataSlotsTicking
 import net.bdew.pressure.api.IPressureEject
 import net.bdew.pressure.blocks.TileFilterable
 import net.bdew.pressure.config.Modules
 import net.bdew.pressure.misc.FakeTank
 import net.minecraft.entity.item.EntityXPOrb
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 
-class TileDrain extends TileDataSlots with FakeTank with IPressureEject with TileFilterable {
-  def getFacing = BlockDrain.getFacing(worldObj, xCoord, yCoord, zCoord)
-
-  lazy val me = BlockRef.fromTile(this)
+class TileDrain extends TileDataSlotsTicking with FakeTank with IPressureEject with TileFilterable {
+  def getFacing = BlockDrain.getFacing(worldObj, pos)
 
   val bufferTank = new DataSlotTank("buffer", this, Int.MaxValue)
 
   def doDrain(resource: FluidStack) {
-    val target = me.neighbour(getFacing)
+    val target = pos.offset(getFacing)
     if (bufferTank.getFluid != null && bufferTank.getFluid.getFluid != resource.getFluid)
       bufferTank.setFluid(null)
     bufferTank.fill(resource, true)
@@ -39,22 +36,23 @@ class TileDrain extends TileDataSlots with FakeTank with IPressureEject with Til
       while (xpToDrop > 0) {
         val dropNow = EntityXPOrb.getXPSplit(xpToDrop)
         xpToDrop -= dropNow
-        val ent = new EntityXPOrb(this.worldObj, target.x + 0.5D, target.y + 0.5D, target.z + 0.5D, dropNow)
-        ent.motionX = getFacing.offsetX * (Math.random() * 0.5 - 0.25) + (Math.random() * 0.2 - 0.1)
-        ent.motionY = getFacing.offsetY * (Math.random() * 0.5 - 0.25) + (Math.random() * 0.2 - 0.1)
-        ent.motionZ = getFacing.offsetZ * (Math.random() * 0.5 - 0.25) + (Math.random() * 0.2 - 0.1)
+        val ent = new EntityXPOrb(this.worldObj, target.getX + 0.5D, target.getY + 0.5D, target.getZ + 0.5D, dropNow)
+        val v = getFacing.getDirectionVec
+        ent.motionX = v.getX * (Math.random() * 0.5 - 0.25) + (Math.random() * 0.2 - 0.1)
+        ent.motionY = v.getY * (Math.random() * 0.5 - 0.25) + (Math.random() * 0.2 - 0.1)
+        ent.motionZ = v.getZ * (Math.random() * 0.5 - 0.25) + (Math.random() * 0.2 - 0.1)
         this.worldObj.spawnEntityInWorld(ent)
       }
     } else {
-      if (worldObj.isAirBlock(target.x, target.y, target.z) && bufferTank.getFluidAmount >= 1000 && resource.getFluid.canBePlacedInWorld) {
+      if (worldObj.isAirBlock(target) && bufferTank.getFluidAmount >= 1000 && resource.getFluid.canBePlacedInWorld) {
         bufferTank.setFluid(null)
-        worldObj.setBlock(target.x, target.y, target.z, resource.getFluid.getBlock)
-        worldObj.notifyBlockOfNeighborChange(target.x, target.y, target.z, BlockDrain)
+        worldObj.setBlockState(target, resource.getFluid.getBlock.getDefaultState, 3)
+        worldObj.notifyBlockOfStateChange(target, BlockDrain)
       }
     }
   }
 
-  override def eject(resource: FluidStack, direction: ForgeDirection, doEject: Boolean) = {
+  override def eject(resource: FluidStack, direction: EnumFacing, doEject: Boolean) = {
     if (isFluidAllowed(resource) && direction == getFacing.getOpposite) {
       if (doEject)
         doDrain(resource)
@@ -62,9 +60,9 @@ class TileDrain extends TileDataSlots with FakeTank with IPressureEject with Til
     } else 0
   }
 
-  override def canFill(from: ForgeDirection, fluid: Fluid) = from == getFacing.getOpposite && isFluidAllowed(fluid)
+  override def canFill(from: EnumFacing, fluid: Fluid) = from == getFacing.getOpposite && isFluidAllowed(fluid)
 
-  override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int = {
+  override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
     if (resource != null && resource.getFluid != null && resource.amount > 0 && canFill(from, resource.getFluid)) {
       if (!worldObj.isRemote && doFill)
         doDrain(resource)
@@ -72,11 +70,6 @@ class TileDrain extends TileDataSlots with FakeTank with IPressureEject with Til
     } else 0
   }
 
-  override def getXCoord = xCoord
-  override def getYCoord = yCoord
-  override def getZCoord = zCoord
-  override def getWorld = worldObj
-
-  override def isValidDirectionForFakeTank(dir: ForgeDirection) = getFacing.getOpposite == dir
+  override def isValidDirectionForFakeTank(dir: EnumFacing) = getFacing.getOpposite == dir
 }
 

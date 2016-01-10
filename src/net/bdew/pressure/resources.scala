@@ -12,17 +12,17 @@ package net.bdew.pressure
 import net.bdew.lib.gui.{Color, ScaledResourceLocation, Texture}
 import net.bdew.lib.multiblock.ResourceProvider
 import net.bdew.lib.multiblock.data.RSMode
-import net.bdew.lib.render.IconPreloader
 
-object IconCache extends IconPreloader(0) {
-  val edgeIcon = TextureLoc("pressure:connected/edge")
-  val output = TextureLoc("pressure:connected/output")
-  val disabled = TextureLoc("pressure:connected/disabled")
-  val arTop = TextureLoc("pressure:connected/artop")
-  val arRight = TextureLoc("pressure:connected/arright")
-  val arBottom = TextureLoc("pressure:connected/arbottom")
-  val arLeft = TextureLoc("pressure:connected/arleft")
-}
+// todo: rendering stuff
+//object IconCache extends IconPreloader {
+//  val edgeIcon = TextureLoc("pressure:connected/edge")
+//  val output = TextureLoc("pressure:connected/output")
+//  val disabled = TextureLoc("pressure:connected/disabled")
+//  val arTop = TextureLoc("pressure:connected/artop")
+//  val arRight = TextureLoc("pressure:connected/arright")
+//  val arBottom = TextureLoc("pressure:connected/arbottom")
+//  val arLeft = TextureLoc("pressure:connected/arleft")
+//}
 
 object Textures {
   val sheet = new ScaledResourceLocation(Pressure.modId, "textures/gui/widgets.png")
@@ -48,14 +48,15 @@ object Textures {
 }
 
 object PressureResourceProvider extends ResourceProvider {
-  override def edge = IconCache.edgeIcon
-  override def output = IconCache.output
-  override def disabled = IconCache.disabled
-
-  override def arrowBottom = IconCache.arBottom
-  override def arrowRight = IconCache.arRight
-  override def arrowTop = IconCache.arTop
-  override def arrowLeft = IconCache.arLeft
+  // todo: rendering stuff
+  //  override def edge = IconCache.edgeIcon
+  //  override def output = IconCache.output
+  //  override def disabled = IconCache.disabled
+  //
+  //  override def arrowBottom = IconCache.arBottom
+  //  override def arrowRight = IconCache.arRight
+  //  override def arrowTop = IconCache.arTop
+  //  override def arrowLeft = IconCache.arLeft
 
   override def btRsOff = Textures.Button16.rsOff
   override def btRsOn = Textures.Button16.rsOn

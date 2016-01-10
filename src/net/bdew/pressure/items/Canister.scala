@@ -12,7 +12,6 @@ package net.bdew.pressure.items
 import java.util
 
 import net.bdew.lib.Misc
-import net.bdew.lib.block.BlockRef
 import net.bdew.lib.items.SimpleItem
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.config.{Config, Tuning}
@@ -21,8 +20,8 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.World
-import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
 
 object Canister extends SimpleItem("Canister") with IFluidContainerItem {
@@ -34,9 +33,8 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
 
   override def getCreativeTabs = Array(PressureCreativeTabs.main, PressureCreativeTabs.canisters)
 
-  override def getSubItems(item: Item, tab: CreativeTabs, jStacks: util.List[_]) {
+  override def getSubItems(item: Item, tab: CreativeTabs, stacks: util.List[ItemStack]) = {
     import scala.collection.JavaConversions._
-    val stacks = jStacks.asInstanceOf[java.util.List[ItemStack]]
     if (tab == PressureCreativeTabs.main)
       stacks.add(new ItemStack(this))
     else if (tab == PressureCreativeTabs.canisters || tab == null) {
@@ -102,40 +100,37 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
 
   def getCapacity(container: ItemStack): Int = capacity
 
-  override def addInformation(stack: ItemStack, player: EntityPlayer, lst: util.List[_], par4: Boolean) {
-    import scala.collection.JavaConverters._
-    val l = lst.asInstanceOf[util.List[String]].asScala
+  override def addInformation(stack: ItemStack, playerIn: EntityPlayer, tooltip: util.List[String], advanced: Boolean) = {
     val fl = getFluid(stack)
     if (fl == null) {
-      l += Misc.toLocal("bdlib.label.empty")
+      tooltip.add(Misc.toLocal("bdlib.label.empty"))
     } else {
-      l += "%d/%d %s".format(fl.amount, capacity, fl.getFluid.getLocalizedName(fl))
-      if (Config.showFluidName) l += "ID: " + fl.getFluid.getName
+      tooltip.add("%d/%d %s".format(fl.amount, capacity, fl.getFluid.getLocalizedName(fl)))
+      if (Config.showFluidName) tooltip.add("ID: " + fl.getFluid.getName)
     }
   }
 
-  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
     if (world.isRemote) return true
-    val te = world.getTileEntity(x, y, z)
+    val te = world.getTileEntity(pos)
     if (te != null && te.isInstanceOf[IFluidHandler]) {
       val fh = te.asInstanceOf[IFluidHandler]
       val fl = drain(stack, maxPour, false)
       if (fl == null) return false
-      val dir = ForgeDirection.values()(side)
-      val toFill = fh.fill(dir, fl, false)
+      val toFill = fh.fill(side, fl, false)
       if (toFill > 0) {
-        fh.fill(dir, drain(stack, toFill, true), true)
+        fh.fill(side, drain(stack, toFill, true), true)
         player.swingItem()
         return true
       }
     } else {
-      val p = BlockRef(x, y, z).neighbour(Misc.forgeDirection(side))
-      if (p.y >= 0 && p.y < world.getActualHeight && world.isAirBlock(p.x, p.y, p.z)) {
+      val p = pos.offset(side)
+      if (p.getY >= 0 && p.getY < world.getActualHeight && world.isAirBlock(p)) {
         val fs = getFluid(stack)
         if (fs != null && fs.getFluid != null && fs.getFluid.canBePlacedInWorld && fs.amount >= FluidContainerRegistry.BUCKET_VOLUME) {
           drain(stack, FluidContainerRegistry.BUCKET_VOLUME, true)
-          world.setBlock(p.x, p.y, p.z, fs.getFluid.getBlock, 0, 3)
-          world.notifyBlockOfNeighborChange(p.x, p.y, p.z, fs.getFluid.getBlock)
+          world.setBlockState(p, fs.getFluid.getBlock.getDefaultState, 3)
+          world.notifyBlockOfStateChange(p, fs.getFluid.getBlock)
         }
       }
     }
