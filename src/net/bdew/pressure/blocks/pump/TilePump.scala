@@ -27,7 +27,7 @@ class TilePump extends TileDataSlotsTicking with FakeTank with TileFilterable {
   serverTick.listen(doPushFluid)
 
   def doPushFluid() {
-    if (!BlockPump.isPowered(worldObj, pos)) return
+    if (!BlockPump.getSignal(worldObj, pos)) return
     val face = getFacing
     for {
       from <- worldObj.getTileSafe[IFluidHandler](pos.offset(face.getOpposite))

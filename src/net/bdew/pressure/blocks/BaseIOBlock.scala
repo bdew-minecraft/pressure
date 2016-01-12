@@ -9,14 +9,11 @@
 
 package net.bdew.pressure.blocks
 
-import net.bdew.lib.PimpVanilla._
-import net.bdew.lib.block.{HasTE, SimpleBlock}
+import net.bdew.lib.block.{BaseBlock, HasTE}
+import net.bdew.lib.rotate.BlockFacingMeta
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.PropertyDirection
 
-class BaseIOBlock[T <: TileFilterable](name: String, teClass: Class[T]) extends SimpleBlock(name, Material.iron) with HasTE[T] with BlockFilterableRotatable {
-  override val facingProperty = PropertyDirection.create("facing")
+class BaseIOBlock[T <: TileFilterable](name: String, teClass: Class[T]) extends BaseBlock(name, Material.iron) with HasTE[T] with BlockFilterableRotatable with BlockFacingMeta {
   override val TEClass = teClass
-
   setHardness(2)
 }

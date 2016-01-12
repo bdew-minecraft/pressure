@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.blocks
 
-import net.bdew.lib.block.{HasItemBlock, SimpleBlock}
+import net.bdew.lib.block.{BaseBlock, HasItemBlock}
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.material.Material
@@ -17,7 +17,7 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
 
-object BlockPipe extends SimpleBlock("Pipe", Material.iron) with IPressureConnectableBlock with BlockNotifyUpdates with HasItemBlock {
+object BlockPipe extends BaseBlock("Pipe", Material.iron) with IPressureConnectableBlock with BlockNotifyUpdates with HasItemBlock {
   override val ItemBlockClass = classOf[CustomItemBlock]
 
   setHardness(2)

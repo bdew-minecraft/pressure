@@ -10,20 +10,16 @@
 package net.bdew.pressure.blocks.valves
 
 import net.bdew.lib.PimpVanilla._
-import net.bdew.lib.block.SimpleBlock
-import net.bdew.lib.rotate.BaseRotatableBlock
+import net.bdew.lib.block.BaseBlock
+import net.bdew.lib.rotate.{BaseRotatableBlock, BlockFacingSignalMeta}
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.bdew.pressure.blocks.BlockNotifyUpdates
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.{PropertyBool, PropertyDirection}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
 
-class BlockValve(name: String) extends SimpleBlock(name, Material.iron) with BaseRotatableBlock with IPressureConnectableBlock with BlockNotifyUpdates {
-  override val facingProperty = PropertyDirection.create("facing")
-  val stateProperty = PropertyBool.create("state")
-
+class BlockValve(name: String) extends BaseBlock(name, Material.iron) with BaseRotatableBlock with IPressureConnectableBlock with BlockNotifyUpdates with BlockFacingSignalMeta {
   // ==== BLOCK SETTINGS ====
 
   override def isOpaqueCube = false
@@ -61,25 +57,5 @@ class BlockValve(name: String) extends SimpleBlock(name, Material.iron) with Bas
 
   override def setBlockBoundsForItemRender(): Unit = {
     setBlockBoundsTupled(boundsFromFacing(getDefaultFacing))
-  }
-
-  // ==== METADATA ====
-
-  override def getStateFromMeta(meta: Int) =
-    getDefaultState
-      .withProperty(facingProperty, EnumFacing.getFront(meta & 7))
-      .withProperty(stateProperty, Boolean.box((meta & 8) > 0))
-
-  override def getMetaFromState(state: IBlockState) = {
-    state.getValue(facingProperty).ordinal() | (if (state.getValue(stateProperty)) 8 else 0)
-  }
-
-  def isPowered(world: IBlockAccess, pos: BlockPos) =
-    world.getBlockState(pos).getValue(stateProperty)
-
-  def setPowered(world: World, pos: BlockPos, signal: Boolean): Unit = {
-    world.changeBlockState(pos, 3) { state =>
-      state.withProperty(stateProperty, Boolean.box(signal))
-    }
   }
 }

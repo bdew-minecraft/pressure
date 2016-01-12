@@ -40,7 +40,7 @@ class TileInput extends TileDataSlotsTicking with FakeTank with IPressureInject 
   serverTick.listen(doPushFluid)
 
   def doPushFluid() {
-    if (!BlockInput.isPowered(worldObj, pos)) return
+    if (!BlockInput.getSignal(worldObj, pos)) return
     val face = getFacing
     worldObj.getTileSafe[IFluidHandler](pos.offset(face.getOpposite)).foreach { from =>
       val res = from.drain(face, Int.MaxValue, false)

@@ -10,18 +10,18 @@
 package net.bdew.pressure.blocks
 
 import net.bdew.lib.PimpVanilla._
-import net.bdew.lib.block.{HasTE, SimpleBlock}
+import net.bdew.lib.block.{BaseBlock, HasTE}
+import net.bdew.lib.rotate.BlockFacingSignalMeta
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.{PropertyBool, PropertyDirection}
+import net.minecraft.block.properties.PropertyBool
 import net.minecraft.block.state.IBlockState
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
 
-class BasePoweredBlock[T <: TileFilterable](name: String, teClass: Class[T]) extends SimpleBlock(name, Material.iron) with HasTE[T] with BlockFilterableRotatable {
+class BasePoweredBlock[T <: TileFilterable](name: String, teClass: Class[T]) extends BaseBlock(name, Material.iron) with HasTE[T] with BlockFilterableRotatable with BlockFacingSignalMeta {
   override val TEClass = teClass
-  override val facingProperty = PropertyDirection.create("facing")
-  val stateProperty = PropertyBool.create("state")
+  lazy val POWERED = PropertyBool.create("powered")
 
   setHardness(2)
 
@@ -30,27 +30,9 @@ class BasePoweredBlock[T <: TileFilterable](name: String, teClass: Class[T]) ext
     side != facing && side != facing.getOpposite
   }
 
-  override def getStateFromMeta(meta: Int) =
-    getDefaultState
-      .withProperty(facingProperty, EnumFacing.getFront(meta & 7))
-      .withProperty(stateProperty, Boolean.box((meta & 8) > 0))
-
-  override def getMetaFromState(state: IBlockState) = {
-    state.getValue(facingProperty).ordinal() | (if (state.getValue(stateProperty)) 8 else 0)
-  }
-
-  def isPowered(world: IBlockAccess, pos: BlockPos) =
-    world.getBlockState(pos).getValue(stateProperty)
-
-  def setPowered(world: World, pos: BlockPos, signal: Boolean): Unit = {
-    world.changeBlockState(pos, 3) { state =>
-      state.withProperty(stateProperty, Boolean.box(signal))
-    }
-  }
-
   override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, neighborBlock: Block) = {
     val powered = world.isBlockIndirectlyGettingPowered(pos) > 0
-    if (powered != isPowered(world, pos))
-      setPowered(world, pos, powered)
+    if (powered != getSignal(state))
+      setSignal(world, pos, powered)
   }
 }

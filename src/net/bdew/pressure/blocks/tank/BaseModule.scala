@@ -9,15 +9,13 @@
 
 package net.bdew.pressure.blocks.tank
 
-import net.bdew.lib.block.NamedBlock
 import net.bdew.lib.multiblock.block.BlockModule
 import net.bdew.lib.multiblock.tile.TileModule
 import net.bdew.pressure.PressureResourceProvider
 import net.bdew.pressure.config.Machines
 import net.minecraft.block.material.Material
 
-class BaseModule[T <: TileModule](name: String, kind: String, TEClass: Class[T])
-  extends BlockModule(name, kind, Material.iron, TEClass, Machines) with NamedBlock {
+class BaseModule[T <: TileModule](name: String, kind: String, TEClass: Class[T]) extends BlockModule(name, kind, Material.iron, TEClass, Machines) {
   override def resources = PressureResourceProvider
   setHardness(1)
 }

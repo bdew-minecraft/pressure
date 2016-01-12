@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.blocks.router
 
-import net.bdew.lib.block.{HasTE, SimpleBlock}
+import net.bdew.lib.block.{BaseBlock, HasTE}
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.bdew.pressure.blocks.BlockNotifyUpdates
@@ -20,7 +20,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
 
-object BlockRouter extends SimpleBlock("Router", Material.iron) with HasTE[TileRouter] with BlockNotifyUpdates with IPressureConnectableBlock {
+object BlockRouter extends BaseBlock("Router", Material.iron) with HasTE[TileRouter] with BlockNotifyUpdates with IPressureConnectableBlock {
   override val TEClass = classOf[TileRouter]
   val cfg = MachineRouter
 

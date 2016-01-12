@@ -9,15 +9,14 @@
 
 package net.bdew.pressure.blocks
 
-import net.bdew.lib.block.HasTE
-import net.minecraft.block.Block
+import net.bdew.lib.block.{BaseBlock, HasTE}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{BlockPos, ChatComponentTranslation, EnumFacing}
 import net.minecraft.world.World
 import net.minecraftforge.fluids.{FluidContainerRegistry, IFluidContainerItem}
 
-trait BlockFilterable extends Block {
+trait BlockFilterable extends BaseBlock {
   self: HasTE[_ <: TileFilterable] =>
   override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
     if (!player.isSneaking && player.getCurrentEquippedItem != null) {

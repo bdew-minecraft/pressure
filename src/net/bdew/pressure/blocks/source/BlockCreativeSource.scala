@@ -9,11 +9,11 @@
 
 package net.bdew.pressure.blocks.source
 
-import net.bdew.lib.block.{HasTE, SimpleBlock}
+import net.bdew.lib.block.{BaseBlock, HasTE}
 import net.bdew.pressure.blocks.BlockFilterable
 import net.minecraft.block.material.Material
 
-object BlockCreativeSource extends SimpleBlock("CreativeSource", Material.iron) with HasTE[TileCreativeSource] with BlockFilterable {
+object BlockCreativeSource extends BaseBlock("CreativeSource", Material.iron) with HasTE[TileCreativeSource] with BlockFilterable {
   override val TEClass = classOf[TileCreativeSource]
   setHardness(1)
 }

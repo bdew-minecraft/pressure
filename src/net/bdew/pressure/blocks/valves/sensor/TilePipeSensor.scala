@@ -32,8 +32,8 @@ class TilePipeSensor extends TileDataSlotsTicking with IPressureEject with IPres
     flowTicks += 1
     if (coolDown <= 0) {
       val state = flowTicks < 10
-      if (BlockPipeSensor.isPowered(worldObj, pos) != state)
-        BlockPipeSensor.setPowered(worldObj, pos, state)
+      if (BlockPipeSensor.getSignal(worldObj, pos) != state)
+        BlockPipeSensor.setSignal(worldObj, pos, state)
       coolDown = 10
     }
     averages.update(flowThisTick)

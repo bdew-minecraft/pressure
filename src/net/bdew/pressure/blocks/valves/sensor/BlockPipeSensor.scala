@@ -29,7 +29,7 @@ object BlockPipeSensor extends BlockValve("PipeSensor") with HasTE[TilePipeSenso
 
   override def getWeakPower(world: IBlockAccess, pos: BlockPos, state: IBlockState, side: EnumFacing) = {
     val facing = getFacing(world, pos)
-    if (facing != side && facing.getOpposite != side && isPowered(world, pos))
+    if (facing != side && facing.getOpposite != side && getSignal(world, pos))
       15
     else
       0

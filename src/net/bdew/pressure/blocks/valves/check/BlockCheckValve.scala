@@ -27,8 +27,8 @@ object BlockCheckValve extends BlockValve("CheckValve") with HasTE[TileCheckValv
 
   override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, neighborBlock: Block) = {
     val powered = world.isBlockIndirectlyGettingPowered(pos) > 0
-    if (powered != isPowered(world, pos))
-      setPowered(world, pos, powered)
+    if (powered != getSignal(world, pos))
+      setSignal(world, pos, powered)
   }
 
   override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack: ItemStack) = {

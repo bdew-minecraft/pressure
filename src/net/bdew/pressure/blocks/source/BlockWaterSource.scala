@@ -9,10 +9,10 @@
 
 package net.bdew.pressure.blocks.source
 
-import net.bdew.lib.block.{HasTE, SimpleBlock}
+import net.bdew.lib.block.{BaseBlock, HasTE}
 import net.minecraft.block.material.Material
 
-object BlockWaterSource extends SimpleBlock("WaterSource", Material.iron) with HasTE[TileWaterSource] {
+object BlockWaterSource extends BaseBlock("WaterSource", Material.iron) with HasTE[TileWaterSource] {
   override val TEClass = classOf[TileWaterSource]
   setHardness(1)
 }

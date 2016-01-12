@@ -76,12 +76,10 @@ dependencies {
 //    compile "net.bdew:bdlib:${config.bdlib.version}-mc${config.minecraft.version}:dev"
 
     deobfCompile "mezz.jei:jei_${config.minecraft.version}:${config.jei.version}"
+    deobfCompile "mcp.mobius.waila:Waila:${config.waila.version}"
 
     compile "net.bdew.thirdparty:computercraft:${config.computercraft.version}-mc${config.minecraft.version}:api"
 
-    compile module("mcp.mobius.waila:Waila:${config.waila.version}") {
-        transitive = false // WAILA is depending on an invalid combination of CCC/NEI that doesn't run...
-    }
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
