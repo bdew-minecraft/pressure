@@ -13,15 +13,19 @@ import java.io.File
 
 import net.bdew.lib.Misc
 import net.bdew.pressure.api.PressureAPI
+import net.bdew.pressure.blocks.pump.BlockPump
 import net.bdew.pressure.blocks.router.BlockRouter
 import net.bdew.pressure.compat.OpenComputersExecutionHelper
 import net.bdew.pressure.compat.computercraft.ExecutionHelpers
 import net.bdew.pressure.compat.enderio.EnderIOProxy
 import net.bdew.pressure.config._
 import net.bdew.pressure.misc.PressureCreativeTabs
+import net.bdew.pressure.model.ExtendedModelLoader
 import net.bdew.pressure.network.NetworkHandler
 import net.bdew.pressure.pressurenet.Helper
+import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.item.Item
+import net.minecraftforge.client.model.{ModelLoader, ModelLoaderRegistry}
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.Mod.EventHandler
 import net.minecraftforge.fml.common.event._
@@ -56,6 +60,8 @@ object Pressure {
     Blocks.load()
     Machines.load()
     if (event.getSide == Side.CLIENT) {
+      ModelLoaderRegistry.registerLoader(ExtendedModelLoader)
+      ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockPump), 0, new ModelResourceLocation("pressure:Pump", "inventory"))
       // todo: rendering stuff
       //      IconCache.init()
       //      sensor.Icons.init()
@@ -69,9 +75,10 @@ object Pressure {
     NetworkRegistry.INSTANCE.registerGuiHandler(this, Config.guiHandler)
     TuningLoader.loadDelayed()
     FMLInterModComms.sendMessage("Waila", "register", "net.bdew.pressure.waila.WailaHandler.loadCallback")
-    if (Misc.haveModVersion("ForgeMultipart"))
-      FMLInterModComms.sendMessage("Waila", "register", "net.bdew.pressure.fmp.waila.FMPWailaHandler.loadCallback")
     NetworkHandler.init()
+    if (event.getSide == Side.CLIENT) {
+      //      Client.minecraft.getRenderItem.getItemModelMesher.register(Item.getItemFromBlock(BlockPump), 0, new ModelResourceLocation("pressure:Pump", "inventory"))
+    }
   }
 
   @EventHandler
