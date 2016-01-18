@@ -11,4 +11,4 @@ package net.bdew.pressure.blocks.pump
 
 import net.bdew.pressure.blocks.BasePoweredBlock
 
-object BlockPump extends BasePoweredBlock("Pump", classOf[TilePump])
+object BlockPump extends BasePoweredBlock("pump", classOf[TilePump])

@@ -61,7 +61,7 @@ object Pressure {
     Machines.load()
     if (event.getSide == Side.CLIENT) {
       ModelLoaderRegistry.registerLoader(ExtendedModelLoader)
-      ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockPump), 0, new ModelResourceLocation("pressure:Pump", "inventory"))
+      ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockPump), 0, new ModelResourceLocation("pressure:pump", "inventory"))
       // todo: rendering stuff
       //      IconCache.init()
       //      sensor.Icons.init()
