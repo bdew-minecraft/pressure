@@ -14,7 +14,9 @@ import net.bdew.lib.block.BaseBlock
 import net.bdew.lib.rotate.{BaseRotatableBlock, BlockFacingSignalMeta}
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.bdew.pressure.blocks.BlockNotifyUpdates
+import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.material.Material
+import net.minecraft.block.properties.PropertyBool
 import net.minecraft.block.state.IBlockState
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
@@ -23,7 +25,29 @@ class BlockValve(name: String) extends BaseBlock(name, Material.iron) with BaseR
   // ==== BLOCK SETTINGS ====
 
   override def isOpaqueCube = false
+  override def isFullCube = false
   override def getDefaultFacing: EnumFacing = EnumFacing.NORTH
+
+  object Properties {
+    val FRONT = PropertyBool.create("front")
+    val BACK = PropertyBool.create("back")
+  }
+
+  // ==== BLOCKSTATE ====
+
+  override def getProperties = super.getProperties :+ Properties.FRONT :+ Properties.BACK
+
+  setDefaultState(getDefaultState
+    .withProperty(Properties.FRONT, Boolean.box(false))
+    .withProperty(Properties.BACK, Boolean.box(false))
+  )
+
+  override def getActualState(state: IBlockState, world: IBlockAccess, pos: BlockPos) = {
+    val facing = getFacing(world, pos)
+    state
+      .withProperty(Properties.FRONT, Boolean.box(Helper.canPipeConnectTo(world, pos.offset(facing), facing.getOpposite)))
+      .withProperty(Properties.BACK, Boolean.box(Helper.canPipeConnectTo(world, pos.offset(facing.getOpposite), facing)))
+  }
 
   // ==== PRESSURE NET ====
 
@@ -48,7 +72,14 @@ class BlockValve(name: String) extends BaseBlock(name, Material.iron) with BaseR
   val setBlockBoundsTupled = (setBlockBounds _).tupled
 
   override def setBlockBoundsBasedOnState(world: IBlockAccess, pos: BlockPos): Unit =
-    setBlockBoundsTupled(boundsFromFacing(getFacing(world, pos)))
+    setBlockBoundsTupled(boundsFromFacing(
+      // Minecraft calls this *before* block is placed and can have any kind of state
+      // from World.canBlockBePlaced for some fucking reason
+      if (world.getBlockState(pos).getBlock == this)
+        getFacing(world, pos)
+      else
+        getDefaultFacing
+    ))
 
   override def getCollisionBoundingBox(w: World, pos: BlockPos, state: IBlockState) = {
     setBlockBoundsBasedOnState(w, pos)
