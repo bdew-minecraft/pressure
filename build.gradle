@@ -4,7 +4,6 @@ buildscript {
     }
     repositories {
         mavenCentral()
-        mavenLocal()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
@@ -13,14 +12,20 @@ buildscript {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
+        maven {
+            name = "gradle plugins"
+            url = "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.7"
     }
 }
 
 apply plugin: 'scala'
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'com.matthewprenger.cursegradle'
 
 file "build.properties" withReader {
     def prop = new Properties()
@@ -47,6 +52,7 @@ minecraft {
     version = "${config.minecraft.version}-${config.forge.version}"
     mappings = "${config.minecraft.mappings}"
     useDepAts = true
+    makeObfSourceJar = false
     replace("BDLIB_VER", config.bdlib.version)
     replace("PRESSURE_VER", simpleVersion.toString())
     replace("PRESSURE_APIVER", simpleVersion.toString())
@@ -73,7 +79,7 @@ repositories {
 }
 
 dependencies {
-//    compile "net.bdew:bdlib:${config.bdlib.version}-mc${config.minecraft.version}:dev"
+    compile "net.bdew:bdlib:${config.bdlib.version}-mc${config.minecraft.version}:dev"
 
     deobfCompile "mezz.jei:jei_${config.minecraft.version}:${config.jei.version}"
     deobfCompile "mcp.mobius.waila:Waila:${config.waila.version}"
@@ -92,7 +98,6 @@ sourceSets {
         resources {
             srcDir 'resources'
         }
-        output.resourcesDir = output.classesDir // Hack for IDEA
     }
 }
 
@@ -113,14 +118,15 @@ task apiJar(type: Jar, dependsOn: 'classes') {
         include 'net/bdew/pressure/api/**'
     }
 
-    duplicatesStrategy "exclude"
     extension = 'jar'
     classifier = 'api'
 }
 
-//task sourceJar(type: Jar) {
-//    classifier "sources"
-//}
+
+task sourceJarReal(type: Jar) {
+    // FG has a task named sourceJar that seems to be borked
+    classifier "sources"
+}
 
 task deobfJar(type: Jar) {
     from sourceSets.main.output
@@ -135,14 +141,14 @@ jar {
 
 afterEvaluate { project ->
     // Fudge the inputs of api/source jars so we get the version after replacements
-    //tasks.getByPath(":sourceJar").from(tasks.getByPath(":sourceMainScala").outputs.files)
+    tasks.getByPath(":sourceJarReal").from(tasks.getByPath(":sourceMainScala").outputs.files)
     tasks.getByPath(":apiJar").from(tasks.getByPath(":sourceMainScala").outputs.files, {
         include 'net/bdew/pressure/api/**'
     })
 }
 
 artifacts {
-    archives sourceJar
+    archives sourceJarReal
     archives deobfJar
     archives apiJar
 }
@@ -153,13 +159,47 @@ publishing {
     publications {
         maven(MavenPublication) {
             artifact deobfJar
-            artifact sourceJar
+            artifact sourceJarReal
             artifact apiJar
         }
     }
     repositories {
         maven {
             url "file://var/www/maven"
+        }
+    }
+}
+
+curseforge {
+    apiKey = project.hasProperty("curseForgeApiKey") ? project.curseForgeApiKey : ""
+    project {
+        id = config.curseforge.id
+
+        releaseType = "alpha"
+        changelog = project.hasProperty("changelog") ? project.changelog : "No changelog available"
+
+        addGameVersion config.minecraft.version
+
+        mainArtifact(jar) {
+            displayName = "Pressure Pipes ${simpleVersion} (MC ${config.minecraft.version})"
+        }
+
+        addArtifact(deobfJar) {
+            displayName = "Pressure Pipes ${simpleVersion} Source (MC ${config.minecraft.version})"
+        }
+
+        addArtifact(sourceJarReal) {
+            displayName = "Pressure Pipes ${simpleVersion} Deobfuscated (MC ${config.minecraft.version})"
+        }
+
+        addArtifact(apiJar) {
+            displayName = "Pressure Pipes ${simpleVersion} API (MC ${config.minecraft.version})"
+        }
+
+        relations {
+            requiredLibrary 'bdlib'
+            optionalLibrary 'waila'
+            optionalLibrary 'just-enough-items-jei'
         }
     }
 }
