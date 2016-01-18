@@ -17,7 +17,7 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
 
-object BlockPipe extends BaseBlock("Pipe", Material.iron) with IPressureConnectableBlock with BlockNotifyUpdates with HasItemBlock {
+object BlockPipe extends BaseBlock("pipe", Material.iron) with IPressureConnectableBlock with BlockNotifyUpdates with HasItemBlock {
   override val ItemBlockClass = classOf[CustomItemBlock]
 
   setHardness(2)

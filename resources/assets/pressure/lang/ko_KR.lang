@@ -2,7 +2,7 @@ tile.pressure.input.name=고압 입력면
 tile.pressure.output.name=고압 출력면
 tile.pressure.pipe.name=고압 파이프
 tile.pressure.pump.name=고압 펌프
-tile.pressure.water.name=무한 물
+tile.pressure.WaterSource.name=무한 물
 tile.pressure.drain.name=배수로
 
 tile.pressure.TankBlock.name=탱크 블럭

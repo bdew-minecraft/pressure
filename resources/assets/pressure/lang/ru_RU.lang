@@ -2,7 +2,7 @@ tile.pressure.input.name=Вход под высоким давлением
 tile.pressure.output.name=Выход под высоким давлением
 tile.pressure.pipe.name=Труба под высоким давлением
 tile.pressure.pump.name=Помпа под высоким давлением
-tile.pressure.water.name=Бесконечный источник воды
+tile.pressure.WaterSource.name=Бесконечный источник воды
 tile.pressure.creative.name=Творческий источник воды
 tile.pressure.drain.name=Дренаж
 

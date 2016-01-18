@@ -2,7 +2,7 @@ tile.pressure.input.name=Visokotlačni ulaz
 tile.pressure.output.name=Visokotlačni izlaz
 tile.pressure.pipe.name=Visokotlačna cijev
 tile.pressure.pump.name=Visokotlačna pumpa
-tile.pressure.water.name=Beskonačan izvor vode
+tile.pressure.WaterSource.name=Beskonačan izvor vode
 
 item.pressure.Debugger.name=Ispravitelj grešaka za tlačni sustav
 item.pressure.Interface.name=Sučelje sustava tlaka

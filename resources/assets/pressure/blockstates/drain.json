@@ -1,0 +1,21 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "side": "pressure:blocks/drain/side",
+      "front": "pressure:blocks/drain/front",
+      "back": "pressure:blocks/drain/back"
+    },
+    "model": "pressure:filtered_rotated.extended"
+  },
+  "variants": {
+    "facing": {
+      "down": {"x": 90},
+      "up": {"x": 270},
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90}
+    }
+  }
+}
