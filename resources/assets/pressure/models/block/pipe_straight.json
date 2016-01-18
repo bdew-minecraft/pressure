@@ -1,0 +1,17 @@
+{
+  "textures": {
+    "particle": "#pipe"
+  },
+  "elements": [
+    {
+      "from": [4, 0, 4],
+      "to": [12, 16, 12],
+      "faces": {
+        "north": {"uv": [0, 2, 16, 14], "texture": "#pipe"},
+        "south": {"uv": [0, 2, 16, 14], "texture": "#pipe"},
+        "west": {"uv": [0, 2, 16, 14], "texture": "#pipe"},
+        "east": {"uv": [0, 2, 16, 14], "texture": "#pipe"}
+      }
+    }
+  ]
+}

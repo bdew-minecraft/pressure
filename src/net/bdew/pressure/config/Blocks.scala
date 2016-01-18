@@ -11,10 +11,10 @@ package net.bdew.pressure.config
 
 import net.bdew.lib.Misc
 import net.bdew.lib.config.BlockManager
-import net.bdew.pressure.blocks._
 import net.bdew.pressure.blocks.drain.{BlockDrain, BlockSluice}
 import net.bdew.pressure.blocks.input.BlockInput
 import net.bdew.pressure.blocks.output.BlockOutput
+import net.bdew.pressure.blocks.pipe.BlockPipe
 import net.bdew.pressure.blocks.pump.BlockPump
 import net.bdew.pressure.blocks.source.{BlockCreativeSource, BlockWaterSource}
 import net.bdew.pressure.blocks.tank.blocks._

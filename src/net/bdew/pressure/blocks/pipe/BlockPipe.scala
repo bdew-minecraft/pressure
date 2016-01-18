@@ -1,5 +1,5 @@
 /*
- * Copyright (c) bdew, 2013 - 2014
+ * Copyright (c) bdew, 2013 - 2016
  * https://github.com/bdew/pressure
  *
  * This mod is distributed under the terms of the Minecraft Mod Public
@@ -7,22 +7,55 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.blocks
+package net.bdew.pressure.blocks.pipe
 
 import net.bdew.lib.block.{BaseBlock, HasItemBlock}
 import net.bdew.pressure.api.IPressureConnectableBlock
+import net.bdew.pressure.blocks.{BlockNotifyUpdates, CustomItemBlock}
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.material.Material
+import net.minecraft.block.properties.{PropertyBool, PropertyEnum}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
 
 object BlockPipe extends BaseBlock("pipe", Material.iron) with IPressureConnectableBlock with BlockNotifyUpdates with HasItemBlock {
   override val ItemBlockClass = classOf[CustomItemBlock]
-
   setHardness(2)
 
+  object Properties {
+    val CONNECTED = (EnumFacing.values() map (dir => dir -> PropertyBool.create(dir.toString))).toMap
+    val STRAIGHT = PropertyEnum.create("straight", classOf[StraightPipe], StraightPipe.values(): _*)
+  }
+
+  setDefaultState(
+    EnumFacing.values().foldLeft(getDefaultState.withProperty(Properties.STRAIGHT, StraightPipe.NONE)) { (state, face) =>
+      state.withProperty(Properties.CONNECTED(face), Boolean.box(true))
+    }
+  )
+
+  override def getProperties =
+    super.getProperties ++ Properties.CONNECTED.values :+ Properties.STRAIGHT
+
+  override def getActualState(state: IBlockState, world: IBlockAccess, pos: BlockPos) = {
+    val connections = Helper.getPipeConnections(world, pos).toSet
+    if (connections == Set(EnumFacing.EAST, EnumFacing.WEST))
+      state.withProperty(Properties.STRAIGHT, StraightPipe.X)
+    else if (connections == Set(EnumFacing.NORTH, EnumFacing.SOUTH))
+      state.withProperty(Properties.STRAIGHT, StraightPipe.Z)
+    else if (connections == Set(EnumFacing.UP, EnumFacing.DOWN))
+      state.withProperty(Properties.STRAIGHT, StraightPipe.Y)
+    else {
+      connections.foldLeft(state.withProperty(Properties.STRAIGHT, StraightPipe.NONE)) { (state, face) =>
+        state.withProperty(Properties.CONNECTED(face), Boolean.box(true))
+      }
+    }
+  }
+
+  override def getMetaFromState(state: IBlockState) = 0
+
   override def isOpaqueCube = false
+  override def isFullCube = false
 
   override def setBlockBoundsBasedOnState(w: IBlockAccess, pos: BlockPos) {
     val connections = Helper.getPipeConnections(w, pos)

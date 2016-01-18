@@ -1,0 +1,62 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {"pipe": "pressure:blocks/pipe"}
+  },
+  "variants": {
+    "straight": {
+      "x": {"model": "pressure:pipe_straight", "x": 90, "y": 90},
+      "y": {"model": "pressure:pipe_straight"},
+      "z": {"model": "pressure:pipe_straight", "x": 90},
+      "none": {"model": "pressure:pipe_center"}
+    },
+    "east": {
+      "true": {
+        "submodel": {
+          "s1": {"model": "pressure:pipe_section", "x": 90, "y": 90}
+        }
+      },
+      "false": {}
+    },
+    "west": {
+      "true": {
+        "submodel": {
+          "s2": {"model": "pressure:pipe_section", "x": 90, "y": 270}
+        }
+      },
+      "false": {}
+    },
+    "north": {
+      "true": {
+        "submodel": {
+          "s3": {"model": "pressure:pipe_section", "x": 90}
+        }
+      },
+      "false": {}
+    },
+    "south": {
+      "true": {
+        "submodel": {
+          "s4": {"model": "pressure:pipe_section", "x": 270}
+        }
+      },
+      "false": {}
+    },
+    "down": {
+      "true": {
+        "submodel": {
+          "s5": {"model": "pressure:pipe_section", "x": 180}
+        }
+      },
+      "false": {}
+    },
+    "up": {
+      "true": {
+        "submodel": {
+          "s6": {"model": "pressure:pipe_section"}
+        }
+      },
+      "false": {}
+    }
+  }
+}
