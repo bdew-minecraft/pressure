@@ -10,7 +10,7 @@
 package net.bdew.pressure.blocks
 
 import net.bdew.lib.block.{BaseBlock, HasTE}
-import net.bdew.pressure.model.FilteredModelEnhancer
+import net.bdew.pressure.model.FluidFilterProperty
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{BlockPos, ChatComponentTranslation, EnumFacing}
@@ -21,11 +21,11 @@ import net.minecraftforge.fluids.{FluidContainerRegistry, IFluidContainerItem}
 trait BlockFilterable extends BaseBlock {
   self: HasTE[_ <: TileFilterable] =>
 
-  override def getUnlistedProperties = super.getUnlistedProperties :+ FilteredModelEnhancer.FILTER
+  override def getUnlistedProperties = super.getUnlistedProperties :+ FluidFilterProperty
 
   override def getExtendedState(state: IBlockState, world: IBlockAccess, pos: BlockPos): IBlockState = {
     val st = super.getExtendedState(state, world, pos).asInstanceOf[IExtendedBlockState]
-    getTE(world, pos).getFluidFilter.map(fluid => st.withProperty(FilteredModelEnhancer.FILTER, fluid)).getOrElse(st)
+    getTE(world, pos).getFluidFilter.map(fluid => st.withProperty(FluidFilterProperty, fluid)).getOrElse(st)
   }
 
   override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {

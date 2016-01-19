@@ -3,7 +3,7 @@ tile.pressure.output.name=高压输出接口
 tile.pressure.pipe.name=压力管道
 tile.pressure.pump.name=高压泵
 tile.pressure.WaterSource.name=无限水源块
-tile.pressure.creative.name=创造液体源块
+tile.pressure.CreativeSource.name=创造液体源块
 tile.pressure.drain.name=水库排液口
 tile.pressure.sluice.name=水闸
 
