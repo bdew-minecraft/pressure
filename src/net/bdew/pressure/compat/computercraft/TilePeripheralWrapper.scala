@@ -9,11 +9,9 @@
 
 package net.bdew.pressure.compat.computercraft
 
-import dan200.computercraft.api.lua.{ILuaContext, LuaException}
+import dan200.computercraft.api.lua.ILuaContext
 import dan200.computercraft.api.peripheral.{IComputerAccess, IPeripheral}
 import net.minecraft.tileentity.TileEntity
-
-import scala.util.{Failure, Success}
 
 case class TilePeripheralWrapper[T <: TileEntity](kind: String, commands: TileCommandHandler[T], tile: T) extends IPeripheral {
   var computers = Set.empty[IComputerAccess]
@@ -38,13 +36,6 @@ case class TilePeripheralWrapper[T <: TileEntity](kind: String, commands: TileCo
   override def callMethod(computer: IComputerAccess, context: ILuaContext, method: Int, arguments: Array[AnyRef]): Array[AnyRef] = {
     val handler = commands.commands(commands.idToCommand(method))
     val ctx = CallContext(tile, computer, computers, context, arguments)
-    val future = handler(ctx)
-    ExecutionHelpers.waitForFuture(context, computer, future) match {
-      case Success(null) => null
-      case Success(v) => v.wrap
-      case Failure(e: ParameterErrorException) =>
-        throw new LuaException("Usage: %s(%s)".format(commands.idToCommand(method), e.params.map(_.name).mkString(", ")))
-      case Failure(t) => throw t
-    }
+    CCResult(handler(ctx)).wrap
   }
 }
