@@ -10,14 +10,15 @@
 package net.bdew.pressure.model
 
 import net.bdew.lib.Client
-import net.bdew.lib.model.{BakedModelAdditionalFaceQuads, BakedQuadHelper, ModelEnhancer}
 import net.bdew.lib.property.SimpleUnlistedProperty
+import net.bdew.lib.render.models.{BakedModelAdditionalFaceQuads, ModelEnhancer}
+import net.bdew.lib.render.primitive.{Texture, UV, Vertex}
+import net.bdew.lib.render.{Cuboid, QuadBaker}
 import net.bdew.lib.rotate.Properties
 import net.minecraft.block.state.IBlockState
-import net.minecraft.client.renderer.block.model.BakedQuad
-import net.minecraft.client.resources.model.{IBakedModel, ModelRotation}
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.EnumFacing._
+import net.minecraftforge.client.model.IFlexibleBakedModel
 import net.minecraftforge.fluids.Fluid
 
 object FluidFilterProperty extends SimpleUnlistedProperty("filter", classOf[Fluid]) {
@@ -25,34 +26,47 @@ object FluidFilterProperty extends SimpleUnlistedProperty("filter", classOf[Flui
 }
 
 class BaseFluidFilterModelEnhancer(size: Float) extends ModelEnhancer {
-  lazy val helper = new BakedQuadHelper(ModelRotation.X0_Y0)
+  val quads = {
+    val start = (8f - size / 2f) / 16f
+    val end = (8f + size / 2f) / 16f
+    val offset1 = -0.01f
+    val offset2 = 1.01f
 
-  def filterSides(state: IBlockState, quads: Map[EnumFacing, List[BakedQuad]]): Map[EnumFacing, List[BakedQuad]] = quads
+    Map(
+      DOWN -> Cuboid.face(Vertex(start, offset1, start), Vertex(end, offset1, end), DOWN),
+      UP -> Cuboid.face(Vertex(start, offset2, start), Vertex(end, offset2, end), UP),
+      NORTH -> Cuboid.face(Vertex(start, start, offset1), Vertex(end, end, offset1), NORTH),
+      SOUTH -> Cuboid.face(Vertex(start, start, offset2), Vertex(end, end, offset2), SOUTH),
+      WEST -> Cuboid.face(Vertex(offset1, start, start), Vertex(offset1, end, end), WEST),
+      EAST -> Cuboid.face(Vertex(offset2, start, start), Vertex(offset2, end, end), EAST)
+    )
+  }
 
-  override def handleState(base: IBakedModel, state: IBlockState) =
+  def sidesWithIcon(state: IBlockState): Set[EnumFacing] = EnumFacing.values().toSet
+
+  override def handleState(base: IFlexibleBakedModel, state: IBlockState) = {
+    val quadBaker = new QuadBaker(base.getFormat, shading = false)
     FluidFilterProperty.get(state) map { fluid =>
-      val icon = Client.textureMapBlocks.getAtlasSprite(fluid.getStill.toString)
-      val ts = 8f - size / 2
-      val te = 8f + size / 2
-      val o1 = -0.1f
-      val o2 = 16.1f
-      val sides = Map(
-        DOWN -> List(helper.quad((ts, o1, ts), (te, o1, te), DOWN, icon, (ts, ts), (te, te), shaded = false)),
-        UP -> List(helper.quad((ts, o2, ts), (te, o2, te), UP, icon, (ts, ts), (te, te), shaded = false)),
-        NORTH -> List(helper.quad((ts, ts, o1), (te, te, o1), NORTH, icon, (ts, ts), (te, te), shaded = false)),
-        SOUTH -> List(helper.quad((ts, ts, o2), (te, te, o2), SOUTH, icon, (ts, ts), (te, te), shaded = false)),
-        WEST -> List(helper.quad((o1, ts, ts), (o1, te, te), WEST, icon, (ts, ts), (te, te), shaded = false)),
-        EAST -> List(helper.quad((o2, ts, ts), (o2, te, te), EAST, icon, (ts, ts), (te, te), shaded = false))
-      )
-      new BakedModelAdditionalFaceQuads(base, filterSides(state, sides))
+      val sides = sidesWithIcon(state)
+
+      val icon = Texture(Client.textureMapBlocks.getAtlasSprite(fluid.getStill.toString),
+        UV(8f - size / 2f, 8f - size / 2f), UV(8f + size / 2f, 8f + size / 2f))
+
+      val baked =
+        for ((side, quad) <- quads if sides.contains(side)) yield {
+          side -> List(quadBaker.bakeQuad(quad.withTexture(icon)))
+        }
+
+      new BakedModelAdditionalFaceQuads(base, baked.toMap)
     } getOrElse base
+  }
 }
 
 object FluidFilterModelEnhancer extends BaseFluidFilterModelEnhancer(5)
 
 object FluidFilterRotatedModelEnhancer extends BaseFluidFilterModelEnhancer(5) {
-  override def filterSides(state: IBlockState, quads: Map[EnumFacing, List[BakedQuad]]) = {
+  override def sidesWithIcon(state: IBlockState) = {
     val rot = state.getValue(Properties.FACING)
-    quads.filterKeys(x => x != rot && x != rot.getOpposite)
+    EnumFacing.values().toSet -- Set(rot, rot.getOpposite)
   }
 }

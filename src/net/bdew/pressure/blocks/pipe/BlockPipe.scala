@@ -10,11 +10,12 @@
 package net.bdew.pressure.blocks.pipe
 
 import net.bdew.lib.block.{BaseBlock, HasItemBlock}
+import net.bdew.lib.property.EnumerationProperty
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.bdew.pressure.blocks.{BlockNotifyUpdates, CustomItemBlock}
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.{PropertyBool, PropertyEnum}
+import net.minecraft.block.properties.PropertyBool
 import net.minecraft.block.state.IBlockState
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
@@ -23,13 +24,17 @@ object BlockPipe extends BaseBlock("pipe", Material.iron) with IPressureConnecta
   override val ItemBlockClass = classOf[CustomItemBlock]
   setHardness(2)
 
+  object Straight extends Enumeration {
+    val x, y, z, none = Value
+  }
+
   object Properties {
     val CONNECTED = (EnumFacing.values() map (dir => dir -> PropertyBool.create(dir.toString))).toMap
-    val STRAIGHT = PropertyEnum.create("straight", classOf[StraightPipe], StraightPipe.values(): _*)
+    val STRAIGHT = EnumerationProperty.create(Straight, "straight")
   }
 
   setDefaultState(
-    EnumFacing.values().foldLeft(getDefaultState.withProperty(Properties.STRAIGHT, StraightPipe.NONE)) { (state, face) =>
+    EnumFacing.values().foldLeft(getDefaultState.withProperty(Properties.STRAIGHT, Straight.none)) { (state, face) =>
       state.withProperty(Properties.CONNECTED(face), Boolean.box(true))
     }
   )
@@ -40,13 +45,13 @@ object BlockPipe extends BaseBlock("pipe", Material.iron) with IPressureConnecta
   override def getActualState(state: IBlockState, world: IBlockAccess, pos: BlockPos) = {
     val connections = Helper.getPipeConnections(world, pos).toSet
     if (connections == Set(EnumFacing.EAST, EnumFacing.WEST))
-      state.withProperty(Properties.STRAIGHT, StraightPipe.X)
+      state.withProperty(Properties.STRAIGHT, Straight.x)
     else if (connections == Set(EnumFacing.NORTH, EnumFacing.SOUTH))
-      state.withProperty(Properties.STRAIGHT, StraightPipe.Z)
+      state.withProperty(Properties.STRAIGHT, Straight.z)
     else if (connections == Set(EnumFacing.UP, EnumFacing.DOWN))
-      state.withProperty(Properties.STRAIGHT, StraightPipe.Y)
+      state.withProperty(Properties.STRAIGHT, Straight.y)
     else {
-      connections.foldLeft(state.withProperty(Properties.STRAIGHT, StraightPipe.NONE)) { (state, face) =>
+      connections.foldLeft(state.withProperty(Properties.STRAIGHT, Straight.none)) { (state, face) =>
         state.withProperty(Properties.CONNECTED(face), Boolean.box(true))
       }
     }

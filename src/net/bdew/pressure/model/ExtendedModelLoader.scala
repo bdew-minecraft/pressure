@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.model
 
-import net.bdew.lib.model.ModelEnhancer
+import net.bdew.lib.render.models.ModelEnhancer
 import net.minecraft.client.resources.IResourceManager
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.client.model.{ICustomModelLoader, ModelLoaderRegistry}
