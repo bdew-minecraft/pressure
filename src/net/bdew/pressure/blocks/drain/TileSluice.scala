@@ -1,5 +1,5 @@
 /*
- * Copyright (c) bdew, 2013 - 2014
+ * Copyright (c) bdew, 2013 - 2016
  * https://github.com/bdew/pressure
  *
  * This mod is distributed under the terms of the Minecraft Mod Public
@@ -14,9 +14,7 @@ import net.bdew.lib.data.DataSlotTank
 import net.bdew.lib.data.base.TileDataSlots
 import net.bdew.pressure.api.IPressureEject
 import net.bdew.pressure.blocks.TileFilterable
-import net.bdew.pressure.config.Modules
 import net.bdew.pressure.misc.FakeTank
-import net.minecraft.entity.item.EntityXPOrb
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 
