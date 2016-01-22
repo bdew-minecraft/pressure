@@ -9,6 +9,8 @@
 
 package net.bdew.pressure.compat.computercraft
 
+import java.io.{ByteArrayInputStream, ObjectInputStream, ObjectOutputStream, ByteArrayOutputStream}
+
 import dan200.computercraft.api.lua.{LuaException, ILuaContext, ILuaObject}
 import li.cil.oc.api.machine.{Arguments, Context}
 import li.cil.oc.api.network.ManagedPeripheral
@@ -25,6 +27,7 @@ abstract class PersistableFutureState {
   def checkPending: PersistableFutureState
   def isCompleted: Boolean
   def value: CCResult
+  def serialize: Option[AnyRef]
 }
 
 case class Pending(future: Future[CCResult]) extends PersistableFutureState {
@@ -35,18 +38,31 @@ case class Pending(future: Future[CCResult]) extends PersistableFutureState {
   }
   def isCompleted = false
   def value = throw new LuaException("future not completed")
+  def serialize = None
 }
 
 case class Succeeded(result: CCResult) extends PersistableFutureState {
   def checkPending = this
   def isCompleted = true
   def value = result
+  def serialize = Some(("success", result))
 }
 
 case class Failed(message: String) extends PersistableFutureState {
   def checkPending = this
   def isCompleted = true
   def value = ResArray(Array(CCResult.Nil, message))
+  def serialize = Some(("failure", message))
+}
+
+object PersistableFutureState {
+  def apply(serialized: AnyRef): Option[PersistableFutureState] = {
+    serialized match {
+      case ("success", v: CCResult) => Some(Succeeded(v))
+      case ("failure", f: String) => Some(Failed(f))
+      case _ => None
+    }
+  }
 }
 
 class OpaqueLuaFutureWrapper(var value: PersistableFutureState) extends ILuaObject {
@@ -79,6 +95,32 @@ class OpaqueLuaFutureWrapper(var value: PersistableFutureState) extends ILuaObje
 class ManagedPeripheralWrapper(var wrapper: OpaqueLuaFutureWrapper) extends AbstractValue with ManagedPeripheral with ILuaObject {
   def this() {
     this(new OpaqueLuaFutureWrapper(Failed("persisted while pending")))
+  }
+
+  val tagName = "serialized"
+
+  override def save(t: NBTTagCompound): Unit = {
+    val obj = wrapper.value.serialize match {
+      case None => return
+      case Some(v) => v
+    }
+    val baos = new ByteArrayOutputStream
+    val oos = new ObjectOutputStream(baos)
+    oos.writeObject(obj)
+    oos.close()
+    t.setByteArray(tagName, baos.toByteArray)
+  }
+
+  override def load(t: NBTTagCompound): Unit = {
+    if (!t.hasKey(tagName)) return
+    val bytes = t.getByteArray(tagName)
+    if (bytes.isEmpty) return
+    val ois = new ObjectInputStream(new ByteArrayInputStream(bytes))
+    PersistableFutureState.apply(ois.readObject()) match {
+      case None => ()
+      case Some(v) => wrapper = new OpaqueLuaFutureWrapper(v)
+    }
+    ois.close()
   }
 
   override def getMethodNames = wrapper.getMethodNames
