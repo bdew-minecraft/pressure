@@ -9,7 +9,10 @@
 
 package net.bdew.pressure.compat.computercraft
 
+import net.bdew.lib.Misc
+
 import scala.collection.JavaConverters._
+import scala.concurrent.Future
 
 sealed trait CCResult {
   def encode: AnyRef
@@ -53,6 +56,21 @@ object CCResult {
     override def encode = v.zipWithIndex.map({ case (vv, kk) => kk + 1 -> vv.encode }).toMap.asJava
   }
 
+  case class ResFuture(v: Future[CCResult]) extends CCResult {
+    override def encode = {
+      val ret = new OpaqueLuaFutureWrapper(v)
+      if (Misc.haveModVersion("OpenComputers")) {
+        new ManagedPeripheralWrapper(ret)
+      } else {
+        ret
+      }
+    }
+  }
+
+  object Nil extends CCResult {
+    override def encode = null
+  }
+
   object Null extends CCResult {
     override def encode = wrap
     override def wrap = Array(null)
@@ -70,4 +88,5 @@ object CCResult {
   implicit def resString(v: String): CCResult = ResString(v)
   implicit def resMap(v: Map[String, CCResult]): CCResult = ResMap(v)
   implicit def resList(v: List[CCResult]): CCResult = ResList(v)
+  implicit def resFuture(v: Future[CCResult]): CCResult = ResFuture(v)
 }

@@ -20,8 +20,6 @@ import cpw.mods.fml.relauncher.Side
 import net.bdew.lib.Misc
 import net.bdew.pressure.api.PressureAPI
 import net.bdew.pressure.blocks.router.BlockRouter
-import net.bdew.pressure.compat.OpenComputersExecutionHelper
-import net.bdew.pressure.compat.computercraft.ExecutionHelpers
 import net.bdew.pressure.compat.enderio.EnderIOProxy
 import net.bdew.pressure.config._
 import net.bdew.pressure.fmp.FmpHandler
@@ -82,8 +80,6 @@ object Pressure {
     PressureCreativeTabs.init()
     if (Misc.haveModVersion("EnderIO"))
       EnderIOProxy.init()
-    if (Misc.haveModVersion("OpenComputers") && Misc.haveModVersion("ComputerCraft"))
-      ExecutionHelpers.registry +:= OpenComputersExecutionHelper
   }
 
   @EventHandler
