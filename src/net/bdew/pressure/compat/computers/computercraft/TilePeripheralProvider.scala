@@ -1,5 +1,5 @@
 /*
- * Copyright (c) bdew, 2013 - 2015
+ * Copyright (c) bdew, 2013 - 2016
  * https://github.com/bdew/pressure
  *
  * This mod is distributed under the terms of the Minecraft Mod Public
@@ -7,9 +7,10 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.compat.computercraft
+package net.bdew.pressure.compat.computers.computercraft
 
 import dan200.computercraft.api.peripheral.{IPeripheral, IPeripheralProvider}
+import net.bdew.pressure.compat.computers.TileCommandHandler
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 

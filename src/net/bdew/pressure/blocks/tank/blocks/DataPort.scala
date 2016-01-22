@@ -11,17 +11,14 @@ package net.bdew.pressure.blocks.tank.blocks
 
 import java.util.Locale
 
-import dan200.computercraft.api.ComputerCraftAPI
 import net.bdew.lib.multiblock.data.{OutputConfigFluid, OutputConfigRSControllable, RSMode}
 import net.bdew.lib.multiblock.tile.TileModule
 import net.bdew.pressure.blocks.tank.BaseModule
 import net.bdew.pressure.blocks.tank.controller.TileTankController
-import net.bdew.pressure.compat.computercraft._
+import net.bdew.pressure.compat.computers._
 import net.minecraftforge.fluids.FluidRegistry
 
-object BlockDataPort extends BaseModule("TankDataPort", "TankDataPort", classOf[TileDataPort]) {
-  ComputerCraftAPI.registerPeripheralProvider(new TilePeripheralProvider("tank_dataport", DataPortCommands, classOf[TileDataPort]))
-}
+object BlockDataPort extends BaseModule("TankDataPort", "TankDataPort", classOf[TileDataPort])
 
 class TileDataPort extends TileModule {
   val kind: String = "TankDataPort"
@@ -42,48 +39,48 @@ object DataPortCommands extends TileCommandHandler[TileDataPort] {
   def getCore(ctx: CallContext[TileDataPort]) =
     ctx.tile.getCore.getOrElse(err("Not connected to tank"))
 
-  command("isConnected") { ctx =>
+  command("isConnected", direct = true) { ctx =>
     ctx.tile.getCore.isDefined
   }
 
-  command("getCapacity") { ctx =>
+  command("getCapacity", direct = true) { ctx =>
     getCore(ctx).tank.getCapacity
   }
 
-  command("hasFluid") { ctx =>
+  command("hasFluid", direct = true) { ctx =>
     val tank = getCore(ctx).tank
     tank.getFluid != null && tank.getFluid.amount > 0
   }
 
-  command("getFluid") { ctx =>
+  command("getFluid", direct = true) { ctx =>
     val fluid = getCore(ctx).tank.getFluid
     if (fluid != null && fluid.getFluid != null && fluid.amount > 0)
-      CCResult.Map(
+      Result.Map(
         "name" -> fluid.getFluid.getName,
         "amount" -> fluid.amount
       )
     else
-      CCResult.Null
+      Result.Null
   }
 
-  command("getOutputs") { ctx =>
+  command("getOutputs", direct = true) { ctx =>
     val configs = getCore(ctx).outputConfig
     for ((oName, oNum) <- outputNames) yield {
       oName -> (configs.get(oNum) match {
         case Some(x: OutputConfigFluid) =>
-          CCResult.Map(
+          Result.Map(
             "type" -> "fluid",
             "mode" -> x.rsMode.toString,
             "average" -> x.avg
           )
-        case None => CCResult.Map("type" -> "unconnected")
-        case _ => CCResult.Map("type" -> "unknown")
+        case None => Result.Map("type" -> "unconnected")
+        case _ => Result.Map("type" -> "unknown")
       })
     }
   }
 
   command("setOutputMode") { ctx =>
-    val (oName, mode) = ctx.params(CCString, CCString)
+    val (oName, mode) = ctx.params(PString, PString)
     val oNum = outputNames.getOrElse(oName.toLowerCase(Locale.US), err("Invalid output name"))
     val newMode = try {
       RSMode.withName(mode.toUpperCase(Locale.US))
@@ -99,12 +96,12 @@ object DataPortCommands extends TileCommandHandler[TileDataPort] {
     }
   }
 
-  command("getFilter") { ctx =>
-    getCore(ctx).getFluidFilter map (x => CCResult(x.getName)) getOrElse CCResult.Null
+  command("getFilter", direct = true) { ctx =>
+    getCore(ctx).getFluidFilter map (x => Result(x.getName)) getOrElse Result.Null
   }
 
   command("setFilter") { ctx =>
-    ctx.params(CCOption(CCString)) match {
+    ctx.params(POption(PString)) match {
       case Some(s) =>
         if (FluidRegistry.isFluidRegistered(s)) {
           getCore(ctx).setFluidFilter(FluidRegistry.getFluid(s))

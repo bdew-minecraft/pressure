@@ -7,28 +7,29 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.compat.computercraft
+package net.bdew.pressure.compat.computers
 
-sealed trait CCParam[R] {
+sealed trait CallParam[R] {
   def name: String
   def unapply(v: Option[Any]): Option[R]
+  def ? = POption(this)
 }
 
-case class CCSimpleParam[R, T](name: String, runtimeClass: Class[R]) extends CCParam[R] {
+case class ParamSimple[R, T](name: String, runtimeClass: Class[R]) extends CallParam[R] {
   override def unapply(v: Option[Any]): Option[R] = v match {
     case Some(vv) if runtimeClass.isInstance(vv) => Some(vv.asInstanceOf[R])
     case _ => None
   }
 }
 
-object CCString extends CCSimpleParam("string", classOf[String])
+object PString extends ParamSimple("string", classOf[String])
 
 // Need to use the java (boxed) versions
-object CCNumber extends CCSimpleParam("number", classOf[java.lang.Double])
+object PNumber extends ParamSimple("number", classOf[java.lang.Double])
 
-object CCBoolean extends CCSimpleParam("boolean", classOf[java.lang.Boolean])
+object PBoolean extends ParamSimple("boolean", classOf[java.lang.Boolean])
 
-case class CCOption[T](p: CCParam[T]) extends CCParam[Option[T]] {
+case class POption[T](p: CallParam[T]) extends CallParam[Option[T]] {
   override def name = "[%s]".format(p.name)
   override def unapply(v: Option[Any]) = v match {
     case None => Some(None)
