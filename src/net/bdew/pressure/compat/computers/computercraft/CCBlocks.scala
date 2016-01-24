@@ -11,9 +11,11 @@ package net.bdew.pressure.compat.computers.computercraft
 
 import dan200.computercraft.api.ComputerCraftAPI
 import net.bdew.pressure.blocks.tank.blocks.{DataPortCommands, TileDataPort}
+import net.bdew.pressure.blocks.valves.sensor.{TilePipeSensor, PipeSensorCommands}
 
 object CCBlocks {
   def init(): Unit = {
     ComputerCraftAPI.registerPeripheralProvider(new TilePeripheralProvider("tank_dataport", DataPortCommands, classOf[TileDataPort]))
+    ComputerCraftAPI.registerPeripheralProvider(new TilePeripheralProvider("pipe_sensor", PipeSensorCommands, classOf[TilePipeSensor]))
   }
 }

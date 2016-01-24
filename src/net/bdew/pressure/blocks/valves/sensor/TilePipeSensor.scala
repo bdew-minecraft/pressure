@@ -12,7 +12,8 @@ package net.bdew.pressure.blocks.valves.sensor
 import net.bdew.lib.block.BlockRef
 import net.bdew.lib.data.base.{TileDataSlots, UpdateKind}
 import net.bdew.pressure.api.{IPressureConnection, IPressureEject, IPressureInject}
-import net.bdew.pressure.misc.DataSlotFluidAverages
+import net.bdew.pressure.compat.computers.TileCommandHandler
+import net.bdew.pressure.misc.{DataSlotFluidAverages, DataSlotFluidCounts, FluidMapHelpers}
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.Block
 import net.minecraft.world.World
@@ -25,6 +26,7 @@ class TilePipeSensor extends TileDataSlots with IPressureEject with IPressureInj
 
   var flowThisTick = Map.empty[Fluid, Double]
   val averages = DataSlotFluidAverages("flow", this, 50).setUpdate(UpdateKind.SAVE)
+  val fluidCounts = DataSlotFluidCounts("fluidCounts", this).setUpdate(UpdateKind.SAVE)
 
   var flowTicks = 10L
   var coolDown = 0L
@@ -54,8 +56,10 @@ class TilePipeSensor extends TileDataSlots with IPressureEject with IPressureInj
       val res = connection.pushFluid(resource, doEject)
       if (res > 0) {
         flowTicks = 0
-        if (doEject)
+        if (doEject) {
           flowThisTick += resource.getFluid -> (flowThisTick.getOrElse(resource.getFluid, 0D) + res)
+          fluidCounts.update(resource.getFluid, res)
+        }
       }
       res
     } else 0
@@ -67,4 +71,14 @@ class TilePipeSensor extends TileDataSlots with IPressureEject with IPressureInj
   override def getYCoord = yCoord
   override def getXCoord = xCoord
   override def getWorld = worldObj
+}
+
+object PipeSensorCommands extends TileCommandHandler[TilePipeSensor] {
+  command("getAverages", direct = true) { ctx =>
+    FluidMapHelpers.fluidPairsToResult(ctx.tile.averages.getAverages, "average")
+  }
+
+  command("getCounts", direct = true) { ctx =>
+    FluidMapHelpers.fluidPairsToResult(ctx.tile.fluidCounts.values, "count")
+  }
 }

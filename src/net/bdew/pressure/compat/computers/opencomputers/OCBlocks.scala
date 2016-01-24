@@ -11,9 +11,11 @@ package net.bdew.pressure.compat.computers.opencomputers
 
 import li.cil.oc.api.Driver
 import net.bdew.pressure.blocks.tank.blocks.{DataPortCommands, TileDataPort}
+import net.bdew.pressure.blocks.valves.sensor.{TilePipeSensor, PipeSensorCommands}
 
 object OCBlocks {
   def init(): Unit = {
     Driver.add(new BlockDriver("tank_dataport", DataPortCommands, classOf[TileDataPort]))
+    Driver.add(new BlockDriver("pipe_sensor", PipeSensorCommands, classOf[TilePipeSensor]))
   }
 }

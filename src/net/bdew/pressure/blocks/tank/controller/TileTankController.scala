@@ -20,6 +20,7 @@ import net.bdew.lib.sensors.multiblock.CIRedstoneSensors
 import net.bdew.pressure.blocks.tank.blocks.TileTankIndicator
 import net.bdew.pressure.blocks.tank.{CIFilterable, MachineTank, ModuleNeedsRenderUpdate}
 import net.bdew.pressure.config.Modules
+import net.bdew.pressure.misc.CountedDataSlotTank
 import net.bdew.pressure.sensor.Sensors
 import net.bdew.pressure.{Pressure, PressureResourceProvider}
 import net.minecraft.entity.player.EntityPlayer
@@ -34,7 +35,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
 
   val fluidFilter = DataSlotString("fluidFilter", this).setUpdate(UpdateKind.GUI, UpdateKind.SAVE, UpdateKind.WORLD)
 
-  val tank = new DataSlotTank("tank", this, 0) {
+  val tank = new DataSlotTank("tank", this, 0) with CountedDataSlotTank {
     setUpdate(UpdateKind.SAVE, UpdateKind.WORLD, UpdateKind.GUI)
     override val sendCapacityOnUpdateKind = Set(UpdateKind.WORLD, UpdateKind.GUI)
   }
