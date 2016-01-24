@@ -19,7 +19,7 @@ import net.minecraftforge.fluids.{FluidStack, FluidRegistry, Fluid}
 
 import scala.collection.mutable
 
-case class DataSlotFluidCounts(name: String, parent: DataSlotContainer, size: Int) extends DataSlot {
+case class DataSlotFluidCounts(name: String, parent: DataSlotContainer) extends DataSlot {
   val values = mutable.HashMap[Fluid, Int]()
 
   def reset() {
@@ -75,8 +75,8 @@ object FluidMapHelpers {
 }
 
 trait CountedDataSlotTank extends DataSlotTankBase { wrapped: DataSlotTankBase =>
-  val fluidIn = DataSlotFluidCounts(wrapped.name + ":fluidIn", wrapped.parent, 50).setUpdate(UpdateKind.SAVE)
-  val fluidOut = DataSlotFluidCounts(wrapped.name + ":fluidOut", wrapped.parent, 50).setUpdate(UpdateKind.SAVE)
+  val fluidIn = DataSlotFluidCounts(wrapped.name + ":fluidIn", wrapped.parent).setUpdate(UpdateKind.SAVE)
+  val fluidOut = DataSlotFluidCounts(wrapped.name + ":fluidOut", wrapped.parent).setUpdate(UpdateKind.SAVE)
 
   override def fill(resource: FluidStack, doFill: Boolean) = {
     val ret = super.fill(resource, doFill)

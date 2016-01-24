@@ -26,7 +26,7 @@ class TilePipeSensor extends TileDataSlots with IPressureEject with IPressureInj
 
   var flowThisTick = Map.empty[Fluid, Double]
   val averages = DataSlotFluidAverages("flow", this, 50).setUpdate(UpdateKind.SAVE)
-  val fluidCounts = DataSlotFluidCounts("fluidCounts", this, 50).setUpdate(UpdateKind.SAVE)
+  val fluidCounts = DataSlotFluidCounts("fluidCounts", this).setUpdate(UpdateKind.SAVE)
 
   var flowTicks = 10L
   var coolDown = 0L
