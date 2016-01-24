@@ -23,10 +23,10 @@ object ExtendedModelLoader extends ICustomModelLoader {
 
   override def loadModel(modelLocation: ResourceLocation) =
     modelLocation.getResourcePath match {
-      case "models/block/filtered_rotated.extended" =>
-        wrap("pressure:block/rotated", FluidFilterRotatedModelEnhancer)
-      case "models/block/filtered_cube_all.extended" =>
-        wrap("minecraft:block/cube_all", FluidFilterModelEnhancer)
+      case "models/block/filtered_rotated.extended" => wrap("pressure:block/rotated", FluidFilterRotatedModelEnhancer)
+      case "models/block/filtered_cube_all.extended" => wrap("minecraft:block/cube_all", FluidFilterModelEnhancer)
+      case "models/block/router.extended" => wrap("minecraft:block/cube_all", RouterOverlayModelEnhancer)
+
       case _ => null
     }
 

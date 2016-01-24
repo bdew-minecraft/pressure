@@ -10,21 +10,39 @@
 package net.bdew.pressure.blocks.router
 
 import net.bdew.lib.block.{BaseBlock, HasTE}
-import net.bdew.pressure.Pressure
+import net.bdew.lib.property.SimpleUnlistedProperty
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.bdew.pressure.blocks.BlockNotifyUpdates
 import net.bdew.pressure.blocks.router.data.RouterSideMode
+import net.bdew.pressure.{Pressure, PressureResourceProvider}
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.{BlockPos, EnumFacing, EnumWorldBlockLayer}
 import net.minecraft.world.{IBlockAccess, World}
+import net.minecraftforge.common.property.IExtendedBlockState
 
 object BlockRouter extends BaseBlock("Router", Material.iron) with HasTE[TileRouter] with BlockNotifyUpdates with IPressureConnectableBlock {
   override val TEClass = classOf[TileRouter]
   val cfg = MachineRouter
 
   setHardness(2)
+
+  object Properties {
+    val MODE = EnumFacing.values().map(f => f -> new SimpleUnlistedProperty(f.getName, classOf[RouterSideMode.Value])).toMap
+  }
+
+  override def getExtendedState(state: IBlockState, world: IBlockAccess, pos: BlockPos) = {
+    val te = getTE(world, pos)
+    EnumFacing.values().foldRight(super.getExtendedState(state, world, pos).asInstanceOf[IExtendedBlockState]) { (face, state) =>
+      state.withProperty(Properties.MODE(face), te.sideModes.get(face))
+    }
+  }
+
+  override def canRenderInLayer(layer: EnumWorldBlockLayer) =
+    layer == EnumWorldBlockLayer.SOLID || layer == EnumWorldBlockLayer.CUTOUT
+
+  override def getUnlistedProperties = super.getUnlistedProperties ++ Properties.MODE.values
 
   override def canConnectTo(world: IBlockAccess, pos: BlockPos, side: EnumFacing) =
     getTE(world, pos).sideModes.get(side) != RouterSideMode.DISABLED
@@ -38,4 +56,6 @@ object BlockRouter extends BaseBlock("Router", Material.iron) with HasTE[TileRou
     true
   }
 
+  override def colorMultiplier(worldIn: IBlockAccess, pos: BlockPos, index: Int) =
+    PressureResourceProvider.outputColors(index).asRGB
 }
