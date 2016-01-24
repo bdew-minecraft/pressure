@@ -117,10 +117,10 @@ object DataPortCommands extends TileCommandHandler[TileDataPort] {
   }
 
   command("getCountsIn", direct = true) { ctx =>
-    FluidMapHelpers.fluidPairsToResult(getCore(ctx).tank.fluidIn.values.iterator, "count")
+    FluidMapHelpers.fluidPairsToResult(getCore(ctx).tank.fluidIn.values, "count")
   }
 
   command("getCountsOut", direct = true) { ctx =>
-    FluidMapHelpers.fluidPairsToResult(getCore(ctx).tank.fluidOut.values.iterator, "count")
+    FluidMapHelpers.fluidPairsToResult(getCore(ctx).tank.fluidOut.values, "count")
   }
 }

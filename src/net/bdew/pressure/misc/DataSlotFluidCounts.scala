@@ -9,13 +9,11 @@
 
 package net.bdew.pressure.misc
 
-import java.io._
-
 import net.bdew.lib.data.DataSlotTankBase
 import net.bdew.lib.data.base.{DataSlot, DataSlotContainer, UpdateKind}
 import net.bdew.pressure.compat.computers.Result
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraftforge.fluids.{FluidStack, FluidRegistry, Fluid}
+import net.minecraftforge.fluids.{Fluid, FluidRegistry, FluidStack}
 
 import scala.collection.mutable
 
@@ -27,46 +25,37 @@ case class DataSlotFluidCounts(name: String, parent: DataSlotContainer) extends 
   }
 
   def update(f: Fluid, count: Int) = {
-    val newValue = values.get(f).flatMap((prev: Int) => {
-      try {
-        Some(Math.addExact(prev, count))
-      } catch {
-        case _: ArithmeticException => None
-      }
-    }).getOrElse(count)
-    values += f -> newValue
+    val oldVal = values.getOrElse(f, 0)
+    values(f) = if (Int.MaxValue - count >= oldVal)
+      count + oldVal
+    else
+      count // reset on overflow
   }
 
   override def save(t: NBTTagCompound, kind: UpdateKind.Value): Unit = {
     if (values.isEmpty) return
-    val baos = new ByteArrayOutputStream
-    val oos = new ObjectOutputStream(baos)
-    oos.writeObject(values.iterator.map({
-      case (fluid, count) => fluid.getName -> count
-    }).toMap)
-    oos.close()
-    t.setByteArray(name, baos.toByteArray)
+    val map = new NBTTagCompound
+    for ((fluid, value) <- values) {
+      map.setInteger(fluid.getName, value)
+    }
+    t.setTag(name, map)
   }
 
   override def load(t: NBTTagCompound, kind: UpdateKind.Value): Unit = {
     reset()
-    val bytes = t.getByteArray(name)
-    if (bytes.isEmpty) return
-    val ois = new ObjectInputStream(new ByteArrayInputStream(bytes))
-    ois.readObject() match {
-      case fluids: Map[_, _] => fluids.foreach({
-        case (fluidName: String, count: Int) if FluidRegistry.isFluidRegistered(fluidName) =>
-          values += FluidRegistry.getFluid(fluidName) -> count
-      })
+    import scala.collection.JavaConversions._
+    if (t.hasKey(name)) {
+      val map = t.getCompoundTag(name)
+      for (name <- map.func_150296_c().asInstanceOf[java.util.Set[String]] if FluidRegistry.isFluidRegistered(name))
+        values(FluidRegistry.getFluid(name)) = map.getInteger(name)
     }
-    ois.close()
   }
 }
 
 object FluidMapHelpers {
-  def fluidPairsToResult[R](it: Iterator[(Fluid, R)], valueName: String)(implicit ev: R => Result): Result = {
-    it.map ({
-      case (fluid, value) => Result.Map (
+  def fluidPairsToResult[R](pairs: Traversable[(Fluid, R)], valueName: String)(implicit ev: R => Result): Result = {
+    pairs.map({
+      case (fluid, value) => Result.Map(
         "name" -> fluid.getName,
         valueName -> value
       )
@@ -74,9 +63,9 @@ object FluidMapHelpers {
   }
 }
 
-trait CountedDataSlotTank extends DataSlotTankBase { wrapped: DataSlotTankBase =>
-  val fluidIn = DataSlotFluidCounts(wrapped.name + ":fluidIn", wrapped.parent).setUpdate(UpdateKind.SAVE)
-  val fluidOut = DataSlotFluidCounts(wrapped.name + ":fluidOut", wrapped.parent).setUpdate(UpdateKind.SAVE)
+trait CountedDataSlotTank extends DataSlotTankBase {
+  val fluidIn = DataSlotFluidCounts(name + ":fluidIn", parent).setUpdate(UpdateKind.SAVE)
+  val fluidOut = DataSlotFluidCounts(name + ":fluidOut", parent).setUpdate(UpdateKind.SAVE)
 
   override def fill(resource: FluidStack, doFill: Boolean) = {
     val ret = super.fill(resource, doFill)

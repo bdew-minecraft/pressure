@@ -13,7 +13,7 @@ import net.bdew.lib.block.BlockRef
 import net.bdew.lib.data.base.{TileDataSlots, UpdateKind}
 import net.bdew.pressure.api.{IPressureConnection, IPressureEject, IPressureInject}
 import net.bdew.pressure.compat.computers.TileCommandHandler
-import net.bdew.pressure.misc.{FluidMapHelpers, DataSlotFluidCounts, DataSlotFluidAverages}
+import net.bdew.pressure.misc.{DataSlotFluidAverages, DataSlotFluidCounts, FluidMapHelpers}
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.Block
 import net.minecraft.world.World
@@ -75,10 +75,10 @@ class TilePipeSensor extends TileDataSlots with IPressureEject with IPressureInj
 
 object PipeSensorCommands extends TileCommandHandler[TilePipeSensor] {
   command("getAverages", direct = true) { ctx =>
-    FluidMapHelpers.fluidPairsToResult(ctx.tile.averages.getAverages.iterator, "average")
+    FluidMapHelpers.fluidPairsToResult(ctx.tile.averages.getAverages, "average")
   }
 
   command("getCounts", direct = true) { ctx =>
-    FluidMapHelpers.fluidPairsToResult(ctx.tile.fluidCounts.values.iterator, "count")
+    FluidMapHelpers.fluidPairsToResult(ctx.tile.fluidCounts.values, "count")
   }
 }
