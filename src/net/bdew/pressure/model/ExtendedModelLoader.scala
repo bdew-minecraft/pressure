@@ -31,4 +31,8 @@ object ExtendedModelLoader extends ICustomModelLoader {
     }
 
   override def onResourceManagerReload(resourceManager: IResourceManager) = {}
+
+  def install(): Unit = {
+    ModelLoaderRegistry.registerLoader(this)
+  }
 }

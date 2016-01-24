@@ -23,7 +23,6 @@ import net.bdew.pressure.model.ExtendedModelLoader
 import net.bdew.pressure.network.NetworkHandler
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.item.Item
-import net.minecraftforge.client.model.ModelLoaderRegistry
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.Mod.EventHandler
 import net.minecraftforge.fml.common.event._
@@ -58,7 +57,7 @@ object Pressure {
     Blocks.load()
     Machines.load()
     if (event.getSide == Side.CLIENT) {
-      ModelLoaderRegistry.registerLoader(ExtendedModelLoader)
+      ExtendedModelLoader.install()
       // todo: rendering stuff
       //      IconCache.init()
       //      sensor.Icons.init()
