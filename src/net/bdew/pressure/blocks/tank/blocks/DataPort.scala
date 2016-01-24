@@ -16,6 +16,7 @@ import net.bdew.lib.multiblock.tile.TileModule
 import net.bdew.pressure.blocks.tank.BaseModule
 import net.bdew.pressure.blocks.tank.controller.TileTankController
 import net.bdew.pressure.compat.computers._
+import net.bdew.pressure.misc.FluidMapHelpers
 import net.minecraftforge.fluids.FluidRegistry
 
 object BlockDataPort extends BaseModule("TankDataPort", "TankDataPort", classOf[TileDataPort])
@@ -114,5 +115,12 @@ object DataPortCommands extends TileCommandHandler[TileDataPort] {
         true
     }
   }
-}
 
+  command("getCountsIn", direct = true) { ctx =>
+    FluidMapHelpers.fluidPairsToResult(getCore(ctx).tank.fluidIn.values.iterator, "count")
+  }
+
+  command("getCountsOut", direct = true) { ctx =>
+    FluidMapHelpers.fluidPairsToResult(getCore(ctx).tank.fluidOut.values.iterator, "count")
+  }
+}
