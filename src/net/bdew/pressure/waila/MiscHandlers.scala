@@ -16,7 +16,7 @@ import net.bdew.pressure.blocks.input.TileInput
 import net.bdew.pressure.blocks.output.TileOutput
 import net.bdew.pressure.blocks.pump.TilePump
 import net.minecraft.item.ItemStack
-import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
+import net.minecraftforge.fluids.FluidStack
 
 object WailaPumpHandler extends BaseDataProvider(classOf[TilePump]) {
   override def getBodyStrings(target: TilePump, stack: ItemStack, acc: IWailaDataAccessor, cfg: IWailaConfigHandler) = {
@@ -53,10 +53,8 @@ object WailaPressureOutputHandler extends BaseDataProvider(classOf[TileOutput]) 
 
 object WailaFilterableHandler extends BaseDataProvider(classOf[TileFilterable]) {
   override def getBodyStrings(target: TileFilterable, stack: ItemStack, acc: IWailaDataAccessor, cfg: IWailaConfigHandler): Iterable[String] = {
-    if (target.fluidFilter :!= null) {
-      Option(FluidRegistry.getFluid(target.fluidFilter)) map { fluid =>
-        Misc.toLocalF("pressure.waila.filter", fluid.getLocalizedName(new FluidStack(fluid, 1)))
-      }
-    } else List.empty
+    target.getFluidFilter map { fluid =>
+      Misc.toLocalF("pressure.waila.filter", fluid.getLocalizedName(new FluidStack(fluid, 1)))
+    }
   }
 }

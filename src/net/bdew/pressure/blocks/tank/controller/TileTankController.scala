@@ -10,8 +10,9 @@
 package net.bdew.pressure.blocks.tank.controller
 
 import net.bdew.lib.Misc
+import net.bdew.lib.PimpVanilla._
 import net.bdew.lib.data.base.UpdateKind
-import net.bdew.lib.data.{DataSlotInventory, DataSlotString, DataSlotTank}
+import net.bdew.lib.data.{DataSlotInventory, DataSlotOption, DataSlotTank}
 import net.bdew.lib.items.ItemUtils
 import net.bdew.lib.multiblock.interact.{CIFluidInput, CIFluidOutput, CIOutputFaces}
 import net.bdew.lib.multiblock.tile.TileControllerGui
@@ -32,7 +33,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
 
   val resources = PressureResourceProvider
 
-  val fluidFilter = DataSlotString("fluidFilter", this).setUpdate(UpdateKind.GUI, UpdateKind.SAVE, UpdateKind.WORLD)
+  val fluidFilter = DataSlotOption[Fluid]("fluidFilter", this).setUpdate(UpdateKind.GUI, UpdateKind.SAVE, UpdateKind.WORLD)
 
   val tank = new DataSlotTank("tank", this, 0) {
     setUpdate(UpdateKind.SAVE, UpdateKind.WORLD, UpdateKind.GUI)
@@ -69,12 +70,12 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
 
   lazy val maxOutputs = 6
 
-  def getFluidFilter = Option(fluidFilter.value) flatMap (x => Option(FluidRegistry.getFluid(x)))
+  def getFluidFilter = fluidFilter.value
 
   // CIFilterable
 
-  override def clearFluidFilter() = fluidFilter := null
-  override def setFluidFilter(fluid: Fluid) = fluidFilter := (if (fluid == null) null else fluid.getName)
+  override def clearFluidFilter() = fluidFilter.unset()
+  override def setFluidFilter(fluid: Fluid) = if (fluid == null) fluidFilter.unset() else fluidFilter.set(fluid)
 
   // === Inventory Stuff ===
 
@@ -212,8 +213,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
     if (canInputFluid(resource.getFluid)) tank.fill(resource, doFill) else 0
 
   def canInputFluid(fluid: Fluid) =
-    isReady && (tank.getFluid == null || tank.getFluid.getFluid == fluid) &&
-      ((fluidFilter :== null) || (fluidFilter :== fluid.getName))
+    isReady && (tank.getFluid == null || tank.getFluid.getFluid == fluid) && fluidFilter.contains(fluid)
 
   def getTankInfo = Array(tank.getInfo)
 

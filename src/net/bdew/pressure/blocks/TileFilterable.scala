@@ -9,26 +9,23 @@
 
 package net.bdew.pressure.blocks
 
-import net.bdew.lib.data.DataSlotString
+import net.bdew.lib.PimpVanilla._
+import net.bdew.lib.data.DataSlotOption
 import net.bdew.lib.data.base.{TileDataSlots, UpdateKind}
 import net.bdew.pressure.api.IFilterable
-import net.minecraftforge.fluids.{Fluid, FluidRegistry, FluidStack}
+import net.minecraftforge.fluids.{Fluid, FluidStack}
 
 trait TileFilterable extends TileDataSlots with IFilterable {
-  val fluidFilter = new DataSlotString("fluidFilter", this).setUpdate(UpdateKind.SAVE, UpdateKind.WORLD, UpdateKind.RENDER)
+  val fluidFilter = new DataSlotOption[Fluid]("fluidFilter", this).setUpdate(UpdateKind.SAVE, UpdateKind.WORLD, UpdateKind.RENDER)
 
   def isFluidAllowed(fluid: Fluid): Boolean =
-    fluid != null && ((fluidFilter :== null) || fluid.getName.equals(fluidFilter.value))
+    fluid != null && (fluidFilter.isEmpty || fluidFilter.contains(fluid))
 
   def isFluidAllowed(fs: FluidStack): Boolean =
     fs != null && isFluidAllowed(fs.getFluid)
 
-  override def setFluidFilter(fluid: Fluid) = fluidFilter := (if (fluid == null) null else fluid.getName)
-  override def clearFluidFilter() = fluidFilter := null
+  override def setFluidFilter(fluid: Fluid) = if (fluid == null) fluidFilter.unset() else fluidFilter.set(fluid)
+  override def clearFluidFilter() = fluidFilter.unset()
 
-  def getFluidFilter =
-    if ((fluidFilter :!= null) && FluidRegistry.isFluidRegistered(fluidFilter))
-      Option(FluidRegistry.getFluid(fluidFilter))
-    else
-      None
+  def getFluidFilter = fluidFilter.value
 }

@@ -46,10 +46,10 @@ trait BlockFilterable extends BaseBlock {
       if (world.isRemote) return true
 
       if (newFilter == null) {
-        getTE(world, pos).fluidFilter := null
+        getTE(world, pos).clearFluidFilter()
         player.addChatMessage(new ChatComponentTranslation("pressure.label.filter.unset"))
       } else {
-        getTE(world, pos).fluidFilter := newFilter.getFluid.getName
+        getTE(world, pos).setFluidFilter(newFilter.getFluid)
         player.addChatMessage(new ChatComponentTranslation("pressure.label.filter.set", newFilter.getFluid.getLocalizedName(newFilter)))
       }
 
