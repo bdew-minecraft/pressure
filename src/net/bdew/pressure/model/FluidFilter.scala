@@ -17,6 +17,7 @@ import net.bdew.lib.render.{Cuboid, QuadBaker}
 import net.bdew.lib.rotate.Properties
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
+import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing._
 import net.minecraft.util.{EnumFacing, ResourceLocation}
 import net.minecraftforge.client.model.IFlexibleBakedModel
@@ -45,8 +46,10 @@ class BaseFluidFilterModelEnhancer(size: Float) extends ModelEnhancer {
 
   def sidesWithIcon(state: IBlockState): Set[EnumFacing] = EnumFacing.values().toSet
 
-  override def handleState(base: IFlexibleBakedModel, state: IBlockState, additionalSprites: Map[ResourceLocation, TextureAtlasSprite]) = {
-    val quadBaker = new QuadBaker(base.getFormat, shading = false)
+  override def handleItemState(base: IFlexibleBakedModel, stack: ItemStack, textures: Map[ResourceLocation, TextureAtlasSprite]) = base
+
+  override def handleBlockState(base: IFlexibleBakedModel, state: IBlockState, additionalSprites: Map[ResourceLocation, TextureAtlasSprite]) = {
+    val quadBaker = new QuadBaker(base.getFormat)
     FluidFilterProperty.get(state) map { fluid =>
       val sides = sidesWithIcon(state)
 
@@ -55,7 +58,7 @@ class BaseFluidFilterModelEnhancer(size: Float) extends ModelEnhancer {
 
       val baked =
         for ((side, quad) <- quads if sides.contains(side)) yield {
-          side -> List(quadBaker.bakeQuad(quad.withTexture(icon)))
+          side -> List(quadBaker.bakeQuad(quad.withTexture(icon, shading = false)))
         }
 
       new BakedModelAdditionalFaceQuads(base, baked.toMap)

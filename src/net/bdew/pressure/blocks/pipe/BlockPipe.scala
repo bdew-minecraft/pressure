@@ -9,6 +9,7 @@
 
 package net.bdew.pressure.blocks.pipe
 
+import net.bdew.lib.PimpVanilla._
 import net.bdew.lib.block.{BaseBlock, HasItemBlock}
 import net.bdew.lib.property.EnumerationProperty
 import net.bdew.pressure.api.IPressureConnectableBlock
@@ -34,9 +35,9 @@ object BlockPipe extends BaseBlock("pipe", Material.iron) with IPressureConnecta
   }
 
   setDefaultState(
-    EnumFacing.values().foldLeft(getDefaultState.withProperty(Properties.STRAIGHT, Straight.none)) { (state, face) =>
-      state.withProperty(Properties.CONNECTED(face), Boolean.box(true))
-    }
+    getDefaultState
+      .withProperty(Properties.STRAIGHT, Straight.none)
+      .withProperties(EnumFacing.values().map(f => Properties.CONNECTED(f) -> Boolean.box(false)))
   )
 
   override def getProperties =
@@ -51,9 +52,9 @@ object BlockPipe extends BaseBlock("pipe", Material.iron) with IPressureConnecta
     else if (connections == Set(EnumFacing.UP, EnumFacing.DOWN))
       state.withProperty(Properties.STRAIGHT, Straight.y)
     else {
-      connections.foldLeft(state.withProperty(Properties.STRAIGHT, Straight.none)) { (state, face) =>
-        state.withProperty(Properties.CONNECTED(face), Boolean.box(true))
-      }
+      state
+        .withProperty(Properties.STRAIGHT, Straight.none)
+        .withProperties(connections.map(f => Properties.CONNECTED(f) -> Boolean.box(true)))
     }
   }
 
