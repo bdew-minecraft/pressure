@@ -12,12 +12,21 @@ package net.bdew.pressure.blocks.tank.blocks
 import net.bdew.lib.multiblock.tile.TileModule
 import net.bdew.pressure.blocks.tank.{BaseModule, MIFilterable, ModuleNeedsRenderUpdate}
 import net.bdew.pressure.items.configurator.ItemConfigurator
+import net.bdew.pressure.model.FluidFilterProperty
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{BlockPos, EnumFacing}
-import net.minecraft.world.World
+import net.minecraft.world.{IBlockAccess, World}
 
 object BlockTankFilter extends BaseModule("TankFilter", "FluidFilter", classOf[TileTankFilter]) with ModuleNeedsRenderUpdate {
+
+  override def getUnlistedProperties = super.getUnlistedProperties :+ FluidFilterProperty
+
+  override def getExtendedState(state: IBlockState, world: IBlockAccess, pos: BlockPos) = {
+    val st = super.getExtendedState(state, world, pos)
+    getTE(world, pos).getCore.flatMap(_.getFluidFilter).map(fluid => st.withProperty(FluidFilterProperty, fluid)).getOrElse(st)
+  }
+
   override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) = {
     if (player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemConfigurator)
       false // Let the configurator handle the click

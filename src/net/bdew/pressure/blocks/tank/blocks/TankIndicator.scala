@@ -11,11 +11,37 @@ package net.bdew.pressure.blocks.tank.blocks
 
 import net.bdew.lib.PimpVanilla._
 import net.bdew.lib.multiblock.tile.{TileController, TileModule}
+import net.bdew.lib.property.EnumerationProperty
 import net.bdew.pressure.blocks.tank.{BaseModule, ModuleNeedsRenderUpdate}
+import net.minecraft.block.state.IBlockState
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.IBlockAccess
 
 object BlockTankIndicator extends BaseModule("TankIndicator", "TankBlock", classOf[TileTankIndicator]) with ModuleNeedsRenderUpdate {
+
+  object Position extends Enumeration {
+    val TOP, BOTTOM, MIDDLE, ALONE = Value
+    val faces = Set(EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH)
+    val properties = faces.map(f => f -> EnumerationProperty.create(this, f.getName)).toMap
+  }
+
+  override def getProperties = super.getProperties ++ Position.properties.values
+
+  override def getActualState(state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) = {
+    super.getActualState(state, worldIn, pos).withProperties(
+      Position.faces map { face =>
+        val (below, above) = getPositionInColumn(worldIn, pos, face)
+        Position.properties(face) -> ((below > 0, above > 0) match {
+          case (true, false) => Position.TOP
+          case (true, true) => Position.MIDDLE
+          case (false, true) => Position.BOTTOM
+          case (false, false) => Position.ALONE
+        })
+      })
+  }
+
+  override def getMetaFromState(state: IBlockState) = 0
+
   private def scanColumn(r: Seq[BlockPos], core: TileController, world: IBlockAccess, face: EnumFacing) = {
     r.view.map { p =>
       world.getTileSafe[TileTankIndicator](p)

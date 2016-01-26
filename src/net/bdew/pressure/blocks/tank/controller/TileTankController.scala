@@ -51,7 +51,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   def doRenderUpdate(): Unit = {
     needsRenderUpdate = false
     lastRenderUpdate = worldObj.getTotalWorldTime
-    for (ref <- modules if worldObj.getBlockState(ref).isInstanceOf[ModuleNeedsRenderUpdate])
+    for (ref <- modules if worldObj.getBlockState(ref).getBlock.isInstanceOf[ModuleNeedsRenderUpdate])
       worldObj.markBlockRangeForRenderUpdate(ref, ref)
   }
 
