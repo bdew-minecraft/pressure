@@ -17,5 +17,8 @@
       "west": {"y": 270},
       "east": {"y": 90}
     }
+  },
+  "inventory": {
+    "transform": "forge:default-block"
   }
 }

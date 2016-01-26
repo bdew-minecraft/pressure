@@ -40,6 +40,9 @@
         }
       },
       "false": {}
+    },
+    "inventory": {
+      "transform": "forge:default-block"
     }
   }
 }

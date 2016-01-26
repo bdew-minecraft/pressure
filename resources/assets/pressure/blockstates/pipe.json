@@ -57,6 +57,10 @@
         }
       },
       "false": {}
+    },
+    "inventory": {
+      "model": "pressure:pipe_center",
+      "transform": "forge:default-block"
     }
   }
 }
