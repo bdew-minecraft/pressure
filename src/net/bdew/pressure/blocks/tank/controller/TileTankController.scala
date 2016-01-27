@@ -213,7 +213,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
     if (canInputFluid(resource.getFluid)) tank.fill(resource, doFill) else 0
 
   def canInputFluid(fluid: Fluid) =
-    isReady && (tank.getFluid == null || tank.getFluid.getFluid == fluid) && fluidFilter.contains(fluid)
+    isReady && (tank.getFluid == null || tank.getFluid.getFluid == fluid) && (fluidFilter.isEmpty || fluidFilter.contains(fluid))
 
   def getTankInfo = Array(tank.getInfo)
 
