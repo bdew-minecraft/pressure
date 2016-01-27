@@ -19,7 +19,6 @@ import net.bdew.pressure.compat.computercraft.ExecutionHelpers
 import net.bdew.pressure.compat.enderio.EnderIOProxy
 import net.bdew.pressure.config._
 import net.bdew.pressure.misc.PressureCreativeTabs
-import net.bdew.pressure.model.ExtendedModelLoader
 import net.bdew.pressure.network.NetworkHandler
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.item.Item
@@ -56,13 +55,7 @@ object Pressure {
     Items.load()
     Blocks.load()
     Machines.load()
-    if (event.getSide == Side.CLIENT) {
-      ExtendedModelLoader.install()
-      // todo: rendering stuff
-      //      IconCache.init()
-      //      sensor.Icons.init()
-      //      MinecraftForgeClient.registerItemRenderer(Canister, CanisterRenderer)
-    }
+    if (event.getSide == Side.CLIENT) PressureClient.preInit()
   }
 
   @EventHandler
