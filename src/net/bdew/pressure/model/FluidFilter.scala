@@ -20,7 +20,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing._
 import net.minecraft.util.{EnumFacing, ResourceLocation}
-import net.minecraftforge.client.model.IFlexibleBakedModel
+import net.minecraftforge.client.model.IPerspectiveAwareModel
 import net.minecraftforge.fluids.Fluid
 
 object FluidFilterProperty extends SimpleUnlistedProperty("filter", classOf[Fluid]) {
@@ -46,9 +46,9 @@ class BaseFluidFilterModelEnhancer(size: Float) extends ModelEnhancer {
 
   def sidesWithIcon(state: IBlockState): Set[EnumFacing] = EnumFacing.values().toSet
 
-  override def handleItemState(base: IFlexibleBakedModel, stack: ItemStack, textures: Map[ResourceLocation, TextureAtlasSprite]) = base
+  override def handleItemState(base: IPerspectiveAwareModel, stack: ItemStack, textures: Map[ResourceLocation, TextureAtlasSprite]) = base
 
-  override def handleBlockState(base: IFlexibleBakedModel, state: IBlockState, additionalSprites: Map[ResourceLocation, TextureAtlasSprite]) = {
+  override def handleBlockState(base: IPerspectiveAwareModel, state: IBlockState, additionalSprites: Map[ResourceLocation, TextureAtlasSprite]) = {
     val quadBaker = new QuadBaker(base.getFormat)
     FluidFilterProperty.get(state) map { fluid =>
       val sides = sidesWithIcon(state)
