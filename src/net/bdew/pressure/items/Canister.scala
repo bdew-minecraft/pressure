@@ -33,6 +33,7 @@ object Canister extends BaseItem("Canister") with IFluidContainerItem {
   lazy val capacity = cfg.getInt("Capacity")
 
   setMaxStackSize(1)
+  setHasSubtypes(true)
 
   override def getCreativeTabs = Array(PressureCreativeTabs.main, PressureCreativeTabs.canisters)
 
