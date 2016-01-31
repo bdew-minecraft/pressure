@@ -11,7 +11,7 @@ package net.bdew.pressure.items.configurator
 
 import net.bdew.lib.Misc
 import net.bdew.lib.gui.GuiProvider
-import net.bdew.lib.items.SimpleItem
+import net.bdew.lib.items.BaseItem
 import net.bdew.lib.player.PlayerCache
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api.IFilterable
@@ -25,7 +25,7 @@ import net.minecraft.world.World
 import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
-object ItemConfigurator extends SimpleItem("Configurator") with GuiProvider {
+object ItemConfigurator extends BaseItem("Configurator") with GuiProvider {
   override def guiId = 2
   override type TEClass = Any
 

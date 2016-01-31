@@ -12,9 +12,8 @@ package net.bdew.pressure.config
 import net.bdew.lib.config.{MachineManager, MachineManagerMultiblock}
 import net.bdew.pressure.blocks.router.MachineRouter
 import net.bdew.pressure.blocks.tank.MachineTank
-import net.bdew.pressure.misc.PressureCreativeTabs
 
-object Machines extends MachineManager(Tuning.getSection("Machines"), Config.guiHandler, PressureCreativeTabs.main) with MachineManagerMultiblock {
+object Machines extends MachineManager(Tuning.getSection("Machines"), Config.guiHandler, Blocks) with MachineManagerMultiblock {
   registerMachine(MachineTank)
   registerMachine(MachineRouter)
 }

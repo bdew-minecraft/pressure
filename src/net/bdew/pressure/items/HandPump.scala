@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.items
 
-import net.bdew.lib.items.SimpleItem
+import net.bdew.lib.items.BaseItem
 import net.bdew.pressure.config.Tuning
 import net.minecraft.block.material.Material
 import net.minecraft.block.{Block, BlockLiquid}
@@ -24,7 +24,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action
 import net.minecraftforge.fluids._
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
-object HandPump extends SimpleItem("HandPump") {
+object HandPump extends BaseItem("HandPump") {
   lazy val cfg = Tuning.getSection("Items").getSection(name)
   lazy val maxDrain = cfg.getInt("MaxDrain")
 

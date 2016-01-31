@@ -12,19 +12,22 @@ package net.bdew.pressure.items
 import java.util
 
 import net.bdew.lib.Misc
-import net.bdew.lib.items.SimpleItem
+import net.bdew.lib.items.BaseItem
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.config.{Config, Tuning}
 import net.bdew.pressure.misc.PressureCreativeTabs
+import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.World
+import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.fluids._
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
-object Canister extends SimpleItem("Canister") with IFluidContainerItem {
+object Canister extends BaseItem("Canister") with IFluidContainerItem {
   lazy val cfg = Tuning.getSection("Items").getSection(name)
   lazy val maxPour = cfg.getInt("MaxPour")
   lazy val capacity = cfg.getInt("Capacity")
@@ -136,5 +139,10 @@ object Canister extends SimpleItem("Canister") with IFluidContainerItem {
     }
 
     return false
+  }
+
+  @SideOnly(Side.CLIENT)
+  override def registerItemModels() = {
+    ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("pressure:canister.extended", "inventory"))
   }
 }

@@ -10,14 +10,14 @@
 package net.bdew.pressure.items
 
 import net.bdew.lib.PimpVanilla._
-import net.bdew.lib.items.SimpleItem
+import net.bdew.lib.items.BaseItem
 import net.bdew.pressure.pressurenet.{Helper, ScanResult}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.World
 
-object ItemDebugger extends SimpleItem("Debugger") {
+object ItemDebugger extends BaseItem("Debugger") {
   setMaxStackSize(1)
 
   override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
