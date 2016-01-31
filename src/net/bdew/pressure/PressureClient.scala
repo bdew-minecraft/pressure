@@ -18,9 +18,6 @@ object PressureClient {
   def preInit(): Unit = {
     ModelLoaderRegistry.registerLoader(ExtendedModelLoader)
     ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileTankIndicator], TankIndicatorTESR)
-    // todo: rendering stuff
-    //      IconCache.init()
-    //      sensor.Icons.init()
-    //      MinecraftForgeClient.registerItemRenderer(Canister, CanisterRenderer)
+    sensor.Icons.init()
   }
 }
