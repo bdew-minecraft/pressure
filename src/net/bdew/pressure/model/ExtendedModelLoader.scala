@@ -30,6 +30,7 @@ object ExtendedModelLoader extends ICustomModelLoader {
       case "models/block/sided_multiblock_filter.extended" => wrap("minecraft:block/cube_bottom_top", MultiblockModelEnhancer.withFilter)
       case "models/block/cube_multiblock.extended" => wrap("minecraft:block/cube", MultiblockModelEnhancer)
       case "models/block/sided_multiblock_rotated.extended" => wrap("pressure:block/rotated", MultiblockModelEnhancer)
+      case "models/item/canister.extended" => wrap("pressure:item/Canister", CanisterModelEnhancer)
 
       case _ => null
     }
