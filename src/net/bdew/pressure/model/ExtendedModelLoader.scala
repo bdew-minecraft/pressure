@@ -26,10 +26,11 @@ object ExtendedModelLoader extends ICustomModelLoader {
       case "models/block/filtered_rotated.extended" => wrap("pressure:block/rotated", FluidFilterRotatedModelEnhancer)
       case "models/block/filtered_cube_all.extended" => wrap("minecraft:block/cube_all", FluidFilterModelEnhancer)
       case "models/block/router.extended" => wrap("minecraft:block/cube_all", RouterOverlayModelEnhancer)
-      case "models/block/sided_multiblock.extended" => wrap("minecraft:block/cube_bottom_top", MultiblockModelEnhancer)
-      case "models/block/sided_multiblock_filter.extended" => wrap("minecraft:block/cube_bottom_top", MultiblockModelEnhancer.withFilter)
-      case "models/block/cube_multiblock.extended" => wrap("minecraft:block/cube", MultiblockModelEnhancer)
-      case "models/block/sided_multiblock_rotated.extended" => wrap("pressure:block/rotated", MultiblockModelEnhancer)
+      case "models/block/sided_multiblock.extended" => wrap("minecraft:block/cube_bottom_top", PressureMultiblockEnhancer)
+      case "models/block/sided_multiblock_output.extended" => wrap("minecraft:block/cube_bottom_top", PressureMultiblockEnhancer)
+      case "models/block/sided_multiblock_filter.extended" => wrap("minecraft:block/cube_bottom_top", PressureMultiblockEnhancer.withFilter)
+      case "models/block/cube_multiblock.extended" => wrap("minecraft:block/cube", PressureMultiblockEnhancer)
+      case "models/block/sided_multiblock_rotated.extended" => wrap("pressure:block/rotated", PressureMultiblockEnhancer)
       case "models/item/canister.extended" => wrap("pressure:item/Canister", CanisterModelEnhancer)
 
       case _ => null

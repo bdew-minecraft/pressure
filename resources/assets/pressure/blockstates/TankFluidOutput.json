@@ -6,7 +6,7 @@
       "bottom": "pressure:blocks/tank/tankfluidoutput/main",
       "side": "pressure:blocks/tank/tankfluidoutput/main"
     },
-    "model": "pressure:sided_multiblock.extended"
+    "model": "pressure:sided_multiblock_output.extended"
   },
   "variants": {
     "normal": [{}],

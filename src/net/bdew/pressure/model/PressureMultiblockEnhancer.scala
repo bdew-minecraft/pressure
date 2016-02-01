@@ -9,9 +9,9 @@
 
 package net.bdew.pressure.model
 
-import net.bdew.lib.render.connected.ConnectedModelEnhancer
-import net.minecraft.util.ResourceLocation
+import net.bdew.lib.multiblock.render.MultiblockModelEnhancer
+import net.bdew.pressure.PressureResourceProvider
 
-object MultiblockModelEnhancer extends ConnectedModelEnhancer(new ResourceLocation("pressure:blocks/connected/edge")) {
+object PressureMultiblockEnhancer extends MultiblockModelEnhancer(PressureResourceProvider) {
   lazy val withFilter = compose(FluidFilterModelEnhancer)
 }
