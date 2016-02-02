@@ -23,7 +23,7 @@ import net.minecraft.world.IBlockAccess
 object BlockPressureOutput extends BaseModule("TankPressureOutput", "FluidOutput", classOf[TilePressureOutput])
 with BlockOutput[TilePressureOutput] with BlockNotifyUpdates with IPressureConnectableBlock {
   override def canConnectTo(world: IBlockAccess, pos: BlockPos, side: EnumFacing) =
-    getTE(world, pos).getCore.isDefined
+    getTE(world, pos).exists(_.getCore.isDefined)
   override def isTraversable(world: IBlockAccess, pos: BlockPos) = false
   override def canConnectRedstone(world: IBlockAccess, pos: BlockPos, side: EnumFacing) = true
 }

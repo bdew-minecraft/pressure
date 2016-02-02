@@ -17,14 +17,15 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
+import net.minecraftforge.common.property.IExtendedBlockState
 
 object BlockTankFilter extends BaseModule("TankFilter", "FluidFilter", classOf[TileTankFilter]) with ModuleNeedsRenderUpdate {
 
   override def getUnlistedProperties = super.getUnlistedProperties :+ FluidFilterProperty
 
-  override def getExtendedState(state: IBlockState, world: IBlockAccess, pos: BlockPos) = {
-    val st = super.getExtendedState(state, world, pos)
-    getTE(world, pos).getCore.flatMap(_.getFluidFilter).map(fluid => st.withProperty(FluidFilterProperty, fluid)).getOrElse(st)
+  override def getExtendedStateFromTE(state: IExtendedBlockState, world: IBlockAccess, pos: BlockPos, te: TileTankFilter) = {
+    val st = super.getExtendedStateFromTE(state, world, pos, te)
+    te.getCore.flatMap(_.getFluidFilter).map(fluid => st.withProperty(FluidFilterProperty, fluid)).getOrElse(st)
   }
 
   override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) = {

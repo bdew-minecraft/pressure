@@ -9,6 +9,7 @@
 
 package net.bdew.pressure.blocks.router
 
+import net.bdew.lib.PimpVanilla._
 import net.bdew.lib.block.{BaseBlock, HasTE}
 import net.bdew.lib.property.SimpleUnlistedProperty
 import net.bdew.pressure.api.IPressureConnectableBlock
@@ -32,11 +33,10 @@ object BlockRouter extends BaseBlock("Router", Material.iron) with HasTE[TileRou
     val MODE = EnumFacing.values().map(f => f -> new SimpleUnlistedProperty(f.getName, classOf[RouterSideMode.Value])).toMap
   }
 
-  override def getExtendedState(state: IBlockState, world: IBlockAccess, pos: BlockPos) = {
-    val te = getTE(world, pos)
-    EnumFacing.values().foldRight(super.getExtendedState(state, world, pos).asInstanceOf[IExtendedBlockState]) { (face, state) =>
-      state.withProperty(Properties.MODE(face), te.sideModes.get(face))
-    }
+  override def getExtendedStateFromTE(state: IExtendedBlockState, world: IBlockAccess, pos: BlockPos, te: TileRouter) = {
+    super.getExtendedStateFromTE(state, world, pos, te).withPropertiesEx(
+      EnumFacing.values().map(face => Properties.MODE(face) -> te.sideModes.get(face))
+    )
   }
 
   override def canRenderInLayer(layer: EnumWorldBlockLayer) =
@@ -45,7 +45,7 @@ object BlockRouter extends BaseBlock("Router", Material.iron) with HasTE[TileRou
   override def getUnlistedProperties = super.getUnlistedProperties ++ Properties.MODE.values
 
   override def canConnectTo(world: IBlockAccess, pos: BlockPos, side: EnumFacing) =
-    getTE(world, pos).sideModes.get(side) != RouterSideMode.DISABLED
+    getTE(world, pos).exists(_.sideModes.get(side) != RouterSideMode.DISABLED)
 
   override def isTraversable(world: IBlockAccess, pos: BlockPos) = false
 

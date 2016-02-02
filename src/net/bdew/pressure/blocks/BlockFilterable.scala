@@ -25,7 +25,7 @@ trait BlockFilterable extends BaseBlock {
 
   override def getExtendedState(state: IBlockState, world: IBlockAccess, pos: BlockPos): IBlockState = {
     val st = super.getExtendedState(state, world, pos).asInstanceOf[IExtendedBlockState]
-    getTE(world, pos).getFluidFilter.map(fluid => st.withProperty(FluidFilterProperty, fluid)).getOrElse(st)
+    getTE(world, pos).flatMap(_.getFluidFilter).map(fluid => st.withProperty(FluidFilterProperty, fluid)).getOrElse(st)
   }
 
   override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {

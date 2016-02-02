@@ -55,15 +55,17 @@ object BlockTankIndicator extends BaseModule("TankIndicator", "TankBlock", class
     }
   }
 
-  def getPositionInColumn(world: IBlockAccess, pos: BlockPos, face: EnumFacing) = {
-    val te = getTE(world, pos)
-    val result = te.getCore map { core =>
+  def getPositionInColumn(world: IBlockAccess, pos: BlockPos, face: EnumFacing): (Int, Int) = {
+    for {
+      te <- getTE(world, pos)
+      core <- te.getCore
+    } {
       val below = scanColumn(pos.down() to pos.copy(y = 1), core, world, face)
       val above = scanColumn(pos.up() to pos.copy(y = 255), core, world, face)
-      (below, above)
-    } getOrElse ((0, 0))
-    te.cachedPosition(face) = result
-    result
+      te.cachedPosition(face) = (below, above)
+      return (below, above)
+    }
+    (0, 0)
   }
 }
 
