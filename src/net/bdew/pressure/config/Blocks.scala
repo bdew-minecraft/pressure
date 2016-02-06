@@ -43,6 +43,7 @@ object Blocks extends BlockManager(PressureCreativeTabs.main) {
   regBlock(BlockFluidOutput)
   regBlock(BlockFluidAutoOutput)
   regBlock(BlockFluidInput)
+  regBlock(BlockFluidAccess)
 
   regBlock(BlockPressureOutput)
   regBlock(BlockPressureInput)
