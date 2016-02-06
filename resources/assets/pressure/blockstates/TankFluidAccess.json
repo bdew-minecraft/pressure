@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "top": "pressure:blocks/tank/tankfluidaccess/main",
+      "bottom": "pressure:blocks/tank/tankfluidaccess/main",
+      "side": "pressure:blocks/tank/tankfluidaccess/main"
+    },
+    "model": "pressure:sided_multiblock.extended"
+  },
+  "variants": {
+    "normal": [
+      {}
+    ],
+    "inventory": {
+      "transform": "forge:default-block"
+    }
+  }
+}
