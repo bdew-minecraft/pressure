@@ -7,7 +7,6 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-@API(apiVersion = "PRESSURE_APIVER", owner = "pressure", provides = "pressureAPI") //
-        package net.bdew.pressure.api;
+package net.bdew.pressure.compat.computers
 
-import net.minecraftforge.fml.common.API;
+case class ParameterErrorException(params: CallParam[_]*) extends ComputerException("Expected parameters: " + params.map(_.name).mkString(", "))

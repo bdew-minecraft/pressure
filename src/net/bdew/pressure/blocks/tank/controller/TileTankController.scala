@@ -11,16 +11,17 @@ package net.bdew.pressure.blocks.tank.controller
 
 import net.bdew.lib.Misc
 import net.bdew.lib.PimpVanilla._
-import net.bdew.lib.data.base.UpdateKind
+import net.bdew.lib.data.base.{DataSlot, UpdateKind}
 import net.bdew.lib.data.{DataSlotInventory, DataSlotOption, DataSlotTank}
 import net.bdew.lib.items.ItemUtils
 import net.bdew.lib.multiblock.interact.{CIFluidInput, CIFluidOutput, CIOutputFaces}
 import net.bdew.lib.multiblock.tile.TileControllerGui
 import net.bdew.lib.sensors.SensorSystem
 import net.bdew.lib.sensors.multiblock.CIRedstoneSensors
-import net.bdew.pressure.blocks.tank.blocks.TileTankIndicator
+import net.bdew.pressure.blocks.tank.blocks.{BlockFluidAccess, TileTankIndicator}
 import net.bdew.pressure.blocks.tank.{CIFilterable, MachineTank, ModuleNeedsRenderUpdate}
 import net.bdew.pressure.config.Modules
+import net.bdew.pressure.misc.CountedDataSlotTank
 import net.bdew.pressure.sensor.Sensors
 import net.bdew.pressure.{Pressure, PressureResourceProvider}
 import net.minecraft.entity.player.EntityPlayer
@@ -35,7 +36,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
 
   val fluidFilter = DataSlotOption[Fluid]("fluidFilter", this).setUpdate(UpdateKind.GUI, UpdateKind.SAVE, UpdateKind.WORLD)
 
-  val tank = new DataSlotTank("tank", this, 0) {
+  val tank = new DataSlotTank("tank", this, 0) with CountedDataSlotTank {
     setUpdate(UpdateKind.SAVE, UpdateKind.WORLD, UpdateKind.GUI)
     override val sendCapacityOnUpdateKind = Set(UpdateKind.WORLD, UpdateKind.GUI)
   }
@@ -206,6 +207,16 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   }
 
   def isReady = !revalidateOnNextTick && !modulesChanged
+
+  override def dataSlotChanged(slot: DataSlot): Unit = {
+    super.dataSlotChanged(slot)
+    if (slot == tank) {
+      // Send block updates if tank content changes - needed for extracells, etc.
+      for (pos <- modules if worldObj.getBlockState(pos).getBlock == BlockFluidAccess) {
+        worldObj.notifyNeighborsOfStateChange(pos, BlockFluidAccess)
+      }
+    }
+  }
 
   // === CIFluidInput ===
 

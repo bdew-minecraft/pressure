@@ -14,8 +14,8 @@ import java.io.File
 import net.bdew.lib.Misc
 import net.bdew.pressure.api.PressureAPI
 import net.bdew.pressure.blocks.router.BlockRouter
-import net.bdew.pressure.compat.OpenComputersExecutionHelper
-import net.bdew.pressure.compat.computercraft.ExecutionHelpers
+import net.bdew.pressure.compat.computers.computercraft.CCBlocks
+import net.bdew.pressure.compat.computers.opencomputers.OCBlocks
 import net.bdew.pressure.compat.enderio.EnderIOProxy
 import net.bdew.pressure.config._
 import net.bdew.pressure.misc.PressureCreativeTabs
@@ -64,6 +64,10 @@ object Pressure {
     NetworkRegistry.INSTANCE.registerGuiHandler(this, Config.guiHandler)
     TuningLoader.loadDelayed()
     FMLInterModComms.sendMessage("Waila", "register", "net.bdew.pressure.waila.WailaHandler.loadCallback")
+    if (Misc.haveModVersion("OpenComputers"))
+      OCBlocks.init()
+    if (Misc.haveModVersion("ComputerCraft"))
+      CCBlocks.init()
     NetworkHandler.init()
   }
 
@@ -72,8 +76,6 @@ object Pressure {
     PressureCreativeTabs.init()
     if (Misc.haveModVersion("EnderIO"))
       EnderIOProxy.init()
-    if (Misc.haveModVersion("OpenComputers") && Misc.haveModVersion("ComputerCraft"))
-      ExecutionHelpers.registry +:= OpenComputersExecutionHelper
   }
 
   @EventHandler

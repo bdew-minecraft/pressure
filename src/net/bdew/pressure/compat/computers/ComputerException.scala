@@ -7,7 +7,9 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-@API(apiVersion = "PRESSURE_APIVER", owner = "pressure", provides = "pressureAPI") //
-        package net.bdew.pressure.api;
+package net.bdew.pressure.compat.computers
 
-import net.minecraftforge.fml.common.API;
+/**
+  * Special exception type that will be passed to the computer as an error (if supported by the mod)
+  */
+class ComputerException(msg: String) extends RuntimeException(msg)

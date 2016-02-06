@@ -7,9 +7,10 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.compat.computercraft
+package net.bdew.pressure.compat.computers.computercraft
 
 import dan200.computercraft.api.peripheral.IPeripheralProvider
+import net.bdew.pressure.compat.computers.TileCommandHandler
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.World

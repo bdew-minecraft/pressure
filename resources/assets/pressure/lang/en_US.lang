@@ -17,6 +17,7 @@ tile.pressure.TankPressureInput.name=Tank Pressure Intake
 tile.pressure.TankFluidInput.name=Tank Fluid Intake
 tile.pressure.TankFluidOutput.name=Tank Fluid Outlet
 tile.pressure.TankFluidAutoOutput.name=Powered Tank Fluid Outlet
+tile.pressure.TankFluidAccess.name=Tank Access Port
 tile.pressure.TankPressureOutput.name=Tank Pressure Outlet
 tile.pressure.TankIndicator.name=Tank Indicator Block
 tile.pressure.TankInterface.name=Tank Interface

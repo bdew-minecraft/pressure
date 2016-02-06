@@ -7,13 +7,16 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.compat.computercraft
+package net.bdew.pressure.compat.computers.computercraft
 
 import dan200.computercraft.api.lua.{ILuaContext, LuaException}
 import dan200.computercraft.api.peripheral.{IComputerAccess, IPeripheral}
+import net.bdew.lib.async.{Async, ServerTickExecutionContext}
+import net.bdew.pressure.compat.computers._
 import net.minecraft.tileentity.TileEntity
 
-import scala.util.{Failure, Success}
+import scala.concurrent.Future
+import scala.util.{Failure, Success, Try}
 
 case class TilePeripheralWrapper[T <: TileEntity](kind: String, commands: TileCommandHandler[T], tile: T) extends IPeripheral {
   var computers = Set.empty[IComputerAccess]
@@ -35,15 +38,33 @@ case class TilePeripheralWrapper[T <: TileEntity](kind: String, commands: TileCo
 
   override def getMethodNames: Array[String] = commands.commandNames
 
+  case class CCResultConverter(computer: IComputerAccess, context: ILuaContext) extends SimpleResultConverter {
+    override def handleFuture(future: Future[Result]) = encode(waitForFuture(context, computer, future).get)
+  }
+
+  private def waitForFuture[R](ctx: ILuaContext, comp: IComputerAccess, future: Future[R]): Try[R] = {
+    future.onComplete(x => comp.queueEvent("bdew.wakeup", Array.empty))(ServerTickExecutionContext)
+    while (!future.isCompleted) {
+      ctx.pullEventRaw("bdew.wakeup")
+    }
+    future.value.get
+  }
+
   override def callMethod(computer: IComputerAccess, context: ILuaContext, method: Int, arguments: Array[AnyRef]): Array[AnyRef] = {
     val handler = commands.commands(commands.idToCommand(method))
-    val ctx = CallContext(tile, computer, computers, context, arguments)
-    val future = handler(ctx)
-    ExecutionHelpers.waitForFuture(context, computer, future) match {
+    val ctx = CallContext(tile, arguments)
+    val result = if (handler.isDirect) {
+      Try(handler.apply(ctx))
+    } else {
+      waitForFuture(context, computer, Async.inServerThread(handler.apply(ctx)))
+    }
+    result match {
       case Success(null) => null
-      case Success(v) => v.wrap
+      case Success(v) => CCResultConverter(computer, context).wrap(v)
       case Failure(e: ParameterErrorException) =>
         throw new LuaException("Usage: %s(%s)".format(commands.idToCommand(method), e.params.map(_.name).mkString(", ")))
+      case Failure(e: ComputerException) =>
+        throw new LuaException(e.getMessage)
       case Failure(t) => throw t
     }
   }

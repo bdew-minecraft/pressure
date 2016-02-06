@@ -42,6 +42,7 @@ object Blocks extends BlockManager(PressureCreativeTabs.main) {
   regBlock(BlockFluidOutput)
   regBlock(BlockFluidAutoOutput)
   regBlock(BlockFluidInput)
+  regBlock(BlockFluidAccess)
 
   regBlock(BlockPressureOutput)
   regBlock(BlockPressureInput)
@@ -51,7 +52,7 @@ object Blocks extends BlockManager(PressureCreativeTabs.main) {
 
   regBlock(BlockSensor)
 
-  if (Misc.haveModVersion("ComputerCraft")) {
+  if (Misc.haveModVersion("ComputerCraft") || Misc.haveModVersion("OpenComputers")) {
     regBlock(BlockDataPort)
   }
 }
