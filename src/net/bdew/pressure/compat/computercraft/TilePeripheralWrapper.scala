@@ -7,12 +7,12 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.compat.computers.computercraft
+package net.bdew.pressure.compat.computercraft
 
 import dan200.computercraft.api.lua.{ILuaContext, LuaException}
 import dan200.computercraft.api.peripheral.{IComputerAccess, IPeripheral}
 import net.bdew.lib.async.{Async, ServerTickExecutionContext}
-import net.bdew.pressure.compat.computers._
+import net.bdew.lib.computers._
 import net.minecraft.tileentity.TileEntity
 
 import scala.concurrent.Future

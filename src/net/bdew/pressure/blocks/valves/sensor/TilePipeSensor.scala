@@ -9,9 +9,9 @@
 
 package net.bdew.pressure.blocks.valves.sensor
 
+import net.bdew.lib.computers.TileCommandHandler
 import net.bdew.lib.data.base.{TileDataSlotsTicking, UpdateKind}
 import net.bdew.pressure.api.{IPressureConnection, IPressureEject, IPressureInject}
-import net.bdew.pressure.compat.computers.TileCommandHandler
 import net.bdew.pressure.misc.{DataSlotFluidAverages, DataSlotFluidCounts, FluidMapHelpers}
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.state.IBlockState

@@ -7,13 +7,13 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.compat.computers.opencomputers
+package net.bdew.pressure.compat.opencomputers
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, ObjectInputStream, ObjectOutputStream}
 
 import li.cil.oc.api.machine.{Arguments, Callback, Context}
 import li.cil.oc.api.prefab.AbstractValue
-import net.bdew.pressure.compat.computers.Result
+import net.bdew.lib.computers.Result
 import net.minecraft.nbt.NBTTagCompound
 
 import scala.concurrent.Future

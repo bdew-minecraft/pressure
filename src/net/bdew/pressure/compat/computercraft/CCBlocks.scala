@@ -7,11 +7,11 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.compat.computers.computercraft
+package net.bdew.pressure.compat.computercraft
 
 import dan200.computercraft.api.ComputerCraftAPI
 import net.bdew.pressure.blocks.tank.blocks.{DataPortCommands, TileDataPort}
-import net.bdew.pressure.blocks.valves.sensor.{TilePipeSensor, PipeSensorCommands}
+import net.bdew.pressure.blocks.valves.sensor.{PipeSensorCommands, TilePipeSensor}
 
 object CCBlocks {
   def init(): Unit = {

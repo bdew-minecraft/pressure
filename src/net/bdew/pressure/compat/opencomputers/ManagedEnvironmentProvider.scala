@@ -7,12 +7,12 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.compat.computers.opencomputers
+package net.bdew.pressure.compat.opencomputers
 
 import li.cil.oc.api.machine.{Arguments, Context, LimitReachedException}
 import li.cil.oc.api.network.{ManagedPeripheral, Visibility}
 import li.cil.oc.api.{Network, prefab}
-import net.bdew.pressure.compat.computers.{CallContext, ComputerException, ParameterErrorException, TileCommandHandler}
+import net.bdew.lib.computers.{CallContext, ComputerException, ParameterErrorException, TileCommandHandler}
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.relauncher.Side

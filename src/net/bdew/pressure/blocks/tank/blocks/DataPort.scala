@@ -11,11 +11,11 @@ package net.bdew.pressure.blocks.tank.blocks
 
 import java.util.Locale
 
+import net.bdew.lib.computers._
 import net.bdew.lib.multiblock.data.{OutputConfigFluid, OutputConfigRSControllable, RSMode}
 import net.bdew.lib.multiblock.tile.TileModule
 import net.bdew.pressure.blocks.tank.BaseModule
 import net.bdew.pressure.blocks.tank.controller.TileTankController
-import net.bdew.pressure.compat.computers._
 import net.bdew.pressure.misc.FluidMapHelpers
 import net.minecraftforge.fluids.FluidRegistry
 

@@ -14,9 +14,9 @@ import java.io.File
 import net.bdew.lib.Misc
 import net.bdew.pressure.api.PressureAPI
 import net.bdew.pressure.blocks.router.BlockRouter
-import net.bdew.pressure.compat.computers.computercraft.CCBlocks
-import net.bdew.pressure.compat.computers.opencomputers.OCBlocks
+import net.bdew.pressure.compat.computercraft.CCBlocks
 import net.bdew.pressure.compat.enderio.EnderIOProxy
+import net.bdew.pressure.compat.opencomputers.OCBlocks
 import net.bdew.pressure.config._
 import net.bdew.pressure.misc.PressureCreativeTabs
 import net.bdew.pressure.network.NetworkHandler

@@ -9,9 +9,9 @@
 
 package net.bdew.pressure.misc
 
+import net.bdew.lib.computers.Result
 import net.bdew.lib.data.DataSlotTankBase
 import net.bdew.lib.data.base.{DataSlot, DataSlotContainer, UpdateKind}
-import net.bdew.pressure.compat.computers.Result
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fluids.{Fluid, FluidRegistry, FluidStack}
 

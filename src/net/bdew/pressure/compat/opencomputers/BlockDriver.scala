@@ -7,11 +7,11 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.compat.computers.opencomputers
+package net.bdew.pressure.compat.opencomputers
 
 import li.cil.oc.api.driver.Block
 import li.cil.oc.api.network.ManagedEnvironment
-import net.bdew.pressure.compat.computers._
+import net.bdew.lib.computers.TileCommandHandler
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.BlockPos
 import net.minecraft.world.World

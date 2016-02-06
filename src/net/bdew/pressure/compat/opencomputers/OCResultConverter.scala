@@ -7,9 +7,9 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.compat.computers.opencomputers
+package net.bdew.pressure.compat.opencomputers
 
-import net.bdew.pressure.compat.computers.{Result, SimpleResultConverter}
+import net.bdew.lib.computers.{Result, SimpleResultConverter}
 
 import scala.concurrent.Future
 
