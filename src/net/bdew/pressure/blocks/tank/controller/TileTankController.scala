@@ -10,14 +10,14 @@
 package net.bdew.pressure.blocks.tank.controller
 
 import net.bdew.lib.Misc
-import net.bdew.lib.data.base.UpdateKind
+import net.bdew.lib.data.base.{DataSlot, UpdateKind}
 import net.bdew.lib.data.{DataSlotInventory, DataSlotString, DataSlotTank}
 import net.bdew.lib.items.ItemUtils
 import net.bdew.lib.multiblock.interact.{CIFluidInput, CIFluidOutput, CIOutputFaces}
 import net.bdew.lib.multiblock.tile.TileControllerGui
 import net.bdew.lib.sensors.SensorSystem
 import net.bdew.lib.sensors.multiblock.CIRedstoneSensors
-import net.bdew.pressure.blocks.tank.blocks.TileTankIndicator
+import net.bdew.pressure.blocks.tank.blocks.{BlockFluidAccess, TileTankIndicator}
 import net.bdew.pressure.blocks.tank.{CIFilterable, MachineTank, ModuleNeedsRenderUpdate}
 import net.bdew.pressure.config.Modules
 import net.bdew.pressure.misc.CountedDataSlotTank
@@ -206,6 +206,16 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   }
 
   def isReady = !revalidateOnNextTick && !modulesChanged
+
+  override def dataSlotChanged(slot: DataSlot): Unit = {
+    super.dataSlotChanged(slot)
+    if (slot == tank) {
+      // Send block updates if tank content changes - needed for extracells, etc.
+      for (pos <- modules if pos.blockIs(worldObj, BlockFluidAccess)) {
+        worldObj.notifyBlocksOfNeighborChange(pos.x, pos.y, pos.z, BlockFluidAccess)
+      }
+    }
+  }
 
   // === CIFluidInput ===
 
