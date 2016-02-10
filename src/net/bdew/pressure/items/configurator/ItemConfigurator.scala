@@ -14,7 +14,7 @@ import net.bdew.lib.gui.GuiProvider
 import net.bdew.lib.items.BaseItem
 import net.bdew.lib.player.PlayerCache
 import net.bdew.pressure.Pressure
-import net.bdew.pressure.api.IFilterable
+import net.bdew.pressure.api.properties.IFilterable
 import net.bdew.pressure.config.Config
 import net.bdew.pressure.network.NetworkHandler
 import net.bdew.pressure.pressurenet.Helper

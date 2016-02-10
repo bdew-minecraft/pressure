@@ -28,13 +28,13 @@ class ContainerTank(val te: TileTankController, player: EntityPlayer) extends Ba
       val stack = player.inventory.getItemStack
       if (!te.getWorld.isRemote) {
         if (stack == null || stack.getItem == null) {
-          te.clearFluidFilter()
+          te.filterableCapability.clearFluidFilter()
         } else if (FluidContainerRegistry.isFilledContainer(stack)) {
-          te.setFluidFilter(FluidContainerRegistry.getFluidForFilledItem(stack).getFluid)
+          te.filterableCapability.setFluidFilter(FluidContainerRegistry.getFluidForFilledItem(stack).getFluid)
         } else if (stack.getItem.isInstanceOf[IFluidContainerItem]) {
           val fluid = stack.getItem.asInstanceOf[IFluidContainerItem].getFluid(stack)
           if (fluid != null && fluid.getFluid != null)
-            te.setFluidFilter(fluid.getFluid)
+            te.filterableCapability.setFluidFilter(fluid.getFluid)
         }
       }
       stack

@@ -9,6 +9,13 @@
 
 package net.bdew.pressure.api;
 
+import net.bdew.pressure.api.properties.IFilterable;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+
 public class PressureAPI {
     public static IPressureHelper HELPER;
+
+    @CapabilityInject(IFilterable.class)
+    public static Capability<IFilterable> FILTERABLE;
 }

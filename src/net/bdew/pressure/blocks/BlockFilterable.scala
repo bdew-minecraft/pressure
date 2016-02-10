@@ -9,6 +9,7 @@
 
 package net.bdew.pressure.blocks
 
+import net.bdew.lib.PimpVanilla._
 import net.bdew.lib.block.{BaseBlock, HasTE}
 import net.bdew.pressure.model.FluidFilterProperty
 import net.minecraft.block.state.IBlockState
@@ -46,10 +47,10 @@ trait BlockFilterable extends BaseBlock {
       if (world.isRemote) return true
 
       if (newFilter == null) {
-        getTE(world, pos).clearFluidFilter()
+        getTE(world, pos).FilterableImpl.clearFluidFilter()
         player.addChatMessage(new ChatComponentTranslation("pressure.label.filter.unset"))
       } else {
-        getTE(world, pos).setFluidFilter(newFilter.getFluid)
+        getTE(world, pos).FilterableImpl.setFluidFilter(newFilter.getFluid)
         player.addChatMessage(new ChatComponentTranslation("pressure.label.filter.set", newFilter.getFluid.getLocalizedName(newFilter)))
       }
 

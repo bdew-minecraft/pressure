@@ -18,6 +18,7 @@ import net.bdew.lib.multiblock.interact.{CIFluidInput, CIFluidOutput, CIOutputFa
 import net.bdew.lib.multiblock.tile.TileControllerGui
 import net.bdew.lib.sensors.SensorSystem
 import net.bdew.lib.sensors.multiblock.CIRedstoneSensors
+import net.bdew.pressure.api.properties.IFilterable
 import net.bdew.pressure.blocks.tank.blocks.{BlockFluidAccess, TileTankIndicator}
 import net.bdew.pressure.blocks.tank.{CIFilterable, MachineTank, ModuleNeedsRenderUpdate}
 import net.bdew.pressure.config.Modules
@@ -71,12 +72,14 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
 
   lazy val maxOutputs = 6
 
-  def getFluidFilter = fluidFilter.value
-
   // CIFilterable
 
-  override def clearFluidFilter() = fluidFilter.unset()
-  override def setFluidFilter(fluid: Fluid) = if (fluid == null) fluidFilter.unset() else fluidFilter.set(fluid)
+  def getFluidFilter = fluidFilter.value
+
+  override val filterableCapability = new IFilterable {
+    override def clearFluidFilter() = fluidFilter.unset()
+    override def setFluidFilter(fluid: Fluid) = if (fluid == null) fluidFilter.unset() else fluidFilter.set(fluid)
+  }
 
   // === Inventory Stuff ===
 

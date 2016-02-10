@@ -9,16 +9,21 @@
 
 package net.bdew.pressure.blocks.tank
 
+import net.bdew.lib.capabilities.CapabilityProvider
 import net.bdew.lib.multiblock.tile.{TileController, TileModule}
-import net.bdew.pressure.api.IFilterable
+import net.bdew.pressure.api.PressureAPI
+import net.bdew.pressure.api.properties.IFilterable
 import net.minecraftforge.fluids.Fluid
 
-trait CIFilterable extends TileController with IFilterable {
+trait CIFilterable extends TileController {
+  def filterableCapability: IFilterable
   def getFluidFilter: Option[Fluid]
 }
 
-trait MIFilterable extends TileModule with IFilterable {
+trait MIFilterable extends TileModule with CapabilityProvider {
   override def getCore = getCoreAs[CIFilterable]
-  override def setFluidFilter(fluid: Fluid) = getCore foreach (_.setFluidFilter(fluid))
-  override def clearFluidFilter() = getCore foreach (_.clearFluidFilter())
+
+  addCapabilityOption(PressureAPI.FILTERABLE) { face =>
+    getCore map (_.filterableCapability)
+  }
 }

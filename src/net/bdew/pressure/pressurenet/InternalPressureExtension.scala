@@ -9,9 +9,8 @@
 
 package net.bdew.pressure.pressurenet
 
-import net.bdew.lib.Misc
 import net.bdew.lib.PimpVanilla._
-import net.bdew.pressure.api.{IFilterable, IFilterableProvider, IPressureConnectableBlock, IPressureExtension}
+import net.bdew.pressure.api.{IFilterableProvider, IPressureConnectableBlock, IPressureExtension, PressureAPI}
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.item.ItemStack
@@ -45,6 +44,6 @@ object InternalPressureExtension extends IPressureExtension with IFilterableProv
   }
 
   override def getFilterableForWorldCoordinates(world: World, pos: BlockPos, side: EnumFacing) = {
-    (Option(world.getTileEntity(pos)) flatMap Misc.asInstanceOpt(classOf[IFilterable])).orNull
+    world.getCapSafe(pos, side, PressureAPI.FILTERABLE).orNull
   }
 }

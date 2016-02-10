@@ -105,13 +105,13 @@ object DataPortCommands extends TileCommandHandler[TileDataPort] {
     ctx.params(POption(PString)) match {
       case Some(s) =>
         if (FluidRegistry.isFluidRegistered(s)) {
-          getCore(ctx).setFluidFilter(FluidRegistry.getFluid(s))
+          getCore(ctx).filterableCapability.setFluidFilter(FluidRegistry.getFluid(s))
           true
         } else {
           err("Unknown fluid")
         }
       case None =>
-        getCore(ctx).clearFluidFilter()
+        getCore(ctx).filterableCapability.clearFluidFilter()
         true
     }
   }

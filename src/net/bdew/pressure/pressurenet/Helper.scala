@@ -11,18 +11,23 @@ package net.bdew.pressure.pressurenet
 
 import net.bdew.lib.PimpVanilla._
 import net.bdew.lib.block.BlockFace
+import net.bdew.lib.capabilities.{NoFactory, NoStorage}
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api._
+import net.bdew.pressure.api.properties.IFilterable
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
+import net.minecraftforge.common.capabilities.CapabilityManager
 
 import scala.util.DynamicVariable
 
 object Helper extends IPressureHelper {
   var extensions = List.empty[IPressureExtension]
-  var filterable = List.empty[IFilterableProvider]
+  var filterableProviders = List.empty[IFilterableProvider]
+
+  CapabilityManager.INSTANCE.register(classOf[IFilterable], new NoStorage[IFilterable], new NoFactory[IFilterable])
 
   registerExtension(InternalPressureExtension)
   registerIFilterableProvider(InternalPressureExtension)
@@ -99,7 +104,7 @@ object Helper extends IPressureHelper {
     extensions.exists(_.tryPlaceBlock(w, pos, b, p))
 
   def getFilterableForWorldCoordinates(world: World, pos: BlockPos, side: EnumFacing): IFilterable = {
-    for (fp <- filterable)
+    for (fp <- filterableProviders)
       Option(fp.getFilterableForWorldCoordinates(world, pos, side)) map {
         return _
       }
@@ -107,5 +112,5 @@ object Helper extends IPressureHelper {
   }
 
   override def registerExtension(ext: IPressureExtension) = extensions :+= ext
-  override def registerIFilterableProvider(provider: IFilterableProvider) = filterable :+= provider
+  override def registerIFilterableProvider(provider: IFilterableProvider) = filterableProviders :+= provider
 }

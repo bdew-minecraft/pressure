@@ -10,9 +10,10 @@
 package net.bdew.pressure.blocks.router
 
 import net.bdew.lib.Misc
+import net.bdew.lib.capabilities.CapabilityProvider
 import net.bdew.lib.data.base.{TileDataSlotsTicking, UpdateKind}
 import net.bdew.lib.multiblock.data.RSMode
-import net.bdew.pressure.api.{IPressureConnection, IPressureEject, IPressureInject}
+import net.bdew.pressure.api.{IPressureConnection, IPressureEject, IPressureInject, PressureAPI}
 import net.bdew.pressure.blocks.router.data.{DataSlotSideFilters, DataSlotSideModes, DataSlotSideRSControl, RouterSideMode}
 import net.bdew.pressure.misc.FakeTank
 import net.bdew.pressure.pressurenet.Helper
@@ -21,12 +22,16 @@ import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
 
 import scala.collection.mutable
 
-class TileRouter extends TileDataSlotsTicking with IPressureInject with IPressureEject with FakeTank {
+class TileRouter extends TileDataSlotsTicking with IPressureInject with IPressureEject with FakeTank with CapabilityProvider {
   val sideModes = DataSlotSideModes("modes", this).setUpdate(UpdateKind.SAVE, UpdateKind.GUI, UpdateKind.WORLD, UpdateKind.RENDER)
   val sideControl = DataSlotSideRSControl("control", this).setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
   val sideFilters = DataSlotSideFilters("filters", this).setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
 
   val connections = mutable.Map.empty[EnumFacing, IPressureConnection]
+
+  addCapability(PressureAPI.FILTERABLE) {
+    case face => RouterFilterProxy(this, face)
+  }
 
   override def invalidateConnection(side: EnumFacing): Unit = connections -= side
 

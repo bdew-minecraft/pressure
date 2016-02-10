@@ -7,7 +7,7 @@
  * http://bdew.net/minecraft-mod-public-license/
  */
 
-package net.bdew.pressure.api;
+package net.bdew.pressure.api.properties;
 
 import net.minecraftforge.fluids.Fluid;
 

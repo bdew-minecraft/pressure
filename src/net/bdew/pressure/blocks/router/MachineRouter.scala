@@ -13,16 +13,12 @@ import net.bdew.lib.Misc
 import net.bdew.lib.gui.GuiProvider
 import net.bdew.lib.machine.Machine
 import net.bdew.lib.multiblock.data.RSMode
-import net.bdew.pressure.api.{IFilterable, IFilterableProvider}
 import net.bdew.pressure.blocks.router.gui.{ContainerRouter, GuiRouter, MsgSetRouterSideControl}
 import net.bdew.pressure.network.NetworkHandler
-import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{BlockPos, EnumFacing}
-import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
-object MachineRouter extends Machine("Router", BlockRouter) with GuiProvider with IFilterableProvider {
+object MachineRouter extends Machine("Router", BlockRouter) with GuiProvider {
   def guiId: Int = 3
   type TEClass = TileRouter
 
@@ -43,11 +39,4 @@ object MachineRouter extends Machine("Router", BlockRouter) with GuiProvider wit
     RSMode.RS_OFF -> RSMode.NEVER,
     RSMode.NEVER -> RSMode.ALWAYS
   )
-
-  override def getFilterableForWorldCoordinates(world: World, pos: BlockPos, side: EnumFacing): IFilterable =
-    if (world.getBlockState(pos).getBlock == BlockRouter)
-      RouterFilterProxy(BlockRouter.getTE(world, pos), side)
-    else null
-
-  Helper.registerIFilterableProvider(this)
 }

@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.compat.enderio
 
-import net.bdew.pressure.api.IFilterable
+import net.bdew.pressure.api.properties.IFilterable
 import net.bdew.pressure.compat.enderio.EnderIOReflect._
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 

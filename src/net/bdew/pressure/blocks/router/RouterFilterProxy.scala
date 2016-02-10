@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.blocks.router
 
-import net.bdew.pressure.api.IFilterable
+import net.bdew.pressure.api.properties.IFilterable
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.Fluid
 
