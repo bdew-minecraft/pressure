@@ -58,7 +58,7 @@ object HandPump extends BaseItem("HandPump") {
     } else {
       //todo: do we still need this?
       val bState = world.getBlockState(pos)
-      if (bState.getBlock.getMaterial == Material.water && bState.getValue(BlockLiquid.LEVEL) == 15) {
+      if (bState.getBlock.getMaterial == Material.water && bState.getValue(BlockLiquid.LEVEL) == 0) {
         val ns = new FluidStack(FluidRegistry.WATER, 1000)
         val toFill = findFillTarget(ns, player.inventory, true)
         if (toFill != null) {
@@ -68,7 +68,7 @@ object HandPump extends BaseItem("HandPump") {
           }
           return true
         }
-      } else if (bState.getBlock.getMaterial == Material.lava && bState.getValue(BlockLiquid.LEVEL) == 15) {
+      } else if (bState.getBlock.getMaterial == Material.lava && bState.getValue(BlockLiquid.LEVEL) == 0) {
         val ns = new FluidStack(FluidRegistry.LAVA, 1000)
         val toFill = findFillTarget(ns, player.inventory, true)
         if (toFill != null) {
