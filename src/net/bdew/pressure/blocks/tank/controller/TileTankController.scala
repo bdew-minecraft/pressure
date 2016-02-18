@@ -19,7 +19,7 @@ import net.bdew.lib.multiblock.tile.TileControllerGui
 import net.bdew.lib.sensors.SensorSystem
 import net.bdew.lib.sensors.multiblock.CIRedstoneSensors
 import net.bdew.pressure.api.properties.IFilterable
-import net.bdew.pressure.blocks.tank.blocks.{BlockFluidAccess, TileTankIndicator}
+import net.bdew.pressure.blocks.tank.blocks.{BlockFluidAccess, BlockTankIndicator}
 import net.bdew.pressure.blocks.tank.{CIFilterable, MachineTank, ModuleNeedsRenderUpdate}
 import net.bdew.pressure.config.Modules
 import net.bdew.pressure.misc.CountedDataSlotTank
@@ -54,7 +54,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   def doRenderUpdate(): Unit = {
     needsRenderUpdate = false
     lastRenderUpdate = worldObj.getTotalWorldTime
-    for (ref <- modules if worldObj.getBlockState(ref).getBlock.isInstanceOf[ModuleNeedsRenderUpdate])
+    for (ref <- getModuleBlocks[ModuleNeedsRenderUpdate].keys)
       worldObj.markBlockRangeForRenderUpdate(ref, ref)
   }
 
@@ -186,7 +186,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
       tank.setCapacity(Int.MaxValue)
 
     // If we don't have indicators - don't spam updates
-    if (modules.exists(x => worldObj.getTileEntity(x).isInstanceOf[TileTankIndicator])) {
+    if (getModulePositions(BlockTankIndicator).nonEmpty) {
       tank.setUpdate(UpdateKind.SAVE, UpdateKind.GUI, UpdateKind.WORLD)
     } else {
       tank.setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
@@ -215,7 +215,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
     super.dataSlotChanged(slot)
     if (slot == tank) {
       // Send block updates if tank content changes - needed for extracells, etc.
-      for (pos <- modules if worldObj.getBlockState(pos).getBlock == BlockFluidAccess) {
+      for (pos <- getModulePositions(BlockFluidAccess)) {
         worldObj.notifyNeighborsOfStateChange(pos, BlockFluidAccess)
       }
     }
