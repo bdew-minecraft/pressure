@@ -19,6 +19,7 @@ import net.bdew.pressure.compat.enderio.EnderIOProxy
 import net.bdew.pressure.compat.opencomputers.OCBlocks
 import net.bdew.pressure.config._
 import net.bdew.pressure.misc.PressureCreativeTabs
+import net.bdew.pressure.mutilpart.MCMPHandler
 import net.bdew.pressure.network.NetworkHandler
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.item.Item
@@ -68,6 +69,8 @@ object Pressure {
       OCBlocks.init()
     if (Misc.haveModVersion("ComputerCraft"))
       CCBlocks.init()
+    if (Misc.haveModVersion("mcmultipart"))
+      MCMPHandler.init()
     NetworkHandler.init()
   }
 
