@@ -54,4 +54,7 @@ class TileInput extends TileDataSlotsTicking with FakeTank with IPressureInject 
 
   override def invalidateConnection(direction: EnumFacing) = connection = null
   override def isValidDirectionForFakeTank(dir: EnumFacing) = dir == getFacing.getOpposite
+
+  override def pressureNodePos = getPos
+  override def pressureNodeWorld = getWorld
 }

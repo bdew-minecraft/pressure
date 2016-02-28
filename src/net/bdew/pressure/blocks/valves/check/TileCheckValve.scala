@@ -34,4 +34,7 @@ class TileCheckValve extends TileEntity with IPressureEject with IPressureInject
   }
 
   override def invalidateConnection(direction: EnumFacing) = connection = null
+
+  override def pressureNodePos = getPos
+  override def pressureNodeWorld = getWorld
 }

@@ -46,5 +46,8 @@ class TileSluice extends TileDataSlotsTicking with FakeTank with IPressureEject 
   }
 
   override def isValidDirectionForFakeTank(dir: EnumFacing) = getFacing.getOpposite == dir
+
+  override def pressureNodePos = getPos
+  override def pressureNodeWorld = getWorld
 }
 

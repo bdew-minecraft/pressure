@@ -111,4 +111,7 @@ class TileRouter extends TileDataSlotsTicking with IPressureInject with IPressur
       distributeFluid(resource, doFill)
     else
       0
+
+  override def pressureNodePos = getPos
+  override def pressureNodeWorld = getWorld
 }

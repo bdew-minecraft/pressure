@@ -15,7 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
 /**
  * Tile entities that implement this interface will be able to receive fluid from the pressure system
  */
-public interface IPressureEject extends IPressureTile {
+public interface IPressureEject extends IPressureNode {
     /**
      * Called when fluid is eject from the pressure network into this TE
      *

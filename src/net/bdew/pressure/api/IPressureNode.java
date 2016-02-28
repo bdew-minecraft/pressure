@@ -12,8 +12,19 @@ package net.bdew.pressure.api;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-public interface IPressureTile {
-    BlockPos getPos();
+/**
+ * Base interface for nodes of the pressure network
+ */
+public interface IPressureNode {
+    /**
+     * Return the position of the object in world.
+     * Funny name due to reobfuscation issues.
+     */
+    BlockPos pressureNodePos();
 
-    World getWorld();
+    /**
+     * Return the world object.
+     * Funny name due to reobfuscation issues.
+     */
+    World pressureNodeWorld();
 }

@@ -10,15 +10,15 @@
 package net.bdew.pressure.pressurenet
 
 import net.bdew.lib.block.BlockFace
-import net.bdew.pressure.api.{IPressureEject, IPressureInject, IPressureTile}
+import net.bdew.pressure.api.{IPressureEject, IPressureInject, IPressureNode}
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.FluidStack
 
 trait PressureTileFace {
-  val tile: IPressureTile
+  val tile: IPressureNode
   val face: EnumFacing
-  def blockRef = tile.getPos
-  def blockRefFace = BlockFace(tile.getPos, face)
+  def blockRef = tile.pressureNodePos
+  def blockRefFace = BlockFace(tile.pressureNodePos, face)
 }
 
 case class PressureOutputFace(tile: IPressureEject, face: EnumFacing) extends PressureTileFace {

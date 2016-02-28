@@ -60,5 +60,8 @@ class TilePressureOutput extends TileOutput[OutputConfigFluid] with PressureModu
         }
       }
     }
+
+  override def pressureNodePos = getPos
+  override def pressureNodeWorld = getWorld
 }
 

@@ -33,4 +33,7 @@ class TilePressureInput extends TileModule with PressureModule with IPressureEje
   override def eject(resource: FluidStack, direction: EnumFacing, doEject: Boolean) = getCore map { core =>
     core.inputFluid(resource, doEject)
   } getOrElse 0
+
+  override def pressureNodePos = getPos
+  override def pressureNodeWorld = getWorld
 }

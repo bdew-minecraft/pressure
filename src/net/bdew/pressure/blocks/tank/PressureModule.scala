@@ -10,10 +10,10 @@
 package net.bdew.pressure.blocks.tank
 
 import net.bdew.lib.multiblock.tile.{TileController, TileModule}
-import net.bdew.pressure.api.IPressureTile
+import net.bdew.pressure.api.IPressureNode
 import net.bdew.pressure.pressurenet.Helper
 
-trait PressureModule extends TileModule with IPressureTile {
+trait PressureModule extends TileModule with IPressureNode {
   override def connect(target: TileController) {
     super.connect(target)
     Helper.notifyBlockChanged(getWorld, getPos)

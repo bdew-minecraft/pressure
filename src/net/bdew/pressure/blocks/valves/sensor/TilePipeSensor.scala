@@ -64,6 +64,9 @@ class TilePipeSensor extends TileDataSlotsTicking with IPressureEject with IPres
   }
 
   override def invalidateConnection(direction: EnumFacing) = connection = null
+
+  override def pressureNodePos = getPos
+  override def pressureNodeWorld = getWorld
 }
 
 object PipeSensorCommands extends TileCommandHandler[TilePipeSensor] {

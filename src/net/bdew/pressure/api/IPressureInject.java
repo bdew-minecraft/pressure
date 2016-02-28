@@ -11,7 +11,11 @@ package net.bdew.pressure.api;
 
 import net.minecraft.util.EnumFacing;
 
-public interface IPressureInject extends IPressureTile {
+/**
+ * Tile entities that send fluids into the pressure network need to implement this interface,
+ * then use PressureAPI.HELPER.recalculateConnectionInfo to get the actual connection object
+ */
+public interface IPressureInject extends IPressureNode {
     /**
      * Forces invalidation of connection info
      *

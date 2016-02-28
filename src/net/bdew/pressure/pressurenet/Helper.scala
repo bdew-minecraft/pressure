@@ -75,11 +75,11 @@ object Helper extends IPressureHelper {
   }
 
   override def recalculateConnectionInfo(te: IPressureInject, side: EnumFacing) =
-    if (te.getWorld.isRemote) {
+    if (te.pressureNodeWorld.isRemote) {
       Pressure.logWarn("Attempt to generate ConnectionInfo on client side from %s. This is a bug.", te)
       null
     } else {
-      PressureConnection(te, side, scanConnectedBlocks(te.getWorld, te.getPos, side, false).outputs)
+      PressureConnection(te, side, scanConnectedBlocks(te.pressureNodeWorld, te.pressureNodePos, side, false).outputs)
     }
 
   def getPipeConnections(w: IBlockAccess, pos: BlockPos): List[EnumFacing] =

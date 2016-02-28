@@ -30,5 +30,8 @@ class TileOutput extends TileDataSlots with FakeTank with IPressureEject with Ti
   }
 
   override def isValidDirectionForFakeTank(dir: EnumFacing) = getFacing == dir
+
+  override def pressureNodePos = getPos
+  override def pressureNodeWorld = getWorld
 }
 
