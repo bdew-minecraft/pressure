@@ -17,6 +17,7 @@ import net.bdew.pressure.blocks.tank.{BaseModule, ModuleNeedsRenderUpdate}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.IBlockAccess
+import net.minecraftforge.fml.common.FMLCommonHandler
 
 import scala.collection.mutable
 
@@ -31,7 +32,10 @@ object BlockTankIndicator extends BaseModule("TankIndicator", "TankBlock", class
   override def getProperties = super.getProperties ++ Position.properties.values
 
   override def getActualState(state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) = {
-    super.getActualState(state, worldIn, pos).withProperties(
+    if (FMLCommonHandler.instance().getEffectiveSide.isServer)
+    // Position calculation can't run on dedicated server and is only used for rendering. Skip it if this is called from server.
+      super.getActualState(state, worldIn, pos)
+    else super.getActualState(state, worldIn, pos).withProperties(
       Position.faces map { face =>
         val (below, above) = getPositionInColumn(worldIn, pos, face)
         Position.properties(face) -> ((below > 0, above > 0) match {
