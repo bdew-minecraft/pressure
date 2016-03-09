@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.mutilpart
 
-import mcmultipart.multipart.MultipartHelper
+import mcmultipart.multipart.{IMultipart, MultipartHelper}
 import net.bdew.pressure.api.IPressureExtension
 import net.bdew.pressure.blocks.pipe.BlockPipe
 import net.bdew.pressure.mutilpart.traits.ConnectablePart
@@ -31,18 +31,10 @@ object MCMPPressureExtension extends IPressureExtension {
   override def canPipeConnectFrom(world: IBlockAccess, pos: BlockPos, side: EnumFacing): Boolean =
     MCMPUtils.getTypedParts(classOf[ConnectablePart], world, pos).exists(_.canConnectTo(side))
 
-  override def tryPlaceBlock(w: World, pos: BlockPos, block: Block, p: EntityPlayerMP): Boolean = {
-    if (MultipartHelper.getPartContainer(w, pos) == null) return false
-    (block match {
-      case BlockPipe => Some(new PipePart)
-      case _ => None
-    }) exists { part =>
-      if (MultipartHelper.canAddPart(w, pos, part)) {
-        MultipartHelper.addPart(w, pos, part)
-        true
-      } else {
-        false
-      }
-    }
-  }
+  val blockMap = Map[Block, () => IMultipart](
+    BlockPipe -> (() => new PipePart)
+  )
+
+  override def tryPlaceBlock(w: World, pos: BlockPos, block: Block, p: EntityPlayerMP): Boolean =
+    MultipartHelper.getPartContainer(w, pos) != null && blockMap.get(block).exists(c => MultipartHelper.addPartIfPossible(w, pos, c.apply()))
 }
