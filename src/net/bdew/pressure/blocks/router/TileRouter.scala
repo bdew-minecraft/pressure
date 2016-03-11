@@ -107,7 +107,7 @@ class TileRouter extends TileDataSlotsTicking with IPressureInject with IPressur
   override def canFill(from: EnumFacing, fluid: Fluid): Boolean = isSideValidIO(from, fluid, RouterSideMode.inputs)
 
   override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int =
-    if (isSideValidIO(from, resource, RouterSideMode.inputs))
+    if (resource != null && isSideValidIO(from, resource, RouterSideMode.inputs))
       distributeFluid(resource, doFill)
     else
       0
