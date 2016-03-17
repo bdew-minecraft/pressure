@@ -17,11 +17,13 @@ import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTankInfo, IFluidHandle
  */
 trait FakeTank extends IFluidHandler {
   def isValidDirectionForFakeTank(dir: ForgeDirection): Boolean
+
   override def getTankInfo(from: ForgeDirection) =
     if (isValidDirectionForFakeTank(from))
       Array(new FluidTankInfo(null, Int.MaxValue))
     else
-      null
+      Array.empty
+
   override def canDrain(from: ForgeDirection, fluid: Fluid) = false
   override def canFill(from: ForgeDirection, fluid: Fluid) = false
   override def drain(from: ForgeDirection, maxDrain: Int, doDrain: Boolean) = null
