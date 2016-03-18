@@ -190,11 +190,11 @@ curseforge {
         }
 
         addArtifact(deobfJar) {
-            displayName = "Pressure Pipes ${simpleVersion} Source (MC ${config.minecraft.version})"
+            displayName = "Pressure Pipes ${simpleVersion} Deobfuscated (MC ${config.minecraft.version})"
         }
 
         addArtifact(sourceJarReal) {
-            displayName = "Pressure Pipes ${simpleVersion} Deobfuscated (MC ${config.minecraft.version})"
+            displayName = "Pressure Pipes ${simpleVersion} Source (MC ${config.minecraft.version})"
         }
 
         addArtifact(apiJar) {
