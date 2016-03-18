@@ -10,7 +10,7 @@
 package net.bdew.pressure.api;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
@@ -48,7 +48,8 @@ public interface IPressureExtension {
      * Attempt to place a block at the given coordinates, called on the server
      * Implement to allow alternative presentations of blocks from the mod (eg. FMP parts)
      *
+     * @param reallyPlace if false - only check that block can be placed, don't actually place it
      * @return true if block was placed successfully
      */
-    boolean tryPlaceBlock(World w, BlockPos pos, Block block, EntityPlayerMP p);
+    boolean tryPlaceBlock(World w, BlockPos pos, Block block, EntityPlayer p, boolean reallyPlace);
 }

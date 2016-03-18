@@ -14,7 +14,7 @@ import net.bdew.pressure.api.IPressureExtension
 import net.bdew.pressure.blocks.pipe.BlockPipe
 import net.bdew.pressure.mutilpart.traits.ConnectablePart
 import net.minecraft.block.Block
-import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
 
@@ -35,6 +35,11 @@ object MCMPPressureExtension extends IPressureExtension {
     BlockPipe -> (() => new PipePart)
   )
 
-  override def tryPlaceBlock(w: World, pos: BlockPos, block: Block, p: EntityPlayerMP): Boolean =
-    MultipartHelper.getPartContainer(w, pos) != null && blockMap.get(block).exists(c => MultipartHelper.addPartIfPossible(w, pos, c.apply()))
+  override def tryPlaceBlock(w: World, pos: BlockPos, block: Block, p: EntityPlayer, reallyPlace: Boolean): Boolean =
+    MultipartHelper.getPartContainer(w, pos) != null && blockMap.get(block).exists(constructor =>
+      if (reallyPlace)
+        MultipartHelper.addPartIfPossible(w, pos, constructor.apply())
+      else
+        MultipartHelper.canAddPart(w, pos, constructor.apply())
+    )
 }
