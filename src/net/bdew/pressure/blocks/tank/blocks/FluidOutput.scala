@@ -12,12 +12,14 @@ package net.bdew.pressure.blocks.tank.blocks
 import net.bdew.lib.multiblock.block.BlockOutput
 import net.bdew.lib.multiblock.data.OutputConfigFluid
 import net.bdew.pressure.blocks.tank.{BaseModule, TileFluidOutputBase}
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.block.state.IBlockState
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 
 object BlockFluidOutput extends BaseModule("TankFluidOutput", "FluidOutput", classOf[TileFluidOutput]) with BlockOutput[TileFluidOutput] {
-  override def canConnectRedstone(world: IBlockAccess, pos: BlockPos, side: EnumFacing) = true
+  override def canConnectRedstone(state: IBlockState, world: IBlockAccess, pos: BlockPos, side: EnumFacing): Boolean = true
 }
 
 class TileFluidOutput extends TileFluidOutputBase {

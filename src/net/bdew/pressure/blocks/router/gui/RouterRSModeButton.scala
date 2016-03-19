@@ -11,14 +11,16 @@ package net.bdew.pressure.blocks.router.gui
 
 import java.util.Locale
 
+import net.bdew.lib.Misc
 import net.bdew.lib.gui.widgets.Widget
 import net.bdew.lib.gui.{Point, Rect}
-import net.bdew.lib.{Client, Misc}
 import net.bdew.pressure.Textures
 import net.bdew.pressure.blocks.router.{MachineRouter, TileRouter}
 import net.bdew.pressure.network.NetworkHandler
+import net.minecraft.client.Minecraft
 import net.minecraft.client.audio.PositionedSoundRecord
-import net.minecraft.util.{EnumFacing, ResourceLocation}
+import net.minecraft.init.SoundEvents
+import net.minecraft.util.EnumFacing
 
 import scala.collection.mutable
 
@@ -40,7 +42,7 @@ class RouterRSModeButton(p: Point, te: TileRouter, side: EnumFacing) extends Wid
   }
 
   override def mouseClicked(p: Point, button: Int) {
-    Client.minecraft.getSoundHandler.playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F))
+    Minecraft.getMinecraft.getSoundHandler.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ui_button_click, 1.0F))
     NetworkHandler.sendToServer(MsgSetRouterSideControl(side, MachineRouter.rsModeOrder(te.sideControl.get(side))))
   }
 }

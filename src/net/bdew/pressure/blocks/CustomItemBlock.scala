@@ -14,24 +14,25 @@ import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.Block
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.item.{ItemBlock, ItemStack}
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.{EnumActionResult, EnumFacing, EnumHand}
 import net.minecraft.world.World
 
 class CustomItemBlock(bl: Block) extends ItemBlock(bl) {
   setCreativeTab(PressureCreativeTabs.main)
 
   override def canPlaceBlockOnSide(world: World, pos: BlockPos, side: EnumFacing, player: EntityPlayer, stack: ItemStack): Boolean =
-    world.checkNoEntityCollision(bl.getCollisionBoundingBox(world, pos, block.getDefaultState)) && (
+    world.checkNoEntityCollision(bl.getCollisionBoundingBox(block.getDefaultState, world, pos)) && (
       Helper.tryPlaceBlock(world, pos, bl, player, false) || Helper.tryPlaceBlock(world, pos.offset(side), bl, player, false))
 
-  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
     if (!world.isRemote && player.isInstanceOf[EntityPlayerMP]) {
       val p = player.asInstanceOf[EntityPlayerMP]
       if (Helper.tryPlaceBlock(world, pos, bl, p, true) || Helper.tryPlaceBlock(world, pos.offset(side), bl, p, true)) {
         if (!p.capabilities.isCreativeMode)
           player.inventory.decrStackSize(player.inventory.currentItem, 1)
-        true
-      } else false
-    } else true
+        EnumActionResult.SUCCESS
+      } else EnumActionResult.FAIL
+    } else EnumActionResult.SUCCESS
   }
 }

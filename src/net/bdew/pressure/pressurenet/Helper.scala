@@ -17,7 +17,8 @@ import net.bdew.pressure.api._
 import net.bdew.pressure.api.properties.IFilterable
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.capabilities.CapabilityManager
 

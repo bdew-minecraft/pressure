@@ -14,10 +14,11 @@ import net.bdew.lib.data.DataSlotTankBase
 import net.bdew.lib.gui._
 import net.bdew.lib.sensors.GenericSensorParameter
 import net.bdew.pressure.sensor.{Icons, Sensors}
+import net.minecraft.inventory.ClickType
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumChatFormatting
+import net.minecraft.util.text.TextFormatting
 import net.minecraftforge.fluids._
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -32,24 +33,26 @@ case class SensorFluidType[T: ClassTag](uid: String, iconName: String, accessor:
 
   override def isValidParameter(p: GenericSensorParameter, obj: TileEntity): Boolean = p.isInstanceOf[FluidTypeParameter] || p == Sensors.DisabledParameter
 
-  override def paramClicked(current: GenericSensorParameter, item: ItemStack, button: Int, mod: Int, obj: TileEntity): GenericSensorParameter = {
-    if (button == 0 && mod == 0) {
-      if (item == null) {
-        Sensors.DisabledParameter
-      } else if (FluidContainerRegistry.isContainer(item)) {
-        val fluid = FluidContainerRegistry.getFluidForFilledItem(item)
-        if (fluid != null && fluid.getFluid != null)
-          FluidTypeParameter(fluid.getFluid)
-        else
-          current
-      } else if (item.getItem.isInstanceOf[IFluidContainerItem]) {
-        val fluid = item.getItem.asInstanceOf[IFluidContainerItem].getFluid(item)
-        if (fluid != null && fluid.getFluid != null)
-          FluidTypeParameter(fluid.getFluid)
-        else
-          current
-      } else current
-    } else current
+  override def paramClicked(current: GenericSensorParameter, item: ItemStack, clickType: ClickType, dragType: Int, obj: TileEntity): GenericSensorParameter = {
+    // fixme: update button stuff
+    //    if (button == 0 && mod == 0) {
+    //      if (item == null) {
+    //        Sensors.DisabledParameter
+    //      } else if (FluidContainerRegistry.isContainer(item)) {
+    //        val fluid = FluidContainerRegistry.getFluidForFilledItem(item)
+    //        if (fluid != null && fluid.getFluid != null)
+    //          FluidTypeParameter(fluid.getFluid)
+    //        else
+    //          current
+    //      } else if (item.getItem.isInstanceOf[IFluidContainerItem]) {
+    //        val fluid = item.getItem.asInstanceOf[IFluidContainerItem].getFluid(item)
+    //        if (fluid != null && fluid.getFluid != null)
+    //          FluidTypeParameter(fluid.getFluid)
+    //        else
+    //          current
+    //      } else current
+    //    } else current
+    current
   }
 
   override def loadParameter(tag: NBTTagCompound): GenericSensorParameter =
@@ -82,12 +85,12 @@ case class SensorFluidType[T: ClassTag](uid: String, iconName: String, accessor:
       case FluidTypeParameter(fluid) =>
         List(
           fluid.getLocalizedName(new FluidStack(fluid, 1)),
-          EnumChatFormatting.GRAY + Misc.toLocal("pressure.sensor.fluid.tip.set") + EnumChatFormatting.RESET
+          TextFormatting.GRAY + Misc.toLocal("pressure.sensor.fluid.tip.set") + TextFormatting.RESET
         )
       case _ =>
         List(
           Sensors.DisabledParameter.localizedName,
-          EnumChatFormatting.GRAY + Misc.toLocal("pressure.sensor.fluid.tip.unset") + EnumChatFormatting.RESET
+          TextFormatting.GRAY + Misc.toLocal("pressure.sensor.fluid.tip.unset") + TextFormatting.RESET
         )
     }
   }

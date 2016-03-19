@@ -11,7 +11,7 @@ package net.bdew.pressure.blocks.tank.controller
 
 import net.bdew.pressure.blocks.tank.BaseController
 import net.minecraft.block.state.IBlockState
-import net.minecraft.util.BlockPos
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 object BlockTankController extends BaseController("TankController", classOf[TileTankController]) {

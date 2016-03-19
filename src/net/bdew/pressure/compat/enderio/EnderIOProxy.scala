@@ -13,7 +13,8 @@ import net.bdew.lib.Misc
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api.IFilterableProvider
 import net.bdew.pressure.pressurenet.Helper
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 import scala.language.reflectiveCalls

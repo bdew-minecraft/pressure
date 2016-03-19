@@ -16,7 +16,9 @@ import net.bdew.pressure.blocks.valves.BlockValve
 import net.bdew.pressure.misc.{DataSlotFluidAverages, FluidNameHelper}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
 import net.minecraft.util._
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.{IBlockAccess, World}
 
 object BlockPipeSensor extends BlockValve("PipeSensor") with HasTE[TilePipeSensor] with HasItemBlock {
@@ -25,11 +27,11 @@ object BlockPipeSensor extends BlockValve("PipeSensor") with HasTE[TilePipeSenso
 
   setHardness(2)
 
-  override def canProvidePower = true
+  override def canProvidePower(state: IBlockState) = true
 
-  override def getWeakPower(world: IBlockAccess, pos: BlockPos, state: IBlockState, side: EnumFacing) = {
-    val facing = getFacing(world, pos)
-    if (facing != side && facing.getOpposite != side && getSignal(world, pos))
+  override def getWeakPower(blockState: IBlockState, world: IBlockAccess, pos: BlockPos, side: EnumFacing): Int = {
+    val facing = getFacing(blockState)
+    if (facing != side && facing.getOpposite != side && getSignal(blockState))
       15
     else
       0
@@ -54,7 +56,7 @@ object BlockPipeSensor extends BlockValve("PipeSensor") with HasTE[TilePipeSenso
     }
   }
 
-  override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+  override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, hand: EnumHand, heldItem: ItemStack, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
     if (player.isSneaking) return false
     if (world.isRemote) return true
     sendAveragesToPlayer(getTE(world, pos).averages, player)

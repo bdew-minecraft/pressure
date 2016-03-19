@@ -14,7 +14,8 @@ import net.bdew.lib.gui.{BaseContainer, SlotClickable, SlotValidating}
 import net.bdew.lib.multiblock.interact.ContainerOutputFaces
 import net.bdew.pressure.blocks.tank.controller.TileTankController
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.inventory.Slot
+import net.minecraft.inventory.{ClickType, Slot}
+import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.{FluidContainerRegistry, IFluidContainerItem}
 
 class ContainerTank(val te: TileTankController, player: EntityPlayer) extends BaseContainer(te.inventory) with ContainerDataSlots with ContainerOutputFaces {
@@ -24,7 +25,8 @@ class ContainerTank(val te: TileTankController, player: EntityPlayer) extends Ba
   addSlotToContainer(new SlotValidating(te.inventory, 1, 80, 19))
 
   addSlotToContainer(new Slot(te.inventory, 2, 149, 19) with SlotClickable {
-    override def onClick(button: Int, mods: Int, player: EntityPlayer) = {
+
+    override def onClick(clickType: ClickType, dragType: Int, player: EntityPlayer): ItemStack = {
       val stack = player.inventory.getItemStack
       if (!te.getWorld.isRemote) {
         if (stack == null || stack.getItem == null) {

@@ -9,6 +9,6 @@
 
 package net.bdew.pressure.pressurenet
 
-import net.minecraft.util.BlockPos
+import net.minecraft.util.math.BlockPos
 
 case class ScanResult(inputs: Set[PressureInputFace], outputs: Set[PressureOutputFace], seen: Set[BlockPos])

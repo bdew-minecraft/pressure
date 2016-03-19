@@ -9,31 +9,30 @@
 
 package net.bdew.pressure.model
 
-import net.bdew.lib.render.Cuboid
-import net.bdew.lib.render.models.{ModelEnhancer, SmartBakedModelBuilder}
+import java.util
+
+import net.bdew.lib.render.models.ModelEnhancer
 import net.bdew.lib.render.primitive.{Texture, Vertex}
+import net.bdew.lib.render.{Cuboid, QuadBakerDefault}
 import net.bdew.pressure.blocks.router.{BlockRouter, RouterIcons}
 import net.minecraft.block.state.IBlockState
+import net.minecraft.client.renderer.block.model.BakedQuad
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
-import net.minecraft.item.ItemStack
-import net.minecraft.util.{EnumFacing, EnumWorldBlockLayer, ResourceLocation}
+import net.minecraft.util.{BlockRenderLayer, EnumFacing, ResourceLocation}
 import net.minecraftforge.client.MinecraftForgeClient
-import net.minecraftforge.client.model.IPerspectiveAwareModel
 
 object RouterOverlayModelEnhancer extends ModelEnhancer {
   lazy val faceQuads = EnumFacing.values().map(f => f -> Cuboid.face(Vertex(-0.01f, -0.01f, -0.01f), Vertex(1.01f, 1.01f, 1.01f), f)).toMap
   override val additionalTextureLocations = RouterIcons.overlays.values.toList
-  override def handleItemState(base: IPerspectiveAwareModel, stack: ItemStack, textures: Map[ResourceLocation, TextureAtlasSprite]) = base
-  override def handleBlockState(base: IPerspectiveAwareModel, state: IBlockState, additionalSprites: Map[ResourceLocation, TextureAtlasSprite]) = {
-    if (MinecraftForgeClient.getRenderLayer == EnumWorldBlockLayer.CUTOUT) {
-      val builder = new SmartBakedModelBuilder(base.getFormat)
-      builder.inheritCameraTransformsFrom(base)
-      builder.texture = base.getParticleTexture
-      for ((face, quad) <- faceQuads; mode <- BlockRouter.Properties.MODE(face).get(state))
-        builder.addQuad(face,
-          quad.withTexture(Texture(additionalSprites(RouterIcons.overlays(mode))), tint = face.getIndex, shading = false)
-        )
-      builder.build()
-    } else base
+
+  override def processQuads(state: IBlockState, side: EnumFacing, rand: Long, textures: Map[ResourceLocation, TextureAtlasSprite], base: () => util.List[BakedQuad]): util.List[BakedQuad] = {
+    if (MinecraftForgeClient.getRenderLayer == BlockRenderLayer.CUTOUT && state != null && side != null) {
+      val quad = faceQuads(side)
+      val list = base()
+      for (mode <- BlockRouter.Properties.MODE(side).get(state)) {
+        list.add(QuadBakerDefault.bakeQuad(quad.withTexture(Texture(textures(RouterIcons.overlays(mode))), tint = side.getIndex, shading = false)))
+      }
+      list
+    } else base()
   }
 }

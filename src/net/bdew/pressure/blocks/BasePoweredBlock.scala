@@ -16,7 +16,8 @@ import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyBool
 import net.minecraft.block.state.IBlockState
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.{IBlockAccess, World}
 
 class BasePoweredBlock[T <: TileFilterable](name: String, teClass: Class[T]) extends BaseBlock(name, Material.iron) with HasTE[T] with BlockFilterableRotatable with BlockFacingSignalMeta {
@@ -25,7 +26,7 @@ class BasePoweredBlock[T <: TileFilterable](name: String, teClass: Class[T]) ext
 
   setHardness(2)
 
-  override def canConnectRedstone(world: IBlockAccess, pos: BlockPos, side: EnumFacing) = {
+  override def canConnectRedstone(state: IBlockState, world: IBlockAccess, pos: BlockPos, side: EnumFacing): Boolean = {
     val facing = getFacing(world, pos)
     side != facing && side != facing.getOpposite
   }

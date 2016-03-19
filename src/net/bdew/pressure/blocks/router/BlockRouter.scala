@@ -11,7 +11,9 @@ package net.bdew.pressure.blocks.router
 
 import net.bdew.lib.PimpVanilla._
 import net.bdew.lib.block.{BaseBlock, HasTE}
+import net.bdew.lib.multiblock.block.ColorHandler
 import net.bdew.lib.property.SimpleUnlistedProperty
+import net.bdew.lib.render.ColorHandlers
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.bdew.pressure.blocks.BlockNotifyUpdates
 import net.bdew.pressure.blocks.router.data.RouterSideMode
@@ -19,9 +21,12 @@ import net.bdew.pressure.{Pressure, PressureResourceProvider}
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{BlockPos, EnumFacing, EnumWorldBlockLayer}
+import net.minecraft.item.ItemStack
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.{BlockRenderLayer, EnumFacing, EnumHand}
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.property.IExtendedBlockState
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 object BlockRouter extends BaseBlock("Router", Material.iron) with HasTE[TileRouter] with BlockNotifyUpdates with IPressureConnectableBlock {
   override val TEClass = classOf[TileRouter]
@@ -39,8 +44,8 @@ object BlockRouter extends BaseBlock("Router", Material.iron) with HasTE[TileRou
     )
   }
 
-  override def canRenderInLayer(layer: EnumWorldBlockLayer) =
-    layer == EnumWorldBlockLayer.SOLID || layer == EnumWorldBlockLayer.CUTOUT
+  override def canRenderInLayer(layer: BlockRenderLayer) =
+    layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.CUTOUT
 
   override def getUnlistedProperties = super.getUnlistedProperties ++ Properties.MODE.values
 
@@ -49,13 +54,16 @@ object BlockRouter extends BaseBlock("Router", Material.iron) with HasTE[TileRou
 
   override def isTraversable(world: IBlockAccess, pos: BlockPos) = false
 
-  override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+  override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, hand: EnumHand, heldItem: ItemStack, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
     if (player.isSneaking) return false
     if (world.isRemote) return true
     player.openGui(Pressure, cfg.guiId, world, pos.getX, pos.getY, pos.getZ)
     true
   }
 
-  override def colorMultiplier(worldIn: IBlockAccess, pos: BlockPos, index: Int) =
-    PressureResourceProvider.outputColors(index).asRGB
+  @SideOnly(Side.CLIENT)
+  override def registerItemModels(): Unit = {
+    super.registerItemModels()
+    ColorHandlers.register(this, new ColorHandler(PressureResourceProvider))
+  }
 }

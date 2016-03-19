@@ -14,7 +14,8 @@ import net.bdew.lib.data.base.TileDataSlotsTicking
 import net.bdew.pressure.blocks.TileFilterable
 import net.bdew.pressure.misc.FakeTank
 import net.minecraft.block.state.IBlockState
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
 

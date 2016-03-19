@@ -15,7 +15,8 @@ import net.bdew.lib.multiblock.tile.{TileController, TileModule}
 import net.bdew.lib.property.EnumerationProperty
 import net.bdew.pressure.blocks.tank.{BaseModule, ModuleNeedsRenderUpdate}
 import net.minecraft.block.state.IBlockState
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 import net.minecraftforge.fml.common.FMLCommonHandler
 
@@ -54,7 +55,7 @@ object BlockTankIndicator extends BaseModule("TankIndicator", "TankBlock", class
       world.getTileSafe[TileTankIndicator](p)
     } prefixLength { tileOpt =>
       tileOpt exists { tile =>
-        tile.getCore.contains(core) && shouldSideBeRendered(world, tile.getPos.offset(face), face)
+        tile.getCore.contains(core) && shouldSideBeRendered(world.getBlockState(tile.getPos), world, tile.getPos.offset(face), face)
       }
     }
   }

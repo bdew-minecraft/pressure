@@ -22,7 +22,7 @@ case class PressureConnection(origin: IPressureInject, side: EnumFacing, tiles: 
     // and if a loop is detected we blow up the block.
 
     if (Helper.recursionGuard.value.contains(this)) {
-      Pressure.logInfo("Detected loop, blowing up %s (dim %d)", origin.pressureNodePos, origin.pressureNodeWorld.provider.getDimensionId)
+      Pressure.logInfo("Detected loop, blowing up %s (dim %d)", origin.pressureNodePos, origin.pressureNodeWorld.provider.getDimension)
       origin.pressureNodeWorld.setBlockToAir(origin.pressureNodePos)
       origin.pressureNodeWorld.createExplosion(null, origin.pressureNodePos.getX, origin.pressureNodePos.getY, origin.pressureNodePos.getZ, 1, true)
       return 0

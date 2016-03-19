@@ -15,7 +15,8 @@ import net.bdew.pressure.api.{IPressureConnection, IPressureEject, IPressureInje
 import net.bdew.pressure.misc.{DataSlotFluidAverages, DataSlotFluidCounts, FluidMapHelpers}
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.state.IBlockState
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 

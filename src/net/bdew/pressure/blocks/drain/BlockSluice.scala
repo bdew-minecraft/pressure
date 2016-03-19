@@ -11,7 +11,8 @@ package net.bdew.pressure.blocks.drain
 
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.bdew.pressure.blocks.{BaseIOBlock, BlockNotifyUpdates}
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 
 object BlockSluice extends BaseIOBlock("sluice", classOf[TileSluice]) with BlockNotifyUpdates with IPressureConnectableBlock {

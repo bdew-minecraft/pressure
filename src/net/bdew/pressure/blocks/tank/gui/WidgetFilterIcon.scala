@@ -13,7 +13,7 @@ import net.bdew.lib.Misc
 import net.bdew.lib.gui.widgets.Widget
 import net.bdew.lib.gui.{Color, Point, Rect}
 import net.bdew.pressure.blocks.tank.controller.TileTankController
-import net.minecraft.util.EnumChatFormatting
+import net.minecraft.util.text.TextFormatting
 import net.minecraftforge.fluids.FluidStack
 
 import scala.collection.mutable
@@ -29,7 +29,7 @@ class WidgetFilterIcon(p: Point, te: TileTankController) extends Widget {
     tip += te.getFluidFilter map { fluid =>
       Misc.toLocalF("pressure.gui.tank.filter", fluid.getLocalizedName(new FluidStack(fluid, 1)))
     } getOrElse Misc.toLocal("pressure.gui.tank.nofilter")
-    tip += EnumChatFormatting.GRAY + Misc.toLocal("pressure.gui.tank.filter.tip1") + EnumChatFormatting.RESET
-    tip += EnumChatFormatting.GRAY + Misc.toLocal("pressure.gui.tank.filter.tip2") + EnumChatFormatting.RESET
+    tip += TextFormatting.GRAY + Misc.toLocal("pressure.gui.tank.filter.tip1") + TextFormatting.RESET
+    tip += TextFormatting.GRAY + Misc.toLocal("pressure.gui.tank.filter.tip2") + TextFormatting.RESET
   }
 }

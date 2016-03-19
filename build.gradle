@@ -85,12 +85,12 @@ repositories {
 dependencies {
     compile "net.bdew:bdlib:${config.bdlib.version}-mc${config.minecraft.version}:dev"
 
-    deobfCompile "mezz.jei:jei_${config.minecraft.version}:${config.jei.version}"
-    deobfCompile "mcp.mobius.waila:Waila:${config.waila.version}"
-    deobfCompile "MCMultiPart:MCMultiPart:${config.mcmultipart.version}:universal"
+//    deobfCompile "mezz.jei:jei_${config.minecraft.version}:${config.jei.version}"
+//    deobfCompile "mcp.mobius.waila:Waila:${config.waila.version}"
+//    deobfCompile "MCMultiPart:MCMultiPart:${config.mcmultipart.version}:universal"
 
-    compile "net.bdew.thirdparty:computercraft:${config.computercraft.version}-mc${config.minecraft.version}:api"
-    compile "li.cil.oc:OpenComputers:MC${config.minecraft.version}-${config.opencomputers.version}:api"
+//    compile "net.bdew.thirdparty:computercraft:${config.computercraft.version}-mc${config.minecraft.version}:api"
+//    compile "li.cil.oc:OpenComputers:MC${config.minecraft.version}-${config.opencomputers.version}:api"
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens

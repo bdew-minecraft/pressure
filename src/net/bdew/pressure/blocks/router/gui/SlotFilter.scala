@@ -11,14 +11,15 @@ package net.bdew.pressure.blocks.router.gui
 
 import net.bdew.lib.gui.SlotClickable
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.inventory.Slot
+import net.minecraft.inventory.{ClickType, Slot}
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.{FluidContainerRegistry, IFluidContainerItem}
 
 class SlotFilter(container: ContainerRouter, index: Int, x: Int, y: Int) extends Slot(container.inventory, index, x, y) with SlotClickable {
   val dir = EnumFacing.getFront(index)
-  override def onClick(button: Int, mods: Int, player: EntityPlayer): ItemStack = {
+
+  override def onClick(clickType: ClickType, dragType: Int, player: EntityPlayer): ItemStack = {
     val stack = player.inventory.getItemStack
     if (!container.te.getWorld.isRemote) {
       if (stack == null || stack.getItem == null) {

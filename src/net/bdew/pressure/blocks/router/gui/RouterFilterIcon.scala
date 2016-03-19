@@ -13,7 +13,8 @@ import net.bdew.lib.Misc
 import net.bdew.lib.gui.widgets.Widget
 import net.bdew.lib.gui.{Color, Point, Rect}
 import net.bdew.pressure.blocks.router.TileRouter
-import net.minecraft.util.{EnumChatFormatting, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.text.TextFormatting
 import net.minecraftforge.fluids.FluidStack
 
 import scala.collection.mutable
@@ -33,7 +34,7 @@ class RouterFilterIcon(p: Point, te: TileRouter, side: EnumFacing) extends Widge
     } else {
       tip += Misc.toLocal("pressure.gui.tank.nofilter")
     }
-    tip += EnumChatFormatting.GRAY + Misc.toLocal("pressure.gui.tank.filter.tip1") + EnumChatFormatting.RESET
-    tip += EnumChatFormatting.GRAY + Misc.toLocal("pressure.gui.tank.filter.tip2") + EnumChatFormatting.RESET
+    tip += TextFormatting.GRAY + Misc.toLocal("pressure.gui.tank.filter.tip1") + TextFormatting.RESET
+    tip += TextFormatting.GRAY + Misc.toLocal("pressure.gui.tank.filter.tip2") + TextFormatting.RESET
   }
 }

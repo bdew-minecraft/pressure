@@ -14,13 +14,14 @@ import net.bdew.lib.items.BaseItem
 import net.bdew.pressure.pressurenet.{Helper, ScanResult}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.{EnumActionResult, EnumFacing, EnumHand}
 import net.minecraft.world.World
 
 object ItemDebugger extends BaseItem("Debugger") {
   setMaxStackSize(1)
 
-  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
     import net.bdew.lib.helpers.ChatHelper._
     if (!world.isRemote) {
       val br = pos
@@ -36,6 +37,6 @@ object ItemDebugger extends BaseItem("Debugger") {
       player.addChatMessage("PConn: " + Helper.getPipeConnections(world, br).mkString(","))
       player.addChatMessage("Scanned %d blocks, took %d μs".format(seen.size, scanTime / 1000))
     }
-    true
+    EnumActionResult.SUCCESS
   }
 }

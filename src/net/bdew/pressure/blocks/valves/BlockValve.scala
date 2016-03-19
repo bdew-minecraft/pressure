@@ -18,14 +18,15 @@ import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyBool
 import net.minecraft.block.state.IBlockState
-import net.minecraft.util.{BlockPos, EnumFacing}
-import net.minecraft.world.{IBlockAccess, World}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
+import net.minecraft.world.IBlockAccess
 
 class BlockValve(name: String) extends BaseBlock(name, Material.iron) with BaseRotatableBlock with IPressureConnectableBlock with BlockNotifyUpdates with BlockFacingSignalMeta {
   // ==== BLOCK SETTINGS ====
 
-  override def isOpaqueCube = false
-  override def isFullCube = false
+  override def isOpaqueCube(state: IBlockState) = false
+  override def isFullCube(state: IBlockState) = false
   override def getDefaultFacing: EnumFacing = EnumFacing.NORTH
 
   object Properties {
@@ -61,32 +62,14 @@ class BlockValve(name: String) extends BaseBlock(name, Material.iron) with BaseR
   // ==== BOUNDS ====
 
   val boundsFromFacing = Map(
-    EnumFacing.UP ->(0.2F, 0.125F, 0.2F, 0.8F, 0.875F, 0.8F),
-    EnumFacing.DOWN ->(0.2F, 0.125F, 0.2F, 0.8F, 0.875F, 0.8F),
-    EnumFacing.NORTH ->(0.2F, 0.2F, 0.125F, 0.8F, 0.8F, 0.875F),
-    EnumFacing.SOUTH ->(0.2F, 0.2F, 0.125F, 0.8F, 0.8F, 0.875F),
-    EnumFacing.EAST ->(0.125F, 0.2F, 0.2F, 0.875F, 0.8F, 0.8F),
-    EnumFacing.WEST ->(0.125F, 0.2F, 0.2F, 0.875F, 0.8F, 0.8F)
+    EnumFacing.UP -> new AxisAlignedBB(0.2F, 0.125F, 0.2F, 0.8F, 0.875F, 0.8F),
+    EnumFacing.DOWN -> new AxisAlignedBB(0.2F, 0.125F, 0.2F, 0.8F, 0.875F, 0.8F),
+    EnumFacing.NORTH -> new AxisAlignedBB(0.2F, 0.2F, 0.125F, 0.8F, 0.8F, 0.875F),
+    EnumFacing.SOUTH -> new AxisAlignedBB(0.2F, 0.2F, 0.125F, 0.8F, 0.8F, 0.875F),
+    EnumFacing.EAST -> new AxisAlignedBB(0.125F, 0.2F, 0.2F, 0.875F, 0.8F, 0.8F),
+    EnumFacing.WEST -> new AxisAlignedBB(0.125F, 0.2F, 0.2F, 0.875F, 0.8F, 0.8F)
   )
 
-  val setBlockBoundsTupled = (setBlockBounds _).tupled
-
-  override def setBlockBoundsBasedOnState(world: IBlockAccess, pos: BlockPos): Unit =
-    setBlockBoundsTupled(boundsFromFacing(
-      // Minecraft calls this *before* block is placed and can have any kind of state
-      // from World.canBlockBePlaced for some fucking reason
-      if (world.getBlockState(pos).getBlock == this)
-        getFacing(world, pos)
-      else
-        getDefaultFacing
-    ))
-
-  override def getCollisionBoundingBox(w: World, pos: BlockPos, state: IBlockState) = {
-    setBlockBoundsBasedOnState(w, pos)
-    super.getCollisionBoundingBox(w, pos, state)
-  }
-
-  override def setBlockBoundsForItemRender(): Unit = {
-    setBlockBoundsTupled(boundsFromFacing(getDefaultFacing))
-  }
+  override def getBoundingBox(state: IBlockState, source: IBlockAccess, pos: BlockPos): AxisAlignedBB =
+    boundsFromFacing(getFacing(state))
 }

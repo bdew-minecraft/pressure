@@ -16,12 +16,13 @@ import net.bdew.lib.items.BaseItem
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.config.{Config, Tuning}
 import net.bdew.pressure.misc.PressureCreativeTabs
-import net.minecraft.client.resources.model.ModelResourceLocation
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.{EnumActionResult, EnumFacing, EnumHand}
 import net.minecraft.world.World
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.fluids._
@@ -114,18 +115,18 @@ object Canister extends BaseItem("Canister") with IFluidContainerItem {
     }
   }
 
-  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
-    if (world.isRemote) return true
+  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
+    if (world.isRemote) return EnumActionResult.SUCCESS
     val te = world.getTileEntity(pos)
     if (te != null && te.isInstanceOf[IFluidHandler]) {
       val fh = te.asInstanceOf[IFluidHandler]
       val fl = drain(stack, maxPour, false)
-      if (fl == null) return false
+      if (fl == null) return EnumActionResult.FAIL
       val toFill = fh.fill(side, fl, false)
       if (toFill > 0) {
         fh.fill(side, drain(stack, toFill, true), true)
-        player.swingItem()
-        return true
+        player.swingArm(hand)
+        return EnumActionResult.SUCCESS
       }
     } else {
       val p = pos.offset(side)
@@ -139,7 +140,7 @@ object Canister extends BaseItem("Canister") with IFluidContainerItem {
       }
     }
 
-    return false
+    return EnumActionResult.FAIL
   }
 
   @SideOnly(Side.CLIENT)

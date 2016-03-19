@@ -14,12 +14,13 @@ import net.bdew.lib.multiblock.tile.TileModule
 import net.bdew.pressure.api.{IPressureConnectableBlock, IPressureEject}
 import net.bdew.pressure.blocks.BlockNotifyUpdates
 import net.bdew.pressure.blocks.tank.{BaseModule, PressureModule}
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 import net.minecraftforge.fluids.FluidStack
 
 object BlockPressureInput extends BaseModule("TankPressureInput", "FluidInput", classOf[TilePressureInput])
-with BlockNotifyUpdates with IPressureConnectableBlock {
+  with BlockNotifyUpdates with IPressureConnectableBlock {
   override def canConnectTo(world: IBlockAccess, pos: BlockPos, side: EnumFacing) =
     getTE(world, pos).exists(_.getCore.isDefined)
 

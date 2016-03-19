@@ -11,7 +11,8 @@ package net.bdew.pressure.blocks.input
 
 import net.bdew.pressure.api.IPressureConnectableBlock
 import net.bdew.pressure.blocks.{BasePoweredBlock, BlockNotifyUpdates}
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 
 object BlockInput extends BasePoweredBlock("input", classOf[TileInput]) with BlockNotifyUpdates with IPressureConnectableBlock {

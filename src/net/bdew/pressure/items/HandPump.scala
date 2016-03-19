@@ -14,9 +14,11 @@ import net.bdew.pressure.config.Tuning
 import net.minecraft.block.material.Material
 import net.minecraft.block.{Block, BlockLiquid}
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.SoundEvents
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.{ActionResult, EnumActionResult, EnumFacing, EnumHand}
 import net.minecraft.world.World
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
@@ -58,7 +60,7 @@ object HandPump extends BaseItem("HandPump") {
     } else {
       //todo: do we still need this?
       val bState = world.getBlockState(pos)
-      if (bState.getBlock.getMaterial == Material.water && bState.getValue(BlockLiquid.LEVEL) == 0) {
+      if (bState.getBlock.getMaterial(bState) == Material.water && bState.getValue(BlockLiquid.LEVEL) == 0) {
         val ns = new FluidStack(FluidRegistry.WATER, 1000)
         val toFill = findFillTarget(ns, player.inventory, true)
         if (toFill != null) {
@@ -68,7 +70,7 @@ object HandPump extends BaseItem("HandPump") {
           }
           return true
         }
-      } else if (bState.getBlock.getMaterial == Material.lava && bState.getValue(BlockLiquid.LEVEL) == 0) {
+      } else if (bState.getBlock.getMaterial(bState) == Material.lava && bState.getValue(BlockLiquid.LEVEL) == 0) {
         val ns = new FluidStack(FluidRegistry.LAVA, 1000)
         val toFill = findFillTarget(ns, player.inventory, true)
         if (toFill != null) {
@@ -100,27 +102,27 @@ object HandPump extends BaseItem("HandPump") {
     return false
   }
 
-  override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
-    if (player.isSneaking) return stack
+  override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer, hand: EnumHand): ActionResult[ItemStack] = {
+    if (player.isSneaking) return new ActionResult[ItemStack](EnumActionResult.PASS, stack)
     val mop = getMovingObjectPositionFromPlayer(world, player, true)
-    if (mop == null) return stack
+    if (mop == null) return new ActionResult[ItemStack](EnumActionResult.PASS, stack)
 
     val block = world.getBlockState(mop.getBlockPos).getBlock
 
     if (drainBlock(world, block, mop.getBlockPos, stack, mop.sideHit.getOpposite, player)) {
       if (!world.isRemote)
         player.inventoryContainer.detectAndSendChanges()
-      player.swingItem()
-      player.playSound("random.drink", 0.5F, world.rand.nextFloat * 0.1F + 0.9F)
-      return stack
+      player.swingArm(hand)
+      player.playSound(SoundEvents.entity_generic_drink, 0.5F, world.rand.nextFloat * 0.1F + 0.9F)
+      return new ActionResult[ItemStack](EnumActionResult.SUCCESS, stack)
     }
 
-    return stack
+    return new ActionResult[ItemStack](EnumActionResult.FAIL, stack)
   }
 
   @SubscribeEvent
   def onInteract(ev: PlayerInteractEvent) {
-    val item = ev.entityPlayer.getHeldItem
+    val item = ev.entityPlayer.getHeldItem(EnumHand.MAIN_HAND)
     if (ev.action == Action.RIGHT_CLICK_BLOCK && item != null && item.getItem == this && !ev.entityPlayer.isSneaking) ev.setCanceled(true)
   }
 }

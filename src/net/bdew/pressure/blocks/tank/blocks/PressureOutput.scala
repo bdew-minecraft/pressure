@@ -17,7 +17,9 @@ import net.bdew.pressure.api.{IPressureConnectableBlock, IPressureConnection, IP
 import net.bdew.pressure.blocks.BlockNotifyUpdates
 import net.bdew.pressure.blocks.tank.{BaseModule, PressureModule}
 import net.bdew.pressure.pressurenet.Helper
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.block.state.IBlockState
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 
 object BlockPressureOutput extends BaseModule("TankPressureOutput", "FluidOutput", classOf[TilePressureOutput])
@@ -25,7 +27,7 @@ with BlockOutput[TilePressureOutput] with BlockNotifyUpdates with IPressureConne
   override def canConnectTo(world: IBlockAccess, pos: BlockPos, side: EnumFacing) =
     getTE(world, pos).exists(_.getCore.isDefined)
   override def isTraversable(world: IBlockAccess, pos: BlockPos) = false
-  override def canConnectRedstone(world: IBlockAccess, pos: BlockPos, side: EnumFacing) = true
+  override def canConnectRedstone(state: IBlockState, world: IBlockAccess, pos: BlockPos, side: EnumFacing): Boolean = true
 }
 
 class TilePressureOutput extends TileOutput[OutputConfigFluid] with PressureModule with RSControllableOutput with IPressureInject {

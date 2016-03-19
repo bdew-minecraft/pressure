@@ -18,8 +18,9 @@ import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyBool
 import net.minecraft.block.state.IBlockState
-import net.minecraft.util.{BlockPos, EnumFacing}
-import net.minecraft.world.{IBlockAccess, World}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
+import net.minecraft.world.IBlockAccess
 
 object BlockPipe extends BaseBlock("pipe", Material.iron) with IPressureConnectableBlock with BlockNotifyUpdates with HasItemBlock {
   override val ItemBlockClass = classOf[CustomItemBlock]
@@ -60,11 +61,11 @@ object BlockPipe extends BaseBlock("pipe", Material.iron) with IPressureConnecta
 
   override def getMetaFromState(state: IBlockState) = 0
 
-  override def isOpaqueCube = false
-  override def isFullCube = false
+  override def isOpaqueCube(state: IBlockState) = false
+  override def isFullCube(state: IBlockState) = false
 
-  override def setBlockBoundsBasedOnState(w: IBlockAccess, pos: BlockPos) {
-    val connections = Helper.getPipeConnections(w, pos)
+  override def getBoundingBox(state: IBlockState, source: IBlockAccess, pos: BlockPos): AxisAlignedBB = {
+    val connections = Helper.getPipeConnections(source, pos)
     val minX = if (connections.contains(EnumFacing.WEST)) 0 else 0.2F
     val maxX = if (connections.contains(EnumFacing.EAST)) 1 else 0.8F
 
@@ -74,16 +75,7 @@ object BlockPipe extends BaseBlock("pipe", Material.iron) with IPressureConnecta
     val minZ = if (connections.contains(EnumFacing.NORTH)) 0 else 0.2F
     val maxZ = if (connections.contains(EnumFacing.SOUTH)) 1 else 0.8F
 
-    this.setBlockBounds(minX, minY, minZ, maxX, maxY, maxZ)
-  }
-
-  override def getCollisionBoundingBox(w: World, pos: BlockPos, state: IBlockState) = {
-    setBlockBoundsBasedOnState(w, pos)
-    super.getCollisionBoundingBox(w, pos, state)
-  }
-
-  override def setBlockBoundsForItemRender() {
-    this.setBlockBounds(0, 0, 0, 1, 1, 1)
+    new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ)
   }
 
   override def canConnectTo(world: IBlockAccess, pos: BlockPos, side: EnumFacing) = true

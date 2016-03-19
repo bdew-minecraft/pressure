@@ -14,7 +14,10 @@ import net.bdew.lib.block.{BaseBlock, HasTE}
 import net.bdew.pressure.model.FluidFilterProperty
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{BlockPos, ChatComponentTranslation, EnumFacing}
+import net.minecraft.item.ItemStack
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.text.TextComponentTranslation
+import net.minecraft.util.{EnumFacing, EnumHand}
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.property.IExtendedBlockState
 import net.minecraftforge.fluids.{FluidContainerRegistry, IFluidContainerItem}
@@ -29,17 +32,15 @@ trait BlockFilterable extends BaseBlock {
     getTE(world, pos).flatMap(_.getFluidFilter).map(fluid => st.withProperty(FluidFilterProperty, fluid)).getOrElse(st)
   }
 
-  override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
-    if (!player.isSneaking && player.getCurrentEquippedItem != null) {
-      val item = player.getCurrentEquippedItem
-
+  override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, hand: EnumHand, heldItem: ItemStack, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+    if (!player.isSneaking && heldItem != null) {
       val newFilter =
-        if (FluidContainerRegistry.isEmptyContainer(item)) {
+        if (FluidContainerRegistry.isEmptyContainer(heldItem)) {
           null
-        } else if (FluidContainerRegistry.isFilledContainer(item)) {
-          FluidContainerRegistry.getFluidForFilledItem(item)
-        } else if (item.getItem.isInstanceOf[IFluidContainerItem]) {
-          item.getItem.asInstanceOf[IFluidContainerItem].getFluid(item)
+        } else if (FluidContainerRegistry.isFilledContainer(heldItem)) {
+          FluidContainerRegistry.getFluidForFilledItem(heldItem)
+        } else if (heldItem.getItem.isInstanceOf[IFluidContainerItem]) {
+          heldItem.getItem.asInstanceOf[IFluidContainerItem].getFluid(heldItem)
         } else {
           return false
         }
@@ -48,10 +49,10 @@ trait BlockFilterable extends BaseBlock {
 
       if (newFilter == null) {
         getTE(world, pos).FilterableImpl.clearFluidFilter()
-        player.addChatMessage(new ChatComponentTranslation("pressure.label.filter.unset"))
+        player.addChatMessage(new TextComponentTranslation("pressure.label.filter.unset"))
       } else {
         getTE(world, pos).FilterableImpl.setFluidFilter(newFilter.getFluid)
-        player.addChatMessage(new ChatComponentTranslation("pressure.label.filter.set", newFilter.getFluid.getLocalizedName(newFilter)))
+        player.addChatMessage(new TextComponentTranslation("pressure.label.filter.set", newFilter.getFluid.getLocalizedName(newFilter)))
       }
 
       true

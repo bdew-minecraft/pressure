@@ -9,18 +9,19 @@
 
 package net.bdew.pressure.model
 
+import java.util
+
 import net.bdew.lib.Client
 import net.bdew.lib.property.SimpleUnlistedProperty
-import net.bdew.lib.render.models.{BakedModelAdditionalFaceQuads, ModelEnhancer}
+import net.bdew.lib.render.models.ModelEnhancer
 import net.bdew.lib.render.primitive.{Texture, UV, Vertex}
-import net.bdew.lib.render.{Cuboid, QuadBaker}
+import net.bdew.lib.render.{Cuboid, QuadBakerDefault}
 import net.bdew.lib.rotate.Properties
 import net.minecraft.block.state.IBlockState
+import net.minecraft.client.renderer.block.model.BakedQuad
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
-import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing._
 import net.minecraft.util.{EnumFacing, ResourceLocation}
-import net.minecraftforge.client.model.IPerspectiveAwareModel
 import net.minecraftforge.fluids.Fluid
 
 object FluidFilterProperty extends SimpleUnlistedProperty("filter", classOf[Fluid]) {
@@ -28,7 +29,7 @@ object FluidFilterProperty extends SimpleUnlistedProperty("filter", classOf[Flui
 }
 
 class BaseFluidFilterModelEnhancer(size: Float) extends ModelEnhancer {
-  val quads = {
+  val faceQuads = {
     val start = (8f - size / 2f) / 16f
     val end = (8f + size / 2f) / 16f
     val offset1 = -0.01f
@@ -46,23 +47,14 @@ class BaseFluidFilterModelEnhancer(size: Float) extends ModelEnhancer {
 
   def sidesWithIcon(state: IBlockState): Set[EnumFacing] = EnumFacing.values().toSet
 
-  override def handleItemState(base: IPerspectiveAwareModel, stack: ItemStack, textures: Map[ResourceLocation, TextureAtlasSprite]) = base
-
-  override def handleBlockState(base: IPerspectiveAwareModel, state: IBlockState, additionalSprites: Map[ResourceLocation, TextureAtlasSprite]) = {
-    val quadBaker = new QuadBaker(base.getFormat)
-    FluidFilterProperty.get(state) map { fluid =>
-      val sides = sidesWithIcon(state)
-
+  override def processQuads(state: IBlockState, face: EnumFacing, rand: Long, textures: Map[ResourceLocation, TextureAtlasSprite], base: () => util.List[BakedQuad]): util.List[BakedQuad] = {
+    val quads = base()
+    for (fluid <- FluidFilterProperty.get(state) if state != null && face != null && sidesWithIcon(state).contains(face)) {
       val icon = Texture(Client.textureMapBlocks.getAtlasSprite(fluid.getStill.toString),
         UV(8f - size / 2f, 8f - size / 2f), UV(8f + size / 2f, 8f + size / 2f))
-
-      val baked =
-        for ((side, quad) <- quads if sides.contains(side)) yield {
-          side -> List(quadBaker.bakeQuad(quad.withTexture(icon, shading = false)))
-        }
-
-      new BakedModelAdditionalFaceQuads(base, baked.toMap)
-    } getOrElse base
+      quads.add(QuadBakerDefault.bakeQuad(faceQuads(face).withTexture(icon, shading = false)))
+    }
+    quads
   }
 }
 

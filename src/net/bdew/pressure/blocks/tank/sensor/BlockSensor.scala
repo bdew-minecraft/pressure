@@ -15,7 +15,7 @@ import net.bdew.pressure.blocks.tank.BaseModule
 import net.bdew.pressure.config.Config
 import net.bdew.pressure.sensor.Sensors
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.BlockPos
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
