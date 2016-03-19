@@ -66,8 +66,8 @@ object Pressure {
       OCBlocks.init()
     if (Misc.haveModVersion("ComputerCraft"))
       CCBlocks.init()
-    if (Misc.haveModVersion("mcmultipart"))
-      MCMPHandler.init()
+    //    if (Misc.haveModVersion("mcmultipart"))
+    //      MCMPHandler.init()
     NetworkHandler.init()
   }
 
