@@ -26,7 +26,7 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.item.ItemStack
 import net.minecraft.util.{EnumFacing, ResourceLocation}
 import net.minecraft.world.World
-import net.minecraftforge.client.model.TRSRTransformation
+import net.minecraftforge.common.model.TRSRTransformation
 import org.apache.commons.lang3.tuple.Pair
 
 object CanisterModelEnhancer extends ModelEnhancer {
