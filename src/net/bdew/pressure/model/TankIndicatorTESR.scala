@@ -11,7 +11,7 @@ package net.bdew.pressure.model
 
 import net.bdew.lib.gui.Color
 import net.bdew.lib.render.primitive.{Texture, UV, Vertex}
-import net.bdew.lib.render.{Cuboid, QuadRender}
+import net.bdew.lib.render.{Cuboid, WorldQuadRender}
 import net.bdew.lib.{Client, Misc}
 import net.bdew.pressure.blocks.tank.blocks.{BlockTankIndicator, TileTankIndicator}
 import net.minecraft.client.renderer._
@@ -61,7 +61,7 @@ object TankIndicatorTESR extends TileEntitySpecialRenderer[TileTankIndicator] {
         quad(face, low, low + span * myFluid).withTexture(Texture(sprite, UV(7, low * 16f), UV(9, high * 16f)))
       }
 
-      QuadRender.renderQuads(quads)
+      WorldQuadRender.renderQuads(quads)
 
       GlStateManager.enableLighting()
       GlStateManager.disableBlend()

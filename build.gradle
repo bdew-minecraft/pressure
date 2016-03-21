@@ -85,7 +85,7 @@ repositories {
 dependencies {
     compile "net.bdew:bdlib:${config.bdlib.version}-mc${config.minecraft.version}:dev"
 
-//    deobfCompile "mezz.jei:jei_${config.minecraft.version}:${config.jei.version}"
+    deobfCompile "mezz.jei:jei_${config.minecraft.version}:${config.jei.version}"
 //    deobfCompile "mcp.mobius.waila:Waila:${config.waila.version}"
 //    deobfCompile "MCMultiPart:MCMultiPart:${config.mcmultipart.version}:universal"
 

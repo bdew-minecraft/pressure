@@ -13,8 +13,8 @@ import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTankInfo, IFluidHandler}
 
 /**
- * Mixin that makes a TE look like a tank but not do anything. Used to make pipes from other mods connect correctly.
- */
+  * Mixin that makes a TE look like a tank but not do anything. Used to make pipes from other mods connect correctly.
+  */
 trait FakeTank extends IFluidHandler {
   def isValidDirectionForFakeTank(dir: EnumFacing): Boolean
 
