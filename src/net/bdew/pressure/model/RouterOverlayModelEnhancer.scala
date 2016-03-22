@@ -9,8 +9,6 @@
 
 package net.bdew.pressure.model
 
-import java.util
-
 import net.bdew.lib.render.models.ModelEnhancer
 import net.bdew.lib.render.primitive.{Texture, Vertex}
 import net.bdew.lib.render.{Cuboid, QuadBakerDefault}
@@ -25,14 +23,14 @@ object RouterOverlayModelEnhancer extends ModelEnhancer {
   lazy val faceQuads = EnumFacing.values().map(f => f -> Cuboid.face(Vertex(-0.01f, -0.01f, -0.01f), Vertex(1.01f, 1.01f, 1.01f), f)).toMap
   override val additionalTextureLocations = RouterIcons.overlays.values.toList
 
-  override def processQuads(state: IBlockState, side: EnumFacing, rand: Long, textures: Map[ResourceLocation, TextureAtlasSprite], base: () => util.List[BakedQuad]): util.List[BakedQuad] = {
-    if (MinecraftForgeClient.getRenderLayer == BlockRenderLayer.CUTOUT && state != null && side != null) {
-      val quad = faceQuads(side)
-      val list = base()
-      for (mode <- BlockRouter.Properties.MODE(side).get(state)) {
-        list.add(QuadBakerDefault.bakeQuad(quad.withTexture(Texture(textures(RouterIcons.overlays(mode))), tint = side.getIndex, shading = false)))
-      }
-      list
-    } else base()
+  override def processBlockQuads(state: IBlockState, side: EnumFacing, rand: Long, textures: Map[ResourceLocation, TextureAtlasSprite], base: () => List[BakedQuad]) = {
+    super.processBlockQuads(state, side, rand, textures, base) ++ {
+      if (MinecraftForgeClient.getRenderLayer == BlockRenderLayer.CUTOUT && state != null && side != null) {
+        val quad = faceQuads(side)
+        for (mode <- BlockRouter.Properties.MODE(side).get(state)) yield {
+          QuadBakerDefault.bakeQuad(quad.withTexture(Texture(textures(RouterIcons.overlays(mode))), tint = side.getIndex, shading = false))
+        }
+      } else List.empty
+    }
   }
 }

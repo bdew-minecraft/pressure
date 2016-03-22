@@ -9,8 +9,6 @@
 
 package net.bdew.pressure.model
 
-import java.util
-
 import net.bdew.lib.Client
 import net.bdew.lib.property.SimpleUnlistedProperty
 import net.bdew.lib.render.models.ModelEnhancer
@@ -47,14 +45,14 @@ class BaseFluidFilterModelEnhancer(size: Float) extends ModelEnhancer {
 
   def sidesWithIcon(state: IBlockState): Set[EnumFacing] = EnumFacing.values().toSet
 
-  override def processQuads(state: IBlockState, face: EnumFacing, rand: Long, textures: Map[ResourceLocation, TextureAtlasSprite], base: () => util.List[BakedQuad]): util.List[BakedQuad] = {
-    val quads = base()
-    for (fluid <- FluidFilterProperty.get(state) if state != null && face != null && sidesWithIcon(state).contains(face)) {
-      val icon = Texture(Client.textureMapBlocks.getAtlasSprite(fluid.getStill.toString),
-        UV(8f - size / 2f, 8f - size / 2f), UV(8f + size / 2f, 8f + size / 2f))
-      quads.add(QuadBakerDefault.bakeQuad(faceQuads(face).withTexture(icon, shading = false)))
+  override def processBlockQuads(state: IBlockState, face: EnumFacing, rand: Long, textures: Map[ResourceLocation, TextureAtlasSprite], base: () => List[BakedQuad]) = {
+    super.processBlockQuads(state, face, rand, textures, base) ++ {
+      for (fluid <- FluidFilterProperty.get(state) if state != null && face != null && sidesWithIcon(state).contains(face)) yield {
+        val icon = Texture(Client.textureMapBlocks.getAtlasSprite(fluid.getStill.toString),
+          UV(8f - size / 2f, 8f - size / 2f), UV(8f + size / 2f, 8f + size / 2f))
+        QuadBakerDefault.bakeQuad(faceQuads(face).withTexture(icon, shading = false))
+      }
     }
-    quads
   }
 }
 
