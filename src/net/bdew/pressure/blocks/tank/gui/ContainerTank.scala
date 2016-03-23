@@ -26,7 +26,7 @@ class ContainerTank(val te: TileTankController, player: EntityPlayer) extends Ba
 
   addSlotToContainer(new Slot(te.inventory, 2, 149, 19) with SlotClickable {
 
-    override def onClick(clickType: ClickType, dragType: Int, player: EntityPlayer): ItemStack = {
+    override def onClick(clickType: ClickType, button: Int, player: EntityPlayer): ItemStack = {
       val stack = player.inventory.getItemStack
       if (!te.getWorld.isRemote) {
         if (stack == null || stack.getItem == null) {

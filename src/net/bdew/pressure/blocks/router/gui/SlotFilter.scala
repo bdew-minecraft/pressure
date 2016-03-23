@@ -19,7 +19,7 @@ import net.minecraftforge.fluids.{FluidContainerRegistry, IFluidContainerItem}
 class SlotFilter(container: ContainerRouter, index: Int, x: Int, y: Int) extends Slot(container.inventory, index, x, y) with SlotClickable {
   val dir = EnumFacing.getFront(index)
 
-  override def onClick(clickType: ClickType, dragType: Int, player: EntityPlayer): ItemStack = {
+  override def onClick(clickType: ClickType, button: Int, player: EntityPlayer): ItemStack = {
     val stack = player.inventory.getItemStack
     if (!container.te.getWorld.isRemote) {
       if (stack == null || stack.getItem == null) {
