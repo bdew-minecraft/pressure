@@ -22,7 +22,6 @@ import net.minecraft.util.{ActionResult, EnumActionResult, EnumFacing, EnumHand}
 import net.minecraft.world.World
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action
 import net.minecraftforge.fluids._
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
@@ -121,8 +120,8 @@ object HandPump extends BaseItem("HandPump") {
   }
 
   @SubscribeEvent
-  def onInteract(ev: PlayerInteractEvent) {
+  def onInteract(ev: PlayerInteractEvent.RightClickBlock) {
     val item = ev.getEntityPlayer.getHeldItem(EnumHand.MAIN_HAND)
-    if (ev.getAction == Action.RIGHT_CLICK_BLOCK && item != null && item.getItem == this && !ev.getEntityPlayer.isSneaking) ev.setCanceled(true)
+    if (item != null && item.getItem == this && !ev.getEntityPlayer.isSneaking) ev.setCanceled(true)
   }
 }

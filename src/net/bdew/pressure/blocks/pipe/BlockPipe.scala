@@ -18,12 +18,13 @@ import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyBool
 import net.minecraft.block.state.IBlockState
+import net.minecraft.item.ItemBlock
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
 import net.minecraft.world.IBlockAccess
 
 object BlockPipe extends BaseBlock("pipe", Material.iron) with IPressureConnectableBlock with BlockNotifyUpdates with HasItemBlock {
-  override val ItemBlockClass = classOf[CustomItemBlock]
+  override val itemBlockInstance: ItemBlock = new CustomItemBlock(this)
   setHardness(2)
 
   object Straight extends Enumeration {

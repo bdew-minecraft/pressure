@@ -15,13 +15,13 @@ import net.bdew.pressure.blocks.valves.BlockValve
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
-import net.minecraft.item.ItemStack
+import net.minecraft.item.{ItemBlock, ItemStack}
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 object BlockCheckValve extends BlockValve("CheckValve") with HasTE[TileCheckValve] with HasItemBlock {
   override val TEClass = classOf[TileCheckValve]
-  override val ItemBlockClass = classOf[CustomItemBlock]
+  override val itemBlockInstance: ItemBlock = new CustomItemBlock(this)
 
   setHardness(2)
 

@@ -19,6 +19,7 @@ import net.minecraft.util.{EnumActionResult, EnumFacing, EnumHand}
 import net.minecraft.world.World
 
 class CustomItemBlock(bl: Block) extends ItemBlock(bl) {
+  setRegistryName(bl.getRegistryName)
   setCreativeTab(PressureCreativeTabs.main)
 
   override def canPlaceBlockOnSide(world: World, pos: BlockPos, side: EnumFacing, player: EntityPlayer, stack: ItemStack): Boolean =
