@@ -62,7 +62,7 @@ object Pressure {
     if (event.getSide.isClient) Config.load(new File(configDir, "client.config"))
     NetworkRegistry.INSTANCE.registerGuiHandler(this, Config.guiHandler)
     TuningLoader.loadDelayed()
-    //    FMLInterModComms.sendMessage("Waila", "register", "net.bdew.pressure.waila.WailaHandler.loadCallback")
+    FMLInterModComms.sendMessage("Waila", "register", "net.bdew.pressure.waila.WailaHandler.loadCallback")
     //    if (Misc.haveModVersion("OpenComputers"))
     //      OCBlocks.init()
     //    if (Misc.haveModVersion("ComputerCraft"))
