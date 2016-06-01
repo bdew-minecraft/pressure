@@ -18,7 +18,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
         classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.7"
     }
 }
@@ -87,7 +87,7 @@ dependencies {
 
     deobfCompile "mezz.jei:jei_${config.minecraft.version}:${config.jei.version}"
     deobfCompile "mcp.mobius.waila:Waila:${config.waila.version}"
-    deobfCompile "MCMultiPart:MCMultiPart:${config.mcmultipart.version}:universal"
+//    deobfCompile "MCMultiPart:MCMultiPart:${config.mcmultipart.version}:universal"
 
 //    compile "net.bdew.thirdparty:computercraft:${config.computercraft.version}-mc${config.minecraft.version}:api"
 //    compile "li.cil.oc:OpenComputers:MC${config.minecraft.version}-${config.opencomputers.version}:api"

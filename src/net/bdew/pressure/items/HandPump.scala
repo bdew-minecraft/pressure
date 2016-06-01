@@ -59,7 +59,7 @@ object HandPump extends BaseItem("HandPump") {
     } else {
       //todo: do we still need this?
       val bState = world.getBlockState(pos)
-      if (bState.getBlock.getMaterial(bState) == Material.water && bState.getValue(BlockLiquid.LEVEL) == 0) {
+      if (bState.getBlock.getMaterial(bState) == Material.WATER && bState.getValue(BlockLiquid.LEVEL) == 0) {
         val ns = new FluidStack(FluidRegistry.WATER, 1000)
         val toFill = findFillTarget(ns, player.inventory, true)
         if (toFill != null) {
@@ -69,7 +69,7 @@ object HandPump extends BaseItem("HandPump") {
           }
           return true
         }
-      } else if (bState.getBlock.getMaterial(bState) == Material.lava && bState.getValue(BlockLiquid.LEVEL) == 0) {
+      } else if (bState.getBlock.getMaterial(bState) == Material.LAVA && bState.getValue(BlockLiquid.LEVEL) == 0) {
         val ns = new FluidStack(FluidRegistry.LAVA, 1000)
         val toFill = findFillTarget(ns, player.inventory, true)
         if (toFill != null) {
@@ -103,7 +103,7 @@ object HandPump extends BaseItem("HandPump") {
 
   override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer, hand: EnumHand): ActionResult[ItemStack] = {
     if (player.isSneaking) return new ActionResult[ItemStack](EnumActionResult.PASS, stack)
-    val mop = getMovingObjectPositionFromPlayer(world, player, true)
+    val mop = rayTrace(world, player, true)
     if (mop == null) return new ActionResult[ItemStack](EnumActionResult.PASS, stack)
 
     val block = world.getBlockState(mop.getBlockPos).getBlock
@@ -112,7 +112,7 @@ object HandPump extends BaseItem("HandPump") {
       if (!world.isRemote)
         player.inventoryContainer.detectAndSendChanges()
       player.swingArm(hand)
-      player.playSound(SoundEvents.entity_generic_drink, 0.5F, world.rand.nextFloat * 0.1F + 0.9F)
+      player.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 0.5F, world.rand.nextFloat * 0.1F + 0.9F)
       return new ActionResult[ItemStack](EnumActionResult.SUCCESS, stack)
     }
 

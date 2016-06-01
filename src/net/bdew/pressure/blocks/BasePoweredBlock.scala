@@ -9,7 +9,6 @@
 
 package net.bdew.pressure.blocks
 
-import net.bdew.lib.PimpVanilla._
 import net.bdew.lib.block.{BaseBlock, HasTE}
 import net.bdew.lib.rotate.BlockFacingSignalMeta
 import net.minecraft.block.Block
@@ -20,7 +19,7 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.{IBlockAccess, World}
 
-class BasePoweredBlock[T <: TileFilterable](name: String, teClass: Class[T]) extends BaseBlock(name, Material.iron) with HasTE[T] with BlockFilterableRotatable with BlockFacingSignalMeta {
+class BasePoweredBlock[T <: TileFilterable](name: String, teClass: Class[T]) extends BaseBlock(name, Material.IRON) with HasTE[T] with BlockFilterableRotatable with BlockFacingSignalMeta {
   override val TEClass = teClass
   lazy val POWERED = PropertyBool.create("powered")
 
@@ -31,7 +30,7 @@ class BasePoweredBlock[T <: TileFilterable](name: String, teClass: Class[T]) ext
     side != facing && side != facing.getOpposite
   }
 
-  override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, neighborBlock: Block) = {
+  override def neighborChanged(state: IBlockState, world: World, pos: BlockPos, block: Block): Unit = {
     val powered = world.isBlockIndirectlyGettingPowered(pos) > 0
     if (powered != getSignal(state))
       setSignal(world, pos, powered)

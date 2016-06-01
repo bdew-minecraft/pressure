@@ -23,7 +23,7 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
 import net.minecraft.world.IBlockAccess
 
-object BlockPipe extends BaseBlock("pipe", Material.iron) with IPressureConnectableBlock with BlockNotifyUpdates with HasItemBlock {
+object BlockPipe extends BaseBlock("pipe", Material.IRON) with IPressureConnectableBlock with BlockNotifyUpdates with HasItemBlock {
   override val itemBlockInstance: ItemBlock = new CustomItemBlock(this)
   setHardness(2)
 

@@ -15,7 +15,7 @@ import net.bdew.pressure.PressureResourceProvider
 import net.minecraft.block.material.Material
 
 class BaseController[T <: TileController](name: String, TEClass: Class[T])
-  extends BlockController(name, Material.iron, TEClass) {
+  extends BlockController(name, Material.IRON, TEClass) {
   override def resources = PressureResourceProvider
 
   setHardness(1)

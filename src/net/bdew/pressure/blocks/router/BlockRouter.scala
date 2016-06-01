@@ -28,7 +28,7 @@ import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.property.IExtendedBlockState
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
-object BlockRouter extends BaseBlock("Router", Material.iron) with HasTE[TileRouter] with BlockNotifyUpdates with IPressureConnectableBlock {
+object BlockRouter extends BaseBlock("Router", Material.IRON) with HasTE[TileRouter] with BlockNotifyUpdates with IPressureConnectableBlock {
   override val TEClass = classOf[TileRouter]
   val cfg = MachineRouter
 

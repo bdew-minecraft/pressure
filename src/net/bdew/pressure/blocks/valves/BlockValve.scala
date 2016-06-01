@@ -9,7 +9,6 @@
 
 package net.bdew.pressure.blocks.valves
 
-import net.bdew.lib.PimpVanilla._
 import net.bdew.lib.block.BaseBlock
 import net.bdew.lib.rotate.{BaseRotatableBlock, BlockFacingSignalMeta}
 import net.bdew.pressure.api.IPressureConnectableBlock
@@ -22,7 +21,7 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
 import net.minecraft.world.IBlockAccess
 
-class BlockValve(name: String) extends BaseBlock(name, Material.iron) with BaseRotatableBlock with IPressureConnectableBlock with BlockNotifyUpdates with BlockFacingSignalMeta {
+class BlockValve(name: String) extends BaseBlock(name, Material.IRON) with BaseRotatableBlock with IPressureConnectableBlock with BlockNotifyUpdates with BlockFacingSignalMeta {
   // ==== BLOCK SETTINGS ====
 
   override def isOpaqueCube(state: IBlockState) = false

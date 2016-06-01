@@ -42,7 +42,7 @@ class RouterRSModeButton(p: Point, te: TileRouter, side: EnumFacing) extends Wid
   }
 
   override def mouseClicked(p: Point, button: Int) {
-    Minecraft.getMinecraft.getSoundHandler.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.ui_button_click, 1.0F))
+    Minecraft.getMinecraft.getSoundHandler.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F))
     NetworkHandler.sendToServer(MsgSetRouterSideControl(side, MachineRouter.rsModeOrder(te.sideControl.get(side))))
   }
 }

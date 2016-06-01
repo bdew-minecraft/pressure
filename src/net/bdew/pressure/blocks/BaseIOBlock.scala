@@ -13,7 +13,7 @@ import net.bdew.lib.block.{BaseBlock, HasTE}
 import net.bdew.lib.rotate.BlockFacingMeta
 import net.minecraft.block.material.Material
 
-class BaseIOBlock[T <: TileFilterable](name: String, teClass: Class[T]) extends BaseBlock(name, Material.iron) with HasTE[T] with BlockFilterableRotatable with BlockFacingMeta {
+class BaseIOBlock[T <: TileFilterable](name: String, teClass: Class[T]) extends BaseBlock(name, Material.IRON) with HasTE[T] with BlockFilterableRotatable with BlockFacingMeta {
   override val TEClass = teClass
   setHardness(2)
 }

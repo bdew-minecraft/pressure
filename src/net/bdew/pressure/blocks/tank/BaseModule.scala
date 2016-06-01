@@ -15,7 +15,7 @@ import net.bdew.pressure.PressureResourceProvider
 import net.bdew.pressure.config.Machines
 import net.minecraft.block.material.Material
 
-class BaseModule[T <: TileModule](name: String, kind: String, TEClass: Class[T]) extends BlockModule(name, kind, Material.iron, TEClass, Machines) {
+class BaseModule[T <: TileModule](name: String, kind: String, TEClass: Class[T]) extends BlockModule(name, kind, Material.IRON, TEClass, Machines) {
   override def resources = PressureResourceProvider
   setHardness(1)
 }

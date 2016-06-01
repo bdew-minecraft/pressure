@@ -47,7 +47,7 @@ object TankIndicatorTESR extends TileEntitySpecialRenderer[TileTankIndicator] {
       GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
       OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240)
       Color.fromInt(fluid.getColor(fluidStack)).activate()
-      bindTexture(TextureMap.locationBlocksTexture)
+      bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
 
       val quads = for {
         face <- BlockTankIndicator.Position.faces if BlockTankIndicator.shouldSideBeRendered(te.getWorld.getBlockState(te.getPos), te.getWorld, te.getPos.offset(face), face)
