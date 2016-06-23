@@ -12,12 +12,11 @@ package net.bdew.pressure.model
 import net.bdew.lib.Client
 import net.bdew.lib.render.models.ModelEnhancer
 import net.bdew.lib.render.primitive.{Texture, UV, Vertex}
-import net.bdew.lib.render.{Cuboid, QuadBakerDefault, Unpacker}
+import net.bdew.lib.render.{Cuboid, QuadBakerDefault}
 import net.bdew.pressure.items.Canister
 import net.minecraft.client.renderer.block.model.BakedQuad
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.item.ItemStack
 import net.minecraft.util.{EnumFacing, ResourceLocation}
 
@@ -26,7 +25,6 @@ object CanisterModelEnhancer extends ModelEnhancer {
   override val additionalTextureLocations = List(overlay)
 
   override def processItemQuads(stack: ItemStack, side: EnumFacing, rand: Long, mode: TransformType, textures: Map[ResourceLocation, TextureAtlasSprite], base: () => List[BakedQuad]): List[BakedQuad] = {
-    val un = new Unpacker(DefaultVertexFormats.ITEM)
     var list = super.processItemQuads(stack, side, rand, mode, textures, base)
     val fluid = Canister.getFluid(stack)
     if (mode == TransformType.GUI && side == null && fluid != null && fluid.getFluid != null && fluid.amount > 0) {
