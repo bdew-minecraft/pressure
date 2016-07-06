@@ -34,11 +34,11 @@ class TileSluice extends TileDataSlotsTicking with FakeTank with IPressureEject 
     if (resource != null && resource.getFluid != null && resource.amount > 0 && canFill(from, resource.getFluid)) {
       if (bufferTank.getFluid != null && bufferTank.getFluid.getFluid != resource.getFluid)
         bufferTank.setFluid(null)
-      var amountFilled = bufferTank.fill(resource, doFill)
+      val amountFilled = bufferTank.fill(resource, doFill)
       if (doFill && !worldObj.isRemote && bufferTank.getFluidAmount >= BucketVolume) {
         val target = pos.offset(getFacing)
-        worldObj.setBlockState(pos, bufferTank.getFluid.getFluid.getBlock.getDefaultState, 3)
-        worldObj.notifyBlockOfStateChange(pos, BlockSluice)
+        worldObj.setBlockState(target, bufferTank.getFluid.getFluid.getBlock.getDefaultState, 3)
+        worldObj.notifyBlockOfStateChange(target, BlockSluice)
         bufferTank.setFluid(null)
       }
       amountFilled
