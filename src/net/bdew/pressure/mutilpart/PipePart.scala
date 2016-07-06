@@ -27,11 +27,10 @@ import net.minecraft.util.{EnumFacing, ResourceLocation}
 
 class PipePart extends Multipart with ISlottedPart with ConnectablePart {
   override def createBlockState(): BlockStateContainer = {
-    val props = Seq(BlockPipe.Properties.STRAIGHT) ++ BlockPipe.Properties.CONNECTED.values
-    new BlockStateContainer(super.createBlockState().getBlock, BlockPipe.getProperties.toSeq: _*)
+    new BlockStateContainer(BlockPipe, BlockPipe.getProperties: _*)
   }
 
-  override def getExtendedState(state: IBlockState): IBlockState =
+  override def getActualState(state: IBlockState): IBlockState =
     BlockPipe.getActualState(BlockPipe.getDefaultState, getWorld, getPos)
 
   override def getModelPath = new ResourceLocation("pressure", "pipe")
@@ -67,7 +66,7 @@ class PipePart extends Multipart with ISlottedPart with ConnectablePart {
 
   override def getPickBlock(player: EntityPlayer, hit: PartMOP): ItemStack = new ItemStack(BlockPipe)
 
-  override def getHardness(hit: PartMOP): Float = 2
+  override def getHardness(hit: PartMOP): Float = 0.5f
 
   override def onPartChanged(part: IMultipart): Unit = Helper.notifyBlockChanged(getWorld, getPos)
 
