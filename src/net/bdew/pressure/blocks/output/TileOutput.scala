@@ -10,26 +10,28 @@
 package net.bdew.pressure.blocks.output
 
 import net.bdew.lib.PimpVanilla._
+import net.bdew.lib.capabilities.helpers.{FluidHandlerNull, FluidHelper}
+import net.bdew.lib.capabilities.legacy.OldFluidHandlerEmulator
+import net.bdew.lib.capabilities.{Capabilities, CapabilityProvider}
 import net.bdew.lib.data.base.TileDataSlots
 import net.bdew.pressure.api.IPressureEject
 import net.bdew.pressure.blocks.TileFilterable
-import net.bdew.pressure.misc.FakeTank
 import net.minecraft.util.EnumFacing
-import net.minecraftforge.fluids.{FluidStack, IFluidHandler}
+import net.minecraftforge.fluids.FluidStack
 
-class TileOutput extends TileDataSlots with FakeTank with IPressureEject with TileFilterable {
+class TileOutput extends TileDataSlots with CapabilityProvider with OldFluidHandlerEmulator with IPressureEject with TileFilterable {
   def getFacing = BlockOutput.getFacing(worldObj, pos)
 
   override def eject(resource: FluidStack, direction: EnumFacing, doEject: Boolean) = {
     if (isFluidAllowed(resource) && direction == getFacing.getOpposite) {
       val f = getFacing
-      worldObj.getTileSafe[IFluidHandler](pos.offset(f)) map { dest =>
-        dest.fill(f.getOpposite, resource, doEject)
+      FluidHelper.getFluidHandler(worldObj, pos.offset(f), f.getOpposite) map { dest =>
+        dest.fill(resource, doEject)
       } getOrElse 0
     } else 0
   }
 
-  override def isValidDirectionForFakeTank(dir: EnumFacing) = getFacing == dir
+  addCapabilityOption(Capabilities.CAP_FLUID_HANDLER) { side => if (side == getFacing) Some(FluidHandlerNull) else None }
 
   override def pressureNodePos = getPos
   override def pressureNodeWorld = getWorld

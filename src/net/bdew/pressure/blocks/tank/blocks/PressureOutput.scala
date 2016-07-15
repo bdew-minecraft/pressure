@@ -52,12 +52,14 @@ class TilePressureOutput extends TileOutput[OutputConfigFluid] with PressureModu
           connections ++= Option(Helper.recalculateConnectionInfo(this, face)) map { cObj => face -> cObj }
 
         connections.get(face) foreach { conn =>
-          val fs = core.outputFluid(Int.MaxValue, false)
-          val out = conn.pushFluid(fs, true)
-          if (out > 0) {
-            core.outputFluid(out, true)
-            cfg.updateAvg(out)
-            core.outputConfig.updated()
+          for (tank <- core.getOutputTanks) {
+            val fs = tank.drain(Int.MaxValue, false)
+            val out = conn.pushFluid(fs, true)
+            if (out > 0) {
+              tank.drain(out, true)
+              cfg.updateAvg(out)
+              core.outputConfig.updated()
+            }
           }
         }
       }

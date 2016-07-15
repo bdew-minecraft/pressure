@@ -16,7 +16,6 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
-import net.minecraftforge.fluids.{Fluid, FluidStack}
 
 object BlockFluidOutput extends BaseModule("TankFluidOutput", "FluidOutput", classOf[TileFluidOutput]) with BlockOutput[TileFluidOutput] {
   override def canConnectRedstone(state: IBlockState, world: IBlockAccess, pos: BlockPos, side: EnumFacing): Boolean = true
@@ -24,49 +23,4 @@ object BlockFluidOutput extends BaseModule("TankFluidOutput", "FluidOutput", cla
 
 class TileFluidOutput extends TileFluidOutputBase {
   override def doOutput(face: EnumFacing, cfg: OutputConfigFluid) {}
-
-  override def canDrain(from: EnumFacing, fluid: Fluid) =
-    (for {
-      core <- getCore
-      cfg <- getCfg(from) if checkCanOutput(cfg)
-    } yield core.canOutputFluid(fluid)).getOrElse(false)
-
-  override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean) =
-    (for {
-      core <- getCore
-      cfg <- getCfg(from) if checkCanOutput(cfg)
-    } yield {
-      val out = core.outputFluid(resource, doDrain)
-      if (doDrain && out != null) addOutput(from, out.amount)
-      out
-    }).orNull
-
-  override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean) =
-    (for {
-      core <- getCore
-      cfg <- getCfg(from) if checkCanOutput(cfg)
-    } yield {
-      val out = core.outputFluid(maxDrain, doDrain)
-      if (doDrain && out != null) addOutput(from, out.amount)
-      out
-    }).orNull
-
-  var outThisTick = Map.empty[EnumFacing, Float]
-
-  def addOutput(side: EnumFacing, amt: Int) =
-    outThisTick += side -> (outThisTick.getOrElse(side, 0F) + amt)
-
-  def updateOutput() {
-    for {
-      core <- getCore
-      (side, amt) <- outThisTick
-      cfg <- getCfg(side)
-    } {
-      cfg.updateAvg(amt)
-      core.outputConfig.updated()
-    }
-    outThisTick = Map.empty
-  }
-
-  serverTick.listen(updateOutput)
 }

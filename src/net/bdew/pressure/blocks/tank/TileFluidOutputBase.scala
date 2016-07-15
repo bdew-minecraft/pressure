@@ -10,26 +10,49 @@
 package net.bdew.pressure.blocks.tank
 
 import net.bdew.lib.PimpVanilla._
+import net.bdew.lib.capabilities.helpers.{FluidDrainMonitor, FluidHelper, FluidMultiHandler}
+import net.bdew.lib.capabilities.legacy.OldFluidHandlerEmulator
+import net.bdew.lib.capabilities.{Capabilities, CapabilityProvider}
 import net.bdew.lib.multiblock.data.OutputConfigFluid
 import net.bdew.lib.multiblock.interact.CIFluidOutput
 import net.bdew.lib.multiblock.tile.{RSControllableOutput, TileOutput}
 import net.minecraft.util.EnumFacing
-import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
+import net.minecraftforge.fluids.FluidStack
 
-abstract class TileFluidOutputBase extends TileOutput[OutputConfigFluid] with RSControllableOutput with IFluidHandler {
+abstract class TileFluidOutputBase extends TileOutput[OutputConfigFluid] with RSControllableOutput with CapabilityProvider with OldFluidHandlerEmulator {
   val kind: String = "FluidOutput"
 
   override def getCore = getCoreAs[CIFluidOutput]
   override val outputConfigType = classOf[OutputConfigFluid]
 
+  addCapabilityOption(Capabilities.CAP_FLUID_HANDLER) { side =>
+    if (getCfg(side).exists(checkCanOutput))
+      getCore map (core => new FluidDrainMonitor(FluidMultiHandler.wrap(core.getOutputTanks), stack => addOutput(side, stack)))
+    else None
+  }
+
+  def addOutput(side: EnumFacing, res: FluidStack) = {
+    outThisTick += side -> (outThisTick.getOrElse(side, 0F) + res.amount)
+  }
+
   override def canConnectToFace(d: EnumFacing) =
-    getCore.isDefined && worldObj.getTileSafe[IFluidHandler](pos.offset(d)).isDefined
+    getCore.isDefined && FluidHelper.hasFluidHandler(worldObj, pos.offset(d), d.getOpposite)
 
-  override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean) = 0
-  override def canFill(from: EnumFacing, fluid: Fluid) = false
+  var outThisTick = Map.empty[EnumFacing, Float]
 
-  override def getTankInfo(from: EnumFacing) =
-    getCore map (_.getTankInfo) getOrElse Array.empty
+  def updateOutput() {
+    for {
+      core <- getCore
+      (side, amt) <- outThisTick
+      cfg <- getCfg(side)
+    } {
+      cfg.updateAvg(amt)
+      core.outputConfig.updated()
+    }
+    outThisTick = Map.empty
+  }
+
+  serverTick.listen(updateOutput)
 
   override def makeCfgObject(face: EnumFacing) = new OutputConfigFluid
 }

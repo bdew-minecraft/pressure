@@ -10,9 +10,9 @@
 package net.bdew.pressure.blocks.tank.blocks
 
 import net.bdew.lib.PimpVanilla._
-import net.bdew.lib.multiblock.interact.CITankInfo
 import net.bdew.lib.multiblock.tile.{TileController, TileModule}
 import net.bdew.lib.property.EnumerationProperty
+import net.bdew.pressure.blocks.tank.controller.TileTankController
 import net.bdew.pressure.blocks.tank.{BaseModule, ModuleNeedsRenderUpdate}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.util.EnumFacing
@@ -77,7 +77,7 @@ object BlockTankIndicator extends BaseModule("TankIndicator", "TankBlock", class
 class TileTankIndicator extends TileModule {
   val kind: String = "TankBlock"
 
-  override def getCore = getCoreAs[CITankInfo]
+  override def getCore = getCoreAs[TileTankController]
 
   // Used to cache position info for rendering
   var cachedPosition = mutable.Map.empty[EnumFacing, (Int, Int)]

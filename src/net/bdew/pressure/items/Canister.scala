@@ -12,6 +12,9 @@ package net.bdew.pressure.items
 import java.util
 
 import net.bdew.lib.Misc
+import net.bdew.lib.capabilities.Capabilities
+import net.bdew.lib.capabilities.helpers.FluidHelper
+import net.bdew.lib.capabilities.legacy.OldFluidContainerItemEmulator
 import net.bdew.lib.items.BaseItem
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.config.{Config, Tuning}
@@ -25,10 +28,12 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.{EnumActionResult, EnumFacing, EnumHand}
 import net.minecraft.world.World
 import net.minecraftforge.client.model.ModelLoader
-import net.minecraftforge.fluids._
+import net.minecraftforge.common.capabilities.{Capability, ICapabilityProvider}
+import net.minecraftforge.fluids.capability.{IFluidHandler, IFluidTankProperties}
+import net.minecraftforge.fluids.{Fluid, FluidRegistry, FluidStack}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
-object Canister extends BaseItem("Canister") with IFluidContainerItem {
+object Canister extends BaseItem("Canister") with OldFluidContainerItemEmulator {
   lazy val cfg = Tuning.getSection("Items").getSection(name)
   lazy val maxPour = cfg.getInt("MaxPour")
   lazy val capacity = cfg.getInt("Capacity")
@@ -73,40 +78,86 @@ object Canister extends BaseItem("Canister") with IFluidContainerItem {
     }
   }
 
-  def getFluid(stack: ItemStack): FluidStack = FluidStack.loadFluidStackFromNBT(stack.getTagCompound)
+  def getContainedFluid(stack: ItemStack): FluidStack = FluidStack.loadFluidStackFromNBT(stack.getTagCompound)
 
-  def drain(stack: ItemStack, max: Int, doDrain: Boolean): FluidStack = {
-    val fl = getFluid(stack)
-    if (fl == null) return null
-    val ns = new FluidStack(fl, Misc.clamp(fl.amount, 0, max))
-    if (doDrain) {
-      fl.amount -= ns.amount
-      val nbt = new NBTTagCompound()
-      if (fl.amount > 0)
-        fl.writeToNBT(nbt)
-      stack.setTagCompound(nbt)
+  override def initCapabilities(stack: ItemStack, nbt: NBTTagCompound): ICapabilityProvider = new ICapabilityProvider {
+    override def hasCapability(capability: Capability[_], facing: EnumFacing): Boolean = capability == Capabilities.CAP_FLUID_HANDLER
+    override def getCapability[T](capability: Capability[T], facing: EnumFacing): T = {
+      if (capability == Capabilities.CAP_FLUID_HANDLER)
+        new FluidHandler(stack).asInstanceOf[T]
+      else
+        null.asInstanceOf[T]
+
     }
-    return ns
   }
 
-  def fill(stack: ItemStack, fl: FluidStack, doFill: Boolean): Int = {
-    val currStack = getFluid(stack)
-    if (fl == null || (currStack != null && !currStack.isFluidEqual(fl))) return 0
-    val current = if (currStack == null) 0 else currStack.amount
-    val toFill = Misc.clamp(fl.amount, 0, capacity - current)
-    if (doFill) {
-      val newStack = new FluidStack(fl.getFluid, toFill + current)
+  class FluidHandler(stack: ItemStack) extends IFluidHandler with IFluidTankProperties {
+    override def canFill: Boolean = true
+    override def canDrain: Boolean = true
+    override def canFillFluidType(fluidStck: FluidStack): Boolean = true
+    override def canDrainFluidType(fluidStack: FluidStack): Boolean = true
+    override def getContents: FluidStack = getContainedFluid(stack)
+    override def getCapacity: Int = capacity
+
+    def setFluid(fluid: FluidStack): Unit = {
       val nbt = new NBTTagCompound()
-      newStack.writeToNBT(nbt)
+      fluid.writeToNBT(nbt)
       stack.setTagCompound(nbt)
     }
-    return toFill
-  }
 
-  def getCapacity(container: ItemStack): Int = capacity
+    override def getTankProperties: Array[IFluidTankProperties] = Array(this)
+
+    override def fill(resource: FluidStack, doFill: Boolean): Int = {
+      if (stack.stackSize != 1 || resource == null || resource.amount <= 0) return 0
+      val contained = getContents
+      if (contained == null) {
+        val fillAmount = Math.min(capacity, resource.amount)
+        if (doFill) {
+          val filled = resource.copy
+          filled.amount = fillAmount
+          setFluid(filled)
+        }
+        fillAmount
+      } else {
+        if (contained.isFluidEqual(resource)) {
+          val fillAmount = Math.min(capacity - contained.amount, resource.amount)
+          if (doFill && fillAmount > 0) {
+            contained.amount += fillAmount
+            setFluid(contained)
+          }
+          fillAmount
+        } else 0
+      }
+    }
+
+    override def drain(resource: FluidStack, doDrain: Boolean): FluidStack = {
+      if (stack.stackSize != 1 || resource == null || resource.amount <= 0 || !resource.isFluidEqual(getContents))
+        null
+      else
+        drain(resource.amount, doDrain)
+    }
+
+    override def drain(maxDrain: Int, doDrain: Boolean): FluidStack = {
+      if (stack.stackSize != 1 || maxDrain <= 0) return null
+      val contained = getContents
+      if (contained == null || contained.amount <= 0) return null
+      val drainAmount = Math.min(contained.amount, maxDrain)
+      val drained = contained.copy
+      drained.amount = drainAmount
+      if (doDrain) {
+        contained.amount -= drainAmount
+        if (contained.amount == 0) {
+          stack.setTagCompound(null)
+        } else {
+          setFluid(contained)
+        }
+      }
+      drained
+    }
+  }
 
   override def addInformation(stack: ItemStack, playerIn: EntityPlayer, tooltip: util.List[String], advanced: Boolean) = {
-    val fl = getFluid(stack)
+    val fl = getContainedFluid(stack)
     if (fl == null) {
       tooltip.add(Misc.toLocal("bdlib.label.empty"))
     } else {
@@ -117,30 +168,25 @@ object Canister extends BaseItem("Canister") with IFluidContainerItem {
 
   override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
     if (world.isRemote) return EnumActionResult.SUCCESS
-    val te = world.getTileEntity(pos)
-    if (te != null && te.isInstanceOf[IFluidHandler]) {
-      val fh = te.asInstanceOf[IFluidHandler]
-      val fl = drain(stack, maxPour, false)
-      if (fl == null) return EnumActionResult.FAIL
-      val toFill = fh.fill(side, fl, false)
-      if (toFill > 0) {
-        fh.fill(side, drain(stack, toFill, true), true)
+    val me = stack.getCapability(Capabilities.CAP_FLUID_HANDLER, null)
+    FluidHelper.getFluidHandler(world, pos, side) foreach { target =>
+      val filled = FluidHelper.pushFluid(me, target, true, maxPour)
+      if (filled != null) {
         player.swingArm(hand)
         return EnumActionResult.SUCCESS
       }
-    } else {
-      val p = pos.offset(side)
-      if (p.getY >= 0 && p.getY < world.getActualHeight && world.isAirBlock(p)) {
-        val fs = getFluid(stack)
-        if (fs != null && fs.getFluid != null && fs.getFluid.canBePlacedInWorld && fs.amount >= FluidContainerRegistry.BUCKET_VOLUME) {
-          drain(stack, FluidContainerRegistry.BUCKET_VOLUME, true)
-          world.setBlockState(p, fs.getFluid.getBlock.getDefaultState, 3)
-          world.notifyBlockOfStateChange(p, fs.getFluid.getBlock)
-        }
+    }
+    val p = pos.offset(side)
+    if (p.getY >= 0 && p.getY < world.getActualHeight && world.isAirBlock(p)) {
+      val fs = me.drain(Fluid.BUCKET_VOLUME, false)
+      if (fs != null && fs.getFluid != null && fs.getFluid.canBePlacedInWorld && fs.amount == Fluid.BUCKET_VOLUME) {
+        me.drain(fs, true)
+        world.setBlockState(p, fs.getFluid.getBlock.getDefaultState, 3)
+        world.notifyBlockOfStateChange(p, fs.getFluid.getBlock)
+        return EnumActionResult.SUCCESS
       }
     }
-
-    return EnumActionResult.FAIL
+    EnumActionResult.FAIL
   }
 
   @SideOnly(Side.CLIENT)

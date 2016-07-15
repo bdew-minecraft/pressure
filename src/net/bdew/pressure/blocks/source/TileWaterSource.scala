@@ -9,23 +9,27 @@
 
 package net.bdew.pressure.blocks.source
 
+import net.bdew.lib.capabilities.legacy.OldFluidHandlerEmulator
+import net.bdew.lib.capabilities.{Capabilities, CapabilityProvider}
+import net.bdew.pressure.misc.FakeFluidHandler
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids._
+import net.minecraftforge.fluids.capability.{FluidTankProperties, IFluidTankProperties}
 
-class TileWaterSource extends TileEntity with IFluidHandler {
+class TileWaterSource extends TileEntity with CapabilityProvider with OldFluidHandlerEmulator {
   val fullStack = new FluidStack(FluidRegistry.WATER, Int.MaxValue)
-  override def getTankInfo(from: EnumFacing) = Array(new FluidTankInfo(fullStack, Int.MaxValue))
-  override def canDrain(from: EnumFacing, fluid: Fluid) = fluid == FluidRegistry.WATER
-  override def canFill(from: EnumFacing, fluid: Fluid) = false
 
-  override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean) =
-    new FluidStack(FluidRegistry.WATER, maxDrain)
+  addCapability(Capabilities.CAP_FLUID_HANDLER, new FakeFluidHandler {
+    override def getTankProperties: Array[IFluidTankProperties] = Array(new FluidTankProperties(fullStack, Int.MaxValue, false, true))
+    override def canDrain: Boolean = true
+    override def canDrainFluidType(fluidStack: FluidStack): Boolean = fluidStack.getFluid == FluidRegistry.WATER
 
-  override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean) =
-    if (resource.getFluid == FluidRegistry.WATER)
-      new FluidStack(FluidRegistry.WATER, resource.amount)
-    else null
+    override def drain(resource: FluidStack, doDrain: Boolean): FluidStack =
+      if (resource.getFluid == FluidRegistry.WATER)
+        new FluidStack(FluidRegistry.WATER, resource.amount)
+      else null
 
-  override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean) = 0
+    override def drain(maxDrain: Int, doDrain: Boolean): FluidStack =
+      new FluidStack(FluidRegistry.WATER, maxDrain)
+  })
 }

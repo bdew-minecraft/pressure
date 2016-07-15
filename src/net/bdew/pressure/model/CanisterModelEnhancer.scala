@@ -26,7 +26,7 @@ object CanisterModelEnhancer extends ModelEnhancer {
 
   override def processItemQuads(stack: ItemStack, side: EnumFacing, rand: Long, mode: TransformType, textures: Map[ResourceLocation, TextureAtlasSprite], base: () => List[BakedQuad]): List[BakedQuad] = {
     var list = super.processItemQuads(stack, side, rand, mode, textures, base)
-    val fluid = Canister.getFluid(stack)
+    val fluid = Canister.getContainedFluid(stack)
     if (mode == TransformType.GUI && side == null && fluid != null && fluid.getFluid != null && fluid.amount > 0) {
       val overlayTexture = Texture(Client.textureMapBlocks.getAtlasSprite("pressure:gui/canister_overlay"), UV(0, 0), UV(5, 16))
       val fill = 15f * fluid.amount / Canister.capacity

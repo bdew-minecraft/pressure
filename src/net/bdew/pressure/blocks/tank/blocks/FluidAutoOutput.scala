@@ -10,6 +10,7 @@
 package net.bdew.pressure.blocks.tank.blocks
 
 import net.bdew.lib.PimpVanilla._
+import net.bdew.lib.capabilities.helpers.FluidHelper
 import net.bdew.lib.multiblock.block.BlockOutput
 import net.bdew.lib.multiblock.data.OutputConfigFluid
 import net.bdew.pressure.blocks.tank.{BaseModule, TileFluidOutputBase}
@@ -17,32 +18,21 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
-import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
 
 object BlockFluidAutoOutput extends BaseModule("TankFluidAutoOutput", "FluidOutput", classOf[TileFluidAutoOutput]) with BlockOutput[TileFluidAutoOutput] {
-
   override def canConnectRedstone(state: IBlockState, world: IBlockAccess, pos: BlockPos, side: EnumFacing): Boolean = true
 }
 
 class TileFluidAutoOutput extends TileFluidOutputBase {
   override def doOutput(face: EnumFacing, cfg: OutputConfigFluid) {
-    val filled = for {
+    for {
       core <- getCore if checkCanOutput(cfg)
-      target <- worldObj.getTileSafe[IFluidHandler](pos.offset(face))
-      toSend <- Option(core.outputFluid(Int.MaxValue, false))
-    } yield {
-      val filled = target.fill(face.getOpposite, toSend, true)
-      if (filled > 0) {
-        core.outputFluid(filled, true)
-        core.outputConfig.updated()
-        filled
-      } else 0D
+      target <- FluidHelper.getFluidHandler(worldObj, pos.offset(face), face.getOpposite)
+    } {
+      for (handler <- core.getOutputTanks) {
+        val filled = FluidHelper.pushFluid(handler, target)
+        if (filled != null) addOutput(face, filled)
+      }
     }
-    cfg.updateAvg(filled.getOrElse(0D))
   }
-
-  override def canDrain(from: EnumFacing, fluid: Fluid) = false
-
-  override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean) = null
-  override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean) = null
 }

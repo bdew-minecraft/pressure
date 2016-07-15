@@ -9,17 +9,18 @@
 
 package net.bdew.pressure.blocks.pump
 
-import net.bdew.lib.PimpVanilla._
+import net.bdew.lib.capabilities.helpers.FluidHelper
+import net.bdew.lib.capabilities.legacy.OldFluidHandlerEmulator
+import net.bdew.lib.capabilities.{Capabilities, CapabilityProvider}
 import net.bdew.lib.data.base.TileDataSlotsTicking
 import net.bdew.pressure.blocks.TileFilterable
-import net.bdew.pressure.misc.FakeTank
+import net.bdew.pressure.misc.FakeFluidHandler
 import net.minecraft.block.state.IBlockState
-import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import net.minecraftforge.fluids.{Fluid, FluidStack, IFluidHandler}
+import net.minecraftforge.fluids.FluidStack
 
-class TilePump extends TileDataSlotsTicking with FakeTank with TileFilterable {
+class TilePump extends TileDataSlotsTicking with TileFilterable with CapabilityProvider with OldFluidHandlerEmulator {
   override def shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newSate: IBlockState) =
     oldState.getBlock != newSate.getBlock
 
@@ -27,29 +28,33 @@ class TilePump extends TileDataSlotsTicking with FakeTank with TileFilterable {
 
   serverTick.listen(doPushFluid)
 
-  def doPushFluid() {
-    if (!BlockPump.getSignal(worldObj, pos)) return
-    val face = getFacing
-    for {
-      from <- worldObj.getTileSafe[IFluidHandler](pos.offset(face.getOpposite))
-      to <- worldObj.getTileSafe[IFluidHandler](pos.offset(face))
-    } {
-      val res = from.drain(face, Int.MaxValue, false)
-      if (res != null && res.getFluid != null && res.amount > 0 && isFluidAllowed(res)) {
-        val filled = to.fill(face.getOpposite, res, true)
-        if (filled > 0)
-          from.drain(face, filled, true)
-      }
+  val handler = new FakeFluidHandler {
+    override def canFill: Boolean = true
+    override def canFillFluidType(fluidStack: FluidStack): Boolean = isFluidAllowed(fluidStack)
+    override def fill(resource: FluidStack, doFill: Boolean): Int = {
+      if (resource != null && isFluidAllowed(resource)) {
+        FluidHelper.getFluidHandler(worldObj, pos.offset(getFacing), getFacing.getOpposite) map { handler =>
+          handler.fill(resource, doFill)
+        } getOrElse 0
+      } else 0
     }
   }
 
-  override def canFill(from: EnumFacing, fluid: Fluid) = from == getFacing.getOpposite && isFluidAllowed(fluid)
-  override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean) =
-    if (resource != null && canFill(from, resource.getFluid))
-      worldObj.getTileSafe[IFluidHandler](pos.offset(getFacing)) map { target =>
-        target.fill(from, resource, doFill)
-      } getOrElse 0
-    else 0
+  addCapabilityOption(Capabilities.CAP_FLUID_HANDLER) { side =>
+    if (side == getFacing.getOpposite)
+      Some(handler)
+    else
+      None
+  }
 
-  override def isValidDirectionForFakeTank(dir: EnumFacing) = dir == getFacing || dir.getOpposite == getFacing
+  def doPushFluid() {
+    if (BlockPump.getSignal(worldObj, pos)) {
+      for {
+        from <- FluidHelper.getFluidHandler(worldObj, pos.offset(getFacing.getOpposite), getFacing)
+        to <- FluidHelper.getFluidHandler(worldObj, pos.offset(getFacing), getFacing.getOpposite)
+      } {
+        FluidHelper.pushFluid(from, to)
+      }
+    }
+  }
 }

@@ -34,8 +34,7 @@ object TankIndicatorTESR extends TileEntitySpecialRenderer[TileTankIndicator] {
     if (!te.hasWorldObj || !BlockTankIndicator.Position.faces.exists(f => BlockTankIndicator.shouldSideBeRendered(te.getWorld.getBlockState(te.getPos), te.getWorld, te.getPos.offset(f), f))) return
     for {
       core <- te.getCore
-      tank <- core.getTankInfo.headOption
-      fluidStack <- Option(tank.fluid)
+      fluidStack <- Option(core.tank.getFluid)
       fluid <- Option(fluidStack.getFluid) if fluidStack.amount > 0
     } {
       val sprite = Client.textureMapBlocks.getAtlasSprite(fluid.getStill(fluidStack).toString)
@@ -56,7 +55,7 @@ object TankIndicatorTESR extends TileEntitySpecialRenderer[TileTankIndicator] {
         val low = if (below > 0) 0F else 0.125F
         val high = if (above > 0) 1F else 0.875F
         val span = high - low
-        val blockVal = tank.capacity.toFloat / (above + below + 1)
+        val blockVal = core.tank.getCapacity.toFloat / (above + below + 1)
         val myFluid = Misc.clamp(fluidStack.amount.toFloat - below * blockVal, 0F, blockVal) / blockVal
         quad(face, low, low + span * myFluid).withTexture(Texture(sprite, UV(7, low * 16f), UV(9, high * 16f)))
       }

@@ -9,20 +9,41 @@
 
 package net.bdew.pressure.blocks.drain
 
+import net.bdew.lib.capabilities.legacy.OldFluidHandlerEmulator
+import net.bdew.lib.capabilities.{Capabilities, CapabilityProvider}
 import net.bdew.lib.data.DataSlotTank
 import net.bdew.lib.data.base.TileDataSlotsTicking
 import net.bdew.pressure.api.IPressureEject
 import net.bdew.pressure.blocks.TileFilterable
 import net.bdew.pressure.config.Modules
-import net.bdew.pressure.misc.FakeTank
+import net.bdew.pressure.misc.FakeFluidHandler
 import net.minecraft.entity.item.EntityXPOrb
 import net.minecraft.util.EnumFacing
-import net.minecraftforge.fluids.{Fluid, FluidStack}
+import net.minecraftforge.fluids.FluidStack
 
-class TileDrain extends TileDataSlotsTicking with FakeTank with IPressureEject with TileFilterable {
+class TileDrain extends TileDataSlotsTicking with CapabilityProvider with OldFluidHandlerEmulator with IPressureEject with TileFilterable {
   def getFacing = BlockDrain.getFacing(worldObj, pos)
 
   val bufferTank = new DataSlotTank("buffer", this, Int.MaxValue)
+
+  val handler = new FakeFluidHandler {
+    override def canFill: Boolean = true
+    override def canFillFluidType(fluidStack: FluidStack): Boolean = isFluidAllowed(fluidStack)
+    override def fill(resource: FluidStack, doFill: Boolean): Int = {
+      if (resource != null && resource.getFluid != null && resource.amount > 0 && canFillFluidType(resource)) {
+        if (!worldObj.isRemote && doFill)
+          doDrain(resource)
+        resource.amount
+      } else 0
+    }
+  }
+
+  addCapabilityOption(Capabilities.CAP_FLUID_HANDLER) { side =>
+    if (side == getFacing.getOpposite)
+      Some(handler)
+    else
+      None
+  }
 
   def doDrain(resource: FluidStack) {
     val target = pos.offset(getFacing)
@@ -59,18 +80,6 @@ class TileDrain extends TileDataSlotsTicking with FakeTank with IPressureEject w
       resource.amount
     } else 0
   }
-
-  override def canFill(from: EnumFacing, fluid: Fluid) = from == getFacing.getOpposite && isFluidAllowed(fluid)
-
-  override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
-    if (resource != null && resource.getFluid != null && resource.amount > 0 && canFill(from, resource.getFluid)) {
-      if (!worldObj.isRemote && doFill)
-        doDrain(resource)
-      resource.amount
-    } else 0
-  }
-
-  override def isValidDirectionForFakeTank(dir: EnumFacing) = getFacing.getOpposite == dir
 
   override def pressureNodePos = getPos
   override def pressureNodeWorld = getWorld

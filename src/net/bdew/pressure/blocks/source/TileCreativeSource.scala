@@ -9,20 +9,26 @@
 
 package net.bdew.pressure.blocks.source
 
+import net.bdew.lib.capabilities.legacy.OldFluidHandlerEmulator
+import net.bdew.lib.capabilities.{Capabilities, CapabilityProvider}
 import net.bdew.pressure.blocks.TileFilterable
-import net.minecraft.util.EnumFacing
+import net.bdew.pressure.misc.FakeFluidHandler
 import net.minecraftforge.fluids._
+import net.minecraftforge.fluids.capability.{FluidTankProperties, IFluidTankProperties}
 
-class TileCreativeSource extends TileFilterable with IFluidHandler {
+class TileCreativeSource extends TileFilterable with CapabilityProvider with OldFluidHandlerEmulator {
   def stack(amount: Int = Int.MaxValue) = getFluidFilter.map(new FluidStack(_, amount)).orNull
 
-  override def getTankInfo(from: EnumFacing) = Array(new FluidTankInfo(stack(), Int.MaxValue))
-  override def canDrain(from: EnumFacing, fluid: Fluid) = getFluidFilter.contains(fluid)
-  override def canFill(from: EnumFacing, fluid: Fluid) = false
+  addCapability(Capabilities.CAP_FLUID_HANDLER, new FakeFluidHandler {
+    override def getTankProperties: Array[IFluidTankProperties] = Array(new FluidTankProperties(stack(Int.MaxValue), Int.MaxValue, false, true))
 
-  override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean) = stack(maxDrain)
-  override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean) =
-    if (canDrain(from, resource.getFluid)) resource else null
+    override def canDrain: Boolean = true
+    override def canDrainFluidType(fluidStack: FluidStack): Boolean = getFluidFilter.contains(fluidStack.getFluid)
 
-  override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean) = 0
+    override def drain(resource: FluidStack, doDrain: Boolean): FluidStack =
+      if (canDrainFluidType(resource)) resource else null
+
+    override def drain(maxDrain: Int, doDrain: Boolean): FluidStack =
+      stack(maxDrain)
+  })
 }

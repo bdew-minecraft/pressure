@@ -25,9 +25,7 @@ trait TileFilterable extends TileDataSlots with CapabilityProvider {
     def clearFluidFilter() = fluidFilter.unset()
   }
 
-  addCapability(PressureAPI.FILTERABLE) {
-    case face => FilterableImpl
-  }
+  addCapability(PressureAPI.FILTERABLE, FilterableImpl)
 
   def isFluidAllowed(fluid: Fluid): Boolean =
     fluid != null && (fluidFilter.isEmpty || fluidFilter.contains(fluid))

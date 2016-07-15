@@ -9,8 +9,8 @@
 
 package net.bdew.pressure.blocks.tank.controller
 
-import net.bdew.lib.Misc
 import net.bdew.lib.PimpVanilla._
+import net.bdew.lib.capabilities.helpers.FluidHelper
 import net.bdew.lib.data.base.{DataSlot, UpdateKind}
 import net.bdew.lib.data.{DataSlotInventory, DataSlotOption, DataSlotTank}
 import net.bdew.lib.items.ItemUtils
@@ -29,6 +29,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fluids._
+import net.minecraftforge.fluids.capability.IFluidHandler
 
 class TileTankController extends TileControllerGui with CIFluidInput with CIOutputFaces with CIFluidOutput with CIFilterable with CIRedstoneSensors {
   val cfg = MachineTank
@@ -106,67 +107,28 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   }
 
   def doUpdate() {
-    val inStack = inventory.getStackInSlot(0)
-    if (inStack != null && inStack.getItem != null) {
-      if (FluidContainerRegistry.isFilledContainer(inStack)) {
-        // This is a full container, add fluid into tank and return empty container (if defined)
-        val fluid = FluidContainerRegistry.getFluidForFilledItem(inStack)
-        val cont = inStack.getItem.getContainerItem(inStack)
-        if (fluid != null && inputFluid(fluid, false) == fluid.amount && canEjectItem(cont)) {
-          inputFluid(fluid, true)
+    val inStack = inventory.getStackInSlot(0).copy()
+    inStack.stackSize = 1
+    for (handler <- FluidHelper.getFluidHandler(inStack)) {
+      if (tank.getFluidAmount > 0 && handler.getTankProperties.exists(t => t.canFill && (t.getContents == null || t.getContents.amount < t.getCapacity))) {
+        // Attempt to fill
+        val drained = tank.drain(Int.MaxValue, false)
+        drained.amount = handler.fill(drained.copy(), true)
+        if (drained.amount > 0 && canEjectItem(inStack)) {
+          tank.drain(drained, true)
+          doEjectItem(inStack)
           inventory.decrStackSize(0, 1)
-          doEjectItem(cont)
-          inventory.markDirty()
         }
-      } else if (FluidContainerRegistry.isEmptyContainer(inStack)) {
-        // This is an empty container, fill it
-        for {
-          filled <- Option(FluidContainerRegistry.fillFluidContainer(tank.getFluid, inStack)) if canEjectItem(filled)
-          filledFluid <- Option(FluidContainerRegistry.getFluidForFilledItem(filled))
-        } {
-          outputFluid(filledFluid.amount, true)
-          inventory.decrStackSize(0, 1)
-          doEjectItem(filled)
-        }
-      } else Misc.asInstanceOpt(inStack.getItem, classOf[IFluidContainerItem]) foreach { inCont =>
-        // Its a fluid container, figure out what to do with it
-        // Operating on a stack makes no sense, grab a single item
-        val remStack = inStack.copy()
-        val opStack = remStack.splitStack(1)
-        val inFluid = inCont.getFluid(opStack)
-        if (inFluid != null && inFluid.amount > 0) {
-          // It has something, try to drain it
-          val filled = inCont.drain(opStack, inputFluid(inFluid.copy(), false), false)
-          if (filled != null && filled.amount > 0) {
-            // Can drain, grab a drained version and see if we can output it
-            inCont.drain(opStack, filled.amount, true)
-            if (canEjectItem(opStack)) {
-              // All good, proceed
-              inputFluid(filled, true)
-              doEjectItem(opStack)
-              // put the remaining stack (if any) back
-              if (remStack.stackSize > 0)
-                inventory.setInventorySlotContents(0, remStack)
-              else
-                inventory.setInventorySlotContents(0, null)
-            }
-          }
-        } else if (tank.getFluid != null) {
-          // It's empty and we have fluid, try to fill it
-          val filled = outputFluid(inCont.fill(opStack, tank.getFluid.copy(), false), false)
-          if (filled != null && filled.amount > 0) {
-            // Can fill, grab a filled version and see if we can output it
-            inCont.fill(opStack, filled, true)
-            if (canEjectItem(opStack)) {
-              // All good, proceed
-              outputFluid(filled.amount, true)
-              doEjectItem(opStack)
-              // put the remaining stack (if any) back
-              if (remStack.stackSize > 0)
-                inventory.setInventorySlotContents(0, remStack)
-              else
-                inventory.setInventorySlotContents(0, null)
-            }
+      } else if (tank.getFluidAmount < tank.getCapacity && handler.getTankProperties.exists(t => t.canDrain && t.getContents != null && t.getContents.amount > 0)) {
+        // Attempt to drain
+        val drained = handler.drain(Int.MaxValue, false)
+        drained.amount = tank.fill(drained.copy(), false)
+        if (drained.amount > 0) {
+          handler.drain(drained, true)
+          if (canEjectItem(inStack)) {
+            tank.fill(drained, true)
+            doEjectItem(inStack)
+            inventory.decrStackSize(0, 1)
           }
         }
       }
@@ -221,31 +183,11 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
     }
   }
 
-  // === CIFluidInput ===
+  override def getInputTanks: List[IFluidHandler] =
+    if (isReady) List(tank) else null
 
-  def inputFluid(resource: FluidStack, doFill: Boolean): Int =
-    if (resource != null && canInputFluid(resource.getFluid)) tank.fill(resource, doFill) else 0
-
-  def canInputFluid(fluid: Fluid) =
-    isReady && (tank.getFluid == null || tank.getFluid.getFluid == fluid) && (fluidFilter.isEmpty || fluidFilter.contains(fluid))
-
-  def getTankInfo = Array(tank.getInfo)
-
-  // === CIFluidOutput ===
-
-  override def canOutputFluid(fluid: Fluid) = fluid == null || (tank.getFluid != null && tank.getFluid.getFluid == fluid)
-
-  override def outputFluid(resource: FluidStack, doDrain: Boolean) =
-    if (!isReady || tank.getFluid == null || resource == null || resource.getFluid == null || tank.getFluid.getFluid != resource.getFluid)
-      null
-    else
-      tank.drain(resource.amount, doDrain)
-
-  override def outputFluid(amount: Int, doDrain: Boolean) =
-    if (!isReady || tank.getFluid == null || amount <= 0)
-      null
-    else
-      tank.drain(amount, doDrain)
+  override def getOutputTanks: List[IFluidHandler] =
+    if (isReady) List(tank) else null
 
   override def redstoneSensorSystem: SensorSystem[TileEntity, Boolean] = Sensors
   override def redstoneSensorsType = Sensors.tankSensors
