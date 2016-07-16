@@ -10,13 +10,11 @@
 package net.bdew.pressure.blocks.tank.gui
 
 import net.bdew.lib.data.base.ContainerDataSlots
-import net.bdew.lib.gui.{BaseContainer, SlotClickable, SlotValidating}
+import net.bdew.lib.gui.{BaseContainer, SlotValidating}
 import net.bdew.lib.multiblock.interact.ContainerOutputFaces
 import net.bdew.pressure.blocks.tank.controller.TileTankController
+import net.bdew.pressure.misc.SlotFilter
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.inventory.{ClickType, Slot}
-import net.minecraft.item.ItemStack
-import net.minecraftforge.fluids.{FluidContainerRegistry, IFluidContainerItem}
 
 class ContainerTank(val te: TileTankController, player: EntityPlayer) extends BaseContainer(te.inventory) with ContainerDataSlots with ContainerOutputFaces {
   lazy val dataSource = te
@@ -24,24 +22,7 @@ class ContainerTank(val te: TileTankController, player: EntityPlayer) extends Ba
   addSlotToContainer(new SlotValidating(te.inventory, 0, 44, 19))
   addSlotToContainer(new SlotValidating(te.inventory, 1, 80, 19))
 
-  addSlotToContainer(new Slot(te.inventory, 2, 149, 19) with SlotClickable {
-
-    override def onClick(clickType: ClickType, button: Int, player: EntityPlayer): ItemStack = {
-      val stack = player.inventory.getItemStack
-      if (!te.getWorld.isRemote) {
-        if (stack == null || stack.getItem == null) {
-          te.filterableCapability.clearFluidFilter()
-        } else if (FluidContainerRegistry.isFilledContainer(stack)) {
-          te.filterableCapability.setFluidFilter(FluidContainerRegistry.getFluidForFilledItem(stack).getFluid)
-        } else if (stack.getItem.isInstanceOf[IFluidContainerItem]) {
-          val fluid = stack.getItem.asInstanceOf[IFluidContainerItem].getFluid(stack)
-          if (fluid != null && fluid.getFluid != null)
-            te.filterableCapability.setFluidFilter(fluid.getFluid)
-        }
-      }
-      stack
-    }
-  })
+  addSlotToContainer(new SlotFilter(te.inventory, te.filterableCapability, 2, 149, 19))
 
   bindPlayerInventory(player.inventory, 8, 84, 142)
 }

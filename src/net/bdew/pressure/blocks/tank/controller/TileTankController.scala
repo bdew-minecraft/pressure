@@ -41,6 +41,9 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   val tank = new DataSlotTank("tank", this, 0) with CountedDataSlotTank {
     setUpdate(UpdateKind.SAVE, UpdateKind.WORLD, UpdateKind.GUI)
     override val sendCapacityOnUpdateKind = Set(UpdateKind.WORLD, UpdateKind.GUI)
+    override def canFillFluidType(fluid: FluidStack): Boolean = canFill() && (fluidFilter.isEmpty || fluidFilter.contains(fluid.getFluid))
+    override def canDrain: Boolean = isReady
+    override def canFill: Boolean = isReady
   }
 
   var lastRenderUpdate = 0L
@@ -48,8 +51,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
 
   val inventory = new DataSlotInventory("inv", this, 3) {
     override def isItemValidForSlot(slot: Int, stack: ItemStack) =
-      slot == 0 && stack != null && stack.getItem != null && (
-        FluidContainerRegistry.isContainer(stack) || stack.getItem.isInstanceOf[IFluidContainerItem])
+      slot == 0 && stack != null && stack.getItem != null && FluidHelper.hasFluidHandler(stack)
   }
 
   def doRenderUpdate(): Unit = {
