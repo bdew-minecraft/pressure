@@ -107,28 +107,31 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   }
 
   def doUpdate() {
-    val inStack = inventory.getStackInSlot(0).copy()
-    inStack.stackSize = 1
-    for (handler <- FluidHelper.getFluidHandler(inStack)) {
-      if (tank.getFluidAmount > 0 && handler.getTankProperties.exists(t => t.canFill && (t.getContents == null || t.getContents.amount < t.getCapacity))) {
-        // Attempt to fill
-        val drained = tank.drain(Int.MaxValue, false)
-        drained.amount = handler.fill(drained.copy(), true)
-        if (drained.amount > 0 && canEjectItem(inStack)) {
-          tank.drain(drained, true)
-          doEjectItem(inStack)
-          inventory.decrStackSize(0, 1)
-        }
-      } else if (tank.getFluidAmount < tank.getCapacity && handler.getTankProperties.exists(t => t.canDrain && t.getContents != null && t.getContents.amount > 0)) {
-        // Attempt to drain
-        val drained = handler.drain(Int.MaxValue, false)
-        drained.amount = tank.fill(drained.copy(), false)
-        if (drained.amount > 0) {
-          handler.drain(drained, true)
-          if (canEjectItem(inStack)) {
-            tank.fill(drained, true)
+    val original = inventory.getStackInSlot(0)
+    if (original != null) {
+      val inStack = original.copy()
+      inStack.stackSize = 1
+      for (handler <- FluidHelper.getFluidHandler(inStack)) {
+        if (tank.getFluidAmount > 0 && handler.getTankProperties.exists(t => t.canFill && (t.getContents == null || t.getContents.amount < t.getCapacity))) {
+          // Attempt to fill
+          val drained = tank.drain(Int.MaxValue, false)
+          drained.amount = handler.fill(drained.copy(), true)
+          if (drained.amount > 0 && canEjectItem(inStack)) {
+            tank.drain(drained, true)
             doEjectItem(inStack)
             inventory.decrStackSize(0, 1)
+          }
+        } else if (tank.getFluidAmount < tank.getCapacity && handler.getTankProperties.exists(t => t.canDrain && t.getContents != null && t.getContents.amount > 0)) {
+          // Attempt to drain
+          val drained = handler.drain(Int.MaxValue, false)
+          drained.amount = tank.fill(drained.copy(), false)
+          if (drained.amount > 0) {
+            handler.drain(drained, true)
+            if (canEjectItem(inStack)) {
+              tank.fill(drained, true)
+              doEjectItem(inStack)
+              inventory.decrStackSize(0, 1)
+            }
           }
         }
       }
@@ -184,10 +187,10 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   }
 
   override def getInputTanks: List[IFluidHandler] =
-    if (isReady) List(tank) else null
+    if (isReady) List(tank) else List.empty
 
   override def getOutputTanks: List[IFluidHandler] =
-    if (isReady) List(tank) else null
+    if (isReady) List(tank) else List.empty
 
   override def redstoneSensorSystem: SensorSystem[TileEntity, Boolean] = Sensors
   override def redstoneSensorsType = Sensors.tankSensors
