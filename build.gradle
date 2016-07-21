@@ -62,7 +62,7 @@ repositories {
     mavenCentral()
     maven {
         name = "bdew"
-        url = "http://jenkins.bdew.net/maven"
+        url = "https://jenkins.bdew.net/maven"
     }
     maven {
         name "JEI"

@@ -12,9 +12,9 @@ package net.bdew.pressure.items
 import java.util
 
 import net.bdew.lib.Misc
-import net.bdew.lib.capabilities.Capabilities
 import net.bdew.lib.capabilities.helpers.FluidHelper
 import net.bdew.lib.capabilities.legacy.OldFluidContainerItemEmulator
+import net.bdew.lib.capabilities.{Capabilities, CapabilityProviderItem}
 import net.bdew.lib.items.BaseItem
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.config.{Config, Tuning}
@@ -28,18 +28,19 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.{EnumActionResult, EnumFacing, EnumHand}
 import net.minecraft.world.World
 import net.minecraftforge.client.model.ModelLoader
-import net.minecraftforge.common.capabilities.{Capability, ICapabilityProvider}
 import net.minecraftforge.fluids.capability.{IFluidHandler, IFluidTankProperties}
 import net.minecraftforge.fluids.{Fluid, FluidRegistry, FluidStack}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
-object Canister extends BaseItem("Canister") with OldFluidContainerItemEmulator {
+object Canister extends BaseItem("Canister") with CapabilityProviderItem with OldFluidContainerItemEmulator {
   lazy val cfg = Tuning.getSection("Items").getSection(name)
   lazy val maxPour = cfg.getInt("MaxPour")
   lazy val capacity = cfg.getInt("Capacity")
 
   setMaxStackSize(1)
   setHasSubtypes(true)
+
+  addCapability(Capabilities.CAP_FLUID_HANDLER, FluidHandler)
 
   override def getCreativeTabs = Array(PressureCreativeTabs.main, PressureCreativeTabs.canisters)
 
@@ -80,18 +81,7 @@ object Canister extends BaseItem("Canister") with OldFluidContainerItemEmulator 
 
   def getContainedFluid(stack: ItemStack): FluidStack = FluidStack.loadFluidStackFromNBT(stack.getTagCompound)
 
-  override def initCapabilities(stack: ItemStack, nbt: NBTTagCompound): ICapabilityProvider = new ICapabilityProvider {
-    override def hasCapability(capability: Capability[_], facing: EnumFacing): Boolean = capability == Capabilities.CAP_FLUID_HANDLER
-    override def getCapability[T](capability: Capability[T], facing: EnumFacing): T = {
-      if (capability == Capabilities.CAP_FLUID_HANDLER)
-        new FluidHandler(stack).asInstanceOf[T]
-      else
-        null.asInstanceOf[T]
-
-    }
-  }
-
-  class FluidHandler(stack: ItemStack) extends IFluidHandler with IFluidTankProperties {
+  case class FluidHandler(stack: ItemStack) extends IFluidHandler with IFluidTankProperties {
     override def canFill: Boolean = true
     override def canDrain: Boolean = true
     override def canFillFluidType(fluidStck: FluidStack): Boolean = true
