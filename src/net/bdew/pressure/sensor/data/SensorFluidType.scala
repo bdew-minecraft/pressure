@@ -10,6 +10,7 @@
 package net.bdew.pressure.sensor.data
 
 import net.bdew.lib.Misc
+import net.bdew.lib.capabilities.helpers.FluidHelper
 import net.bdew.lib.data.DataSlotTankBase
 import net.bdew.lib.gui._
 import net.bdew.lib.sensors.GenericSensorParameter
@@ -37,21 +38,15 @@ case class SensorFluidType[T: ClassTag](uid: String, iconName: String, accessor:
     if (button == 0 && clickType == ClickType.PICKUP) {
       if (item == null) {
         Sensors.DisabledParameter
-      } else if (FluidContainerRegistry.isContainer(item)) {
-        val fluid = FluidContainerRegistry.getFluidForFilledItem(item)
-        if (fluid != null && fluid.getFluid != null)
-          FluidTypeParameter(fluid.getFluid)
-        else
-          current
-      } else if (item.getItem.isInstanceOf[IFluidContainerItem]) {
-        val fluid = item.getItem.asInstanceOf[IFluidContainerItem].getFluid(item)
-        if (fluid != null && fluid.getFluid != null)
-          FluidTypeParameter(fluid.getFluid)
-        else
-          current
-      } else current
+      } else {
+        val tank = FluidHelper.getFluidHandler(item).flatMap(x => x.getTankProperties.headOption).getOrElse(return current)
+        if (tank.getContents == null || tank.getContents.getFluid == null) {
+          Sensors.DisabledParameter
+        } else {
+          FluidTypeParameter(tank.getContents.getFluid)
+        }
+      }
     } else current
-    current
   }
 
   override def loadParameter(tag: NBTTagCompound): GenericSensorParameter =
