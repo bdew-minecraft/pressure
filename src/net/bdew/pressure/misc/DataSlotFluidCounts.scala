@@ -77,7 +77,7 @@ trait CountedDataSlotTank extends DataSlotTankBase {
 
   override def drain(maxDrain: Int, doDrain: Boolean) = {
     val ret = super.drain(maxDrain, doDrain)
-    if (doDrain) {
+    if (doDrain && ret != null) {
       fluidOut.update(ret.getFluid, ret.amount)
     }
     ret
