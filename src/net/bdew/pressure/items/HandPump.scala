@@ -9,13 +9,14 @@
 
 package net.bdew.pressure.items
 
+import net.bdew.lib.capabilities.helpers.FluidHelper
 import net.bdew.lib.items.BaseItem
 import net.bdew.pressure.config.Tuning
+import net.bdew.pressure.misc.UnstackingFluidHandler
 import net.minecraft.block.material.Material
 import net.minecraft.block.{Block, BlockLiquid}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.SoundEvents
-import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.{ActionResult, EnumActionResult, EnumFacing, EnumHand}
@@ -23,6 +24,7 @@ import net.minecraft.world.World
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.fluids._
+import net.minecraftforge.fluids.capability.IFluidHandler
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
 object HandPump extends BaseItem("HandPump") {
@@ -32,65 +34,61 @@ object HandPump extends BaseItem("HandPump") {
   setMaxStackSize(1)
   MinecraftForge.EVENT_BUS.register(this)
 
-  def findFillTarget(fs: FluidStack, inventory: IInventory, mustTakeAll: Boolean): ItemStack = {
+  def findFillTarget(fs: FluidStack, player: EntityPlayer, mustTakeAll: Boolean): IFluidHandler = {
     if (fs == null) return null
-    for (i <- 0 until inventory.getSizeInventory) {
-      val item = inventory.getStackInSlot(i)
-      if (item != null && item.getItem != null && item.stackSize == 1 && item.getItem.isInstanceOf[IFluidContainerItem]) {
-        val fc = item.getItem.asInstanceOf[IFluidContainerItem]
-        val canFill = fc.fill(item, fs, false)
-        if ((mustTakeAll && canFill == fs.amount) || (!mustTakeAll && canFill > 0)) return item
-      }
+    for {
+      i <- 0 until player.inventory.getSizeInventory
+      stack <- Option(player.inventory.getStackInSlot(i)) if stack.getItem != null
+      handler <- UnstackingFluidHandler.getIfNeeded(player, i)
+    } {
+      val canFill = handler.fill(fs, false)
+      if ((mustTakeAll && canFill == fs.amount) || (!mustTakeAll && canFill > 0)) return handler
     }
     return null
   }
 
   def drainBlock(world: World, block: Block, pos: BlockPos, stack: ItemStack, dir: EnumFacing, player: EntityPlayer): Boolean = {
-    if (block.isInstanceOf[BlockFluidBase]) {
-      val bl = block.asInstanceOf[BlockFluidBase]
+    if (block.isInstanceOf[IFluidBlock]) {
+      val bl = block.asInstanceOf[IFluidBlock]
       val fl = bl.drain(world, pos, false)
-      val toFill = findFillTarget(fl, player.inventory, true)
+      val toFill = findFillTarget(fl, player, true)
       if (toFill != null) {
         if (!world.isRemote) {
-          toFill.getItem.asInstanceOf[IFluidContainerItem].fill(toFill, bl.drain(world, pos, true), true)
+          toFill.fill(bl.drain(world, pos, true), true)
         }
         return true
       }
     } else {
-      //todo: do we still need this?
       val bState = world.getBlockState(pos)
-      if (bState.getBlock.getMaterial(bState) == Material.WATER && bState.getValue(BlockLiquid.LEVEL) == 0) {
-        val ns = new FluidStack(FluidRegistry.WATER, 1000)
-        val toFill = findFillTarget(ns, player.inventory, true)
+      if (bState.getBlock.isInstanceOf[BlockLiquid] && bState.getBlock.getMaterial(bState) == Material.WATER && bState.getValue(BlockLiquid.LEVEL) == 0) {
+        val ns = new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME)
+        val toFill = findFillTarget(ns, player, true)
         if (toFill != null) {
           if (!world.isRemote) {
             world.setBlockToAir(pos)
-            toFill.getItem.asInstanceOf[IFluidContainerItem].fill(toFill, ns, true)
+            toFill.fill(ns, true)
           }
           return true
         }
-      } else if (bState.getBlock.getMaterial(bState) == Material.LAVA && bState.getValue(BlockLiquid.LEVEL) == 0) {
-        val ns = new FluidStack(FluidRegistry.LAVA, 1000)
-        val toFill = findFillTarget(ns, player.inventory, true)
+      } else if (bState.getBlock.isInstanceOf[BlockLiquid] && bState.getBlock.getMaterial(bState) == Material.LAVA && bState.getValue(BlockLiquid.LEVEL) == 0) {
+        val ns = new FluidStack(FluidRegistry.LAVA, Fluid.BUCKET_VOLUME)
+        val toFill = findFillTarget(ns, player, true)
         if (toFill != null) {
           if (!world.isRemote) {
             world.setBlockToAir(pos)
-            toFill.getItem.asInstanceOf[IFluidContainerItem].fill(toFill, ns, true)
+            toFill.fill(ns, true)
           }
           return true
         }
       } else {
-        val te = world.getTileEntity(pos)
-        if (te != null && te.isInstanceOf[IFluidHandler]) {
+        FluidHelper.getFluidHandler(world, pos, dir) foreach { handler =>
           if (!world.isRemote) {
-            val fh = te.asInstanceOf[IFluidHandler]
-            val fs = fh.drain(dir, maxDrain, false)
-            val toFill = findFillTarget(fs, player.inventory, false)
+            val fs = handler.drain(maxDrain, false)
+            val toFill = findFillTarget(fs, player, false)
             if (toFill != null) {
-              val fci = toFill.getItem.asInstanceOf[IFluidContainerItem]
-              val canFill = fci.fill(toFill, fs, false)
+              val canFill = toFill.fill(fs, false)
               if (canFill > 0) {
-                fci.fill(toFill, fh.drain(dir, canFill, true), true)
+                toFill.fill(handler.drain(canFill, true), true)
                 return true
               }
             }
