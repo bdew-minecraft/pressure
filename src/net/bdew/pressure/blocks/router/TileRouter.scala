@@ -29,9 +29,7 @@ class TileRouter extends TileDataSlotsTicking with IPressureInject with IPressur
 
   val connections = mutable.Map.empty[EnumFacing, IPressureConnection]
 
-  addCapability(PressureAPI.FILTERABLE) {
-    case face => RouterFilterProxy(this, face)
-  }
+  addCachedSidedCapability(PressureAPI.FILTERABLE, RouterFilterProxy(this, _))
 
   addCapability(Capabilities.CAP_FLUID_HANDLER) {
     case face if sideModes.get(face) != RouterSideMode.DISABLED => new RouterFluidProxy(this, face)
