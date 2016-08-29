@@ -34,9 +34,11 @@ class TileSluice extends TileDataSlotsTicking with CapabilityProvider with OldFl
         val amountFilled = bufferTank.fill(resource, doFill)
         if (doFill && !worldObj.isRemote && bufferTank.getFluidAmount >= Fluid.BUCKET_VOLUME) {
           val target = pos.offset(getFacing)
-          worldObj.setBlockState(target, bufferTank.getFluid.getFluid.getBlock.getDefaultState, 3)
-          worldObj.notifyBlockOfStateChange(target, BlockSluice)
-          bufferTank.setFluid(null)
+          if (worldObj.isAirBlock(target)) {
+            worldObj.setBlockState(target, bufferTank.getFluid.getFluid.getBlock.getDefaultState, 3)
+            worldObj.notifyBlockOfStateChange(target, BlockSluice)
+            bufferTank.drain(Fluid.BUCKET_VOLUME, true)
+          }
         }
         amountFilled
       } else 0
