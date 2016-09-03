@@ -12,8 +12,8 @@ package net.bdew.pressure.blocks.tank.blocks
 import net.bdew.lib.PimpVanilla._
 import net.bdew.lib.multiblock.tile.{TileController, TileModule}
 import net.bdew.lib.property.EnumerationProperty
+import net.bdew.pressure.blocks.tank.BaseModule
 import net.bdew.pressure.blocks.tank.controller.TileTankController
-import net.bdew.pressure.blocks.tank.{BaseModule, ModuleNeedsRenderUpdate}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler
 
 import scala.collection.mutable
 
-object BlockTankIndicator extends BaseModule("TankIndicator", "TankBlock", classOf[TileTankIndicator]) with ModuleNeedsRenderUpdate {
+object BlockTankIndicator extends BaseModule("TankIndicator", "TankBlock", classOf[TileTankIndicator]) {
 
   object Position extends Enumeration {
     val TOP, BOTTOM, MIDDLE, ALONE = Value

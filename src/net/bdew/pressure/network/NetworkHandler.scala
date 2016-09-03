@@ -9,8 +9,22 @@
 
 package net.bdew.pressure.network
 
+import net.bdew.lib.Misc
 import net.bdew.lib.network.NetChannel
 import net.bdew.pressure.Pressure
+import net.minecraft.entity.player.EntityPlayerMP
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.{World, WorldServer}
 
 object NetworkHandler extends NetChannel(Pressure.channel) {
+  //todo: Move to bdlib if this works out
+  def sendToWatchingPlayers(message: Message, world: World, pos: BlockPos) {
+    import scala.collection.JavaConversions._
+    val playerChunkMap = world.asInstanceOf[WorldServer].getPlayerChunkMap
+    val chunkX = pos.getX >> 4
+    val chunkZ = pos.getZ >> 4
+    Misc.filterType(world.playerEntities, classOf[EntityPlayerMP])
+      .filter(player => playerChunkMap.isPlayerWatchingChunk(player, chunkX, chunkZ))
+      .foreach(player => sendTo(message, player))
+  }
 }

@@ -23,6 +23,7 @@ import net.bdew.pressure.blocks.tank.blocks.{BlockFluidAccess, BlockTankIndicato
 import net.bdew.pressure.blocks.tank.{CIFilterable, MachineTank, ModuleNeedsRenderUpdate}
 import net.bdew.pressure.config.Modules
 import net.bdew.pressure.misc.CountedDataSlotTank
+import net.bdew.pressure.network.{MsgTankUpdate, NetworkHandler}
 import net.bdew.pressure.sensor.Sensors
 import net.bdew.pressure.{Pressure, PressureResourceProvider}
 import net.minecraft.entity.player.EntityPlayer
@@ -39,8 +40,8 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   val fluidFilter = DataSlotOption[Fluid]("fluidFilter", this).setUpdate(UpdateKind.GUI, UpdateKind.SAVE, UpdateKind.WORLD)
 
   val tank = new DataSlotTank("tank", this, 0) with CountedDataSlotTank {
-    setUpdate(UpdateKind.SAVE, UpdateKind.WORLD, UpdateKind.GUI)
-    override val sendCapacityOnUpdateKind = Set(UpdateKind.WORLD, UpdateKind.GUI)
+    setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
+    override val sendCapacityOnUpdateKind = Set(UpdateKind.GUI)
     override def canFillFluidType(fluid: FluidStack): Boolean = canFill() && (fluidFilter.isEmpty || fluidFilter.contains(fluid.getFluid))
     override def canDrain: Boolean = isReady
     override def canFill: Boolean = isReady
@@ -48,6 +49,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
 
   var lastRenderUpdate = 0L
   var needsRenderUpdate = false
+  var sendNetworkUpdates = false
 
   val inventory = new DataSlotInventory("inv", this, 3) {
     override def isItemValidForSlot(slot: Int, stack: ItemStack) =
@@ -153,11 +155,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
       tank.setCapacity(Int.MaxValue)
 
     // If we don't have indicators - don't spam updates
-    if (getModulePositions(BlockTankIndicator).nonEmpty) {
-      tank.setUpdate(UpdateKind.SAVE, UpdateKind.GUI, UpdateKind.WORLD)
-    } else {
-      tank.setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
-    }
+    sendNetworkUpdates = getModulePositions(BlockTankIndicator).nonEmpty
 
     if (newCapacity == 0)
       tank.setFluid(null)
@@ -184,6 +182,14 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
       // Send block updates if tank content changes - needed for extracells, etc.
       for (pos <- getModulePositions(BlockFluidAccess)) {
         worldObj.notifyNeighborsOfStateChange(pos, BlockFluidAccess)
+      }
+      if (sendNetworkUpdates && !worldObj.isRemote) {
+        val fluid = tank.getFluid
+        if (fluid != null && fluid.amount > 0 && fluid.getFluid != null) {
+          NetworkHandler.sendToWatchingPlayers(MsgTankUpdate(pos.getX, pos.getY, pos.getZ, fluid.getFluid.getName, fluid.amount, tank.getCapacity), worldObj, pos)
+        } else {
+          NetworkHandler.sendToWatchingPlayers(MsgTankUpdate(pos.getX, pos.getY, pos.getZ, "", 0, tank.getCapacity), worldObj, pos)
+        }
       }
     }
   }
