@@ -31,7 +31,7 @@ object TankIndicatorTESR extends TileEntitySpecialRenderer[TileTankIndicator] {
 
   override def renderTileEntityAt(te: TileTankIndicator, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int): Unit = {
     // No world or no relevant faces are visible - nothing to do here
-    if (!te.hasWorldObj || !BlockTankIndicator.Position.faces.exists(f => BlockTankIndicator.shouldSideBeRendered(te.getWorld.getBlockState(te.getPos), te.getWorld, te.getPos.offset(f), f))) return
+    if (!te.hasWorldObj || !BlockTankIndicator.Position.faces.exists(f => BlockTankIndicator.shouldSideBeRendered(te.getWorld.getBlockState(te.getPos), te.getWorld, te.getPos, f))) return
     for {
       core <- te.getCore
       fluidStack <- Option(core.tank.getFluid)
@@ -49,7 +49,7 @@ object TankIndicatorTESR extends TileEntitySpecialRenderer[TileTankIndicator] {
       bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
 
       val quads = for {
-        face <- BlockTankIndicator.Position.faces if BlockTankIndicator.shouldSideBeRendered(te.getWorld.getBlockState(te.getPos), te.getWorld, te.getPos.offset(face), face)
+        face <- BlockTankIndicator.Position.faces if BlockTankIndicator.shouldSideBeRendered(te.getWorld.getBlockState(te.getPos), te.getWorld, te.getPos, face)
         (below, above) <- te.cachedPosition.get(face)
       } yield {
         val low = if (below > 0) 0F else 0.125F

@@ -55,7 +55,7 @@ object BlockTankIndicator extends BaseModule("TankIndicator", "TankBlock", class
       world.getTileSafe[TileTankIndicator](p)
     } prefixLength { tileOpt =>
       tileOpt exists { tile =>
-        tile.getCore.contains(core) && shouldSideBeRendered(world.getBlockState(tile.getPos), world, tile.getPos.offset(face), face)
+        tile.getCore.contains(core) && shouldSideBeRendered(world.getBlockState(tile.getPos), world, tile.getPos, face)
       }
     }
   }
