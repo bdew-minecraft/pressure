@@ -9,6 +9,7 @@
 
 package net.bdew.pressure.compat.opencomputers
 
+import li.cil.oc.api.driver.NamedBlock
 import li.cil.oc.api.machine.{Arguments, Context, LimitReachedException}
 import li.cil.oc.api.network.{ManagedPeripheral, Visibility}
 import li.cil.oc.api.{Network, prefab}
@@ -19,8 +20,10 @@ import net.minecraftforge.fml.relauncher.Side
 
 import scala.util.{Failure, Success, Try}
 
-class ManagedEnvironmentProvider[T <: TileEntity](kind: String, commands: TileCommandHandler[T], tile: T) extends prefab.ManagedEnvironment with ManagedPeripheral {
+class ManagedEnvironmentProvider[T <: TileEntity](kind: String, commands: TileCommandHandler[T], tile: T) extends prefab.ManagedEnvironment with ManagedPeripheral with NamedBlock {
   setNode(Network.newNode(this, Visibility.Network).withComponent(kind).create())
+  override def priority(): Int = 0
+  override def preferredName(): String = kind
   override def methods(): Array[String] = commands.commandNames
   override def invoke(method: String, context: Context, args: Arguments): Array[AnyRef] = {
     val handler = commands.commands(method)

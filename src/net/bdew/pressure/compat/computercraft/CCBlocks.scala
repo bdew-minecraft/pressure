@@ -15,7 +15,7 @@ import net.bdew.pressure.blocks.valves.sensor.{PipeSensorCommands, TilePipeSenso
 
 object CCBlocks {
   def init(): Unit = {
-    ComputerCraftAPI.registerPeripheralProvider(new TilePeripheralProvider("tank_dataport", DataPortCommands, classOf[TileDataPort]))
-    ComputerCraftAPI.registerPeripheralProvider(new TilePeripheralProvider("pipe_sensor", PipeSensorCommands, classOf[TilePipeSensor]))
+    ComputerCraftAPI.registerPeripheralProvider(new TilePeripheralProvider("pp_tank", DataPortCommands, classOf[TileDataPort]))
+    ComputerCraftAPI.registerPeripheralProvider(new TilePeripheralProvider("pp_sensor", PipeSensorCommands, classOf[TilePipeSensor]))
   }
 }

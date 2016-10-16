@@ -15,7 +15,7 @@ import net.bdew.pressure.blocks.valves.sensor.{PipeSensorCommands, TilePipeSenso
 
 object OCBlocks {
   def init(): Unit = {
-    Driver.add(new BlockDriver("tank_dataport", DataPortCommands, classOf[TileDataPort]))
-    Driver.add(new BlockDriver("pipe_sensor", PipeSensorCommands, classOf[TilePipeSensor]))
+    Driver.add(new BlockDriver("pp_tank", DataPortCommands, classOf[TileDataPort]))
+    Driver.add(new BlockDriver("pp_sensor", PipeSensorCommands, classOf[TilePipeSensor]))
   }
 }

@@ -27,7 +27,7 @@ class TileDataPort extends TileModule {
   override def getCore = getCoreAs[TileTankController]
 }
 
-object DataPortCommands extends TileCommandHandler[TileDataPort] {
+object DataPortCommands extends ModuleCommandHandler[TileTankController, TileDataPort] {
   val outputNames = Map(
     "red" -> 0,
     "green" -> 1,
@@ -36,9 +36,6 @@ object DataPortCommands extends TileCommandHandler[TileDataPort] {
     "cyan" -> 4,
     "purple" -> 5
   )
-
-  def getCore(ctx: CallContext[TileDataPort]) =
-    ctx.tile.getCore.getOrElse(err("Not connected to tank"))
 
   command("isConnected", direct = true) { ctx =>
     ctx.tile.getCore.isDefined
