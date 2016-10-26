@@ -179,6 +179,15 @@ object Canister extends BaseItem("Canister") with CapabilityProviderItem with Ol
     EnumActionResult.FAIL
   }
 
+  override def getItemStackDisplayName(stack: ItemStack): String = {
+    val fl = getContainedFluid(stack)
+    if (fl == null) {
+      super.getItemStackDisplayName(stack)
+    } else {
+      super.getItemStackDisplayName(stack) + " - " + fl.getLocalizedName
+    }
+  }
+
   @SideOnly(Side.CLIENT)
   override def registerItemModels() = {
     ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("pressure:canister.extended", "inventory"))
