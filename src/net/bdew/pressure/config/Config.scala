@@ -24,7 +24,7 @@ object Config {
     val c = new Configuration(cfg)
     c.load()
     try {
-      showCanisters = c.get(Configuration.CATEGORY_GENERAL, "Add filled canisters to NEI", true).getBoolean(false)
+      showCanisters = c.get(Configuration.CATEGORY_GENERAL, "Add filled canisters to JEI", true).getBoolean(false)
       showFluidName = c.get(Configuration.CATEGORY_GENERAL, "Show fluid identifier on canisters", false).getBoolean(false)
     } finally {
       c.save()
