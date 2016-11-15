@@ -92,6 +92,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
     val outStack = inventory.getStackInSlot(1)
     (stack == null
       || stack.getItem == null
+      || stack.stackSize <= 0
       || outStack == null
       || outStack.getItem == null
       || (ItemUtils.isSameItem(stack, outStack) && outStack.stackSize + stack.stackSize <= outStack.getMaxStackSize)
@@ -99,8 +100,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
   }
 
   def doEjectItem(stack: ItemStack) {
-    if (stack != null && stack.getItem != null) {
-      stack.stackSize = 1
+    if (stack != null && stack.getItem != null && stack.stackSize > 0) {
       if (inventory.getStackInSlot(1) == null) {
         inventory.setInventorySlotContents(1, stack)
       } else {
