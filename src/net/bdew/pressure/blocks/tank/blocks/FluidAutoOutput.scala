@@ -27,7 +27,7 @@ class TileFluidAutoOutput extends TileFluidOutputBase {
   override def doOutput(face: EnumFacing, cfg: OutputConfigFluid) {
     for {
       core <- getCore if checkCanOutput(cfg)
-      target <- FluidHelper.getFluidHandler(worldObj, pos.offset(face), face.getOpposite)
+      target <- FluidHelper.getFluidHandler(world, pos.offset(face), face.getOpposite)
     } {
       for (handler <- core.getOutputTanks) {
         val filled = FluidHelper.pushFluid(handler, target)

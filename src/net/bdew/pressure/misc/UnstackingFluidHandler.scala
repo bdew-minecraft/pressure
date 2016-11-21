@@ -33,12 +33,12 @@ class UnstackingFluidHandler(baseHandler: IFluidHandler, stack: ItemStack, playe
 object UnstackingFluidHandler {
   def getIfNeeded(player: EntityPlayer, slot: Int): Option[IFluidHandler] = {
     val mainStack = player.inventory.getStackInSlot(slot)
-    if (mainStack != null && mainStack.getItem != null) {
-      if (mainStack.stackSize > 1) {
+    if (!mainStack.isEmpty) {
+      if (mainStack.getCount > 1) {
         val singleStack = mainStack.copy()
-        singleStack.stackSize = 1
+        singleStack.setCount(1)
         FluidHelper.getFluidHandler(singleStack) map { handler => new UnstackingFluidHandler(handler, singleStack, player, slot) }
-      } else if (mainStack.stackSize == 1) {
+      } else if (mainStack.getCount == 1) {
         FluidHelper.getFluidHandler(mainStack)
       } else None
     } else None

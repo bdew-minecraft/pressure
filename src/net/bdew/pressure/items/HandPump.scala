@@ -99,7 +99,8 @@ object HandPump extends BaseItem("HandPump") {
     return false
   }
 
-  override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer, hand: EnumHand): ActionResult[ItemStack] = {
+  override def onItemRightClick(world: World, player: EntityPlayer, hand: EnumHand): ActionResult[ItemStack] = {
+    val stack = player.getHeldItem(hand)
     if (player.isSneaking) return new ActionResult[ItemStack](EnumActionResult.PASS, stack)
     val mop = rayTrace(world, player, true)
     if (mop == null) return new ActionResult[ItemStack](EnumActionResult.PASS, stack)

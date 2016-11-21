@@ -13,21 +13,15 @@ import java.io.File
 
 import net.bdew.lib.Misc
 import net.bdew.pressure.api.PressureAPI
-import net.bdew.pressure.blocks.router.BlockRouter
-import net.bdew.pressure.compat.computercraft.CCBlocks
 import net.bdew.pressure.compat.enderio.EnderIOProxy
-import net.bdew.pressure.compat.opencomputers.OCBlocks
 import net.bdew.pressure.config._
 import net.bdew.pressure.misc.PressureCreativeTabs
-import net.bdew.pressure.mutilpart.MCMPHandler
 import net.bdew.pressure.network.NetworkHandler
 import net.bdew.pressure.pressurenet.Helper
-import net.minecraft.item.Item
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.Mod.EventHandler
 import net.minecraftforge.fml.common.event._
 import net.minecraftforge.fml.common.network.NetworkRegistry
-import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.fml.relauncher.Side
 import org.apache.logging.log4j.Logger
 
@@ -76,11 +70,10 @@ object Pressure {
 
   @EventHandler
   def missingMappings(event: FMLMissingMappingsEvent): Unit = {
+    //fixme: still needed?
     import scala.collection.JavaConversions._
     for (missing <- event.getAll) {
       (missing.name, missing.`type`) match {
-        case ("pressure:Director", GameRegistry.Type.BLOCK) => missing.remap(BlockRouter)
-        case ("pressure:Director", GameRegistry.Type.ITEM) => missing.remap(Item.getItemFromBlock(BlockRouter))
         case _ => // do nothing
       }
     }

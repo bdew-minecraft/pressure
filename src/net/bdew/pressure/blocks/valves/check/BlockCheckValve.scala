@@ -25,7 +25,7 @@ object BlockCheckValve extends BlockValve("CheckValve") with HasTE[TileCheckValv
 
   setHardness(2)
 
-  override def neighborChanged(state: IBlockState, world: World, pos: BlockPos, block: Block): Unit = {
+  override def neighborChanged(state: IBlockState, world: World, pos: BlockPos, block: Block, fromPos: BlockPos): Unit = {
     val powered = world.isBlockIndirectlyGettingPowered(pos) > 0
     if (powered != getSignal(world, pos))
       setSignal(world, pos, powered)
@@ -33,6 +33,6 @@ object BlockCheckValve extends BlockValve("CheckValve") with HasTE[TileCheckValv
 
   override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack: ItemStack) = {
     super.onBlockPlacedBy(world, pos, state, placer, stack)
-    neighborChanged(state, world, pos, this)
+    neighborChanged(state, world, pos, this, pos)
   }
 }

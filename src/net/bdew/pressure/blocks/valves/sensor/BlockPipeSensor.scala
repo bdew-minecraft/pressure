@@ -16,7 +16,7 @@ import net.bdew.pressure.blocks.valves.BlockValve
 import net.bdew.pressure.misc.{DataSlotFluidAverages, FluidNameHelper}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.{ItemBlock, ItemStack}
+import net.minecraft.item.ItemBlock
 import net.minecraft.util._
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.{IBlockAccess, World}
@@ -41,9 +41,9 @@ object BlockPipeSensor extends BlockValve("PipeSensor") with HasTE[TilePipeSenso
     import net.bdew.lib.helpers.ChatHelper._
     val flow = ds.getAverages.toList.filter(_._2 > 0.000001).sortBy(-_._2)
     if (flow.nonEmpty) {
-      player.addChatComponentMessage(L("pressure.message.flow.head", ds.values.size.toString))
+      player.sendMessage(L("pressure.message.flow.head", ds.values.size.toString))
       for ((fluid, amount) <- flow) {
-        player.addChatComponentMessage(
+        player.sendMessage(
           L(" * %s - %s mB/t",
             L(FluidNameHelper.sanitizeUnlocalizedName(fluid)).setColor(Color.YELLOW),
             DecFormat.short(amount).setColor(Color.YELLOW)
@@ -52,11 +52,11 @@ object BlockPipeSensor extends BlockValve("PipeSensor") with HasTE[TilePipeSenso
       }
     }
     else {
-      player.addChatComponentMessage(L("pressure.message.flow.empty").setColor(Color.RED))
+      player.sendMessage(L("pressure.message.flow.empty").setColor(Color.RED))
     }
   }
 
-  override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, hand: EnumHand, heldItem: ItemStack, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+  override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
     if (player.isSneaking) return false
     if (world.isRemote) return true
     sendAveragesToPlayer(getTE(world, pos).averages, player)

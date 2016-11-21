@@ -30,7 +30,7 @@ class BasePoweredBlock[T <: TileFilterable](name: String, teClass: Class[T]) ext
     side != facing && side != facing.getOpposite
   }
 
-  override def neighborChanged(state: IBlockState, world: World, pos: BlockPos, block: Block): Unit = {
+  override def neighborChanged(state: IBlockState, world: World, pos: BlockPos, block: Block, fromPos: BlockPos): Unit = {
     val powered = world.isBlockIndirectlyGettingPowered(pos) > 0
     if (powered != getSignal(state))
       setSignal(world, pos, powered)

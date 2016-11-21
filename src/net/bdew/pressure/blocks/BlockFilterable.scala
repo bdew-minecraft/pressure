@@ -15,7 +15,6 @@ import net.bdew.lib.capabilities.helpers.FluidHelper
 import net.bdew.pressure.model.FluidFilterProperty
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.util.{EnumFacing, EnumHand}
@@ -32,16 +31,17 @@ trait BlockFilterable extends BaseBlock {
     getTE(world, pos).flatMap(_.getFluidFilter).map(fluid => st.withProperty(FluidFilterProperty, fluid)).getOrElse(st)
   }
 
-  override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, hand: EnumHand, heldItem: ItemStack, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
-    if (!player.isSneaking && heldItem != null) {
+  override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+    val heldItem = player.getHeldItem(hand)
+    if (!player.isSneaking && !heldItem.isEmpty) {
       val tank = FluidHelper.getFluidHandler(heldItem).flatMap(x => x.getTankProperties.headOption).getOrElse(return false)
       if (world.isRemote) return true
       if (tank.getContents == null || tank.getContents.getFluid == null) {
         getTE(world, pos).FilterableImpl.clearFluidFilter()
-        player.addChatMessage(new TextComponentTranslation("pressure.label.filter.unset"))
+        player.sendStatusMessage(new TextComponentTranslation("pressure.label.filter.unset"), true)
       } else {
         getTE(world, pos).FilterableImpl.setFluidFilter(tank.getContents.getFluid)
-        player.addChatMessage(new TextComponentTranslation("pressure.label.filter.set", tank.getContents.getLocalizedName))
+        player.sendStatusMessage(new TextComponentTranslation("pressure.label.filter.set", tank.getContents.getLocalizedName), true)
       }
       true
     } else false

@@ -10,7 +10,6 @@
 package net.bdew.pressure.blocks.pump
 
 import net.bdew.lib.capabilities.helpers.FluidHelper
-import net.bdew.lib.capabilities.legacy.OldFluidHandlerEmulator
 import net.bdew.lib.capabilities.{Capabilities, CapabilityProvider}
 import net.bdew.lib.data.base.TileDataSlotsTicking
 import net.bdew.pressure.blocks.TileFilterable
@@ -20,11 +19,11 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.fluids.FluidStack
 
-class TilePump extends TileDataSlotsTicking with TileFilterable with CapabilityProvider with OldFluidHandlerEmulator {
+class TilePump extends TileDataSlotsTicking with TileFilterable with CapabilityProvider {
   override def shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newSate: IBlockState) =
     oldState.getBlock != newSate.getBlock
 
-  def getFacing = BlockPump.getFacing(worldObj, pos)
+  def getFacing = BlockPump.getFacing(world, pos)
 
   serverTick.listen(doPushFluid)
 
@@ -33,7 +32,7 @@ class TilePump extends TileDataSlotsTicking with TileFilterable with CapabilityP
     override def canFillFluidType(fluidStack: FluidStack): Boolean = isFluidAllowed(fluidStack)
     override def fill(resource: FluidStack, doFill: Boolean): Int = {
       if (resource != null && isFluidAllowed(resource)) {
-        FluidHelper.getFluidHandler(worldObj, pos.offset(getFacing), getFacing.getOpposite) map { handler =>
+        FluidHelper.getFluidHandler(world, pos.offset(getFacing), getFacing.getOpposite) map { handler =>
           handler.fill(resource, doFill)
         } getOrElse 0
       } else 0
@@ -48,10 +47,10 @@ class TilePump extends TileDataSlotsTicking with TileFilterable with CapabilityP
   }
 
   def doPushFluid() {
-    if (BlockPump.getSignal(worldObj, pos)) {
+    if (BlockPump.getSignal(world, pos)) {
       for {
-        from <- FluidHelper.getFluidHandler(worldObj, pos.offset(getFacing.getOpposite), getFacing)
-        to <- FluidHelper.getFluidHandler(worldObj, pos.offset(getFacing), getFacing.getOpposite)
+        from <- FluidHelper.getFluidHandler(world, pos.offset(getFacing.getOpposite), getFacing)
+        to <- FluidHelper.getFluidHandler(world, pos.offset(getFacing), getFacing.getOpposite)
       } {
         FluidHelper.pushFluid(from, to)
       }

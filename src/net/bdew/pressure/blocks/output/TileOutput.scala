@@ -11,7 +11,6 @@ package net.bdew.pressure.blocks.output
 
 import net.bdew.lib.PimpVanilla._
 import net.bdew.lib.capabilities.helpers.{FluidHandlerNull, FluidHelper}
-import net.bdew.lib.capabilities.legacy.OldFluidHandlerEmulator
 import net.bdew.lib.capabilities.{Capabilities, CapabilityProvider}
 import net.bdew.lib.data.base.TileDataSlots
 import net.bdew.pressure.api.IPressureEject
@@ -19,13 +18,13 @@ import net.bdew.pressure.blocks.TileFilterable
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.FluidStack
 
-class TileOutput extends TileDataSlots with CapabilityProvider with OldFluidHandlerEmulator with IPressureEject with TileFilterable {
-  def getFacing = BlockOutput.getFacing(worldObj, pos)
+class TileOutput extends TileDataSlots with CapabilityProvider with IPressureEject with TileFilterable {
+  def getFacing = BlockOutput.getFacing(world, pos)
 
   override def eject(resource: FluidStack, direction: EnumFacing, doEject: Boolean) = {
     if (isFluidAllowed(resource) && direction == getFacing.getOpposite) {
       val f = getFacing
-      FluidHelper.getFluidHandler(worldObj, pos.offset(f), f.getOpposite) map { dest =>
+      FluidHelper.getFluidHandler(world, pos.offset(f), f.getOpposite) map { dest =>
         dest.fill(resource, doEject)
       } getOrElse 0
     } else 0

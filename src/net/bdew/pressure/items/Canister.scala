@@ -13,7 +13,6 @@ import java.util
 
 import net.bdew.lib.Misc
 import net.bdew.lib.capabilities.helpers.FluidHelper
-import net.bdew.lib.capabilities.legacy.OldFluidContainerItemEmulator
 import net.bdew.lib.capabilities.{Capabilities, CapabilityProviderItem}
 import net.bdew.lib.items.BaseItem
 import net.bdew.pressure.Pressure
@@ -25,14 +24,14 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.{EnumActionResult, EnumFacing, EnumHand}
+import net.minecraft.util.{EnumActionResult, EnumFacing, EnumHand, NonNullList}
 import net.minecraft.world.World
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.fluids.capability.{IFluidHandler, IFluidTankProperties}
 import net.minecraftforge.fluids.{Fluid, FluidRegistry, FluidStack}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
-object Canister extends BaseItem("Canister") with CapabilityProviderItem with OldFluidContainerItemEmulator {
+object Canister extends BaseItem("Canister") with CapabilityProviderItem {
   lazy val cfg = Tuning.getSection("Items").getSection(name)
   lazy val maxPour = cfg.getInt("MaxPour")
   lazy val capacity = cfg.getInt("Capacity")
@@ -44,7 +43,7 @@ object Canister extends BaseItem("Canister") with CapabilityProviderItem with Ol
 
   override def getCreativeTabs = Array(PressureCreativeTabs.main, PressureCreativeTabs.canisters)
 
-  override def getSubItems(item: Item, tab: CreativeTabs, stacks: util.List[ItemStack]) = {
+  override def getSubItems(item: Item, tab: CreativeTabs, stacks: NonNullList[ItemStack]) = {
     import scala.collection.JavaConversions._
     if (tab == PressureCreativeTabs.main)
       stacks.add(new ItemStack(this))
@@ -98,7 +97,7 @@ object Canister extends BaseItem("Canister") with CapabilityProviderItem with Ol
     override def getTankProperties: Array[IFluidTankProperties] = Array(this)
 
     override def fill(resource: FluidStack, doFill: Boolean): Int = {
-      if (stack.stackSize != 1 || resource == null || resource.amount <= 0) return 0
+      if (stack.getCount != 1 || resource == null || resource.amount <= 0) return 0
       val contained = getContents
       if (contained == null) {
         val fillAmount = Math.min(capacity, resource.amount)
@@ -121,14 +120,14 @@ object Canister extends BaseItem("Canister") with CapabilityProviderItem with Ol
     }
 
     override def drain(resource: FluidStack, doDrain: Boolean): FluidStack = {
-      if (stack.stackSize != 1 || resource == null || resource.amount <= 0 || !resource.isFluidEqual(getContents))
+      if (stack.getCount != 1 || resource == null || resource.amount <= 0 || !resource.isFluidEqual(getContents))
         null
       else
         drain(resource.amount, doDrain)
     }
 
     override def drain(maxDrain: Int, doDrain: Boolean): FluidStack = {
-      if (stack.stackSize != 1 || maxDrain <= 0) return null
+      if (stack.getCount != 1 || maxDrain <= 0) return null
       val contained = getContents
       if (contained == null || contained.amount <= 0) return null
       val drainAmount = Math.min(contained.amount, maxDrain)
@@ -156,7 +155,8 @@ object Canister extends BaseItem("Canister") with CapabilityProviderItem with Ol
     }
   }
 
-  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
+  override def onItemUse(player: EntityPlayer, world: World, pos: BlockPos, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
+    val stack = player.getHeldItem(hand)
     if (world.isRemote) return EnumActionResult.SUCCESS
     val me = stack.getCapability(Capabilities.CAP_FLUID_HANDLER, null)
     FluidHelper.getFluidHandler(world, pos, side) foreach { target =>
@@ -172,7 +172,7 @@ object Canister extends BaseItem("Canister") with CapabilityProviderItem with Ol
       if (fs != null && fs.getFluid != null && fs.getFluid.canBePlacedInWorld && fs.amount == Fluid.BUCKET_VOLUME) {
         me.drain(fs, true)
         world.setBlockState(p, fs.getFluid.getBlock.getDefaultState, 3)
-        world.notifyBlockOfStateChange(p, fs.getFluid.getBlock)
+        world.neighborChanged(p, fs.getFluid.getBlock, p)
         return EnumActionResult.SUCCESS
       }
     }

@@ -15,7 +15,6 @@ import net.bdew.pressure.items.configurator.ItemConfigurator
 import net.bdew.pressure.model.FluidFilterProperty
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.{EnumFacing, EnumHand}
 import net.minecraft.world.{IBlockAccess, World}
@@ -30,11 +29,11 @@ object BlockTankFilter extends BaseModule("TankFilter", "FluidFilter", classOf[T
     te.getCore.flatMap(_.getFluidFilter).map(fluid => st.withProperty(FluidFilterProperty, fluid)).getOrElse(st)
   }
 
-  override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, hand: EnumHand, heldItem: ItemStack, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+  override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
     if (player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemConfigurator)
       false // Let the configurator handle the click
     else
-      super.onBlockActivated(world, pos, state, player, hand, heldItem, side, hitX, hitY, hitZ)
+      super.onBlockActivated(world, pos, state, player, hand, side, hitX, hitY, hitZ)
   }
 }
 

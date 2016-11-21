@@ -35,8 +35,8 @@ class TilePipeSensor extends TileDataSlotsTicking with IPressureEject with IPres
     flowTicks += 1
     if (coolDown <= 0) {
       val state = flowTicks < 10
-      if (BlockPipeSensor.getSignal(worldObj, pos) != state)
-        BlockPipeSensor.setSignal(worldObj, pos, state)
+      if (BlockPipeSensor.getSignal(world, pos) != state)
+        BlockPipeSensor.setSignal(world, pos, state)
       coolDown = 10
     }
     averages.update(flowThisTick)
@@ -46,7 +46,7 @@ class TilePipeSensor extends TileDataSlotsTicking with IPressureEject with IPres
   override def shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newSate: IBlockState) =
     oldState.getBlock != newSate.getBlock
 
-  def getFacing = BlockPipeSensor.getFacing(worldObj, pos)
+  def getFacing = BlockPipeSensor.getFacing(world, pos)
 
   override def eject(resource: FluidStack, face: EnumFacing, doEject: Boolean): Int = {
     if (face == getFacing.getOpposite) {

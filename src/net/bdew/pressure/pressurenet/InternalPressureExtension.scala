@@ -11,9 +11,8 @@ package net.bdew.pressure.pressurenet
 
 import net.bdew.lib.PimpVanilla._
 import net.bdew.pressure.api.{IFilterableProvider, IPressureConnectableBlock, IPressureExtension, PressureAPI}
-import net.minecraft.block.Block
+import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.{IBlockAccess, World}
@@ -34,12 +33,11 @@ object InternalPressureExtension extends IPressureExtension with IFilterableProv
       _.isTraversable(world, pos)
     }
 
-  override def tryPlaceBlock(w: World, pos: BlockPos, b: Block, p: EntityPlayer, reallyPlace: Boolean) = {
+  override def tryPlaceBlock(w: World, pos: BlockPos, state: IBlockState, p: EntityPlayer, reallyPlace: Boolean) = {
     if (w.isAirBlock(pos) || w.getBlockState(pos).getBlock.isReplaceable(w, pos)) {
       if (reallyPlace) {
-        val st = b.onBlockPlaced(w, pos, EnumFacing.UP, 0, 0, 0, 0, p)
-        if (w.setBlockState(pos, st, 3)) {
-          b.onBlockPlacedBy(w, pos, st, p, new ItemStack(b))
+        if (w.setBlockState(pos, state, 3)) {
+          state.getBlock.onBlockPlacedBy(w, pos, state, p, state.getBlock.getItem(w, pos, state))
           true
         } else false // Failed to place
       } else true // Just testing, not really placing

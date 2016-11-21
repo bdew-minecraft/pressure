@@ -37,7 +37,7 @@ class TilePressureOutput extends TileOutput[OutputConfigFluid] with PressureModu
   override def getCore = getCoreAs[CIFluidOutput]
 
   override def canConnectToFace(d: EnumFacing) =
-    Helper.canPipeConnectFrom(worldObj, pos.offset(d), d.getOpposite)
+    Helper.canPipeConnectFrom(world, pos.offset(d), d.getOpposite)
 
   override def makeCfgObject(face: EnumFacing) = new OutputConfigFluid
 

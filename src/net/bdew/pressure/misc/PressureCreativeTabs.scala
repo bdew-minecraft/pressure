@@ -12,8 +12,9 @@ package net.bdew.pressure.misc
 import net.bdew.lib.CreativeTabContainer
 import net.bdew.pressure.config.Items
 import net.bdew.pressure.items.Canister
+import net.minecraft.item.ItemStack
 
 object PressureCreativeTabs extends CreativeTabContainer {
-  val main = new Tab("bdew.pressure", Items.interface)
-  val canisters = new Tab("bdew.canisters", Canister)
+  val main = new Tab("bdew.pressure", new ItemStack(Items.interface))
+  val canisters = new Tab("bdew.canisters", new ItemStack(Canister))
 }

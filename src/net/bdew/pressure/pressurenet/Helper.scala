@@ -15,7 +15,7 @@ import net.bdew.lib.capabilities.{NoFactory, NoStorage}
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api._
 import net.bdew.pressure.api.properties.IFilterable
-import net.minecraft.block.Block
+import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
@@ -101,8 +101,8 @@ object Helper extends IPressureHelper {
   def canPipeConnectTo(w: IBlockAccess, pos: BlockPos, side: EnumFacing) =
     extensions.exists(_.canPipeConnectTo(w, pos, side))
 
-  override def tryPlaceBlock(w: World, pos: BlockPos, b: Block, p: EntityPlayer, reallyPlace: Boolean) =
-    extensions.exists(_.tryPlaceBlock(w, pos, b, p, reallyPlace))
+  override def tryPlaceBlock(w: World, pos: BlockPos, state: IBlockState, p: EntityPlayer, reallyPlace: Boolean) =
+    extensions.exists(_.tryPlaceBlock(w, pos, state, p, reallyPlace))
 
   def getFilterableForWorldCoordinates(world: World, pos: BlockPos, side: EnumFacing): IFilterable = {
     for (fp <- filterableProviders)

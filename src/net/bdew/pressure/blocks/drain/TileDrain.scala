@@ -9,7 +9,6 @@
 
 package net.bdew.pressure.blocks.drain
 
-import net.bdew.lib.capabilities.legacy.OldFluidHandlerEmulator
 import net.bdew.lib.capabilities.{Capabilities, CapabilityProvider}
 import net.bdew.lib.data.DataSlotTank
 import net.bdew.lib.data.base.TileDataSlotsTicking
@@ -21,8 +20,8 @@ import net.minecraft.entity.item.EntityXPOrb
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.FluidStack
 
-class TileDrain extends TileDataSlotsTicking with CapabilityProvider with OldFluidHandlerEmulator with IPressureEject with TileFilterable {
-  def getFacing = BlockDrain.getFacing(worldObj, pos)
+class TileDrain extends TileDataSlotsTicking with CapabilityProvider with IPressureEject with TileFilterable {
+  def getFacing = BlockDrain.getFacing(world, pos)
 
   val bufferTank = new DataSlotTank("buffer", this, Int.MaxValue)
 
@@ -31,7 +30,7 @@ class TileDrain extends TileDataSlotsTicking with CapabilityProvider with OldFlu
     override def canFillFluidType(fluidStack: FluidStack): Boolean = isFluidAllowed(fluidStack)
     override def fill(resource: FluidStack, doFill: Boolean): Int = {
       if (resource != null && resource.getFluid != null && resource.amount > 0 && canFillFluidType(resource)) {
-        if (!worldObj.isRemote && doFill)
+        if (!world.isRemote && doFill)
           doDrain(resource)
         resource.amount
       } else 0
@@ -57,18 +56,18 @@ class TileDrain extends TileDataSlotsTicking with CapabilityProvider with OldFlu
       while (xpToDrop > 0) {
         val dropNow = EntityXPOrb.getXPSplit(xpToDrop)
         xpToDrop -= dropNow
-        val ent = new EntityXPOrb(this.worldObj, target.getX + 0.5D, target.getY + 0.5D, target.getZ + 0.5D, dropNow)
+        val ent = new EntityXPOrb(this.world, target.getX + 0.5D, target.getY + 0.5D, target.getZ + 0.5D, dropNow)
         val v = getFacing.getDirectionVec
         ent.motionX = v.getX * (Math.random() * 0.5 - 0.25) + (Math.random() * 0.2 - 0.1)
         ent.motionY = v.getY * (Math.random() * 0.5 - 0.25) + (Math.random() * 0.2 - 0.1)
         ent.motionZ = v.getZ * (Math.random() * 0.5 - 0.25) + (Math.random() * 0.2 - 0.1)
-        this.worldObj.spawnEntityInWorld(ent)
+        this.world.spawnEntity(ent)
       }
     } else {
-      if (worldObj.isAirBlock(target) && bufferTank.getFluidAmount >= 1000 && resource.getFluid.canBePlacedInWorld) {
+      if (world.isAirBlock(target) && bufferTank.getFluidAmount >= 1000 && resource.getFluid.canBePlacedInWorld) {
         bufferTank.setFluid(null)
-        worldObj.setBlockState(target, resource.getFluid.getBlock.getDefaultState, 3)
-        worldObj.notifyBlockOfStateChange(target, BlockDrain)
+        world.setBlockState(target, resource.getFluid.getBlock.getDefaultState, 3)
+        world.neighborChanged(target, BlockDrain, pos)
       }
     }
   }

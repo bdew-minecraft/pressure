@@ -11,7 +11,6 @@ package net.bdew.pressure.blocks.tank
 
 import net.bdew.lib.PimpVanilla._
 import net.bdew.lib.capabilities.helpers.{FluidDrainMonitor, FluidHelper, FluidMultiHandler}
-import net.bdew.lib.capabilities.legacy.OldFluidHandlerEmulator
 import net.bdew.lib.capabilities.{Capabilities, CapabilityProvider}
 import net.bdew.lib.multiblock.data.OutputConfigFluid
 import net.bdew.lib.multiblock.interact.CIFluidOutput
@@ -19,7 +18,7 @@ import net.bdew.lib.multiblock.tile.{RSControllableOutput, TileOutput}
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.FluidStack
 
-abstract class TileFluidOutputBase extends TileOutput[OutputConfigFluid] with RSControllableOutput with CapabilityProvider with OldFluidHandlerEmulator {
+abstract class TileFluidOutputBase extends TileOutput[OutputConfigFluid] with RSControllableOutput with CapabilityProvider {
   val kind: String = "FluidOutput"
 
   override def getCore = getCoreAs[CIFluidOutput]
@@ -36,7 +35,7 @@ abstract class TileFluidOutputBase extends TileOutput[OutputConfigFluid] with RS
   }
 
   override def canConnectToFace(d: EnumFacing) =
-    getCore.isDefined && FluidHelper.hasFluidHandler(worldObj, pos.offset(d), d.getOpposite)
+    getCore.isDefined && FluidHelper.hasFluidHandler(world, pos.offset(d), d.getOpposite)
 
   var outThisTick = Map.empty[EnumFacing, Float]
 

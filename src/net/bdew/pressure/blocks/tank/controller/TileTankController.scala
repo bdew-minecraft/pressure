@@ -53,25 +53,25 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
 
   val inventory = new DataSlotInventory("inv", this, 3) {
     override def isItemValidForSlot(slot: Int, stack: ItemStack) =
-      slot == 0 && stack != null && stack.getItem != null && FluidHelper.hasFluidHandler(stack)
+      slot == 0 && !stack.isEmpty && stack.getItem != null && FluidHelper.hasFluidHandler(stack)
   }
 
   def doRenderUpdate(): Unit = {
     needsRenderUpdate = false
-    lastRenderUpdate = worldObj.getTotalWorldTime
+    lastRenderUpdate = world.getTotalWorldTime
     for (ref <- getModuleBlocks[ModuleNeedsRenderUpdate].keys)
-      worldObj.markBlockRangeForRenderUpdate(ref, ref)
+      world.markBlockRangeForRenderUpdate(ref, ref)
   }
 
   handleClientUpdate listen { tag =>
-    if (worldObj.getTotalWorldTime > lastRenderUpdate + 10)
+    if (world.getTotalWorldTime > lastRenderUpdate + 10)
       doRenderUpdate()
     else
       needsRenderUpdate = true
   }
 
   clientTick.listen(() => {
-    if (needsRenderUpdate && worldObj.getTotalWorldTime > lastRenderUpdate + 10)
+    if (needsRenderUpdate && world.getTotalWorldTime > lastRenderUpdate + 10)
       doRenderUpdate()
   })
 
@@ -90,21 +90,15 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
 
   def canEjectItem(stack: ItemStack) = {
     val outStack = inventory.getStackInSlot(1)
-    (stack == null
-      || stack.getItem == null
-      || stack.stackSize <= 0
-      || outStack == null
-      || outStack.getItem == null
-      || (ItemUtils.isSameItem(stack, outStack) && outStack.stackSize + stack.stackSize <= outStack.getMaxStackSize)
-      )
+    stack.isEmpty || outStack.isEmpty || (ItemUtils.isSameItem(stack, outStack) && outStack.getCount + stack.getCount <= outStack.getMaxStackSize)
   }
 
   def doEjectItem(stack: ItemStack) {
-    if (stack != null && stack.getItem != null && stack.stackSize > 0) {
-      if (inventory.getStackInSlot(1) == null) {
+    if (!stack.isEmpty) {
+      if (inventory.getStackInSlot(1).isEmpty) {
         inventory.setInventorySlotContents(1, stack)
       } else {
-        inventory.getStackInSlot(1).stackSize += stack.stackSize
+        inventory.getStackInSlot(1).grow(stack.getCount)
         inventory.markDirty()
       }
     }
@@ -112,9 +106,9 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
 
   def doUpdate() {
     val original = inventory.getStackInSlot(0)
-    if (original != null) {
+    if (!original.isEmpty) {
       val inStack = original.copy()
-      inStack.stackSize = 1
+      inStack.setCount(1)
       for (handler <- FluidHelper.getFluidHandler(inStack)) {
         if (tank.getFluidAmount > 0 && handler.getTankProperties.exists(t => t.canFill && (t.getContents == null || t.getContents.amount < t.getCapacity))) {
           // Attempt to fill
@@ -146,7 +140,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
 
   serverTick.listen(doUpdate)
 
-  override def openGui(player: EntityPlayer) = player.openGui(Pressure, cfg.guiId, worldObj, pos.getX, pos.getY, pos.getZ)
+  override def openGui(player: EntityPlayer) = player.openGui(Pressure, cfg.guiId, world, pos.getX, pos.getY, pos.getZ)
 
   def onModulesChanged() {
     val newCapacity = 1.0 * getNumOfModules("TankBlock") * Modules.TankBlock.capacity
@@ -183,14 +177,14 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
     if (slot == tank) {
       // Send block updates if tank content changes - needed for extracells, etc.
       for (pos <- getModulePositions(BlockFluidAccess)) {
-        worldObj.notifyNeighborsOfStateChange(pos, BlockFluidAccess)
+        world.notifyNeighborsOfStateChange(pos, BlockFluidAccess, true)
       }
-      if (sendNetworkUpdates && !worldObj.isRemote) {
+      if (sendNetworkUpdates && !world.isRemote) {
         val fluid = tank.getFluid
         if (fluid != null && fluid.amount > 0 && fluid.getFluid != null) {
-          NetworkHandler.sendToWatchingPlayers(MsgTankUpdate(pos.getX, pos.getY, pos.getZ, fluid.getFluid.getName, fluid.amount, tank.getCapacity), worldObj, pos)
+          NetworkHandler.sendToWatchingPlayers(MsgTankUpdate(pos.getX, pos.getY, pos.getZ, fluid.getFluid.getName, fluid.amount, tank.getCapacity), world, pos)
         } else {
-          NetworkHandler.sendToWatchingPlayers(MsgTankUpdate(pos.getX, pos.getY, pos.getZ, "", 0, tank.getCapacity), worldObj, pos)
+          NetworkHandler.sendToWatchingPlayers(MsgTankUpdate(pos.getX, pos.getY, pos.getZ, "", 0, tank.getCapacity), world, pos)
         }
       }
     }

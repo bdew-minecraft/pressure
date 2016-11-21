@@ -22,7 +22,7 @@ class SlotFilter(container: IInventory, filterable: IFilterable, index: Int, x: 
 
   override def onClick(clickType: ClickType, button: Int, player: EntityPlayer): ItemStack = {
     val stack = player.inventory.getItemStack
-    if (!player.worldObj.isRemote) {
+    if (!player.world.isRemote) {
       if (stack == null || stack.getItem == null) {
         filterable.clearFluidFilter()
       } else if (FluidHelper.hasFluidHandler(stack)) {

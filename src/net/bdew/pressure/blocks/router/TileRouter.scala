@@ -10,7 +10,6 @@
 package net.bdew.pressure.blocks.router
 
 import net.bdew.lib.capabilities.helpers.FluidHelper
-import net.bdew.lib.capabilities.legacy.OldFluidHandlerEmulator
 import net.bdew.lib.capabilities.{Capabilities, CapabilityProvider}
 import net.bdew.lib.data.base.{TileDataSlotsTicking, UpdateKind}
 import net.bdew.lib.multiblock.data.RSMode
@@ -22,7 +21,7 @@ import net.minecraftforge.fluids.{Fluid, FluidStack}
 
 import scala.collection.mutable
 
-class TileRouter extends TileDataSlotsTicking with IPressureInject with IPressureEject with OldFluidHandlerEmulator with CapabilityProvider {
+class TileRouter extends TileDataSlotsTicking with IPressureInject with IPressureEject with CapabilityProvider {
   val sideModes = DataSlotSideModes("modes", this).setUpdate(UpdateKind.SAVE, UpdateKind.GUI, UpdateKind.WORLD, UpdateKind.RENDER)
   val sideControl = DataSlotSideRSControl("control", this).setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
   val sideFilters = DataSlotSideFilters("filters", this).setUpdate(UpdateKind.SAVE, UpdateKind.GUI)
@@ -77,7 +76,7 @@ class TileRouter extends TileDataSlotsTicking with IPressureInject with IPressur
 
   def pushFromSide(resource: FluidStack, side: EnumFacing, doEject: Boolean) = {
     if (isSideValidIO(side, resource, RouterSideMode.outputs)) {
-      FluidHelper.getFluidHandler(worldObj, pos.offset(side), side.getOpposite) map { handler =>
+      FluidHelper.getFluidHandler(world, pos.offset(side), side.getOpposite) map { handler =>
         handler.fill(resource, doEject)
       } getOrElse {
         if (!connections.isDefinedAt(side))
@@ -90,7 +89,7 @@ class TileRouter extends TileDataSlotsTicking with IPressureInject with IPressur
   serverTick.listen(() => {
     for {
       face <- sideModes.sides(RouterSideMode.INPUT_ACTIVE) if canWorkWithRsMode(sideControl.get(face))
-      handler <- FluidHelper.getFluidHandler(worldObj, pos.offset(face), face.getOpposite)
+      handler <- FluidHelper.getFluidHandler(world, pos.offset(face), face.getOpposite)
     } {
       val fluid = if (sideFilters.isSet(face)) {
         handler.drain(new FluidStack(sideFilters.get(face), Int.MaxValue), false)

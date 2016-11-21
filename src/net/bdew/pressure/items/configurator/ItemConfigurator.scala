@@ -19,7 +19,6 @@ import net.bdew.pressure.config.Config
 import net.bdew.pressure.network.NetworkHandler
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
-import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.util.{EnumActionResult, EnumFacing, EnumHand}
@@ -40,7 +39,7 @@ object ItemConfigurator extends BaseItem("Configurator") with GuiProvider {
 
   override def getContainer(te: TEClass, player: EntityPlayer) = new ContainerConfigurator(player)
 
-  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
+  override def onItemUse(player: EntityPlayer, world: World, pos: BlockPos, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
     if (!world.isRemote && player.isInstanceOf[EntityPlayerMP]) {
       Option(Helper.getFilterableForWorldCoordinates(world, pos, side)) foreach { filterable =>
         filterableCache.update(player, filterable)
@@ -57,7 +56,7 @@ object ItemConfigurator extends BaseItem("Configurator") with GuiProvider {
         fluid <- Option(FluidRegistry.getFluid(msg.fluid))
         filterable <- filterableCache.map.get(p)
       } {
-        p.addChatMessage(new TextComponentTranslation("pressure.label.filter.set", fluid.getLocalizedName(new FluidStack(fluid, 1))))
+        p.sendMessage(new TextComponentTranslation("pressure.label.filter.set", fluid.getLocalizedName(new FluidStack(fluid, 1))))
         filterable.setFluidFilter(fluid)
         filterableCache.reset(p)
         p.closeContainer()
@@ -67,7 +66,7 @@ object ItemConfigurator extends BaseItem("Configurator") with GuiProvider {
         cont <- Misc.asInstanceOpt(p.openContainer, classOf[ContainerConfigurator])
         filterable <- filterableCache.map.get(p)
       } {
-        p.addChatMessage(new TextComponentTranslation("pressure.label.filter.unset"))
+        p.sendMessage(new TextComponentTranslation("pressure.label.filter.unset"))
         filterable.clearFluidFilter()
         filterableCache.reset(p)
         p.closeContainer()

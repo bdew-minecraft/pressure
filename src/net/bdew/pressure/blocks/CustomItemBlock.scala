@@ -24,12 +24,12 @@ class CustomItemBlock(bl: Block) extends ItemBlock(bl) {
 
   override def canPlaceBlockOnSide(world: World, pos: BlockPos, side: EnumFacing, player: EntityPlayer, stack: ItemStack): Boolean =
     world.checkNoEntityCollision(bl.getCollisionBoundingBox(block.getDefaultState, world, pos)) && (
-      Helper.tryPlaceBlock(world, pos, bl, player, false) || Helper.tryPlaceBlock(world, pos.offset(side), bl, player, false))
+      Helper.tryPlaceBlock(world, pos, bl.getDefaultState, player, false) || Helper.tryPlaceBlock(world, pos.offset(side), bl.getDefaultState, player, false))
 
-  override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
+  override def onItemUse(player: EntityPlayer, world: World, pos: BlockPos, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
     if (!world.isRemote && player.isInstanceOf[EntityPlayerMP]) {
       val p = player.asInstanceOf[EntityPlayerMP]
-      if (Helper.tryPlaceBlock(world, pos, bl, p, true) || Helper.tryPlaceBlock(world, pos.offset(side), bl, p, true)) {
+      if (Helper.tryPlaceBlock(world, pos, bl.getDefaultState, p, true) || Helper.tryPlaceBlock(world, pos.offset(side), bl.getDefaultState, p, true)) {
         if (!p.capabilities.isCreativeMode)
           player.inventory.decrStackSize(player.inventory.currentItem, 1)
         EnumActionResult.SUCCESS

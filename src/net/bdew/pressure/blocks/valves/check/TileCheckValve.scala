@@ -24,10 +24,10 @@ class TileCheckValve extends TileEntity with IPressureEject with IPressureInject
   override def shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newSate: IBlockState) =
     oldState.getBlock != newSate.getBlock
 
-  def getFacing = BlockCheckValve.getFacing(worldObj, pos)
+  def getFacing = BlockCheckValve.getFacing(world, pos)
 
   override def eject(resource: FluidStack, face: EnumFacing, doEject: Boolean): Int = {
-    if (face == getFacing.getOpposite && !BlockCheckValve.getSignal(worldObj, pos)) {
+    if (face == getFacing.getOpposite && !BlockCheckValve.getSignal(world, pos)) {
       if (connection == null)
         connection = Helper.recalculateConnectionInfo(this, getFacing)
       connection.pushFluid(resource, doEject)

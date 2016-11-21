@@ -9,7 +9,6 @@
 
 package net.bdew.pressure.blocks.drain
 
-import net.bdew.lib.capabilities.legacy.OldFluidHandlerEmulator
 import net.bdew.lib.capabilities.{Capabilities, CapabilityProvider}
 import net.bdew.lib.data.DataSlotTank
 import net.bdew.lib.data.base.TileDataSlotsTicking
@@ -19,8 +18,8 @@ import net.bdew.pressure.misc.FakeFluidHandler
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.{Fluid, FluidStack}
 
-class TileSluice extends TileDataSlotsTicking with CapabilityProvider with OldFluidHandlerEmulator with IPressureEject with TileFilterable {
-  def getFacing = BlockSluice.getFacing(worldObj, pos)
+class TileSluice extends TileDataSlotsTicking with CapabilityProvider with IPressureEject with TileFilterable {
+  def getFacing = BlockSluice.getFacing(world, pos)
 
   val bufferTank = new DataSlotTank("buffer", this, Fluid.BUCKET_VOLUME)
 
@@ -32,11 +31,11 @@ class TileSluice extends TileDataSlotsTicking with CapabilityProvider with OldFl
         if (bufferTank.getFluid != null && bufferTank.getFluid.getFluid != resource.getFluid)
           bufferTank.setFluid(null)
         val amountFilled = bufferTank.fill(resource, doFill)
-        if (doFill && !worldObj.isRemote && bufferTank.getFluidAmount >= Fluid.BUCKET_VOLUME) {
+        if (doFill && !world.isRemote && bufferTank.getFluidAmount >= Fluid.BUCKET_VOLUME) {
           val target = pos.offset(getFacing)
-          if (worldObj.isAirBlock(target)) {
-            worldObj.setBlockState(target, bufferTank.getFluid.getFluid.getBlock.getDefaultState, 3)
-            worldObj.notifyBlockOfStateChange(target, BlockSluice)
+          if (world.isAirBlock(target)) {
+            world.setBlockState(target, bufferTank.getFluid.getFluid.getBlock.getDefaultState, 3)
+            world.neighborChanged(target, BlockSluice, pos)
             bufferTank.drain(Fluid.BUCKET_VOLUME, true)
           }
         }

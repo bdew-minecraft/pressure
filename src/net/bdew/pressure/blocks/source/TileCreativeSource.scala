@@ -9,14 +9,14 @@
 
 package net.bdew.pressure.blocks.source
 
-import net.bdew.lib.capabilities.legacy.OldFluidHandlerEmulator
+
 import net.bdew.lib.capabilities.{Capabilities, CapabilityProvider}
 import net.bdew.pressure.blocks.TileFilterable
 import net.bdew.pressure.misc.FakeFluidHandler
 import net.minecraftforge.fluids._
 import net.minecraftforge.fluids.capability.{FluidTankProperties, IFluidTankProperties}
 
-class TileCreativeSource extends TileFilterable with CapabilityProvider with OldFluidHandlerEmulator {
+class TileCreativeSource extends TileFilterable with CapabilityProvider {
   def stack(amount: Int = Int.MaxValue) = getFluidFilter.map(new FluidStack(_, amount)).orNull
 
   addCapability(Capabilities.CAP_FLUID_HANDLER, new FakeFluidHandler {

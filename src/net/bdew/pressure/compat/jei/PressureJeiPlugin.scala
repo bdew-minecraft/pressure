@@ -9,20 +9,19 @@
 
 package net.bdew.pressure.compat.jei
 
-import java.util
-
 import mezz.jei.api._
 import net.bdew.pressure.config.Config
 import net.bdew.pressure.items.Canister
 import net.bdew.pressure.misc.PressureCreativeTabs
 import net.minecraft.item.ItemStack
+import net.minecraft.util.NonNullList
 
 @JEIPlugin
 class PressureJeiPlugin extends BlankModPlugin {
   override def register(registry: IModRegistry): Unit = {
     if (!Config.showCanisters) {
       import scala.collection.JavaConversions._
-      val list = new util.ArrayList[ItemStack]()
+      val list = NonNullList.create[ItemStack]
       Canister.getSubItems(Canister, PressureCreativeTabs.canisters, list)
       list.foreach(registry.getJeiHelpers.getItemBlacklist.addItemToBlacklist)
     }

@@ -9,7 +9,7 @@
 
 package net.bdew.pressure.api;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -51,5 +51,5 @@ public interface IPressureExtension {
      * @param reallyPlace if false - only check that block can be placed, don't actually place it
      * @return true if block was placed successfully
      */
-    boolean tryPlaceBlock(World w, BlockPos pos, Block block, EntityPlayer p, boolean reallyPlace);
+    boolean tryPlaceBlock(World w, BlockPos pos, IBlockState state, EntityPlayer p, boolean reallyPlace);
 }

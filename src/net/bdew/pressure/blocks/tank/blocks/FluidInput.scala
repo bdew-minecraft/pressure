@@ -10,7 +10,6 @@
 package net.bdew.pressure.blocks.tank.blocks
 
 import net.bdew.lib.capabilities.helpers.FluidMultiHandler
-import net.bdew.lib.capabilities.legacy.OldFluidHandlerEmulator
 import net.bdew.lib.capabilities.{Capabilities, CapabilityProvider}
 import net.bdew.lib.multiblock.interact.CIFluidInput
 import net.bdew.lib.multiblock.tile.TileModule
@@ -18,7 +17,7 @@ import net.bdew.pressure.blocks.tank.BaseModule
 
 object BlockFluidInput extends BaseModule("TankFluidInput", "FluidInput", classOf[TileFluidInput])
 
-class TileFluidInput extends TileModule with CapabilityProvider with OldFluidHandlerEmulator {
+class TileFluidInput extends TileModule with CapabilityProvider {
   val kind: String = "FluidInput"
 
   override def getCore = getCoreAs[CIFluidInput]

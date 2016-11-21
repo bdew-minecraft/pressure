@@ -9,14 +9,14 @@
 
 package net.bdew.pressure.blocks.source
 
-import net.bdew.lib.capabilities.legacy.OldFluidHandlerEmulator
+
 import net.bdew.lib.capabilities.{Capabilities, CapabilityProvider}
 import net.bdew.pressure.misc.FakeFluidHandler
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fluids._
 import net.minecraftforge.fluids.capability.{FluidTankProperties, IFluidTankProperties}
 
-class TileWaterSource extends TileEntity with CapabilityProvider with OldFluidHandlerEmulator {
+class TileWaterSource extends TileEntity with CapabilityProvider {
   val fullStack = new FluidStack(FluidRegistry.WATER, Int.MaxValue)
 
   addCapability(Capabilities.CAP_FLUID_HANDLER, new FakeFluidHandler {

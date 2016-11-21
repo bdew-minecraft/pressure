@@ -21,7 +21,6 @@ import net.bdew.pressure.{Pressure, PressureResourceProvider}
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.{BlockRenderLayer, EnumFacing, EnumHand}
 import net.minecraft.world.{IBlockAccess, World}
@@ -54,7 +53,7 @@ object BlockRouter extends BaseBlock("Router", Material.IRON) with HasTE[TileRou
 
   override def isTraversable(world: IBlockAccess, pos: BlockPos) = false
 
-  override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, hand: EnumHand, heldItem: ItemStack, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+  override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
     if (player.isSneaking) return false
     if (world.isRemote) return true
     player.openGui(Pressure, cfg.guiId, world, pos.getX, pos.getY, pos.getZ)
