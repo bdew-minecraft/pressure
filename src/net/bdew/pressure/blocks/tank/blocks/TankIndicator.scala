@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler
 
 import scala.collection.mutable
 
-object BlockTankIndicator extends BaseModule("TankIndicator", "TankBlock", classOf[TileTankIndicator]) {
+object BlockTankIndicator extends BaseModule("tank_indicator", "TankBlock", classOf[TileTankIndicator]) {
 
   object Position extends Enumeration {
     val TOP, BOTTOM, MIDDLE, ALONE = Value

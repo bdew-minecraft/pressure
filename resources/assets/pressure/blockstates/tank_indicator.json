@@ -1,0 +1,108 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "up": "pressure:blocks/tank/indicator/main",
+      "down": "pressure:blocks/tank/indicator/main",
+      "east": "pressure:blocks/tank/indicator/single",
+      "west": "pressure:blocks/tank/indicator/single",
+      "north": "pressure:blocks/tank/indicator/single",
+      "south": "pressure:blocks/tank/indicator/single",
+      "particle": "pressure:blocks/tank/indicator/single"
+    },
+    "model": "pressure:cube_multiblock.extended"
+  },
+  "variants": {
+    "east": {
+      "top": {
+        "textures": {
+          "east": "pressure:blocks/tank/indicator/up"
+        }
+      },
+      "bottom": {
+        "textures": {
+          "east": "pressure:blocks/tank/indicator/down"
+        }
+      },
+      "middle": {
+        "textures": {
+          "east": "pressure:blocks/tank/indicator/full"
+        }
+      },
+      "alone": {
+        "textures": {
+          "east": "pressure:blocks/tank/indicator/single"
+        }
+      }
+    },
+    "west": {
+      "top": {
+        "textures": {
+          "west": "pressure:blocks/tank/indicator/up"
+        }
+      },
+      "bottom": {
+        "textures": {
+          "west": "pressure:blocks/tank/indicator/down"
+        }
+      },
+      "middle": {
+        "textures": {
+          "west": "pressure:blocks/tank/indicator/full"
+        }
+      },
+      "alone": {
+        "textures": {
+          "west": "pressure:blocks/tank/indicator/single"
+        }
+      }
+    },
+    "north": {
+      "top": {
+        "textures": {
+          "north": "pressure:blocks/tank/indicator/up"
+        }
+      },
+      "bottom": {
+        "textures": {
+          "north": "pressure:blocks/tank/indicator/down"
+        }
+      },
+      "middle": {
+        "textures": {
+          "north": "pressure:blocks/tank/indicator/full"
+        }
+      },
+      "alone": {
+        "textures": {
+          "north": "pressure:blocks/tank/indicator/single"
+        }
+      }
+    },
+    "south": {
+      "top": {
+        "textures": {
+          "south": "pressure:blocks/tank/indicator/up"
+        }
+      },
+      "bottom": {
+        "textures": {
+          "south": "pressure:blocks/tank/indicator/down"
+        }
+      },
+      "middle": {
+        "textures": {
+          "south": "pressure:blocks/tank/indicator/full"
+        }
+      },
+      "alone": {
+        "textures": {
+          "south": "pressure:blocks/tank/indicator/single"
+        }
+      }
+    },
+    "inventory": {
+      "transform": "forge:default-block"
+    }
+  }
+}

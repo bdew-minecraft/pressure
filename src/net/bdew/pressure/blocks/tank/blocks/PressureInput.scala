@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 import net.minecraftforge.fluids.FluidStack
 
-object BlockPressureInput extends BaseModule("TankPressureInput", "FluidInput", classOf[TilePressureInput])
+object BlockPressureInput extends BaseModule("tank_pressure_input", "FluidInput", classOf[TilePressureInput])
   with BlockNotifyUpdates with IPressureConnectableBlock {
   override def canConnectTo(world: IBlockAccess, pos: BlockPos, side: EnumFacing) =
     getTE(world, pos).exists(_.getCore.isDefined)

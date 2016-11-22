@@ -2,9 +2,9 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "side": "pressure:blocks/gasoutput/side",
-      "front": "pressure:blocks/gasoutput/front",
-      "back": "pressure:blocks/gasoutput/back"
+      "side": "pressure:blocks/gas_output/side",
+      "front": "pressure:blocks/gas_output/front",
+      "back": "pressure:blocks/gas_output/back"
     },
     "model": "pressure:filtered_rotated.extended"
   },

@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "top": "pressure:blocks/tank/fluid_output_auto/main",
+      "bottom": "pressure:blocks/tank/fluid_output_auto/main",
+      "side": "pressure:blocks/tank/fluid_output_auto/main"
+    },
+    "model": "pressure:sided_multiblock_output.extended"
+  },
+  "variants": {
+    "normal": [
+      {}
+    ],
+    "inventory": {
+      "transform": "forge:default-block"
+    }
+  }
+}

@@ -31,8 +31,8 @@ import net.minecraftforge.fluids.capability.{IFluidHandler, IFluidTankProperties
 import net.minecraftforge.fluids.{Fluid, FluidRegistry, FluidStack}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
-object Canister extends BaseItem("Canister") with CapabilityProviderItem {
-  lazy val cfg = Tuning.getSection("Items").getSection(name)
+object Canister extends BaseItem("canister") with CapabilityProviderItem {
+  lazy val cfg = Tuning.getSection("Items").getSection("Canister")
   lazy val maxPour = cfg.getInt("MaxPour")
   lazy val capacity = cfg.getInt("Capacity")
 

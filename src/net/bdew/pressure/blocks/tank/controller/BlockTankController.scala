@@ -14,7 +14,7 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-object BlockTankController extends BaseController("TankController", classOf[TileTankController]) {
+object BlockTankController extends BaseController("tank_controller", classOf[TileTankController]) {
   override def breakBlock(world: World, pos: BlockPos, state: IBlockState) = {
     if (!world.isRemote) {
       getTE(world, pos).dropItems()

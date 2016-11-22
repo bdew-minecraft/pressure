@@ -70,12 +70,7 @@ object Pressure {
 
   @EventHandler
   def missingMappings(event: FMLMissingMappingsEvent): Unit = {
-    //fixme: still needed?
     import scala.collection.JavaConversions._
-    for (missing <- event.getAll) {
-      (missing.name, missing.`type`) match {
-        case _ => // do nothing
-      }
-    }
+    event.getAll.foreach(OldNames.checkRemap)
   }
 }

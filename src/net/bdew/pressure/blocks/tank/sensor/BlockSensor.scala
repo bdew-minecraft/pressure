@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 class TileSensor extends TileRedstoneSensorModule(Sensors, BlockSensor)
 
-object BlockSensor extends BaseModule("Sensor", "Sensor", classOf[TileSensor]) with BlockRedstoneSensorModule[TileSensor] {
+object BlockSensor extends BaseModule("tank_sensor", "Sensor", classOf[TileSensor]) with BlockRedstoneSensorModule[TileSensor] {
   override def guiId = 4
   override type TEClass = TileSensor
 

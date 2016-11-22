@@ -2,9 +2,9 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "top": "pressure:blocks/tank/tankgasoutput/main",
-      "bottom": "pressure:blocks/tank/tankgasoutput/main",
-      "side": "pressure:blocks/tank/tankgasoutput/main"
+      "top": "pressure:blocks/tank/fluid_output/main",
+      "bottom": "pressure:blocks/tank/fluid_output/main",
+      "side": "pressure:blocks/tank/fluid_output/main"
     },
     "model": "pressure:sided_multiblock_output.extended"
   },

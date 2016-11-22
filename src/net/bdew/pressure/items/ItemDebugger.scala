@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.{EnumActionResult, EnumFacing, EnumHand}
 import net.minecraft.world.World
 
-object ItemDebugger extends BaseItem("Debugger") {
+object ItemDebugger extends BaseItem("debugger") {
   setMaxStackSize(1)
 
   override def onItemUse(player: EntityPlayer, world: World, pos: BlockPos, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {

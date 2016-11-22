@@ -2,9 +2,9 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "side": "pressure:blocks/gasinput/side_off",
-      "front": "pressure:blocks/gasinput/front",
-      "back": "pressure:blocks/gasinput/back"
+      "side": "pressure:blocks/gas_input/side_off",
+      "front": "pressure:blocks/gas_input/front",
+      "back": "pressure:blocks/gas_input/back"
     },
     "model": "pressure:filtered_rotated.extended"
   },
@@ -12,7 +12,7 @@
     "signal": {
       "true": {
         "textures": {
-          "side": "pressure:blocks/gasinput/side_on"
+          "side": "pressure:blocks/gas_input/side_on"
         }
       },
       "false": {}

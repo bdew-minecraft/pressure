@@ -2,14 +2,16 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "top": "pressure:blocks/tank/tankblock/main",
-      "bottom": "pressure:blocks/tank/tankblock/main",
-      "side": "pressure:blocks/tank/tankblock/main"
+      "top": "pressure:blocks/tank/gas_input/main",
+      "bottom": "pressure:blocks/tank/gas_input/main",
+      "side": "pressure:blocks/tank/gas_input/main"
     },
     "model": "pressure:sided_multiblock.extended"
   },
   "variants": {
-    "normal": [{}],
+    "normal": [
+      {}
+    ],
     "inventory": {
       "transform": "forge:default-block"
     }

@@ -17,7 +17,7 @@ import net.minecraft.inventory.ISidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
 
-object BlockTankInterface extends BaseModule("TankInterface", "TankInterface", classOf[TileTankInterface])
+object BlockTankInterface extends BaseModule("tank_interface", "TankInterface", classOf[TileTankInterface])
 
 class TileTankInterface extends TileModule with ISidedInventory with InventoryProxy {
   val kind: String = "TankInterface"

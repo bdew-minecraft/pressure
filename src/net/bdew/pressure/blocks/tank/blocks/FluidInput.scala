@@ -15,7 +15,7 @@ import net.bdew.lib.multiblock.interact.CIFluidInput
 import net.bdew.lib.multiblock.tile.TileModule
 import net.bdew.pressure.blocks.tank.BaseModule
 
-object BlockFluidInput extends BaseModule("TankFluidInput", "FluidInput", classOf[TileFluidInput])
+object BlockFluidInput extends BaseModule("tank_fluid_input", "FluidInput", classOf[TileFluidInput])
 
 class TileFluidInput extends TileModule with CapabilityProvider {
   val kind: String = "FluidInput"

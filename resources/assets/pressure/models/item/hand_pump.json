@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "pressure:items/handpump"
+    "layer0": "pressure:items/hand_pump"
   }
 }

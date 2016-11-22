@@ -19,7 +19,7 @@ import net.minecraft.item.{ItemBlock, ItemStack}
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
-object BlockCheckValve extends BlockValve("CheckValve") with HasTE[TileCheckValve] with HasItemBlock {
+object BlockCheckValve extends BlockValve("check_valve") with HasTE[TileCheckValve] with HasItemBlock {
   override val TEClass = classOf[TileCheckValve]
   override val itemBlockInstance: ItemBlock = new CustomItemBlock(this)
 

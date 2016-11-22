@@ -27,7 +27,7 @@ import net.minecraftforge.fluids._
 import net.minecraftforge.fluids.capability.IFluidHandler
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
-object HandPump extends BaseItem("HandPump") {
+object HandPump extends BaseItem("hand_pump") {
   lazy val cfg = Tuning.getSection("Items").getSection(name)
   lazy val maxDrain = cfg.getInt("MaxDrain")
 

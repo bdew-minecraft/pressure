@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "pressure:items/tankwall"
+    "layer0": "pressure:items/fluid_interface"
   }
 }

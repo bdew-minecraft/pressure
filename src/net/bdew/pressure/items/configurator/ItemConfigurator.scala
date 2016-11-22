@@ -26,7 +26,7 @@ import net.minecraft.world.World
 import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
-object ItemConfigurator extends BaseItem("Configurator") with GuiProvider {
+object ItemConfigurator extends BaseItem("configurator") with GuiProvider {
   override def guiId = 2
   override type TEClass = Any
 

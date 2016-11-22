@@ -16,10 +16,10 @@ import net.bdew.pressure.misc.PressureCreativeTabs
 
 object Items extends ItemManager(PressureCreativeTabs.main) {
   regItem(ItemDebugger)
-  val interface = regSimpleItem("Interface")
+  val interface = regSimpleItem("interface")
 
-  regSimpleItem("TankWall")
-  regSimpleItem("FluidInterface")
+  val tankWall = regSimpleItem("tank_wall")
+  val fluidInterface = regSimpleItem("fluid_interface")
 
   regItem(HandPump)
   regItem(Canister).setCreativeTab(PressureCreativeTabs.canisters)

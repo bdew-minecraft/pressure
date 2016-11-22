@@ -12,7 +12,7 @@ package net.bdew.pressure.blocks.tank.blocks
 import net.bdew.lib.multiblock.tile.TileModule
 import net.bdew.pressure.blocks.tank.BaseModule
 
-object BlockTankBlock extends BaseModule("TankBlock", "TankBlock", classOf[TileTankBlock])
+object BlockTankBlock extends BaseModule("tank_block", "TankBlock", classOf[TileTankBlock])
 
 class TileTankBlock extends TileModule {
   val kind: String = "TankBlock"

@@ -2,12 +2,12 @@ tile.pressure.input.name=Visokotlačni ulaz
 tile.pressure.output.name=Visokotlačni izlaz
 tile.pressure.pipe.name=Visokotlačna cijev
 tile.pressure.pump.name=Visokotlačna pumpa
-tile.pressure.WaterSource.name=Beskonačan izvor vode
+tile.pressure.water_source.name=Beskonačan izvor vode
 
-item.pressure.Debugger.name=Ispravitelj grešaka za tlačni sustav
-item.pressure.Interface.name=Sučelje sustava tlaka
-item.pressure.HandPump.name=Ručna pumpa
-item.pressure.Canister.name=Spremnik
+item.pressure.debugger.name=Ispravitelj grešaka za tlačni sustav
+item.pressure.interface.name=Sučelje sustava tlaka
+item.pressure.hand_pump.name=Ručna pumpa
+item.pressure.canister.name=Spremnik
 
 pressure.label.filter.set=Postavljanje filtera tekućine za: %s
 pressure.label.filter.unset=Uklanjanje filtera tekućine

@@ -20,7 +20,7 @@ import net.minecraft.util.{EnumFacing, EnumHand}
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.property.IExtendedBlockState
 
-object BlockTankFilter extends BaseModule("TankFilter", "FluidFilter", classOf[TileTankFilter]) with ModuleNeedsRenderUpdate {
+object BlockTankFilter extends BaseModule("tank_filter", "FluidFilter", classOf[TileTankFilter]) with ModuleNeedsRenderUpdate {
 
   override def getUnlistedProperties = super.getUnlistedProperties :+ FluidFilterProperty
 

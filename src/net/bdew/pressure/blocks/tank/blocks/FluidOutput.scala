@@ -17,7 +17,7 @@ import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 
-object BlockFluidOutput extends BaseModule("TankFluidOutput", "FluidOutput", classOf[TileFluidOutput]) with BlockOutput[TileFluidOutput] {
+object BlockFluidOutput extends BaseModule("tank_fluid_output", "FluidOutput", classOf[TileFluidOutput]) with BlockOutput[TileFluidOutput] {
   override def canConnectRedstone(state: IBlockState, world: IBlockAccess, pos: BlockPos, side: EnumFacing): Boolean = true
 }
 

@@ -2,14 +2,16 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "top": "pressure:blocks/tank/tankdataport/main",
-      "bottom": "pressure:blocks/tank/tankdataport/main",
-      "side": "pressure:blocks/tank/tankdataport/main"
+      "top": "pressure:blocks/tank/data_port/main",
+      "bottom": "pressure:blocks/tank/data_port/main",
+      "side": "pressure:blocks/tank/data_port/main"
     },
     "model": "pressure:sided_multiblock.extended"
   },
   "variants": {
-    "normal": [{}],
+    "normal": [
+      {}
+    ],
     "inventory": {
       "transform": "forge:default-block"
     }

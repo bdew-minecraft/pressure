@@ -2,9 +2,9 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "top": "pressure:blocks/tank/tankfluidaccess/main",
-      "bottom": "pressure:blocks/tank/tankfluidaccess/main",
-      "side": "pressure:blocks/tank/tankfluidaccess/main"
+      "top": "pressure:blocks/tank/fluid_input/main",
+      "bottom": "pressure:blocks/tank/fluid_input/main",
+      "side": "pressure:blocks/tank/fluid_input/main"
     },
     "model": "pressure:sided_multiblock.extended"
   },

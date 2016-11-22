@@ -21,7 +21,7 @@ import net.minecraft.util._
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.{IBlockAccess, World}
 
-object BlockPipeSensor extends BlockValve("PipeSensor") with HasTE[TilePipeSensor] with HasItemBlock {
+object BlockPipeSensor extends BlockValve("pipe_sensor") with HasTE[TilePipeSensor] with HasItemBlock {
   override val TEClass = classOf[TilePipeSensor]
   override val itemBlockInstance: ItemBlock = new CustomItemBlock(this)
 
