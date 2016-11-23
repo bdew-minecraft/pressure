@@ -9,6 +9,12 @@
 
 package net.bdew.pressure
 
+import java.util.Locale
+
+import net.bdew.pressure.blocks.drain.{BlockDrain, BlockSluice}
+import net.bdew.pressure.blocks.input.BlockInput
+import net.bdew.pressure.blocks.output.BlockOutput
+import net.bdew.pressure.blocks.pump.BlockPump
 import net.bdew.pressure.blocks.router.BlockRouter
 import net.bdew.pressure.blocks.source.{BlockCreativeSource, BlockWaterSource}
 import net.bdew.pressure.blocks.tank.blocks.{BlockTankFilter, _}
@@ -27,11 +33,13 @@ import net.minecraftforge.fml.common.registry.IForgeRegistryEntry
 
 object OldNames {
   val map: Map[String, IForgeRegistryEntry[_]] = Map(
+    // Blocks with changed name
     "CheckValve" -> BlockCheckValve,
     "PipeSensor" -> BlockPipeSensor,
     "WaterSource" -> BlockWaterSource,
     "CreativeSource" -> BlockCreativeSource,
     "TankBlock" -> BlockTankBlock,
+    "TankDataPort" -> BlockDataPort,
     "TankIndicator" -> BlockTankIndicator,
     "TankFluidOutput" -> BlockFluidOutput,
     "TankFluidAutoOutput" -> BlockFluidAutoOutput,
@@ -41,22 +49,31 @@ object OldNames {
     "TankPressureInput" -> BlockPressureInput,
     "TankInterface" -> BlockTankInterface,
     "TankFilter" -> BlockTankFilter,
-    "Sensor" -> BlockSensor,
-
-    "Router" -> BlockRouter,
     "TankController" -> BlockTankController,
+    "Sensor" -> BlockSensor,
+    "Router" -> BlockRouter,
 
+    // Items with changed name
     "Debugger" -> ItemDebugger,
     "Interface" -> Items.interface,
     "TankWall" -> Items.tankWall,
     "FluidInterface" -> Items.fluidInterface,
     "HandPump" -> HandPump,
     "Canister" -> Canister,
-    "Configurator" -> ItemConfigurator
+    "Configurator" -> ItemConfigurator,
+
+    // Blocks with unchanged name, but need to have TE remapped
+    "drain" -> BlockDrain,
+    "sluice" -> BlockSluice,
+    "input" -> BlockInput,
+    "output" -> BlockOutput,
+    "pump" -> BlockPump
   )
 
+  val lowerMap: Map[String, IForgeRegistryEntry[_]] = map.map(x => "pressure:" + x._1.toLowerCase(Locale.US) -> x._2).toMap
+
   def checkRemap(mapping: MissingMapping): Unit = {
-    map.get(mapping.name) match {
+    lowerMap.get(mapping.name) match {
       case Some(x: Block) if mapping.`type` == Type.BLOCK => mapping.remap(x)
       case Some(x: Block) if mapping.`type` == Type.ITEM => mapping.remap(Item.getItemFromBlock(x))
       case Some(x: Item) if mapping.`type` == Type.ITEM => mapping.remap(x)

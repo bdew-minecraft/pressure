@@ -19,7 +19,7 @@ import net.bdew.pressure.blocks.tank.controller.TileTankController
 import net.bdew.pressure.misc.FluidMapHelpers
 import net.minecraftforge.fluids.FluidRegistry
 
-object BlockDataPort extends BaseModule("TankDataPort", "TankDataPort", classOf[TileDataPort])
+object BlockDataPort extends BaseModule("tank_data_port", "TankDataPort", classOf[TileDataPort])
 
 class TileDataPort extends TileModule {
   val kind: String = "TankDataPort"
