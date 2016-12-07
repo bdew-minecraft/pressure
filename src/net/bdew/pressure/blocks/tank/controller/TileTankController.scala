@@ -114,9 +114,9 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
           // Attempt to fill
           val drained = tank.drain(Int.MaxValue, false)
           drained.amount = handler.fill(drained.copy(), true)
-          if (drained.amount > 0 && canEjectItem(inStack)) {
+          if (drained.amount > 0 && canEjectItem(handler.getContainer)) {
             tank.drain(drained, true)
-            doEjectItem(inStack)
+            doEjectItem(handler.getContainer)
             inventory.decrStackSize(0, 1)
           }
         } else if (tank.getFluidAmount < tank.getCapacity && handler.getTankProperties.exists(t => t.canDrain && t.getContents != null && t.getContents.amount > 0)) {
@@ -126,9 +126,9 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
             drained.amount = tank.fill(drained.copy(), false)
             if (drained.amount > 0) {
               handler.drain(drained, true)
-              if (canEjectItem(inStack)) {
+              if (canEjectItem(handler.getContainer)) {
                 tank.fill(drained, true)
-                doEjectItem(inStack)
+                doEjectItem(handler.getContainer)
                 inventory.decrStackSize(0, 1)
               }
             }
