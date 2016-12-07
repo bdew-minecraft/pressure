@@ -27,7 +27,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.{EnumActionResult, EnumFacing, EnumHand, NonNullList}
 import net.minecraft.world.World
 import net.minecraftforge.client.model.ModelLoader
-import net.minecraftforge.fluids.capability.{IFluidHandler, IFluidTankProperties}
+import net.minecraftforge.fluids.capability.{IFluidHandlerItem, IFluidTankProperties}
 import net.minecraftforge.fluids.{Fluid, FluidRegistry, FluidStack}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -39,7 +39,7 @@ object Canister extends BaseItem("canister") with CapabilityProviderItem {
   setMaxStackSize(1)
   setHasSubtypes(true)
 
-  addCapability(Capabilities.CAP_FLUID_HANDLER, FluidHandler)
+  addCapability(Capabilities.CAP_FLUID_HANDLER_ITEM, FluidHandler)
 
   override def getCreativeTabs = Array(PressureCreativeTabs.main, PressureCreativeTabs.canisters)
 
@@ -80,13 +80,14 @@ object Canister extends BaseItem("canister") with CapabilityProviderItem {
 
   def getContainedFluid(stack: ItemStack): FluidStack = FluidStack.loadFluidStackFromNBT(stack.getTagCompound)
 
-  case class FluidHandler(stack: ItemStack) extends IFluidHandler with IFluidTankProperties {
+  case class FluidHandler(stack: ItemStack) extends IFluidHandlerItem with IFluidTankProperties {
     override def canFill: Boolean = true
     override def canDrain: Boolean = true
     override def canFillFluidType(fluidStck: FluidStack): Boolean = true
     override def canDrainFluidType(fluidStack: FluidStack): Boolean = true
     override def getContents: FluidStack = getContainedFluid(stack)
     override def getCapacity: Int = capacity
+    override def getContainer: ItemStack = stack
 
     def setFluid(fluid: FluidStack): Unit = {
       val nbt = new NBTTagCompound()
