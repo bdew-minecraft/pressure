@@ -16,6 +16,7 @@ import net.bdew.lib.data.base.{TileDataSlotsTicking, UpdateKind}
 import net.bdew.lib.multiblock.data.RSMode
 import net.bdew.pressure.api.{IPressureConnection, IPressureEject, IPressureInject, PressureAPI}
 import net.bdew.pressure.blocks.router.data.{DataSlotSideFilters, DataSlotSideModes, DataSlotSideRSControl, RouterSideMode}
+import net.bdew.pressure.misc.FluidUtils
 import net.bdew.pressure.pressurenet.Helper
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.{Fluid, FluidStack}
@@ -98,7 +99,7 @@ class TileRouter extends TileDataSlotsTicking with IPressureInject with IPressur
         handler.drain(Int.MaxValue, false)
       }
       if (fluid != null && fluid.getFluid != null && fluid.amount > 0 && isSideValidIO(face, fluid, RouterSideMode.inputs)) {
-        val ejected = new FluidStack(fluid.getFluid, distributeFluid(fluid, true))
+        val ejected = FluidUtils.copyStackWithAmount(fluid, distributeFluid(fluid, true))
         handler.drain(ejected, true)
       }
     }
