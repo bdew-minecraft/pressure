@@ -11,6 +11,7 @@ package net.bdew.pressure.pressurenet
 
 import net.bdew.pressure.Pressure
 import net.bdew.pressure.api.{IPressureConnection, IPressureInject}
+import net.bdew.pressure.misc.FluidUtils
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.FluidStack
 
@@ -36,7 +37,7 @@ case class PressureConnection(origin: IPressureInject, side: EnumFacing, tiles: 
         // Don't try balancing small amounts
         var toPush = fluid.amount
         tiles.foreach { target =>
-          toPush -= target.eject(new FluidStack(fluid.getFluid, toPush), doPush)
+          toPush -= target.eject(FluidUtils.copyStackWithAmount(fluid, toPush), doPush)
           if (toPush <= 0) return fluid.amount
         }
         toPush - fluid.amount
@@ -47,7 +48,7 @@ case class PressureConnection(origin: IPressureInject, side: EnumFacing, tiles: 
         val filled = maxFill map { case (te, amount) =>
           val toFill = (amount * mul).floor.toInt
           if (toFill > 0)
-            te.eject(new FluidStack(fluid.getFluid, toFill), doPush)
+            te.eject(FluidUtils.copyStackWithAmount(fluid, toFill), doPush)
           else
             0
         }
