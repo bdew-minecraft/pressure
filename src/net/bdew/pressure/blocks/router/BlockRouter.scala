@@ -43,7 +43,7 @@ object BlockRouter extends BaseBlock("router", Material.IRON) with HasTE[TileRou
     )
   }
 
-  override def canRenderInLayer(layer: BlockRenderLayer) =
+  override def canRenderInLayer(state: IBlockState, layer: BlockRenderLayer): Boolean =
     layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.CUTOUT
 
   override def getUnlistedProperties = super.getUnlistedProperties ++ Properties.MODE.values
