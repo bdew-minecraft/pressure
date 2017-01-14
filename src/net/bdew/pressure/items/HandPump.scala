@@ -121,6 +121,6 @@ object HandPump extends BaseItem("hand_pump") {
   @SubscribeEvent
   def onInteract(ev: PlayerInteractEvent.RightClickBlock) {
     val item = ev.getEntityPlayer.getHeldItem(EnumHand.MAIN_HAND)
-    if (item != null && item.getItem == this && !ev.getEntityPlayer.isSneaking) ev.setCanceled(true)
+    if (!item.isEmpty && item.getItem == this && !ev.getEntityPlayer.isSneaking) ev.setCanceled(true)
   }
 }

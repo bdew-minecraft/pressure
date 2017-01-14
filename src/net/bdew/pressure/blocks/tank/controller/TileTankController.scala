@@ -53,7 +53,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
 
   val inventory = new DataSlotInventory("inv", this, 3) {
     override def isItemValidForSlot(slot: Int, stack: ItemStack) =
-      slot == 0 && !stack.isEmpty && stack.getItem != null && FluidHelper.hasFluidHandler(stack)
+      slot == 0 && !stack.isEmpty && FluidHelper.hasFluidHandler(stack)
   }
 
   def doRenderUpdate(): Unit = {
@@ -163,7 +163,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
 
   def dropItems() {
     if (getWorld != null && !getWorld.isRemote) {
-      for (stack <- inventory.inv if stack != null) {
+      for (stack <- inventory.inv if !stack.isEmpty) {
         ItemUtils.throwItemAt(getWorld, pos, stack)
       }
       inventory.inv = new Array[ItemStack](inventory.size)

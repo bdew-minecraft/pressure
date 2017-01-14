@@ -36,7 +36,7 @@ case class SensorFluidType[T: ClassTag](uid: String, iconName: String, accessor:
 
   override def paramClicked(current: GenericSensorParameter, item: ItemStack, clickType: ClickType, button: Int, obj: TileEntity): GenericSensorParameter = {
     if (button == 0 && clickType == ClickType.PICKUP) {
-      if (item == null) {
+      if (item.isEmpty) {
         Sensors.DisabledParameter
       } else {
         val tank = FluidHelper.getFluidHandler(item).flatMap(x => x.getTankProperties.headOption).getOrElse(return current)
