@@ -159,7 +159,7 @@ object Canister extends BaseItem("canister") with CapabilityProviderItem {
   override def onItemUse(player: EntityPlayer, world: World, pos: BlockPos, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
     val stack = player.getHeldItem(hand)
     if (world.isRemote) return EnumActionResult.SUCCESS
-    val me = stack.getCapability(Capabilities.CAP_FLUID_HANDLER, null)
+    val me = stack.getCapability(Capabilities.CAP_FLUID_HANDLER_ITEM, null)
     FluidHelper.getFluidHandler(world, pos, side) foreach { target =>
       val filled = FluidHelper.pushFluid(me, target, true, maxPour)
       if (filled != null) {
