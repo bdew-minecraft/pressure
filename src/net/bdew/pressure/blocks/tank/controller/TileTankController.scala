@@ -166,7 +166,7 @@ class TileTankController extends TileControllerGui with CIFluidInput with CIOutp
       for (stack <- inventory.inv if !stack.isEmpty) {
         ItemUtils.throwItemAt(getWorld, pos, stack)
       }
-      inventory.inv = new Array[ItemStack](inventory.size)
+      inventory.clear()
     }
   }
 
