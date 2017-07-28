@@ -14,6 +14,7 @@ import java.io.File
 import net.bdew.lib.Misc
 import net.bdew.pressure.api.PressureAPI
 import net.bdew.pressure.compat.enderio.EnderIOProxy
+import net.bdew.pressure.compat.opencomputers.OCBlocks
 import net.bdew.pressure.config._
 import net.bdew.pressure.misc.PressureCreativeTabs
 import net.bdew.pressure.network.NetworkHandler
@@ -58,6 +59,9 @@ object Pressure {
     if (event.getSide.isClient) Config.load(new File(configDir, "client.config"))
     NetworkRegistry.INSTANCE.registerGuiHandler(this, Config.guiHandler)
     TuningLoader.loadDelayed()
+    FMLInterModComms.sendMessage("Waila", "register", "net.bdew.pressure.waila.WailaHandler.loadCallback")
+    if (Misc.haveModVersion("opencomputers"))
+      OCBlocks.init()
     NetworkHandler.init()
   }
 

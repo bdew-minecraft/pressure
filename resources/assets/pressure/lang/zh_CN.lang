@@ -32,10 +32,10 @@ item.pressure.fluid_interface.name=水库端口
 item.pressure.tank_wall.name=水库外墙
 item.pressure.configurator.name=流体过滤调置器
 
-tile.pressure.gasinput.name=高压燃气输入端扣
-tile.pressure.gasoutput.name=高压燃气输出端口
-tile.pressure.TankGasOutput.name=水库燃气输出端口
-tile.pressure.TankGasInput.name=水库燃气输入接口
+tile.pressure.gas_input.name=高压燃气输入端扣
+tile.pressure.gas_output.name=高压燃气输出端口
+tile.pressure.tank_gas_output.name=水库燃气输出端口
+tile.pressure.tank_gas_input.name=水库燃气输入接口
 
 pressure.label.filter.set=过滤流体设为: %s
 pressure.label.filter.unset=移除流体过滤设定

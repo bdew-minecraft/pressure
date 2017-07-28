@@ -31,10 +31,10 @@ item.pressure.fluid_interface.name=Жидкостный интерфейс
 item.pressure.tank_wall.name=Стенка резервуара
 item.pressure.configurator.name=Конфигуратор фильтра жидкостей
 
-tile.pressure.gasinput.name=Газовый вход под давлением
-tile.pressure.gasoutput.name=Газовый выход под давлением
-tile.pressure.TankGasOutput.name=Газовый выход из резервуара
-tile.pressure.TankGasInput.name=Газовый вход в резервуар
+tile.pressure.gas_input.name=Газовый вход под давлением
+tile.pressure.gas_output.name=Газовый выход под давлением
+tile.pressure.tank_gas_output.name=Газовый выход из резервуара
+tile.pressure.tank_gas_input.name=Газовый вход в резервуар
 
 pressure.label.filter.set=Установка жидкостного фильтра на: %s
 pressure.label.filter.unset=Удаление жидкостного фильтра
