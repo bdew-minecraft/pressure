@@ -20,7 +20,7 @@ import scala.collection.mutable
 
 class WidgetFilterIcon(p: Point, te: TileTankController) extends Widget {
   override val rect = new Rect(p, 16, 16)
-  override def draw(mouse: Point) {
+  override def draw(mouse: Point, partial: Float) {
     te.getFluidFilter.foreach { fluid =>
       parent.drawTexture(rect, Misc.getFluidIcon(fluid), Color.fromInt(Misc.getFluidColor(fluid)))
     }

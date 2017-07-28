@@ -27,7 +27,7 @@ class WidgetFluidSelector(p: Point, conf: GuiConfigurator, n: Int) extends Widge
     }
   }
 
-  override def draw(mouse: Point) {
+  override def draw(mouse: Point, partial: Float) {
     getFluid foreach { fluid =>
       parent.drawTexture(rect, Misc.getFluidIcon(fluid), Color.fromInt(fluid.getColor))
     }

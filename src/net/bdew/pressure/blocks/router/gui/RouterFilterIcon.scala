@@ -21,7 +21,7 @@ import scala.collection.mutable
 
 class RouterFilterIcon(p: Point, te: TileRouter, side: EnumFacing) extends Widget {
   override val rect = new Rect(p, 16, 16)
-  override def draw(mouse: Point) {
+  override def draw(mouse: Point, partial: Float) {
     if (te.sideFilters.isSet(side)) {
       val fluid = te.sideFilters.get(side)
       parent.drawTexture(rect, Misc.getFluidIcon(fluid), Color.fromInt(Misc.getFluidColor(fluid)))

@@ -17,13 +17,13 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.NonNullList
 
 @JEIPlugin
-class PressureJeiPlugin extends BlankModPlugin {
+class PressureJeiPlugin extends IModPlugin {
   override def register(registry: IModRegistry): Unit = {
     if (!Config.showCanisters) {
       import scala.collection.JavaConversions._
       val list = NonNullList.create[ItemStack]
-      Canister.getSubItems(Canister, PressureCreativeTabs.canisters, list)
-      list.foreach(registry.getJeiHelpers.getItemBlacklist.addItemToBlacklist)
+      Canister.getSubItems(PressureCreativeTabs.canisters, list)
+      list.foreach(registry.getJeiHelpers.getIngredientBlacklist.addIngredientToBlacklist)
     }
   }
 }

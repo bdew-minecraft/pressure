@@ -23,7 +23,7 @@ import scala.collection.mutable
 class RouterSideIcon(p: Point, te: TileRouter, side: EnumFacing) extends Widget {
   val rect = new Rect(p, 16, 16)
 
-  override def draw(mouse: Point) {
+  override def draw(mouse: Point, partial: Float) {
     parent.drawTexture(rect, RouterIcons.modeIcons(te.sideModes.get(side)), PressureResourceProvider.outputColors(side.ordinal()))
   }
 

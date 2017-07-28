@@ -29,7 +29,7 @@ object TankIndicatorTESR extends TileEntitySpecialRenderer[TileTankIndicator] {
     case _ => null // shutup compiler
   }
 
-  override def renderTileEntityAt(te: TileTankIndicator, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int): Unit = {
+  override def render(te: TileTankIndicator, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int, alpha: Float): Unit = {
     // No world or no relevant faces are visible - nothing to do here
     if (!te.hasWorld || !BlockTankIndicator.Position.faces.exists(f => BlockTankIndicator.shouldSideBeRendered(te.getWorld.getBlockState(te.getPos), te.getWorld, te.getPos, f))) return
     for {

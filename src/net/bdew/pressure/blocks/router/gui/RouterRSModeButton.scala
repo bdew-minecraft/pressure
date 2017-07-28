@@ -28,7 +28,7 @@ class RouterRSModeButton(p: Point, te: TileRouter, side: EnumFacing) extends Wid
   val rect = new Rect(p, 16, 16)
   val iconRect = new Rect(p +(1, 1), 14, 14)
 
-  override def draw(mouse: Point) {
+  override def draw(mouse: Point, partial: Float) {
     if (rect.contains(mouse))
       parent.drawTexture(rect, Textures.Button16.hover)
     else

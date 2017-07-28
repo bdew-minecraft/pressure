@@ -71,10 +71,4 @@ object Pressure {
     if (Misc.haveModVersion("EnderIO"))
       EnderIOProxy.init()
   }
-
-  @EventHandler
-  def missingMappings(event: FMLMissingMappingsEvent): Unit = {
-    import scala.collection.JavaConversions._
-    event.getAll.foreach(OldNames.checkRemap)
-  }
 }

@@ -19,9 +19,10 @@ import net.bdew.pressure.Pressure
 import net.bdew.pressure.config.{Config, Tuning}
 import net.bdew.pressure.misc.PressureCreativeTabs
 import net.minecraft.client.renderer.block.model.ModelResourceLocation
+import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.{Item, ItemStack}
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.{EnumActionResult, EnumFacing, EnumHand, NonNullList}
@@ -43,11 +44,11 @@ object Canister extends BaseItem("canister") with CapabilityProviderItem {
 
   override def getCreativeTabs = Array(PressureCreativeTabs.main, PressureCreativeTabs.canisters)
 
-  override def getSubItems(item: Item, tab: CreativeTabs, stacks: NonNullList[ItemStack]) = {
+  override def getSubItems(tab: CreativeTabs, stacks: NonNullList[ItemStack]): Unit = {
     import scala.collection.JavaConversions._
-    if (tab == PressureCreativeTabs.main)
+    if (tab == PressureCreativeTabs.main || tab == CreativeTabs.SEARCH)
       stacks.add(new ItemStack(this))
-    else if (tab == PressureCreativeTabs.canisters || tab == null) {
+    else if (tab == PressureCreativeTabs.canisters || tab == CreativeTabs.SEARCH || tab == null) {
       if (tab == PressureCreativeTabs.canisters || Config.showCanisters) {
         stacks.addAll(
           FluidRegistry.getRegisteredFluids flatMap { case (id, fluid) =>
@@ -146,7 +147,7 @@ object Canister extends BaseItem("canister") with CapabilityProviderItem {
     }
   }
 
-  override def addInformation(stack: ItemStack, playerIn: EntityPlayer, tooltip: util.List[String], advanced: Boolean) = {
+  override def addInformation(stack: ItemStack, world: World, tooltip: util.List[String], flagIn: ITooltipFlag): Unit = {
     val fl = getContainedFluid(stack)
     if (fl == null) {
       tooltip.add(Misc.toLocal("bdlib.label.empty"))

@@ -10,9 +10,7 @@
 package net.bdew.pressure.config
 
 import net.bdew.lib.Misc
-import net.bdew.lib.block.HasTE
 import net.bdew.lib.config.BlockManager
-import net.bdew.pressure.Pressure
 import net.bdew.pressure.blocks.drain.{BlockDrain, BlockSluice}
 import net.bdew.pressure.blocks.input.BlockInput
 import net.bdew.pressure.blocks.output.BlockOutput
@@ -56,12 +54,5 @@ object Blocks extends BlockManager(PressureCreativeTabs.main) {
 
   if (Misc.haveModVersion("ComputerCraft") || Misc.haveModVersion("opencomputers")) {
     regBlock(BlockDataPort)
-  }
-
-  for ((oldName, obj) <- OldNames.map) {
-    obj match {
-      case x: HasTE[_] => registerLegacyTileEntity(Pressure.modId + "." + oldName, x.TEClass)
-      case _ => //nothing
-    }
   }
 }
