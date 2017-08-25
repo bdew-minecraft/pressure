@@ -23,7 +23,7 @@ object Modules {
     lazy val xpJuiceRatio = cfg.getInt("XPJuiceRatio")
     lazy val mobEssenceRatio = cfg.getInt("MobEssenceRatio")
 
-    lazy val ratioMap = Map("mobessence" -> mobEssenceRatio, "xpjuice" -> xpJuiceRatio)
+    lazy val ratioMap = Map("mobessence" -> mobEssenceRatio, "essence" -> mobEssenceRatio, "xpjuice" -> xpJuiceRatio)
   }
 
 }
