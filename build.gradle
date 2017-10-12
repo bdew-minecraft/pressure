@@ -90,10 +90,10 @@ dependencies {
     deobfCompile "mcp.mobius.waila:Hwyla:${config.hwyla.version}"
 //    deobfCompile "MCMultiPart:MCMultiPart:${config.mcmultipart.version}:universal"
 
-    compile "net.bdew.thirdparty:mekanism:${config.minecraft.version}-${config.mekanism.version}:api"
+    compile "net.bdew.thirdparty:mekanism:${config.mekanism.version}:api"
 
 //    compile "net.bdew.thirdparty:computercraft:${config.computercraft.version}-mc${config.minecraft.version}:api"
-    compile "li.cil.oc:OpenComputers:MC${config.minecraft.version}-${config.opencomputers.version}:api"
+    compile "li.cil.oc:OpenComputers:${config.opencomputers.version}:api"
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -188,6 +188,7 @@ curseforge {
 
         addGameVersion config.minecraft.version
         addGameVersion "1.12"
+        addGameVersion "1.12.1"
 
         mainArtifact(jar) {
             displayName = "Pressure Pipes ${simpleVersion} (MC ${config.minecraft.version})"

@@ -26,7 +26,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.relauncher.Side
 import org.apache.logging.log4j.Logger
 
-@Mod(modid = Pressure.modId, version = "PRESSURE_VER", name = "Pressure Pipes", dependencies = "after:ForgeMultipart;after:ComputerCraft;required-after:bdlib", modLanguage = "scala", acceptedMinecraftVersions = "[1.12,1.12.1]")
+@Mod(modid = Pressure.modId, version = "PRESSURE_VER", name = "Pressure Pipes", dependencies = "required-after:bdlib", modLanguage = "scala", acceptedMinecraftVersions = "[1.12,1.12.2]")
 object Pressure {
   var log: Logger = null
   var instance = this
