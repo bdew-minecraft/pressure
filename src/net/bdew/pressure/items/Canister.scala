@@ -22,10 +22,11 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.client.util.ITooltipFlag
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.SoundEvents
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util._
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.{EnumActionResult, EnumFacing, EnumHand, NonNullList}
 import net.minecraft.world.World
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.fluids.capability.{IFluidHandlerItem, IFluidTankProperties}
@@ -159,7 +160,6 @@ object Canister extends BaseItem("canister") with CapabilityProviderItem {
 
   override def onItemUse(player: EntityPlayer, world: World, pos: BlockPos, hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
     val stack = player.getHeldItem(hand)
-    if (world.isRemote) return EnumActionResult.SUCCESS
     val me = stack.getCapability(Capabilities.CAP_FLUID_HANDLER_ITEM, null)
     FluidHelper.getFluidHandler(world, pos, side) foreach { target =>
       val filled = FluidHelper.pushFluid(me, target, true, maxPour)
@@ -173,8 +173,17 @@ object Canister extends BaseItem("canister") with CapabilityProviderItem {
       val fs = me.drain(Fluid.BUCKET_VOLUME, false)
       if (fs != null && fs.getFluid != null && fs.getFluid.canBePlacedInWorld && fs.amount == Fluid.BUCKET_VOLUME) {
         me.drain(fs, true)
-        world.setBlockState(p, fs.getFluid.getBlock.getDefaultState, 3)
-        world.neighborChanged(p, fs.getFluid.getBlock, p)
+        if (fs.getFluid == FluidRegistry.WATER && world.provider.doesWaterVaporize) {
+          world.playSound(player, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.rand.nextFloat - world.rand.nextFloat) * 0.8F)
+          for (i <- 0 to 8) {
+            world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, p.getX + Math.random, p.getY + Math.random, p.getZ + Math.random, 0.0D, 0.0D, 0.0D)
+          }
+        } else {
+          if (!world.isRemote) {
+            world.setBlockState(p, fs.getFluid.getBlock.getDefaultState, 3)
+            world.neighborChanged(p, fs.getFluid.getBlock, p)
+          }
+        }
         return EnumActionResult.SUCCESS
       }
     }
